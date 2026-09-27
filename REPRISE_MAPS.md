@@ -10,7 +10,26 @@ Reprise du 26 septembre, 09 h 20 UTC (session `arena/01a0dd03`, branchée sur `0
 
 **Décision de l'utilisateur, même session** : « tu dois utiliser la méthode et reprendre seulement de ta branche parente. Et refaire waterfall avec la génération fond majenta multicalque ». On ne fusionne pas les branches sœurs et on n'en reprend rien. Lot réalisé : **Entrée Waterfall Cave** (`renders/entree_waterfall_cave_sud_nord_v1/`, préfixe `EWC1`, réf. `entrancecascade.png`, aperçu `apercu_entree_waterfall_cave_sud_nord_v1.html`) : rendu généré référencé, décor sur magenta, 16 calques, cascade, écume et embruns animés, 13 tests PASS. **Retours sur EWC1, puis EWC2** (`renders/entree_waterfall_cave_sud_nord_v2/`, aperçu `apercu_entree_waterfall_cave_sud_nord_v2.html`, mêmes bruts) : liseré clair de rive retiré, couloir de sable jusqu'à la grotte (plus d'eau devant), cascade en deux temps (fermée → fente qui s'ouvre → ouverte, calques d'état), 15 tests PASS. **EWC3** (`renders/entree_waterfall_cave_sud_nord_v3/`, aperçu `apercu_entree_waterfall_cave_sud_nord_v3.html`) : autre lecture de « la cascade se fend ». Le rideau se fend en deux sur toute sa hauteur et ses moitiés s'écartent devant une paroi générée (4e brut : décor EWC1 édité sans la cascade). Le reste est identique à EWC2, 17 tests PASS. Carte suivante, biome choisi par l'agent à la demande de l'utilisateur (« go carte suivante choisis ! ») : **Entrée Underground Lake** (`renders/entree_underground_lake_sud_nord_v1/`, préfixe `EUL1`, aperçu `apercu_entree_underground_lake_sud_nord_v1.html`). Rendu généré référencé, lac aux couleurs exactes du rip sans liseré clair, lueur qui respire, gouttes et ronds générés, 11 calques, 15 tests PASS. L'utilisateur a demandé ensuite de passer à la map suivante : **Entrée Mystifying Forest** (`renders/entree_mystifying_forest_sud_nord_v1/`, préfixe `EMF1`, réf. `Mystifying_Forest_entrance_TDS.png`, aperçu `apercu_entree_mystifying_forest_sud_nord_v1.html`, biome choisi par l'agent, à confirmer). Elle a été faite par rendu généré référencé : mare en magenta, 11 calques, eau sans liseré, feuilles et lucioles générées, 13 tests PASS.
 
-## Branches sœurs non intégrées (relevé du 26 septembre, 09 h 30 UTC)
+Reprise du 27 septembre (session `arena/01a0e2f1`, branchée sur `95160e32` = EUL1) : sur « poursuis le projet », lot **Entrée Sables mouvants** (`renders/entree_sables_mouvants_sud_nord_v1/`, préfixe `EQS1`, réf. `witheringdesert.png` = Furnace Desert, aperçu `apercu_entree_sables_mouvants_sud_nord_v1.html`). Biome choisi par l'agent, **à confirmer**. Fosse de sable mouvant, chutes de sable, poussière et rayons animés ; 14 tests PASS.
+
+## Branches sœurs de la série (relevé du 27 septembre)
+
+Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) ; `01a0e017` travaille sur un autre historique. Aucune n'a été fusionnée et rien n'en a été repris. Leurs têtes étaient identiques au démarrage et avant le commit d'EQS1.
+
+| Branche | Tête | Préfixes ajoutés |
+|---|---|---|
+| `arena/01a0de11` | `6d72314e` | EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, ESR1, EWL1, TMA1-3, ZGE1, ZGA1 |
+| `arena/01a0dfad` | `ab2d40e6` | EJT1 |
+| `arena/01a0dfe2` | `f0918bd1` | aucun (reprise documentaire de `REPRISE_MAPS.md`) |
+| `arena/01a0e001` | `fc94f5a6` | EFF1 (autre lot Foggy Forest, **même préfixe** que sur `01a0de11`) |
+| `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
+| `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
+
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1.
+
+`git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
+
+## Branches sœurs non intégrées, premier relevé (relevé du 26 septembre, 09 h 30 UTC)
 
 La branche parente `arena/01a0da3c` est toujours à `0eaa002c`, mais cela ne prouve pas l'absence de travail parallèle : plusieurs sessions peuvent repartir de cette même base. Au démarrage, lister `git ls-remote --heads origin` et inspecter les branches `arena/*` récentes, pas seulement la parente.
 
@@ -63,7 +82,7 @@ Gabarit 4:3 à copier : `source/entree_jungle_sud_nord_v1/` (`build.py`, `test_b
 
 `.venv` et `.cache` ne sont pas persistés : recréer la première, puis relancer le `build.py` d'un lot avant ses tests, qui relisent le Ground dans `.cache`. Un rebuild réécrit l'ORA avec de nouveaux horodatages ZIP : restaurer le fichier s'il n'a pas d'autre changement.
 
-`entrancecascade.png` (vraie entrée de Waterfall Cave) sert désormais à EWC1. `Mystifying_Forest_entrance_TDS.png` sert désormais à EMF1. `Underground_Lake_shore_TDS.png` sert désormais à EUL1 (lac souterrain, chaussée jusqu'à la grotte). Références jamais utilisées comme référence principale de la série, toutes branches confondues : `Foggy_Forest_Base_Camp_TDS.png` (campement), GBA Mushroom Forest et Mt. Thunder (DA GBA), `Sealed_Ruin_pit_TDS.png` et `Southern_Jungle_exit_2_S.png` (salles de fond). Revérifier les branches sœurs avant de choisir.
+`entrancecascade.png` (vraie entrée de Waterfall Cave) sert désormais à EWC1. `Mystifying_Forest_entrance_TDS.png` sert désormais à EMF1. `Underground_Lake_shore_TDS.png` sert désormais à EUL1 (lac souterrain, chaussée jusqu'à la grotte). `witheringdesert.png` (Furnace Desert, *Rescue Team*) sert désormais à EQS1. Il servait déjà hors de la série : duo désert DB1 dans `dungeon_biomes_v1`, biome swap en eau dans `01a0d498`. **Les références que ce paragraphe donnait comme libres (Foggy Forest Base Camp, Sealed Ruin pit, Southern Jungle exit 2, etc.) ont toutes été prises sur les branches sœurs** (relevé du 27 septembre). Rips de la racine encore jamais pris comme référence d'une entrée de la série : starcavepmdsky, rockgeyserlike, Steam_Cave_Peak_TDS, secretgarden, energeticforest, finalisland, roadundergound, junglewaterfallzonepmdsky, oldcastlepmd, volcanicpit (1). Certains servent déjà hors série (energeticforest, finalisland et volcanicpit dans DB1) : chercher le nom dans tout l'arbre et dans toutes les branches avant de choisir.
 
 ## Repérage effectué
 

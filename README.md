@@ -1,5 +1,32 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Sables mouvants — 4:3, désert aux chutes de sable et fosse qui aspire, réf. Furnace Desert (27 septembre 2026)
+
+- Aperçu : `apercu_entree_sables_mouvants_sud_nord_v1.html`.
+- Lot : `renders/entree_sables_mouvants_sud_nord_v1/` (`EQS1_projet_pmdo_0812.zip`, `EQS1_calques_png_8px.zip`, ORA, WebP animé, planche des poses).
+- Source : `source/entree_sables_mouvants_sud_nord_v1/`.
+
+**Demande de l'utilisateur** : « poursuis le projet ». Carte suivante de la série. Comme pour EUL1, le biome a été choisi par l'agent : **désert aux sables mouvants, à confirmer**.
+
+La référence est `witheringdesert.png`, soit **Furnace Desert** (zone amie de *PMD Rescue Team*). Aucune entrée de la série ne l'utilisait. Elle a déjà servi hors de la série : au duo désert DB1 (`dungeon_biomes_v1`) et, sur une branche ancienne non fusionnée, à un biome swap en eau.
+
+Méthode des textures canoniques = **rendu généré référencé**. La capture est passée au générateur, qui produit trois bruts :
+
+- le décor complet en 4:3, avec la fosse et les deux chutes en magenta ;
+- un sol complet édité depuis le décor (2ᵉ essai ; le 1ᵉʳ, un aplat jaune, a été écarté) ;
+- une planche de poussière et de tourbillons sur magenta.
+
+L'arrivée est au sud, entre des pierres dressées. Un large bassin de sable mène à l'entrée sombre au nord, dans une falaise en strates encadrée par deux chutes de sable. La fosse de sable mouvant est à l'est, à l'écart du chemin.
+
+La map compte 11 calques : fosse, sol complet, sable, ombres au pied des roches, bord de la fosse, roches, pierres, profondeur, chutes, poussière et rayons. Elle a quatre animations :
+
+- la **fosse** aspire : lignes de 1 px aux **couleurs exactes de la capture**, lobes qui tournent, anneaux qui s'enfoncent vers le centre (12 × 10 ticks) ;
+- les **chutes** : zigzags en V relevés sur la capture, redessinés aux couleurs exactes, qui défilent vers le sud (24 × 5 ticks) ;
+- la **poussière** au pied des chutes et des tourbillons de grains générés, sur le sable dégagé (24 × 5 ticks) ;
+- les **rayons de soleil** en overlay translucide : couleur de la capture, alpha équivalent à l'éclaircissement additif mesuré (12 × 10 ticks).
+
+Toutes les boucles sont fermées (testé). Fidélité au rip mesurée par test : sable 15,5, roches 22,0, pierres 17,7 (seuil 35). 14 tests PASS ; 7 mutations vérifiées. Pas de test PMDO en jeu.
+
 ## Entrée Underground Lake — 4:3, lac souterrain lumineux et chaussée jusqu'à la grotte, réf. Underground Lake (26 septembre 2026)
 
 - Aperçu : `apercu_entree_underground_lake_sud_nord_v1.html`.

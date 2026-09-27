@@ -616,3 +616,58 @@ Règles et recettes :
 
 15 tests PASS, dont : pas d'eau sous la bouche, lueur et gouttes recalculées depuis le manifeste avec les phases 12 = 0 et 24 = 0, et scintillements sur la lueur. 6 mutations vérifiées : liseré clair sur la rive, phase de lueur remplacée, scintillements sur l'eau sombre, phase de gouttes dupliquée, eau devant l'entrée, ombres aussi claires que le sable. Build reproductible (74 fichiers identiques hors ORA), en 25 s environ. Pas de runtime.
 
+
+### Entrée Sables mouvants (EQS1) — « poursuis le projet », biome choisi par l'agent (27 septembre)
+
+Demande : « poursuis le projet », après EUL1. Session `arena/01a0e2f1`, branchée sur `95160e32` (EUL1).
+
+Relevé des branches **avant le choix, puis de nouveau avant le commit** :
+
+- **Sœurs de la série** (non fusionnées, têtes inchangées entre les deux relevés) : `01a0de11` `6d72314e`, `01a0dfad` `ab2d40e6`, `01a0dfe2` `f0918bd1`, `01a0e001` `fc94f5a6`, `01a0e017` `46a1f159`, `01a0e2db` `66afe893`.
+- **Préfixes qu'elles ajoutent** : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2.
+- Toutes les références « libres » de `REPRISE_MAPS.md` y sont prises.
+
+Référence choisie : `witheringdesert.png` = **Furnace Desert** (zone amie de *PMD Rescue Team*, H20P01). Lot `source/entree_sables_mouvants_sud_nord_v1/`, préfixe `EQS1`, namespace `entree_sables_mouvants_sud_nord`, aperçu `apercu_entree_sables_mouvants_sud_nord_v1.html`.
+
+Usages antérieurs du rip, **hors série** : duo désert DB1 (`dungeon_biomes_v1`, sur notre base) et biome swap en eau (`01a0d498`, ancienne).
+
+**Leçon** : chercher le nom du fichier de référence dans **tout** l'arbre (`grep -rn witheringdesert`) et dans **toutes** les branches distantes, pas seulement dans les lots de la série.
+
+- `git fetch` ne récupère que `main` ici : il faut passer les refspecs `arena/*` explicitement.
+- Le nom du fichier ne dit pas la zone. C'est l'audit DB1 qui a établi Furnace Desert ; le prompt du décor disait à tort « Explorers of Sky ». Il est gardé tel qu'envoyé, et le titre du manifeste est corrigé.
+
+Règles et recettes :
+
+- **Motif d'un effet du rip redessiné aux couleurs exactes** (chutes de sable) : relever le motif pixel par pixel sur un zoom.
+  - Ici : fond (255,215,95) et zigzags en V pointe en bas, pas horizontal de 15 px, rangées tous les 16 px en quinconce, liseré de 2 px et cœur de 3 px, 3 paires de couleurs en cycle.
+  - Le motif est redessiné par formule dans le masque magenta. Un premier essai en losanges isolés ne ressemblait pas au rip ; comparer côte à côte avec la capture avant de valider.
+  - La **période** vaut PPCM(quinconce, cycle des couleurs) = 6 rangées = 96 px, et non 48. Le défilement (4 px vers le sud par phase, 24 phases) doit la diviser ; un test vérifie la translation pure de chaque phase à la suivante, 23 → 0 compris.
+- **Fosse qui aspire** : les lignes de 1 px aux couleurs du rip (séquence de 6 relevée du bord vers le centre) sont indexées par la distance au bord (`distance_transform_edt`), avec 6 lobes tournants. L'enfoncement est de 0,5 px par phase.
+  - **Test d'enfoncement** : avec les lobes (amplitude 2,5 px pour une période de 6), la mesure par moyenne circulaire de `d mod 6` est dominée par la rotation. Les pas vont de −1,1 à 0,5.
+  - On mesure donc à lobes neutralisés (`B.PIT_LOBE_A = 0`, restauré ensuite) : chaque pas doit être entre 0 et 1,5 px, 0,5 en moyenne. Pris un à un, les pas alternent 0,7 et 0,3, car `d` est quantifié au pixel.
+  - Les phases réelles sont en plus recalculées depuis le manifeste.
+- **Éclaircissement additif du rip** (rayons de soleil) : PMDO mélange en alpha. On pose donc la couleur du rip avec un alpha équivalent, mesuré (ici ≤ 80/255, paliers de 16).
+  - C'est le seul calque translucide ; le test de taille et d'alpha l'exempte explicitement.
+  - Le codec `.tile` prémultiplie l'alpha (`TileBank.add`) : l'aller-retour Ground se compare après `premult`.
+  - Aucun rayon sur l'entrée sombre (test).
+- **Bouche sombre et fentes des rochers** : le masque lum < 55 brut se prolonge en filaments dans les fentes. On prend `open_(dark, 4)`, puis la composante qui contient le haut-centre, puis une dilatation de 4 px limitée au sombre, puis `fill_holes`.
+- **Sol complet trop lisse** : le prompt « only plain sand » a rendu un aplat jaune. Il faut demander explicitement de garder les stries ocre et le style de pixel. Le brut raté est écarté, mais gardé dans `generation` du manifeste.
+
+14 tests PASS, dont :
+
+- recalage (0, 0) du sol complet ;
+- fosse et chutes en couleurs du rip seulement ;
+- tourbillons de poussière sur le sable praticable seulement ;
+- fosse, chutes et bouche bloquées.
+
+7 mutations vérifiées :
+
+- phase de fosse remplacée ;
+- pixel hors rip dans la fosse ;
+- chutes 12 = 11 ;
+- poussière 23 = 10 ;
+- rayon sur la bouche ;
+- alpha hors palier ;
+- ombres aussi claires que le sable.
+
+Build reproductible : 105 fichiers identiques sur 106, seul l'ORA change (horodatages). Il prend environ 30 s. Pas de runtime.
