@@ -13,7 +13,7 @@ Méthode (rendu généré RÉFÉRENCÉ, comme la série) :
 - animations, chacune sur son calque, boucles fermées :
   eau de la source = eau « façon rivière Métano » de l'entrée Vapeur V2 (même palette, 4 x 10 ticks) ;
   bouillonnement = bulles de l'entrée Vapeur V2 (mêmes poses générées, 24 x 5 ticks) ;
-  vapeur des évents et de la source = poses générées réduites x0,1, 24 x 5 ticks, décalées par émetteur.
+  vapeur des évents et de la source = poses générées réduites x0,14, 24 x 5 ticks, décalées par émetteur.
 Scène : PPCM 120 ticks = 2 s.
 Lancer : .venv/bin/python source/fin_vapeur_sommet_v1/build.py
 """
@@ -40,13 +40,13 @@ WATER_PHASES, WATER_TICKS = 4, 10
 BUBBLE_PHASES, BUBBLE_TICKS = 24, 5
 STEAM_PHASES, STEAM_TICKS = 24, 5
 LOOP_TICKS = 120
-STEAM_SCALE = 0.1                        # comme les bulles de l'entrée Vapeur V2 (réduction uniforme x0,1)
+STEAM_SCALE = 0.14                       # panache d'environ 100 px (0,1 donnait 40 px : trop discret)
 # Planche de vapeur : cases relevées (séparateurs noirs x = 210, 420, 636 en haut ; 352, 787 en bas ; y = 260).
 STEAM_CELLS = [(2, 260, 0, 210), (2, 260, 210, 420), (2, 260, 420, 636), (2, 260, 636, 1047),
                (262, 1006, 0, 352), (262, 1006, 352, 787), (262, 1006, 787, 1047)]
 # Chronologie d'une bouffée : 7 poses (petite bouffée -> colonne -> panache -> dissipation) puis repos.
 STEAM_TIMELINE = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6]          # 16 phases actives, 8 au repos
-WISP_TIMELINE = [0, 0, 1, 1, 2, 2, 2, 1, 0]                                 # volutes au-dessus de la source
+WISP_TIMELINE = [1, 1, 2, 2, 3, 3, 2, 1]                                  # volutes au-dessus de la source
 # Positions relevées à la main sur le brut (pixels du brut 1200 x 896) : centre, demi-axes.
 VENTS_RAW = {'event_nord_est': ((838, 318), (52, 45)), 'event_ouest': ((258, 482), (55, 45)),
              'event_est': ((942, 482), (55, 48))}
