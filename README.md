@@ -1,14 +1,27 @@
 # Guilde Treehouse — passages ouverts PMD
 
-## Mod PMDO unique — les 18 entrées de donjon sud → nord (27 septembre 2026)
+## EJS2 — Jardin secret V2 : le temple miniature de Celebi sur la souche (27 septembre 2026)
 
-- Mod : `renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip` (26 Mo), namespace `guilde_entrees_sud_nord`.
+- Aperçu : `apercu_entree_jardin_secret_sud_nord_v2.html`.
+- Lot : `renders/entree_jardin_secret_sud_nord_v2/` (`EJS2_projet_pmdo_0812.zip`, `EJS2_calques_png_8px.zip`, README détaillé).
+- Source : `source/entree_jardin_secret_sud_nord_v2/`, 13 tests PASS.
+
+**Demande de l'utilisateur** : « Je veux un petit temple miniature qui tiens sur la buche celebi gardien secret », puis « lance la suite ! ». **Choix de l'agent, à confirmer** (les questions ont été passées) : nouvelle version (EJS1 intacte) ; la porte du temple devient l'entrée du donjon ; Celebi est un emblème lumineux sur le fronton, pas un sprite.
+
+- **Un seul brut nouveau** : `decor_temple.png`, généré avec le décor d'EJS1 **et** la capture `secretgarden.png` en référence. Seule la zone du temple (9227 px autour de la souche) est collée ; ailleurs, le décor est celui d'EJS1 au pixel près (test).
+- **Temple** : toit vert, piliers de bois, socle de pierre posé sur la souche. Sa porte sombre est bloquée, et `donjon_seuil` (376, 120) est sur le parvis juste dessous. Les marches de la souche y mènent depuis la prairie.
+- **Emblème de Celebi animé** : il s'éclaire de 3 crans jusqu'au blanc sur la rampe exacte du rayon de la capture, puis revient. Boucle de 24 × 5 ticks, symétrique et fermée (test). Le rayon et les lucioles sont ceux d'EJS1 ; deux lucioles qui tombaient sur le toit ont été déplacées.
+- Les distances au rip des calques finaux sont toutes sous 35. Ce sont des pixels générés, pas des tuiles natives. 4 mutations vérifiées. **EJS2 est ajoutée au mod unique (19 cartes)**, marquée « à confirmer ».
+
+## Mod PMDO unique — les entrées de donjon sud → nord (27 septembre 2026)
+
+- Mod : `renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip` (27 Mo, version 1.1.0.0 depuis l'ajout d'EJS2), namespace `guilde_entrees_sud_nord`.
 - Galerie : `apercu_mod_guilde_entrees_v1.html` (une vignette par carte, lien vers son aperçu animé) ; planche `renders/mod_guilde_entrees_v1/planche_cartes.png`.
 - Source : `source/mod_guilde_entrees_v1/` (`build_mod.py`, `test_mod.py`).
 
 **Demande de l'utilisateur** : « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE ! ». La série est **validée par l'utilisateur** (sur les aperçus ; toujours aucun test en jeu).
 
-Le mod regroupe les 18 Grounds de la série (ESN1, ESN2, ECN1, ERN1, EGN1, EBN1 en portrait 424 × 632 ; EJN1, EWC1-3, EUL1, EMF1, EQS1, ESC1, ETC1, ECV1, EMT1, EJS1 en 4:3 768 × 576). Les 219 banques `.tile` et les Grounds sont copiés **octet pour octet** depuis les ZIP projets versionnés des lots ; l'index des tuiles est fusionné ; les scripts de carte passent sous le namespace commun, sans changement. ZIP reproductible (horodatages fixes). 6 tests PASS, dont une installation complète dans un mod existant (simulation, installation, réinstallation sans effet, carte éditée protégée) ; 3 mutations vérifiées.
+Le mod regroupe les 18 Grounds de la série (ESN1, ESN2, ECN1, ERN1, EGN1, EBN1 en portrait 424 × 632 ; EJN1, EWC1-3, EUL1, EMF1, EQS1, ESC1, ETC1, ECV1, EMT1, EJS1 en 4:3 768 × 576). Les 219 banques `.tile` et les Grounds sont copiés **octet pour octet** depuis les ZIP projets versionnés des lots ; l'index des tuiles est fusionné ; les scripts de carte passent sous le namespace commun, sans changement. ZIP reproductible (horodatages fixes). Depuis, **EJS2** a été ajoutée : 19 cartes, 235 banques, EJS2 notée « à confirmer » dans le manifeste. 6 tests PASS, dont une installation complète dans un mod existant (simulation, installation, réinstallation sans effet, carte éditée protégée) ; 3 mutations vérifiées.
 
 ## Étude — animations canoniques d'eau et de magma (PMD Ciel) et leur portage PMDO (27 septembre 2026)
 

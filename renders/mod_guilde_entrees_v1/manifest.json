@@ -2,12 +2,35 @@
  "lot": "mod_guilde_entrees_v1",
  "namespace": "guilde_entrees_sud_nord",
  "target": "0.8.12",
- "cartes": 18,
- "banques": 219,
+ "cartes": 19,
+ "banques": 235,
  "validation_utilisateur": {
   "date": "2026-09-27",
   "citation": "BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE !",
-  "portee": "validation artistique de la serie par l utilisateur, sur les apercus ; aucun test en jeu PMDO"
+  "portee": "validation artistique de la serie par l utilisateur, sur les apercus ; aucun test en jeu PMDO",
+  "cartes_validees": [
+   "ESN1",
+   "ESN2",
+   "ECN1",
+   "ERN1",
+   "EGN1",
+   "EBN1",
+   "EJN1",
+   "EWC1",
+   "EWC2",
+   "EWC3",
+   "EUL1",
+   "EMF1",
+   "EQS1",
+   "ESC1",
+   "ETC1",
+   "ECV1",
+   "EMT1",
+   "EJS1"
+  ],
+  "a_confirmer": [
+   "EJS2"
+  ]
  },
  "runtime_tested": false,
  "methode": "banques et Grounds copies octet pour octet depuis les ZIP projets versionnes des lots ; index fusionne ; scripts deplaces sous le namespace commun, contenu inchange",
@@ -1563,6 +1586,100 @@
     "EJS1_11_FOND": "9c98d747326ef05da91986bf06b8da57331d49152b6a36927a836152bcb5401f",
     "EJS1_12_RAYON": "2d7ae51fe89ed4a773b43e6fb8be9d40f4692137be146d49fe09f1fa41e3f436",
     "EJS1_13_LUCIOLES": "fe88fc0c126cda20dcce7bbf806c303bfc7f2dfd80c8ca0605d4cebaccbf14e3"
+   }
+  },
+  {
+   "lot": "entree_jardin_secret_sud_nord_v2",
+   "prefixe": "EJS2",
+   "titre": "Jardin secret V2 (Celebi)",
+   "asset": "ejs2_entree_jardin_secret_temple",
+   "image": "EJS2_scene_t000.png",
+   "apercu": "apercu_entree_jardin_secret_sud_nord_v2.html",
+   "zip_source": "renders/entree_jardin_secret_sud_nord_v2/EJS2_projet_pmdo_0812.zip",
+   "zip_source_sha256": "767046834c2ccd7a1c30be41142c7e77d570717552e3e5e3b18c0fee583ed7df",
+   "namespace_source": "entree_jardin_secret_sud_nord_v2",
+   "script_source": "Data/Script/entree_jardin_secret_sud_nord_v2/ground/ejs2_entree_jardin_secret_temple/init.lua",
+   "banques": [
+    "EJS2_00_SOL",
+    "EJS2_01_PRAIRIE",
+    "EJS2_02_HERBE",
+    "EJS2_03_OMBRES",
+    "EJS2_04_FLEURS",
+    "EJS2_05_ROCHERS",
+    "EJS2_06_ARBRES",
+    "EJS2_07_HAIES",
+    "EJS2_08_SOUCHE",
+    "EJS2_09_TEMPLE",
+    "EJS2_10_MARCHES",
+    "EJS2_11_PROFONDEUR",
+    "EJS2_12_FOND",
+    "EJS2_13_EMBLEME",
+    "EJS2_14_RAYON",
+    "EJS2_15_LUCIOLES"
+   ],
+   "ground": {
+    "nom": "Entree Jardin secret, temple de Celebi - sud vers nord (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 17,
+    "pistes_animees": [
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "EJS2_00_SOL",
+     "EJS2_01_PRAIRIE",
+     "EJS2_02_HERBE",
+     "EJS2_03_OMBRES",
+     "EJS2_04_FLEURS",
+     "EJS2_05_ROCHERS",
+     "EJS2_06_ARBRES",
+     "EJS2_07_HAIES",
+     "EJS2_08_SOUCHE",
+     "EJS2_09_TEMPLE",
+     "EJS2_10_MARCHES",
+     "EJS2_11_PROFONDEUR",
+     "EJS2_12_FOND",
+     "EJS2_13_EMBLEME",
+     "EJS2_14_RAYON",
+     "EJS2_15_LUCIOLES"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "donjon_seuil": [
+      376,
+      120
+     ]
+    },
+    "cases_bloquees": 4771,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "d60ec4e06d4564bc4fc15c87eebb87ca8be568616802080b2fc1b77bba7c9632",
+   "tiles_sha256": {
+    "EJS2_00_SOL": "f7c038f7cf6417c98a162fd4d63c816a3cb340d47fc9e428eabfac2fca9f54ae",
+    "EJS2_01_PRAIRIE": "a6b5d083c2a97e3598b6baa7ad0888090310db425d5c1d99135e9526dadebd4d",
+    "EJS2_02_HERBE": "80c8af3d4d2fc44dff4027965c43e82a82f79931fef3bddcaaddbfba5c106b2f",
+    "EJS2_03_OMBRES": "bd6550dfae9b63e7c081de065a9a75b006afd49c133109151c7334f4ba826e2c",
+    "EJS2_04_FLEURS": "4295792d3411e05f648577ec56c4e2e3639c3dff4a6de6acf4333d1f72282fc5",
+    "EJS2_05_ROCHERS": "cb76b1cf1c69872bdb5d4e066ce8a0bca800bd8c722b6f4e7996a6bacd9b0ae7",
+    "EJS2_06_ARBRES": "9e89233a74de1f0bb783087eae77bb5c5d21fb7ec5070a23019982125c870432",
+    "EJS2_07_HAIES": "8c5744d3b14366b20d4e8d10af2aa68a51dc9675445a4297f526042706a633cb",
+    "EJS2_08_SOUCHE": "9cfaad334ecd70a253026b20360cfca121249d319a9737ff5006fbb8d78dc447",
+    "EJS2_09_TEMPLE": "7e6cf1f8646837cc7d467a28b5e1ff46b5af59db3c43fd48733dfce8fb0d8a8f",
+    "EJS2_10_MARCHES": "260e0e83ea311ec985c8268a6f7267f6349d39e730404cd359ebf442af8bc490",
+    "EJS2_11_PROFONDEUR": "e5e28ce9931523c2338c9079fd59ce89c876c204b04296f478d58192563fdc6e",
+    "EJS2_12_FOND": "9c98d747326ef05da91986bf06b8da57331d49152b6a36927a836152bcb5401f",
+    "EJS2_13_EMBLEME": "d67ac83615705cef4ee0d70354ff16f4d3eb996a012197a74fbd99acc0851290",
+    "EJS2_14_RAYON": "fc2aa5634ce2c6b156b0cd42ef9fa72047afb246f125e9b6a427d91af9f24945",
+    "EJS2_15_LUCIOLES": "c0c8bb507f625f295e3c2e6e3e2302a04a5ce983be966a534e305fae4cc822a0"
    }
   }
  ]

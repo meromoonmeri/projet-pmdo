@@ -815,10 +815,26 @@ Lot `source/mod_guilde_entrees_v1/`, namespace `guilde_entrees_sud_nord`, sortie
 
 - **Ne rien refaire** : lire chaque banque et chaque Ground dans le ZIP projet versionné du lot, et les copier tels quels. Le test compare octet pour octet et vérifie qu'aucun fichier n'est en trop ou en moins.
 - **Nouvelle carte de la série** : l'ajouter à `MAPS` dans `build_mod.py`, puis relancer le build et les tests. Le test « toutes les cartes » échoue si un lot `renders/entree_*_sud_nord_v*/` avec ZIP projet n'est pas dans le mod.
-- **Installeur** : `source/pmdo_cote/INSTALLER.py` copie `index.idx` comme un fichier ordinaire, et une réinstallation le voit en conflit. Les lots (17 sur 18 ; ESN1 a encore l'ancien) et le mod appliquent le correctif au build. Test : installer, réinstaller sans effet, carte éditée protégée.
+- **Installeur** : `source/pmdo_cote/INSTALLER.py` copie `index.idx` comme un fichier ordinaire, et une réinstallation le voit en conflit. Les lots (tous sauf ESN1, qui a encore l'ancien) et le mod appliquent le correctif au build. Test : installer, réinstaller sans effet, carte éditée protégée.
 - **Validation** : l'utilisateur a validé la série sur les aperçus. Les manifestes des lots gardent `art_approved:false` (leurs tests l'exigent) ; la validation est notée dans le manifeste du mod. `runtime_tested` reste faux partout.
 - **ZIP reproductible** : `ZipInfo` à date fixe, fichiers triés. Deux builds donnent le même sha256.
 - **Planche** : la police par défaut de Pillow n'a pas d'accents ; prendre DejaVuSans.
 
 6 tests PASS. 3 mutations vérifiées : octet changé dans une banque, banque retirée de l'index, tuile citée inexistante. Build en 45 s environ.
 
+### Entrée Jardin secret V2, temple de Celebi (EJS2) — « petit temple miniature… celebi gardien secret » (27 septembre)
+
+Lot `source/entree_jardin_secret_sud_nord_v2/`, préfixe `EJS2`, namespace `entree_jardin_secret_sud_nord_v2`, aperçu `apercu_entree_jardin_secret_sud_nord_v2.html`. Choix de l'agent, à confirmer : nouvelle version, EJS1 intacte ; porte du temple = entrée ; Celebi en emblème, pas en sprite.
+
+Recette d'une **variante locale d'un lot existant** (ajouter un objet à un décor déjà validé) :
+
+- **Un seul brut nouveau**, généré avec `images=[décor du lot parent, rip]` et la consigne de ne changer que la zone visée. Les autres bruts sont relus dans le dossier du lot parent (`RAW1`), jamais copiés ; `generation` garde un champ `lot` par brut.
+- **Recalage** du nouveau brut hors de la fenêtre élargie de 20 px (EJS2 : (0, 0), écart 3,76 contre 6,22).
+- **Collage** : écart lissé 3 px > 22 dans une fenêtre fixe, plus grande composante, fermée 3 px, trous bouchés, dilatée 2 px. Hors zone, le décor du parent au pixel près (test). Le masque pleine résolution est enregistré, et un test le compare au recalcul.
+- **Segmentation de l'objet** dans la zone : socle = grande composante grise, porte = grande composante sombre (`profondeur`), emblème = boîte fixe au-dessus de la porte, marches = zone sous la porte dans la largeur de l'ancien trou. Le reste devient le calque `temple`, avec son propre groupe de palette (48). Retirer la zone du rayon.
+- **Vérifier les positions animées du parent** : deux lucioles d'EJS1 tombaient sur le nouveau toit.
+- **Lueur en aller-retour** : calculer sur `u = min(t, 24 − t)`. `round(1,5 ± ε)` rend sinon la boucle asymétrique (t = 6 contre t = 18), et le test l'a vu.
+- Les tests du parent qui supposaient « le trou touche la souche » ou « le rayon est au-dessus du trou » sont à adapter : porte dans le temple, rayon au-dessus des marches.
+- **Mod** : la carte est ajoutée à `MAPS`. Le manifeste du mod sépare `cartes_validees` (18) et `a_confirmer` (EJS2) ; version 1.1.0.0.
+
+13 tests PASS. 4 mutations vérifiées : pixel de l'emblème hors rampe, phase 12 = phase 0, zone collée hors fenêtre, temple remonté de 40 px. Build en 30 s environ. Pas de runtime.

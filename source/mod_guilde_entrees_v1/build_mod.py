@@ -1,4 +1,4 @@
-"""Mod PMDO 0.8.12 unique qui regroupe toutes les entrées de donjon sud -> nord de la série (18 Grounds).
+"""Mod PMDO 0.8.12 unique qui regroupe toutes les entrées de donjon sud -> nord de la série (19 Grounds : les 18 validées et EJS2, à confirmer).
 .venv/bin/python source/mod_guilde_entrees_v1/build_mod.py
 
 Demande : « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE ! » (27 septembre).
@@ -7,7 +7,7 @@ Aucun pixel n'est refait ici : chaque banque .tile et chaque Ground sont copiés
 versionné de son lot (`renders/<lot>/<PFX>_projet_pmdo_0812.zip`). Seuls changent :
 - le namespace, commun : `guilde_entrees_sud_nord` (les scripts de carte vont dans Data/Script/<namespace>/ground/<asset>/,
   leur contenu est inchangé : ce sont des modules autonomes nommés d'après la carte) ;
-- `Content/Tile/index.idx`, fusion des index des 18 lots (un nœud par banque, relu dans la banque elle-même) ;
+- `Content/Tile/index.idx`, fusion des index des lots (un nœud par banque, relu dans la banque elle-même) ;
 - Mod.xml, README.md, manifest.json et INSTALLER.py (celui des lots, générique).
 
 Sorties : `.cache/mod_guilde_entrees_v1/guilde_entrees_sud_nord/` (dossier du mod), puis
@@ -47,9 +47,13 @@ MAPS = [
     ('entree_couloir_violet_sud_nord_v1', 'ECV1', 'Couloir violet', 'ECV1_scene_t000.png'),
     ('entree_mt_thunder_sud_nord_v1', 'EMT1', 'Mt. Thunder', 'EMT1_scene_t000.png'),
     ('entree_jardin_secret_sud_nord_v1', 'EJS1', 'Jardin secret', 'EJS1_scene_t000.png'),
+    ('entree_jardin_secret_sud_nord_v2', 'EJS2', 'Jardin secret V2 (Celebi)', 'EJS2_scene_t000.png'),
 ]
+N = len(MAPS)
 VALIDATION = {'date': '2026-09-27', 'citation': 'BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE !',
-              'portee': 'validation artistique de la serie par l utilisateur, sur les apercus ; aucun test en jeu PMDO'}
+              'portee': 'validation artistique de la serie par l utilisateur, sur les apercus ; aucun test en jeu PMDO',
+              # Les 18 cartes montrees quand l utilisateur a valide ; EJS2 (temple de Celebi) a ete faite apres : a confirmer.
+              'cartes_validees': [m[1] for m in MAPS if m[1] != 'EJS2'], 'a_confirmer': ['EJS2']}
 
 
 def loadmod(name, path):
@@ -114,12 +118,12 @@ def mod_xml():
     uid = uuid.uuid5(uuid.NAMESPACE_URL, 'meromoonmeri/guilde-treehouse-pmd/' + NAMESPACE)
     return f'''<?xml version="1.0" encoding="utf-8"?>
 <Header>
-  <Name>Guilde Treehouse - Entrees de donjon sud-nord (18 cartes) - 0.8.12</Name>
+  <Name>Guilde Treehouse - Entrees de donjon sud-nord ({N} cartes) - 0.8.12</Name>
   <Author>meromoonmeri</Author>
-  <Description>Les 18 entrees de donjon sud vers nord de la serie Guilde Treehouse, en un seul mod : Grounds animes, collisions et marqueurs entrance / donjon_seuil. Base d'edition, aucun warp, pas une aventure jouable.</Description>
+  <Description>Les {N} entrees de donjon sud vers nord de la serie Guilde Treehouse, en un seul mod : Grounds animes, collisions et marqueurs entrance / donjon_seuil. Base d'edition, aucun warp, pas une aventure jouable.</Description>
   <Namespace>{NAMESPACE}</Namespace>
   <UUID>{uid}</UUID>
-  <Version>1.0.0.0</Version>
+  <Version>1.1.0.0</Version>
   <GameVersion>0.8.12.0</GameVersion>
   <ModType>Quest</ModType>
   <Relationships />
@@ -129,11 +133,13 @@ def mod_xml():
 
 def readme(rows):
     lines = [
-        '# Guilde Treehouse — entrées de donjon sud → nord (18 cartes) — mod PMDO 0.8.12', '',
-        f'Ce dossier est un mod d\'édition autonome, namespace `{NAMESPACE}`. Il regroupe les **18 entrées de donjon sud → nord** '
+        f'# Guilde Treehouse — entrées de donjon sud → nord ({N} cartes) — mod PMDO 0.8.12', '',
+        f'Ce dossier est un mod d\'édition autonome, namespace `{NAMESPACE}`. Il regroupe les **{N} entrées de donjon sud → nord** '
         'de la série. Chaque carte est un Ground animé, avec ses collisions et deux marqueurs : `entrance` (arrivée, au sud) et '
         '`donjon_seuil` (au pied de l\'entrée, au nord). **Aucun warp** : c\'est une base d\'édition, pas une aventure jouable.', '',
-        f'Série validée par l\'utilisateur le 27 septembre 2026 (« {VALIDATION["citation"]} »). **Aucune carte n\'a encore été testée dans PMDO.**', '',
+        f'Série validée par l\'utilisateur le 27 septembre 2026 (« {VALIDATION["citation"]} ») pour les {len(VALIDATION["cartes_validees"])} cartes '
+        'montrées alors. **EJS2** (jardin secret avec le temple miniature de Celebi) a été faite ensuite : **elle reste à confirmer**. '
+        '**Aucune carte n\'a encore été testée dans PMDO.**', '',
         '## Installer', '',
         f'- **Mod séparé** : copier le dossier `{NAMESPACE}` dans `PMDO/MODS/`, activer le mod, puis ouvrir les Grounds dans l\'éditeur (mode développeur).',
         '- **Dans un mod existant** : `python INSTALLER.py /chemin/PMDO/MODS/mon_mod --dry-run`, puis la même commande sans `--dry-run`. '
@@ -186,7 +192,7 @@ def gallery(rows):
                      f'<code>{r["asset"]}</code></span></a>')
     return f'''<!doctype html>
 <html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mod Guilde Treehouse — 18 entrées sud → nord</title>
+<title>Mod Guilde Treehouse — {N} entrées sud → nord</title>
 <style>
 body{{background:#141b24;color:#e4e6f2;font:15px/1.55 system-ui,sans-serif;margin:0;padding:24px}}main{{max-width:1240px;margin:auto}}
 h1{{font-size:30px;margin:0 0 6px}}p{{color:#b3c9d3;max-width:90ch}}code{{color:#cfe4ee}}
@@ -196,10 +202,10 @@ h1{{font-size:30px;margin:0 0 6px}}p{{color:#b3c9d3;max-width:90ch}}code{{color:
 .card span{{color:#9fb6c0;font-size:13px}}
 </style>
 <main>
-<h1>Mod PMDO 0.8.12 — les 18 entrées de donjon sud → nord</h1>
+<h1>Mod PMDO 0.8.12 — les {N} entrées de donjon sud → nord</h1>
 <p>Un seul mod, namespace <code>{NAMESPACE}</code> : <a href="renders/{LOT}/{ZIP.name}" style="color:#e7c77f">{ZIP.name}</a>.
 Chaque carte garde ses banques et son Ground octet pour octet ; l'index des tuiles est fusionné. Série validée par l'utilisateur le
-27 septembre 2026. Aucun test en jeu. Cliquer une carte pour ouvrir son aperçu animé.</p>
+27 septembre 2026 (18 cartes ; EJS2, faite ensuite, reste à confirmer). Aucun test en jeu. Cliquer une carte pour ouvrir son aperçu animé.</p>
 <div class="grid">
 {chr(10).join(cards)}
 </div>
@@ -233,7 +239,7 @@ def build():
                      'ground_sha256': sha(graw), 'tiles_sha256': {k: sha(v) for k, v in sorted(L['tiles'].items())}})
     (STAGE / 'Content/Tile/index.idx').write_bytes(INST.encode_index(nodes))
     (STAGE / 'Mod.xml').write_text(mod_xml())
-    # Installeur des lots (17 sur 18) : celui de source/pmdo_cote, corrigé pour ne pas copier index.idx comme un fichier
+    # Installeur des lots (tous sauf ESN1) : celui de source/pmdo_cote, corrigé pour ne pas copier index.idx comme un fichier
     # ordinaire (sinon une réinstallation le voit en conflit). Même correctif que dans les build.py des lots.
     script = (R / 'source/pmdo_cote/INSTALLER.py').read_text()
     needle = '            relative = src.relative_to(source)\n'
