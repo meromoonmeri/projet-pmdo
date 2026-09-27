@@ -792,3 +792,20 @@ Règles et recettes :
 - **Lucioles et souche** : un test « jamais sur la souche ni le trou » a trouvé deux lucioles qui partaient des racines ; elles ont été décalées.
 
 11 tests PASS. 8 mutations vérifiées : pixel de rayon hors rampe, phase de lucioles décalée, distance du sol complet au manifeste, cran de rampe au manifeste, case praticable bloquée dans le Ground, ORA altérée, préfixe repris, masque des marches vidé. Fidélité : fond 9,9, herbe claire 8,7, herbe 8,5, roche 20,1 sur le brut ; prairie 30,5, herbe 8,1, ombres 2,2, rochers 20,5, fond 11,7 sur les calques. Build en 30 s environ. Pas de runtime.
+
+### Étude des animations canoniques eau / magma (PMD Ciel) — « regarde les animations canoniques… S01P02A » (27 septembre)
+
+Lot `source/etude_animations_canoniques_sky_v1/` (étude, pas une carte), aperçu `apercu_etude_animations_canoniques_sky_v1.html`. Sources figées : `pret/pmd-sky` `c8073235` (`files/MAP_BG`, téléchargé dans `.cache`), `meromoonmeri/PMD-SKY-PMDO-PORT` `d62110a0`, RogueEssence `ee6811c2`. Il faut `skytemple-files` dans `.venv` (`pip install skytemple-files`).
+
+Règles et recettes :
+
+- **Eau et lave canoniques = rotation de palette (BPL)** : pour chaque palette animée, `number_of_frames` jeux de 15 couleurs, chacun `duration_per_frame` frames. Les tuiles animées (BPA) ont leurs durées par cran. Rendu exact au tick t : image indexée `bma.to_pil(..., pal_ani=False)` au cran BPA du tick, avec les palettes du tick (`t // durée % crans` pour chaque palette).
+- **Ne pas se fier à `to_pil(..., pal_ani=True)`** pour le temps : il avance tout à pas égaux, une image par entrée de la table de palettes, et ignore les vitesses (skytemple le dit lui-même).
+- **Piste PMDO exacte** : RogueEssence joue `totalTick / FrameLength % frames`, à 60 i/s comme la DS. `FrameLength` = PGCD des instants de changement de la case ; frames = la vraie suite, **répétitions et ordre gardés**. Ne jamais dédoublonner les frames d'une case : 0‑1‑0‑2 deviendrait 0‑1‑2, et 13 crans dont le dernier redonne le premier deviendraient 12. Chaque case dérive alors à son rythme.
+- **Audit d'un Ground animé** : comparer piste à piste sur le PPCM des deux périodes, au pas du PGCD des `FrameLength`. Une période globale sur toute la carte (240 240 ticks pour d41p41a) a fait tomber le processus par manque de mémoire.
+- **Attention au pipe** : `python … | tail` masque un arrêt par manque de mémoire (code 137, rien d'affiché). Écrire dans un fichier et lire le code de retour.
+- **Test « rapport = recalcul »** : un test qui lit un rapport recalculé ne détecte pas une modification du fichier enregistré. Comparer aussi le fichier au recalcul.
+- s01p03a (capture d'ETC1) et s01p02a ont la même animation de palette, octet pour octet.
+
+9 tests PASS. 4 mutations vérifiées. Chiffres : s01p02a mer 10 × 10, fleurs 4 × 12, port faux 16,7 % du temps sur les cases animées ; d41p41a lave 13 × 10, port faux 88,7 % ; v03p08a 10 × 12, 10 × 8 et 20 × 8, port faux 71,7 %. Étude en 20 s environ. Pas de runtime.
+

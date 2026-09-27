@@ -1,5 +1,28 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Étude — animations canoniques d'eau et de magma (PMD Ciel) et leur portage PMDO (27 septembre 2026)
+
+- Aperçu : `apercu_etude_animations_canoniques_sky_v1.html` : piste exacte et piste du port rejouées côte à côte, avec la formule du moteur.
+- Lot : `renders/etude_animations_canoniques_sky_v1/` (rapport, inventaire des 110 cartes à palette animée, WebP à la vraie vitesse, cycles de palette, audits).
+- Source : `source/etude_animations_canoniques_sky_v1/`. **Étude, pas une carte de la série.**
+
+**Demande de l'utilisateur** : « regarde les animations canoniques des maps magma / de l'eau, par exemple sur la map S01P02A » (`meromoonmeri/PMD-SKY-PMDO-PORT`).
+
+- **Mécanique**, lue dans les fichiers de la ROM (`pret/pmd-sky`) : l'eau et la lave sont des **rotations de palette**. Les pixels restent fixes, 15 couleurs tournent par crans, chaque palette avec sa durée en frames. Les tuiles animées (BPA) ont leurs propres durées.
+  - s01p02a : mer 10 crans × 10 frames, fleurs en BPA 4 crans × 12.
+  - Magma d41p41a : 13 crans × 10.
+  - Magma v03p08a : 10 × 12, dont un aller-retour, et 20 × 8.
+- **Moteur** : RogueEssence joue `totalTick / FrameLength % frames`, à 60 i/s comme la DS. Une piste est donc exacte si `FrameLength` = durée NDS et si ses frames gardent leurs répétitions.
+- **Audit du port** : ses pistes sont l'aperçu skytemple à pas égaux, dédoublonné case par case, avec `FrameLength` 10 partout (prouvé par test). Résultats :
+  - mer de s01p02a juste à 97 %, mais fleurs fausses 65 % du temps ;
+  - lave de d41p41a fausse **89 %** du temps ;
+  - lave de v03p08a fausse **72 %** du temps.
+
+  Les pistes exactes, recalculées case par case, sont vérifiées tick par tick.
+- **Pour nos cartes** : s01p03a, la capture d'ETC1, a la même animation de palette que s01p02a. La mer d'ETC1 n'est donc pas l'animation canonique.
+
+9 tests PASS ; 4 mutations vérifiées. Pas de test dans PMDO.
+
 ## Entrée Jardin secret — 4:3, prairie fleurie, souche à marches sous un rayon de lumière (27 septembre 2026)
 
 - Aperçu : `apercu_entree_jardin_secret_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
