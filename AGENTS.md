@@ -743,3 +743,20 @@ Règles et recettes :
 - **Planche de poses serrée** : quand des sprites sont plus proches que la fenêtre, garder pour chaque fenêtre la seule composante (fermée 3 px) qui contient son centre, **avec un fond propre à chaque fenêtre** (un masque global gardait la composante voisine d'une autre fenêtre).
 
 13 tests PASS. 5 mutations vérifiées : trait blanc sur la rive, phase de mer figée, phase de papillons dupliquée, ombres à la couleur moyenne de l'herbe, jungle devant la bouche. Une mutation « ombres = un pixel d'herbe quelconque » n'échouait pas, parce que le pixel choisi était sombre (lum 185) : muter avec la couleur moyenne. Fidélité : herbe 20,4, jungle 32,0, dalles 25,1 sur le brut ; herbe 20,4, jungle 33,5, dalles 13,3 sur les calques. Build reproductible (92 fichiers identiques sur 93, hors ORA), en 30 s environ. Pas de runtime.
+
+### Entrée Couloir violet (ECV1) — « Push et passe a la prochaine ! » (27 septembre)
+
+Référence `large.S05P03A.png.301f7a1eadda348357be0801e81faa2a.png` (312 × 720, 34 couleurs, couloir rocheux violet ; jeu et scène non confirmés). Lot `source/entree_couloir_violet_sud_nord_v1/`, préfixe `ECV1`, namespace `entree_couloir_violet_sud_nord`, aperçu `apercu_entree_couloir_violet_sud_nord_v1.html`. Relevé : 0 occurrence du nom de fichier sur les 72 têtes (`git grep -l -I -F`, inventaires exclus) ; le titre d'audit n'apparaît que dans notre `REPRISE_MAPS.md`.
+
+Règles et recettes :
+
+- **Sol et roche séparés par la teinte** : dans cette capture, le sol est mauve (r − g ≈ 16) et toute la roche a r = g. Le critère `r − g lissé 5 px ≥ 6` suffit à isoler le sol, y compris sur le brut généré ; la même paire de classifieurs sert à la fidélité.
+- **Falaise striée contre rochers ronds** : même couleur, autre texture. Rapport gradient horizontal / vertical lissé 21 px > 1,5 = stries verticales = falaise ; fermeture 6 px, composantes > 4000 px.
+- **Vide contre creux entre rochers** : les deux sont noirs. Le vide est le noir **relié au bord de l'image** (ouvert 4 px, > 3000 px) ; les creux entre les rochers restent aux rochers.
+- **Îlots dans le sol** : trous du sol qui ne sont pas du sol. ≥ 600 px = blocs (obstacles), 12 à 600 px = gravillons (praticables, fidèles à la capture).
+- **Sprites exacts pris sur la capture** : une composante de roche 8-connexe **entièrement entourée de sol** est un gravillon isolé ; ses pixels et ses couleurs sont copiés tels quels (test : pixels = rip). Les composantes qui touchent une paroi sont des ombres de rochers, pas des gravillons.
+- **Planche de poses qui ne respecte pas la grille** : le générateur a peint une colonne de nuages dans un couloir magenta bordé de rochers (il a recopié la capture). Seuls 2 nuages sur 4 étaient des trous fermés du magenta. Recette : fenêtre par pose, pixels de la teinte du nuage (r − g ≥ 10, b − r < 40), à plus de 3 px de tout pixel de rocher bleu (b − r ≥ 40), composantes ≥ 40 px, trous bouchés (reflets). Test : aucun pixel bleu dans les poses.
+- **Chute au pied d'une paroi** : point d'impact = point de sol le plus proche de la cible avec une paroi 8 px et 20 px au-dessus, calcul vectorisé (`minimum_filter` + `np.roll`). La double boucle Python prenait plusieurs minutes.
+- **Chute accélérée** : pas de 5, 7, 9 px. Un test « ≤ 8 px par phase » a échoué au premier passage : c'était le test qui était faux ; il vérifie désormais des pas croissants, ≤ 9 px.
+
+12 tests PASS. 5 mutations vérifiées : pixel d'éboulis hors rip, trou dans le sol, pose de gravillon altérée, chute déplacée dans le manifeste, phase de poussière dupliquée. Fidélité : sol 6,5 et roche 6,3 sur le brut ; sol 8,9, rochers 4,5, blocs 25,6 sur les calques. Build en 30 s environ. Pas de runtime.

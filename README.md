@@ -1,5 +1,24 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Couloir violet — 4:3, couloir rocheux qui s'ouvre sur une grande salle (27 septembre 2026)
+
+- Aperçu : `apercu_entree_couloir_violet_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
+- Lot : `renders/entree_couloir_violet_sud_nord_v1/` (`ECV1_projet_pmdo_0812.zip`, `ECV1_calques_png_8px.zip`, ORA, WebP animé, planche des poses).
+- Source : `source/entree_couloir_violet_sud_nord_v1/`.
+
+**Demande de l'utilisateur** : « Push et passe a la prochaine ! ». ETC1 était déjà poussé ; carte suivante de la série. L'agent a choisi le biome **couloir rocheux violet**, **à confirmer**. La capture `large.S05P03A…png` (sol mauve marbré, rochers empilés bleu-violet, falaises striées ; jeu et scène non confirmés) n'est citée par aucun lot : 0 occurrence sur les 72 branches (`git grep -F`, inventaires exclus).
+
+Méthode des textures canoniques = **rendu généré référencé**, la capture en référence pour les trois bruts : décor complet (premier essai, conforme), sol complet, planche de nuages de poussière.
+
+L'arrivée est au sud, par un couloir étroit entre deux parois de rochers. Il s'ouvre sur une grande salle semée de huit amas de rochers, jusqu'à un tunnel sombre sous une arche de rochers, au nord. Falaises striées au fond.
+
+11 calques : sol complet, sol, ombres (au pied des parois et des blocs), gravillons, blocs, rochers, falaise, vide, profondeur, éboulis, poussière. Deux animations de 24 × 5 ticks :
+
+- **éboulis** : trois gravillons **relevés pixel par pixel sur la capture** tombent du pied des parois (chute accélérée), rebondissent, roulent de 4 px et restent au sol ; 4 chutes décalées de 6 phases ;
+- **poussière** : 4 poses générées, un nuage qui s'élève à chaque impact.
+
+Boucles fermées (testé). Fidélité au rip : sol 6,5 et roche 6,3 sur le brut ; sol 8,9, rochers 4,5, blocs 25,6 sur les calques (seuil 35). 12 tests PASS ; 5 mutations vérifiées. Pas de test PMDO en jeu.
+
 ## Entrée Clairière tropicale — 4:3, arrivée par un ponton, clairière de palmiers (27 septembre 2026)
 
 - Aperçu : `apercu_entree_clairiere_tropicale_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
