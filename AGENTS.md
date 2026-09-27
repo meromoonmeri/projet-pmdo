@@ -838,3 +838,46 @@ Recette d'une **variante locale d'un lot existant** (ajouter un objet à un déc
 - **Mod** : la carte est ajoutée à `MAPS`. Le manifeste du mod sépare `cartes_validees` (18) et `a_confirmer` (EJS2) ; version 1.1.0.0.
 
 13 tests PASS. 4 mutations vérifiées : pixel de l'emblème hors rampe, phase 12 = phase 0, zone collée hors fenêtre, temple remonté de 40 px. Build en 30 s environ. Pas de runtime.
+
+### Zone de réveil, prairie face à l'océan (ZRV1) — « zone de départ… mer animée comme dans PMD Sky » (27 septembre)
+
+Lot `source/zone_reveil_prairie_horizon_v1/`, préfixe `ZRV1`.
+
+- Banques `ZRV1J_`, `ZRV1A_` et `ZRV1N_`.
+- Namespace `zone_reveil_prairie_horizon`.
+- Assets `zrv1_zone_reveil_{jour,aube,nuit}`.
+- Aperçu `apercu_zone_reveil_prairie_horizon_v1.html`.
+
+Choix de l'utilisateur : promontoire, « falaise sans relief », réveil face à l'océan, sortie au sud. Jour et nuit ; l'aube a été ajoutée.
+
+Recette d'une **scène panoramique avec la mer animée du jeu** :
+
+- **Bruts** : un décor de jour, généré avec `images=[frame 0 du GIF, planche des cimes, mer de s01p02a]`. La nuit et l'aube sont des **éditions du jour** (`images=[décor de jour, nuit native]`), recalées sur les gradients de la prairie. Les masques et les collisions sont communs. Les nuages qui passent viennent d'une planche de sprites sur magenta, générée à part.
+- **Segmentation** : horizon = première rangée à plus de 90 % bleu mer ; prairie = plus grande composante verte ; mer = le reste ; panorama = tout au-dessus.
+  - Ne pas séparer ciel, cimes et mer de nuages par la couleur : le bas du ciel a la couleur de la neige.
+  - Rochers : gris-bleu avec `|r − g| < 28` et un ratio de 35 %.
+- **Mer par rotation de palette**, pas par la couleur la plus proche : la rampe n'est pas monotone, et les index 2 et 8 ont la même couleur.
+  - Construire un champ d'index procédural : k ∈ 0..9 croissant vers le rivage, largeurs selon le profil mesuré dans s01p02a.
+  - Couleur = palette[s][k].
+  - Trois impasses sont éprouvées :
+    - une période sous 16 px à l'horizon crénelle ;
+    - une ondulation couplée à la phase donne des dents de scie ; faire onduler toutes les rangées en phase ;
+    - un index d'écume tiré par pixel donne des hachures ; tirer un index par composante (`nd.label`).
+- **Aube et nuit** : palette transposée, avec la médiane des pixels de mer du brut de même luminance de jour.
+  - Reflet de l'astre : colonne centrée sur la médiane x des pixels clairs, demi-largeur au 90ᵉ percentile par rangée, `maximum_filter` 5 puis `uniform_filter` 15.
+  - Une fermeture morphologique des pixels clairs donne une tache informe.
+- **Étoiles** : médiane locale (9 px) < 100 et pas jaune (b ≥ r − 20). Sinon, le bord de la lune et les bords de nuages passent pour des étoiles, et le test d'étoile plus claire que son fond l'a vu.
+- **Bulles** : exclure les 4 px du bord gauche et droit. Les index négatifs de numpy bouclent en silence.
+- **Nuages qui passent** : deux bandes dont la largeur divise 768 (768 et 384), roulées de `pas × t`. Une boucle de 192 phases ferme les deux rangées. Le test compare **les 192 phases** : il en comparait quatre, et une phase décalée passait.
+- **Aperçu** : la page ne contient que le fond fixe composé, les images de mer, d'écume, de bulles et de scintillements, et les deux bandes de nuages par ambiance. Le JavaScript refait le roulement des nuages. L'identité avec l'empilement des calques est vérifiée hors navigateur aux ticks 0 et 800 (écart 0).
+- **Poids** : environ 16 400 tuiles de mer par ambiance ; un rsground d'environ 20 Mo ; build en 200 s environ.
+
+12 tests PASS. 5 mutations vérifiées :
+
+1. pixel de mer hors palette ;
+2. phase de nuage décalée ;
+3. bulle sur la prairie ;
+4. couleur de la palette 7 altérée ;
+5. case de mer praticable.
+
+Pas de runtime. Pas encore dans le mod unique.

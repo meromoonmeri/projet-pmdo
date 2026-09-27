@@ -24,6 +24,13 @@ Même jour, sur « Lance la suite ! » : lot **Entrée Jardin secret** (`renders
 
 Même jour, sur « j'aimerais que tu regardes les animations canoniques des map magma / de l'eau par exemple sur la map S01P02A » : **étude** `renders/etude_animations_canoniques_sky_v1/` (source `source/etude_animations_canoniques_sky_v1/`, aperçu `apercu_etude_animations_canoniques_sky_v1.html`). Fichiers de la ROM lus depuis `pret/pmd-sky` : l'eau et la lave sont des rotations de palette, avec leurs vraies durées. Le Ground du port `PMD-SKY-PMDO-PORT` dédoublonne les frames et fixe `FrameLength` à 10 : lave fausse 72 à 89 % du temps. Pistes exactes calculées et vérifiées tick par tick ; 9 tests PASS. **Suite proposée, à faire confirmer** : appliquer le vrai cycle de palette à nos cartes (ETC2 avec la mer de s01p03a, carte de magma avec le cycle de d41p41a), ou porter fidèlement des cartes du port.
 
+Même jour, sur la demande de la **zone de départ** (« zone où le Pokémon se réveille », grande prairie à la Sky Peak, « falaise sans relief », mer en contrebas « comme la mer animée dans PMD Sky » avec bulles, nuages qui passent, jour et nuit) : lot **ZRV1**. C'est la zone de réveil (`renders/zone_reveil_prairie_horizon_v1/`, aperçu `apercu_zone_reveil_prairie_horizon_v1.html`, 12 tests PASS).
+
+- Trois Grounds : jour, aube (ajoutée) et nuit.
+- La mer suit la rotation de palette exacte de s01p02a ; son motif de bandes est le nôtre.
+- L'écume et les bulles sont l'exception explicite à la règle « pas de liseré blanc ».
+- ZRV1 n'est **pas dans le mod unique**. C'est une zone, pas une entrée de la série : l'y ajouter seulement si l'utilisateur le demande.
+
 Même jour, sur « Je veux un petit temple miniature qui tiens sur la buche celebi gardien secret » puis « lance la suite ! » : lot **EJS2**, Jardin secret V2 avec le temple de Celebi (`renders/entree_jardin_secret_sud_nord_v2/`, aperçu `apercu_entree_jardin_secret_sud_nord_v2.html`, 13 tests PASS). Un seul brut nouveau, collé sur la souche ; le reste est le décor d'EJS1 au pixel près. La porte du temple est l'entrée, et Celebi est un emblème qui luit. Ce sont des choix de l'agent, **à confirmer**. EJS2 est ajoutée au mod unique (19 cartes, version 1.1.0.0).
 
 Même jour, sur « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE ! » : **série validée par l'utilisateur**, et **mod unique** des 18 entrées (`renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip`, namespace `guilde_entrees_sud_nord`, galerie `apercu_mod_guilde_entrees_v1.html`, source `source/mod_guilde_entrees_v1/`, 6 tests PASS). Chaque nouvelle carte de la série doit être ajoutée à `MAPS` dans `build_mod.py`.
@@ -43,7 +50,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1 et EJS2.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2 et ZRV1.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 

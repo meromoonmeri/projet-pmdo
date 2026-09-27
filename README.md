@@ -1,5 +1,32 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## ZRV1 — Zone de réveil : la prairie de Sky Peak face à l'océan, jour, aube et nuit (27 septembre 2026)
+
+- Aperçu : `apercu_zone_reveil_prairie_horizon_v1.html`. Boutons jour, aube et nuit, rejoué à 60 ticks/s, avec collisions et zoom.
+- Lot : `renders/zone_reveil_prairie_horizon_v1/`. Il contient `ZRV1_projet_pmdo_0812.zip` (trois Grounds), `ZRV1_calques_png_8px.zip` et un README détaillé.
+- Source : `source/zone_reveil_prairie_horizon_v1/`, 12 tests PASS.
+
+**Demande de l'utilisateur** : la zone de départ où le Pokémon se réveille.
+
+- Une grande prairie à la Sky Peak, une « falaise sans relief » et une « entrée immersive » sur l'océan en contrebas, « comme la mer animée dans PMD Sky ».
+- L'écume et les bulles de la mer qui arrive au pied de la prairie.
+- Les cimes et la mer de nuages à l'horizon, avec des nuages qui passent.
+- Le jour et la nuit.
+- « C'est la première scène du jeu. »
+
+**Réponses aux questions** : promontoire ; réveil au bord face à l'océan et sortie au sud ; jour, aube et nuit (**l'aube est un ajout**).
+
+- **Trois bruts de décor**, générés avec la frame 0 du GIF Sky Peak, `232233.png` et la mer de s01p02a en référence. La nuit et l'aube sont des éditions du jour, recalées au pixel près, donc mêmes masques et mêmes collisions. Distance au rip : herbe 9,2, fleurs 22,4.
+- **Mer de PMD Ciel** : couleurs et cadence exactes de s01p02a (palettes 7 et 8, 10 crans de 10 ticks).
+  - La crête blanche avance vers la prairie.
+  - Les bandes vont de 16 px à l'horizon à 44 px au rivage. Ce motif est le nôtre ; les couleurs et la cadence sont natives.
+  - À l'aube et la nuit, les couleurs sont transposées, avec le reflet lissé du soleil ou de la lune.
+- **Écume et bulles animées** au pied du promontoire : c'est l'exception demandée à la règle « pas de liseré blanc ».
+  - Scintillements : 12 reflets le jour, 92 paillettes à l'aube, 9 étoiles la nuit.
+  - Nuages qui passent : deux rangées en parallaxe, boucle de 192 × 8 ticks.
+- `reveil` en (376, 240), face au nord ; `entrance` en (384, 560). Aucun warp.
+- Pixels générés, pas de tuiles natives, sauf les couleurs de la mer et de l'écume. 5 mutations vérifiées. Pas de runtime. **Pas encore dans le mod unique.**
+
 ## EJS2 — Jardin secret V2 : le temple miniature de Celebi sur la souche (27 septembre 2026)
 
 - Aperçu : `apercu_entree_jardin_secret_sud_nord_v2.html`.
