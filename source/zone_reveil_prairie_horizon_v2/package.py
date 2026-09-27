@@ -13,7 +13,7 @@ O = R / 'renders/zone_reveil_prairie_horizon_v2'
 NS = 'zone_reveil_prairie_horizon_v2'
 S = R / '.cache/zone_reveil_prairie_horizon_v2' / NS
 PFX = 'ZRV2'
-AMB = {'jour': 'J', 'aube': 'A', 'nuit': 'N'}
+AMB = {'jour': 'J', 'aube': 'A', 'crepuscule': 'C', 'nuit': 'N'}
 PAGE = R / 'apercu_zone_reveil_prairie_horizon_v2.html'
 
 

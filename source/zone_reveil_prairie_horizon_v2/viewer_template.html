@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zone de réveil V2 · mer de V24P04A · jour, aube, nuit</title>
+<title>Zone de réveil V2 · mer de V24P04A · jour, aube, crépuscule, nuit</title>
 <style>
 body{background:#101820;color:#e4e6f2;font:15px/1.55 system-ui,sans-serif;margin:0;padding:22px}
 main{max-width:1180px;margin:auto}h1{font-size:28px;margin:0 0 6px}p{color:#b3c9d3;max-width:95ch}
@@ -19,12 +19,15 @@ table{border-collapse:collapse;font-size:13px;margin-top:10px}td,th{border:1px s
 La <strong>mer</strong> est générée d'après la carte V24P04A de PMD Ciel et suit ses lois d'animation :
 <ul>
 <li>les crêtes naissent en houle sombre sous l'horizon, grandissent en descendant et roulent vers la prairie (12 crans de 10 ticks, motif de 96 px) ;</li>
+<li>cadence décodée des 12 images de V24P04A : une crête avance d'une rangée en 6 crans ;</li>
+<li>chaque crête couvre presque tout le motif, et une fine ligne de houle continue court sous chaque rangée : pas de trou entre les vagues ;</li>
 <li>l'horizon scintille (16 crans de 4 ticks).</li>
 </ul>
 Le <strong>banc de nuages</strong> défile lentement derrière la <strong>montagne de la V1</strong>, dont les flancs descendent jusqu'à l'horizon. La profondeur va de l'avant vers l'arrière : <strong>mer, montagne, nuages</strong>.
-La nuit, la lune se lève derrière le sommet ; à l'aube, c'est le soleil. Chacun a un reflet sur la mer qui ondule au rythme de la houle. Les fleurs se balancent comme à Sky Peak.</p>
+La nuit, la lune se lève derrière le sommet ; à l'aube, le soleil se lève ; au crépuscule, il se couche derrière les nuages.
+Chaque astre a un reflet sur la mer, dessiné au générateur, qui ondule au rythme de la houle. L'écume et les bulles sont celles de la V1. Les fleurs se balancent comme à Sky Peak.</p>
 <div class="bar">
-  <button data-amb="jour" class="on">Jour</button><button data-amb="aube">Aube</button><button data-amb="nuit">Nuit</button>
+  <button data-amb="jour" class="on">Jour</button><button data-amb="aube">Aube</button><button data-amb="crepuscule">Crépuscule</button><button data-amb="nuit">Nuit</button>
   <span style="width:16px"></span>
   <button id="pause">Pause</button><button data-speed="0.5">×0,5</button><button data-speed="1" class="on">×1</button><button data-speed="2">×2</button><button data-speed="8">×8</button>
   <button id="coll">Collisions et marqueurs</button><button id="zoom">Zoom ×2 (horizon)</button>
@@ -35,12 +38,14 @@ La nuit, la lune se lève derrière le sommet ; à l'aube, c'est le soleil. Chac
 Marqueurs : <code>reveil</code> (cyan, au bord de la prairie, tourné vers l'océan) et <code>entrance</code> (jaune, sortie au sud).
 Non testé dans PMDO. Les petits pics sombres de la mer de nuages de la V1 ne sont pas repris.</p>
 <table><tr><th>Calque</th><th>Cadence</th><th>Origine</th></tr>
-<tr><td>Prairie (herbe, chemin, rochers, buissons)</td><td>fixes</td><td>calques de la V1</td></tr>
+<tr><td>Prairie (herbe, chemin, rochers, buissons)</td><td>fixes</td><td>calques de la V1 ; crépuscule : brut édité recalé au pixel</td></tr>
 <tr><td>Fleurs</td><td>4 × 12 ticks (A B A C)</td><td>calque de la V1 ; balancement mesuré sur le GIF Sky Peak</td></tr>
-<tr><td>Ciel, mer</td><td>fixes</td><td>générés avec V24P04A en référence ; aube et nuit : couleurs des bruts de la V1</td></tr>
-<tr><td>Houle, écume, reflet</td><td>12 × 10 ticks</td><td>crêtes générées ; loi de profondeur et cadence de V24P04A (ROM)</td></tr>
+<tr><td>Ciel, mer</td><td>fixes</td><td>générés avec V24P04A en référence ; aube, crépuscule, nuit : couleurs des bruts de ces ambiances</td></tr>
+<tr><td>Houle</td><td>12 × 10 ticks</td><td>crêtes générées ; loi de profondeur, largeur et cadence de V24P04A (12 images décodées de la ROM)</td></tr>
+<tr><td>Reflet de l'astre</td><td>12 × 10 ticks</td><td>planche de reflets générée (lune, aube, crépuscule) ; ondulation calée sur la houle</td></tr>
+<tr><td>Écume, bulles</td><td>10 × 10, 24 × 5 ticks</td><td>celles de la V1 (palette 8 de s01p02a) ; crépuscule : même méthode</td></tr>
 <tr><td>Scintillement de l'horizon</td><td>16 × 4 ticks</td><td>cadence des palettes animées de V24P04A</td></tr>
-<tr><td>Nuages</td><td>256 × 8 ticks (34 s)</td><td>banc généré avec V24P04A en référence, 1 px par cran, boucle de 256 px</td></tr>
+<tr><td>Nuages</td><td>256 × 8 ticks (34 s)</td><td>banc généré avec V24P04A en référence (sommet rogné arrondi en dôme), 1 px par cran, boucle de 256 px</td></tr>
 <tr><td>Montagne</td><td>fixe</td><td>celle de la V1, redessinée seule, flancs prolongés jusqu'à l'horizon</td></tr>
 <tr><td>Étoiles (nuit)</td><td>24 × 5 ticks</td><td>étoiles de la V1</td></tr></table>
 </main>

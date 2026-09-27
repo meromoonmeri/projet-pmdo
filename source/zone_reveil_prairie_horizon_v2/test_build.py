@@ -67,10 +67,15 @@ class Build(unittest.TestCase):
         for k, v in M['references'].items():
             self.assertEqual(sha(R / v['file']), v['sha256'], k)
         g = {x['file']: x for x in M['generation']}
-        self.assertEqual(set(g), {'ciel_mer_jour.png', 'cretes_jour.png', 'mer_de_nuages_jour.png', 'montagne_jour.png', 'astres.png'})
-        for k in ('ciel_mer_jour.png', 'cretes_jour.png', 'mer_de_nuages_jour.png'):        # mer du jeu V24P04A en référence
+        self.assertEqual(set(g), {'ciel_mer_jour.png', 'cretes_jour.png', 'banc_nuages_jour.png', 'montagne_jour.png', 'astres.png',
+                                  'reflets_astres.png', 'decor_crepuscule_zrv1.png'})
+        for k in ('ciel_mer_jour.png', 'cretes_jour.png', 'banc_nuages_jour.png', 'reflets_astres.png'):   # V24P04A en référence
             self.assertTrue(any('v24p04a' in i for i in g[k]['images']), k)
         self.assertTrue(any('v1_montagne' in i for i in g['montagne_jour.png']['images']))  # la montagne de ZRV1
+        self.assertIn('source/zone_reveil_prairie_horizon_v1/bruts/decor_jour.png', g['decor_crepuscule_zrv1.png']['images'])
+        rc = M['crepuscule']['recalage']
+        self.assertEqual(rc, B.dusk_meadow()['recalage'])                                  # recalé au pixel
+        self.assertEqual([rc['dx'], rc['dy']], [0, 0]) if 'dx' in rc else None
         self.assertFalse(M['art_approved']); self.assertFalse(M['runtime_tested'])
 
     def test_exports_reproduits(self):
@@ -89,6 +94,9 @@ class Build(unittest.TestCase):
         self.assertTrue((SEA == (np.array(Image.open(V1 / 'masques/ZRV1_masque_mer.png')) > 127)).all())
         for amb, a in B.AMB.items():
             for k, i in B.V1_INDEX.items():
+                if amb == 'crepuscule':                                                   # mêmes masques que ZRV1
+                    self.assertTrue((alpha(frame(amb, k, 0)) == alpha(frame('jour', k, 0))).all(), k)
+                    continue
                 v1 = load(V1 / f'calques/{amb}/ZRV1{a}_{i:02d}_{k}.png')
                 self.assertTrue((frame(amb, k, 0) == v1).all(), (amb, k))                 # fleurs : phase A = ZRV1
         v1m = json.loads((V1 / 'manifest.json').read_text())
@@ -141,6 +149,17 @@ class Build(unittest.TestCase):
             self.assertTrue((want[t] == frame('jour', 'nuages', t)).all(), t)
         self.assertTrue((np.roll(strip, B.CLOUD_PHASES * B.CLOUD_PAS, axis=1) == strip).all())    # phase 256 = phase 0
         self.assertFalse((frame('jour', 'nuages', 0) == frame('jour', 'nuages', 1)).all())
+        # pas de nuage rogné : ni colonne isolée qui dépasse, ni sommet plat de plus de 10 px (en boucle), ni rien au bord haut
+        al = alpha(strip); tops = np.array([int(np.argmax(al[:, x])) for x in range(strip.shape[1])])
+        for x in range(len(tops)):
+            self.assertFalse(tops[x] < min(tops[x - 1], tops[(x + 1) % len(tops)]) - 2, x)
+        run, best = 1, 1
+        for x in range(1, 2 * len(tops)):
+            run = run + 1 if tops[x % len(tops)] == tops[(x - 1) % len(tops)] else 1; best = max(best, run)
+        self.assertLessEqual(best, 10)
+        self.assertEqual(M['mesures']['nuages']['sommets_arrondis'], [[217, 286, 276]])
+        for amb in B.AMB:                                                   # le banc entier tient dans le ciel
+            self.assertGreater(YH - strip.shape[0], 0)
 
     def test_houle_loi_v24p04a(self):
         self.assertEqual((B.SWELL_STEPS, B.SWELL_TICKS, B.GLINT_STEPS, B.GLINT_TICKS), (12, 10, 16, 4))
@@ -150,21 +169,36 @@ class Build(unittest.TestCase):
         # la dernière crête sort de la mer avant de disparaître : aucun saut à la boucle
         self.assertGreater(B.swell_y(K - 1) - hmax + 1, ymax)
         # les crêtes grandissent en descendant (tailles croissantes)
-        widths = [s[0][0] for s in M['mesures']['cretes']['tailles_px']]
-        self.assertEqual(widths, sorted(widths))
-        # loi de profondeur : bas des crêtes du cran s en y(k + s/12), dans la mer pleine largeur
+        widths = [s[0] for pair in M['mesures']['cretes']['tailles_px'] for s in pair]
+        self.assertTrue(all(w == B.CREST_W for w in widths))                               # largeur de V24P04A (78 / 96)
+        heights = [pair[0][1] for pair in M['mesures']['cretes']['tailles_px']]
+        self.assertEqual(heights, sorted(heights))                                         # plus épaisses en approchant
+        # cadence décodée de V24P04A : 2 rangées par cycle de 12 crans, 5 à 10 px par cran dans la mer visible
+        self.assertEqual(B.SWELL_PASSES, 2)
+        steps = [B.swell_y(u + 2 / 12) - B.swell_y(u) for u in np.arange(0.4, 2.8, 1 / 6)]
+        self.assertTrue(all(5 <= d <= 11 for d in steps), steps)
+        # loi de profondeur : bas des crêtes du cran s en y(k + 2s/12), dans la mer pleine largeur
         top_meadow = int(np.nonzero(MEADOW.any(1))[0].min())
         for amb in B.AMB:
             fr = frames(amb, 'houle'); self.assertEqual(len(fr), 12)
             for s, f in enumerate(fr):
                 a = alpha(f)
-                want = {int(round(B.swell_y(k + s / 12))) for k in range(K)}
+                want = {int(round(B.swell_y(k + 2 * s / 12))) for k in range(K)}
                 bottoms = {y for y in range(YH, top_meadow) if a[y].any() and not a[y + 1].any()}
                 # rangées transparentes au pied des sprites : le bas visible est au plus 3 px au-dessus de y(u)
                 self.assertTrue(all(any(0 <= w - y <= 3 for w in want) for y in bottoms), (amb, s, sorted(bottoms), sorted(want)))
                 self.assertGreaterEqual(len(bottoms), 1)
-                # motif horizontal de 96 px (deux états alternés -> 192) au-dessus de la prairie
-                self.assertTrue((f[YH:top_meadow] == np.roll(f[YH:top_meadow], 192, axis=1)).all() if amb == 'jour' else True)
+                # motif de 96 px (deux états alternés -> 192) ; la ligne prend la couleur de la mer : on compare l'alpha
+                self.assertTrue((a[YH:top_meadow] == np.roll(a[YH:top_meadow], 192, axis=1)).all())
+                # pas d'interstice : les rangées de crêtes (u >= 0,4) ont une ligne continue sur toute la largeur de mer
+                for k in range(K):
+                    u = k + 2 * s / 12
+                    if u >= B.SIZE_BOUNDS[0]:
+                        yc = int(round(B.swell_y(u)))
+                        yl = [y for y in range(yc - 3, yc + 1) if YH <= y < H and SEA[y].all()]
+                        if yl:
+                            self.assertTrue(any(a[y][SEA[y]].all() for y in yl), (amb, s, k))
+                self.assertTrue((f == fr[(s + 6) % 12]).all())                               # une rangée en 6 crans
             self.assertFalse((fr[0] == fr[1]).all())
         self.assertTrue((frames('jour', 'houle')[0][YH:top_meadow] != 0).any())
 
@@ -178,20 +212,32 @@ class Build(unittest.TestCase):
             n = [int(alpha(f).sum()) for f in fr]
             self.assertGreater(max(n) - min(n), 0)
 
-    def test_reflet_astre(self):
+    def test_reflet_astre_genere(self):
         self.assertNotIn('reflet', LAYERS['jour']); self.assertNotIn('astre', LAYERS['jour'])
-        for amb in ('aube', 'nuit'):
+        sheet = B.rgb(B.RAW / 'reflets_astres.png')
+        for y in range(YH + 45, 280, 7):                                              # u(y) inverse la loi de la houle
+            self.assertAlmostEqual(B.swell_y(B.u_of_y(y)), y, places=6)
+        for amb in ('aube', 'crepuscule', 'nuit'):
             A = B.ASTRE[amb]; xc = A['c'][0]
             ast = alpha(frame(amb, 'astre')); mont = alpha(frame(amb, 'montagne'))
             fr = frames(amb, 'reflet'); self.assertEqual(len(fr), B.SWELL_STEPS)
             self.assertEqual(LAYERS[amb]['reflet']['ticks'], B.SWELL_TICKS)                   # calé sur la houle
-            bands = B.reflection_bands(xc, A['d'])
-            for f in fr:
-                ys, xs = np.nonzero(alpha(f))
-                self.assertGreater(len(ys), 200)
-                self.assertTrue((np.abs(xs - xc) <= max(b['hw'] for b in bands) * 1.2 + 10).all())   # colonne sous l'astre
-                mer = frame(amb, 'mer')
-                self.assertGreater(B.lum(f[alpha(f)][:, :3]).mean(), B.lum(mer[SEA][:, :3]).mean() + 40)
+            dashes, rinfo = B.reflet_dashes(sheet, B.REFLET_COL[amb])
+            self.assertGreater(rinfo['traits'], 40)
+            want = B.reflet_frames(dashes, xc, SEA)
+            sheet_cols = {tuple(int(v) for v in c) for d in dashes for c in d['spr'][d['spr'][..., 3] == 255][:, :3]}
+            mer = frame(amb, 'mer')
+            for t, f in enumerate(fr):
+                self.assertTrue((f == want[t]).all(), (amb, t))
+                ys, xs = np.nonzero(alpha(f)); self.assertGreater(len(ys), 150)
+                self.assertTrue((np.abs(xs - xc) <= 260 * B.REFLET_SX / 2 + 12).all())       # colonne sous l'astre
+                self.assertTrue({tuple(int(v) for v in c) for c in f[alpha(f)][:, :3]} <= sheet_cols)   # couleurs générées
+                rr = f[alpha(f)][:, :3].astype(int); sm = mer[SEA][:, :3].astype(int)
+                if amb == 'crepuscule':                                                     # reflet rouge du couchant
+                    self.assertGreater((rr[:, 0] - rr[:, 2]).mean(), (sm[:, 0] - sm[:, 2]).mean() + 40)
+                    self.assertGreater(B.lum(rr).mean(), B.lum(sm).mean())
+                else:
+                    self.assertGreater(B.lum(rr).mean(), B.lum(sm).mean() + 25)
             self.assertFalse((fr[0] == fr[3]).all())
             ys, xs = np.nonzero(ast); self.assertLess(ys.max(), YH)
             if amb == 'nuit':
@@ -200,7 +246,24 @@ class Build(unittest.TestCase):
                 vis = ast & ~mont
                 for t in range(0, B.CLOUD_PHASES, 32):
                     vis = vis & ~alpha(frame(amb, 'nuages', t))
-                self.assertGreater(vis.sum(), 0.6 * ast.sum())                                # soleil levant bien visible
+                self.assertGreater(vis.sum(), (0.6 if amb == 'aube' else 0.35) * ast.sum(), amb)
+                if amb == 'crepuscule':                                                     # soleil couchant à demi caché
+                    self.assertLess(vis.sum(), 0.95 * ast.sum())
+
+    def test_ecume_et_bulles_de_zrv1(self):
+        for amb, a in B.AMB.items():
+            e, b = frames(amb, 'ecume'), frames(amb, 'bulles')
+            self.assertEqual((len(e), LAYERS[amb]['ecume']['ticks'], len(b), LAYERS[amb]['bulles']['ticks']), (10, 10, 24, 5))
+            if amb == 'crepuscule':
+                d = B.dusk_meadow()
+                self.assertTrue(all((x == y).all() for x, y in zip(e, d['ecume'])))
+                self.assertTrue(all((x == y).all() for x, y in zip(b, d['bulles'])))
+                self.assertTrue(all((alpha(x) == alpha(y)).all() for x, y in zip(e, frames('jour', 'ecume'))))
+                continue
+            for t, f in enumerate(e):
+                self.assertTrue((f == load(V1 / f'animation/{amb}/ecume/ZRV1{a}_08_ecume_f{t:03d}.png')).all(), (amb, t))
+            for t, f in enumerate(b):
+                self.assertTrue((f == load(V1 / f'animation/{amb}/bulles/ZRV1{a}_09_bulles_f{t:03d}.png')).all(), (amb, t))
 
     def test_fleurs_sky_peak(self):
         for amb in B.AMB:
@@ -223,6 +286,9 @@ class Build(unittest.TestCase):
         self.assertGreater(float((aube[:, 2] >= aube[:, 1]).mean()), 0.9)                   # aube : mer ardoise / violette
         sky = frame('aube', 'ciel')[:YH, :, :3].astype(int)
         self.assertGreater(sky[80, :, 1].mean(), sky[5, :, 1].mean() + 10)                 # aube : dégradé vers le rose clair
+        dusk = frame('crepuscule', 'ciel')[:YH, :, :3].astype(int)
+        self.assertGreater(dusk[80, :, 0].mean(), dusk[5, :, 0].mean() + 30)                # crépuscule : violet -> orange
+        self.assertGreater(dusk[5, :, 2].mean(), dusk[5, :, 1].mean())
         night = frame('nuit', 'ciel')[:YH, :, :3].astype(int)
         self.assertTrue((night[..., 2] > night[..., 0]).mean() > 0.95)                       # nuit : ciel bleu nuit
 
