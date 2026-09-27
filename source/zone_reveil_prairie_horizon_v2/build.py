@@ -104,7 +104,7 @@ SWELL_PERIOD_X = 96                                # V24P04A : motif de 96 px (7
 CREST_SCALE = 0.157
 SIZE_BOUNDS = [0.4, 1.2, 2.0, 2.8]                 # u < 0.4 : houle sombre ; puis tailles 1..4
 ASTRE = {'nuit': {'sprite': 0, 'd': 64, 'c': (384, 34)}, 'aube': {'sprite': 1, 'd': 40, 'c': (236, 32)}}
-ORDER = ['sol_complet', 'ciel', 'etoiles', 'astre', 'nuages', 'montagne', 'mer', 'scintillement', 'houle', 'reflet', 'ecume',
+ORDER = ['sol_complet', 'ciel', 'etoiles', 'astre', 'nuages', 'montagne', 'mer', 'scintillement', 'houle', 'reflet', 'ecume', 'bulles',
          'herbe', 'chemin', 'fleurs', 'rochers', 'buissons']
 V1_INDEX = {'sol_complet': 0, 'herbe': 1, 'chemin': 2, 'fleurs': 3, 'rochers': 4, 'buissons': 5}
 
@@ -203,6 +203,11 @@ def sky_gradient(layer, amb):
         d = (L[y, r] - L[y, r].mean()) * 0.6
         out[y, r, :3] = np.clip(np.round(tgt[None] + d[:, None]), 0, 255).astype('uint8')
     return out
+
+
+def v1_frames(amb, name, idx, n):
+    d = V1OUT / 'animation' / amb / name
+    return [np.array(Image.open(d / f'ZRV1{AMB[amb]}_{idx:02d}_{name}_f{t:03d}.png').convert('RGBA')) for t in range(n)]
 
 
 def v1_layer(amb, name):
@@ -731,7 +736,8 @@ def make_all():
         if amb == 'nuit':
             L['etoiles'] = (star_frames(stars), STAR_TICKS)
         L['houle'] = (sw, SWELL_TICKS)
-        L['ecume'] = (foam_frames(sw, meadow, sea_region, (foam_white, foam_pale)), SWELL_TICKS)
+        L['ecume'] = (v1_frames(amb, 'ecume', 8, 10), 10)             # écume de ZRV1 (s01p02a palette 8, 10 x 10 ticks)
+        L['bulles'] = (v1_frames(amb, 'bulles', 9, 24), 5)            # bulles de ZRV1 (24 x 5 ticks)
         out[amb] = L
     return out, info, meadow, sea_region, strip
 
