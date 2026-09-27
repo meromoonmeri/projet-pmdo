@@ -127,7 +127,7 @@ CREST_SCALE = 0.157
 SWELL_LINE = 0.85
 CREST_W = 78                                       # V24P04A : toutes les crêtes ont presque la largeur du motif (78 / 96)
 REFLET_SPAN, REFLET_SX = 172, 0.42                 # reflets : hauteur couverte sous l'horizon, échelle horizontale
-CLOUD_BASE_RAW, CLOUD_FLAT_MIN, CLOUD_DOME = 60, 40, 18
+CLOUD_BASE_RAW, CLOUD_FLAT_MIN, CLOUD_DOME = 60, 40, 30
 CLOUD_CUT_RANGE = (820, 1000)                      # largeur de coupe du brut : là où la silhouette se raccorde au début   # banc : base pleine gardée ; sommets plats rognés -> arrondis
 SIZE_BOUNDS = [0.4, 1.2, 2.0, 2.8]                 # u < 0.4 : houle sombre ; puis tailles 1..4
 ASTRE = {'nuit': {'sprite': 0, 'd': 64, 'c': (384, 34)}, 'aube': {'sprite': 1, 'd': 40, 'c': (236, 32)},
@@ -524,7 +524,7 @@ def light_crests(frames, refl, cols):
 # ---------------------------------------------------------------- nuages
 def cloud_strip(raw):
     """Banc généré : du premier pixel de nuage jusqu'à CLOUD_BASE_RAW rangées dans la base pleine. Un sommet plat de plus
-    de CLOUD_FLAT_MIN px (nuage rogné par le générateur) est arrondi : ses colonnes descendent en demi-ellipse, le liseré
+    de CLOUD_FLAT_MIN px (nuage rogné par le générateur) est arrondi : ses colonnes descendent en parabole, le liseré
     clair du sommet descend avec elles."""
     raw = raw.copy(); fg = ~is_magenta(raw); Wr = raw.shape[1]
     top = int(np.nonzero(fg.any(1))[0].min())
@@ -539,9 +539,9 @@ def cloud_strip(raw):
     for x0, x1, ty in runs:
         c = (x0 + x1) / 2; hw = (x1 - x0) / 2 + 6
         for x in range(max(0, int(c - hw)), min(Wr, int(c + hw) + 1)):
-            d = int(round(CLOUD_DOME * (1 - math.sqrt(max(0.0, 1 - ((x - c) / hw) ** 2)))))
-            t = int(tops[x])
-            if d <= 0 or t > ty + CLOUD_DOME:
+            d = int(round(CLOUD_DOME * ((x - c) / hw) ** 2))   # dôme parabolique : l'ellipse restait plate à 8 px
+            t = int(tops[x]); d = ty + d - t          # le sommet descend jusqu'au dôme, jamais plus bas
+            if d <= 0:
                 continue
             col, cm = raw[t:t + 80, x].copy(), fg[t:t + 80, x].copy(); n = len(col)
             raw[t:t + d, x] = (255, 0, 255); fg[t:t + d, x] = False
