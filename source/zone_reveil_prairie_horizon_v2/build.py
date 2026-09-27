@@ -40,7 +40,7 @@ OUT = R / 'renders/zone_reveil_prairie_horizon_v2'
 NAMESPACE = 'zone_reveil_prairie_horizon_v2'
 STAGE = R / '.cache/zone_reveil_prairie_horizon_v2' / NAMESPACE
 PFX = 'ZRV2'
-AMB = {'jour': 'J', 'aube': 'A', 'nuit': 'N'}
+AMB = {'jour': 'J', 'aube': 'A', 'crepuscule': 'C', 'nuit': 'N'}
 ASSET = {k: f'zrv2_zone_reveil_{k}' for k in AMB}
 W, H = 768, 576
 YH = 116                                           # horizon (ZRV1)
@@ -65,14 +65,35 @@ GEN = [
      'from the side, each one a gentle double-hump wave line of white and pale cyan foam with a thin darker blue shadow under it. '
      'Arrange them in 5 rows from very small and thin (top row) to large (bottom row), 2 crests per row: left crest full foam, right '
      'crest thinner breaking foam. Well separated, nothing touching, no water background, no text.'},
-    {'file': 'mer_de_nuages_jour.png', 'images': [f'{LOT}/references/v24p04a_t000_x4.png'], 'essais': 'troisieme generation : la '
-     'premiere (references GIF + 232233) recopiait la prairie de Sky Peak en neige, ecartee ; la deuxieme, conforme, perdue avant '
-     'commit ; celle-ci donne trois bancs empiles, seul celui du bas (base plate) est utilise',
-     'prompt': 'Pixel art, same colours and pixel style as the clouds sitting on the horizon in the reference image (Pokémon Mystery '
-     'Dungeon Explorers of Sky). A single long, low horizontal bank of fluffy white and pale blue-grey cumulus clouds seen far away, '
-     'spanning the full image width, seamlessly tileable left to right, continuous without gaps. Its bottom edge is a perfectly '
-     'straight horizontal line; its top edge is puffy billows of varying height. The bank is centred vertically; everything above '
-     'and below it is solid flat magenta (#FF00FF). No sky, no sea, no mountains, no text.'},
+    {'file': 'banc_nuages_jour.png', 'images': [f'{LOT}/references/v24p04a_t000_x4.png',
+                                                f'{LOT}/bruts/ecartes/mer_de_nuages_jour_trois_bancs.png'],
+     'essais': 'remplace mer_de_nuages_jour.png (trois bancs colles : la dalle du banc du milieu rognait les nuages du bas, '
+               'ecarte dans bruts/ecartes/) ; deux bancs encore, seul celui du haut (ciel magenta au-dessus) est utilise ; '
+               'un sommet plat de 70 px (x 217-286) est arrondi par le build',
+     'prompt': 'Pixel art, same colours and pixel style as the clouds on the horizon in the first reference (Pokémon Mystery '
+     'Dungeon Explorers of Sky) and the cloud style of the second reference. ONE single low horizontal bank of fluffy white and pale '
+     'blue-grey cumulus clouds, spanning the full image width, seamlessly tileable left to right. The bank occupies only the lower '
+     '40 percent of the image; its bottom edge is a perfectly straight horizontal line touching the bottom of the image; its top '
+     'edge is round puffy billows of varying height, every billow complete and rounded. The whole upper 60 percent of the image is '
+     'solid flat magenta (#FF00FF) with nothing in it. No second bank, no sky, no sea, no mountains, no text.'},
+    {'file': 'reflets_astres.png', 'images': [f'{LOT}/references/v24p04a_t000_x4.png', 'source/zone_reveil_prairie_horizon_v1/bruts/decor_nuit.png'],
+     'essais': 'premiere generation ; conforme (demande : reflet de la lune et du crepuscule passes au generateur)',
+     'prompt': 'Pixel art sprite sheet in the same pixel style as the reference images (Pokémon Mystery Dungeon Explorers of Sky '
+     'ocean and moon). On a solid flat magenta background (#FF00FF): three separate vertical columns of light reflected on the sea '
+     'surface, as seen under a low moon or sun on water. Each column is made only of short horizontal wavy dashes and glints of '
+     'light stacked from top to bottom, very narrow and thin at the top, getting wider, longer and more spaced toward the bottom, '
+     'with gaps of magenta between dashes. Left column: pale silver-yellow moonlight. Middle column: warm golden dawn light. Right '
+     'column: deep orange and red sunset light. Tall columns, well separated, no water drawn, no moon, no sun, no text.'},
+    {'file': 'decor_crepuscule_zrv1.png', 'images': ['source/zone_reveil_prairie_horizon_v1/bruts/decor_jour.png',
+                                                     'source/zone_reveil_prairie_horizon_v1/bruts/decor_aube.png'],
+     'essais': 'premiere generation ; recalee au pixel sur le jour de ZRV1 (meilleur decalage (0, 0)) : couleurs de la prairie, '
+               'du ciel, de la mer, de la montagne, des nuages et du soleil du crepuscule',
+     'prompt': 'Edit the first image into a sunset dusk scene, keeping exactly the same layout, framing, shapes and every object at '
+     'the same pixel position (meadow, flowers, rocks, bushes, path, sea, mountain, clouds). Only change the lighting and colours: sky '
+     'from deep violet at the top to orange and red near the horizon, a large low orange-red setting sun on the right side just above '
+     'the clouds, clouds lit pink-orange from below, mountain warm rose and purple, sea deep purple-blue with orange glints, meadow '
+     'grass warm olive-orange in the evening light with long soft shadows, flowers keep their pink. Same pixel art style as the second '
+     'image (the dawn version).'},
     {'file': 'montagne_jour.png', 'images': [f'{LOT}/references/v1_montagne_x380_y0_x2.png'], 'essais': 'deuxieme essai : le premier '
      '(brut ZRV1 entier en entree) peignait une montagne geante plein cadre, ecarte (bruts/ecartes/) ; celui-ci garde le cadrage '
      '(rapport 2,444 identique a l entree)',
@@ -95,15 +116,26 @@ GLINT_STEPS, GLINT_TICKS = 16, 4                   # V24P04A : palettes animées
 GLINT_LEVELS = [1, 1, 2, 2, 1, 1, 0, 0, 0, 0, 1, 1, 2, 1, 0, 0]   # 0 éteint, 1 couleur du brut, 2 blanc
 CLOUD_PERIOD, CLOUD_PAS, CLOUD_TICKS = 256, 1, 8
 CLOUD_PHASES = CLOUD_PERIOD // CLOUD_PAS
-CLOUD_BLEND = 24
+CLOUD_TINT = 16                                    # raccord : fondu des teintes sur 16 colonnes
+CLOUD_BLEND = 0                                    # pas de fondu (il laissait des colonnes isolées) : coupe raccordée
 FLOWER_TICKS = 12                                  # GIF Sky Peak : 4 images de 200 ms (A B A C)
 STAR_PHASES, STAR_TICKS = 24, 5
 # houle : y(u) = YH + D0 + A u + B u^2 (profil de V24P04A : 65, 106, 153 px sous l'horizon, ramené à notre mer)
 SWELL_D0, SWELL_A, SWELL_B = 40, 40, 4
 SWELL_PERIOD_X = 96                                # V24P04A : motif de 96 px (768 = 8 x 96)
 CREST_SCALE = 0.157
+SWELL_LINE = 0.85
+CREST_W = 78                                       # V24P04A : toutes les crêtes ont presque la largeur du motif (78 / 96)
+REFLET_SPAN, REFLET_SX = 172, 0.42                 # reflets : hauteur couverte sous l'horizon, échelle horizontale
+CLOUD_BASE_RAW, CLOUD_FLAT_MIN, CLOUD_DOME = 60, 40, 18
+CLOUD_CUT_RANGE = (820, 1000)                      # largeur de coupe du brut : là où la silhouette se raccorde au début   # banc : base pleine gardée ; sommets plats rognés -> arrondis
 SIZE_BOUNDS = [0.4, 1.2, 2.0, 2.8]                 # u < 0.4 : houle sombre ; puis tailles 1..4
-ASTRE = {'nuit': {'sprite': 0, 'd': 64, 'c': (384, 34)}, 'aube': {'sprite': 1, 'd': 40, 'c': (236, 32)}}
+ASTRE = {'nuit': {'sprite': 0, 'd': 64, 'c': (384, 34)}, 'aube': {'sprite': 1, 'd': 40, 'c': (236, 32)},
+         'crepuscule': {'sprite': 1, 'd': 48, 'c': (560, 50)}}     # soleil couchant : bas, à demi derrière le banc
+AMB_RAW = {'nuit': V1LOT / 'bruts/decor_nuit.png', 'aube': V1LOT / 'bruts/decor_aube.png',
+           'crepuscule': RAW / 'decor_crepuscule_zrv1.png'}         # bruts d'ambiance (même cadrage que le jour de ZRV1)
+AMB_ASTRE = {'nuit': (600, 36, 62), 'aube': (480, 100, 48), 'crepuscule': (812, 65, 54)}   # disque de l'astre dans ces bruts
+REFLET_COL = {'nuit': 0, 'aube': 1, 'crepuscule': 2}                # colonne de la planche de reflets générée
 ORDER = ['sol_complet', 'ciel', 'etoiles', 'astre', 'nuages', 'montagne', 'mer', 'scintillement', 'houle', 'reflet', 'ecume', 'bulles',
          'herbe', 'chemin', 'fleurs', 'rochers', 'buissons']
 V1_INDEX = {'sol_complet': 0, 'herbe': 1, 'chemin': 2, 'fleurs': 3, 'rochers': 4, 'buissons': 5}
@@ -152,13 +184,13 @@ def nearest(rgbs, pal):
     return out.reshape(rgbs.shape)
 
 
-def down_rgba(a, fg, size, pal):
+def down_rgba(a, fg, size, pal, thr=0.5):
     """Réduction pondérée par la couverture (fond magenta exclu) puis couleurs ramenées à la palette du brut."""
     w = Image.fromarray((fg * 255).astype('uint8')).resize(size, Image.BOX)
     wa = np.array(w, float) / 255
     ch = [np.array(Image.fromarray((a[..., c] * fg).astype(np.float32), 'F').resize(size, Image.BOX)) for c in range(3)]
     col = np.stack(ch, -1) / np.maximum(wa[..., None], 1e-6)
-    out = np.zeros((size[1], size[0], 4), 'uint8'); m = wa > 0.5
+    out = np.zeros((size[1], size[0], 4), 'uint8'); m = wa > thr
     out[m, :3] = nearest(col[m], pal); out[m, 3] = 255
     return out
 
@@ -177,15 +209,15 @@ def recolor_rank(layer, samples):
     return out
 
 
-SKY_RAW_ROWS = {'nuit': 70, 'aube': 92}          # rangées de ciel du brut ZRV1 étalées sur les rangées 0..SKY_SPAN du ciel final
+SKY_RAW_ROWS = {'nuit': 70, 'aube': 92, 'crepuscule': 86}          # rangées de ciel du brut ZRV1 étalées sur les rangées 0..SKY_SPAN du ciel final
 SKY_SPAN = 84
 
 
 def sky_gradient(layer, amb):
     """Ciel d'aube/nuit : couleur de rangée prise dans le ciel du brut ZRV1 (dégradé vertical), tramage du ciel de jour conservé."""
-    a = rgb(V1LOT / 'bruts' / f'decor_{amb}.png'); l = lum(a)
+    a = rgb(AMB_RAW[amb]); l = lum(a)
     yy, xx = np.mgrid[:a.shape[0], :a.shape[1]]
-    c = {'nuit': (600, 36, 62), 'aube': (480, 100, 48)}[amb]
+    c = AMB_ASTRE[amb]
     ok = ((xx - c[0]) ** 2 + (yy - c[1]) ** 2 > c[2] ** 2) & (nd.median_filter(l, 5) > l - 25)   # sans astre ni étoiles
     prof = []
     for y in range(SKY_RAW_ROWS[amb] + 1):
@@ -206,11 +238,60 @@ def sky_gradient(layer, amb):
 
 
 def v1_frames(amb, name, idx, n):
+    if amb == 'crepuscule':
+        return [f.copy() for f in dusk_meadow()[name]]
     d = V1OUT / 'animation' / amb / name
     return [np.array(Image.open(d / f'ZRV1{AMB[amb]}_{idx:02d}_{name}_f{t:03d}.png').convert('RGBA')) for t in range(n)]
 
 
+_ZRV1 = {}
+
+
+def zrv1():
+    """Module de construction de ZRV1 (segmentation, palettes de la mer du jeu, bulles) : pipeline du crépuscule."""
+    if 'm' not in _ZRV1:
+        _ZRV1['m'] = loadmod('zrv1_build', V1LOT / 'build.py')
+    return _ZRV1['m']
+
+
+def dusk_meadow():
+    """Prairie du crépuscule : même recette que les calques d'aube et de nuit de ZRV1 (masques du jour, couleurs du brut
+    de crépuscule recalé au pixel, mêmes groupes de palettes)."""
+    if 'prairie' in _ZRV1:
+        return _ZRV1['prairie']
+    B1 = zrv1(); day = B1.rgb(B1.RAW / 'decor_jour.png'); du = B1.rgb(AMB_RAW['crepuscule'])
+    m, sg = B1.seg.classify(day)
+    zone = (np.mgrid[:day.shape[0], :day.shape[1]][0] > sg['horizon_y'] + 200) & ~m['buissons']
+    reg = B1.recalage(day, du, zone)                                   # assert : (0, 0) est le meilleur décalage
+    order = ['panorama', 'mer', 'buissons', 'rochers', 'fleurs', 'chemin', 'herbe']
+    ex, _ = B1.down_class(day, m, order); _, cols = B1.down_class(du, m, order)
+    lay = {'sol_complet': B1.rgba(np.broadcast_to(np.median(cols['herbe'][ex['herbe']], 0).round().astype('uint8'), (H, W, 3)),
+                                  np.ones((H, W), bool))}
+    for k in B1.STATIC:
+        lay[k] = B1.rgba(cols[k], ex[k])
+    for g, (keys, n) in B1.PALETTE_GROUPS.items():
+        lay.update(B1.quantize_group({k: lay[k] for k in keys}, n))
+    # écume et bulles : palette 8 de s01p02a transposée sur le brut (même méthode que l'aube et la nuit de ZRV1)
+    af = B1.down_full(du).astype(int); day_l = B1.lum_of(B1.down_full(day).astype(float))
+    sea = np.array(Image.open(V1OUT / 'masques/ZRV1_masque_mer.png')) > 127
+    fi = np.array(Image.open(V1OUT / 'masques/ZRV1_ecume_index.png')).astype(int); foam = np.where(fi == 255, -1, fi // 25)
+    pred_sel = sea & (foam < 0); pred = B1.lum_of(af.astype(float)); expect = np.zeros((H, W))
+    dl = day_l[pred_sel]; al = pred[pred_sel]; o_ = np.argsort(dl)
+    expect[pred_sel] = nd.uniform_filter1d(al[o_], 301)[np.argsort(o_)]
+    refl = B1.reflection_column(B1.keep_large(B1.close_(pred_sel & (pred > expect + 45), 2), 20), sea)
+    p7, p8 = B1.sea_palettes(); pal8 = B1.transpose_palette(p8, day_l, af, sea & ~refl)
+    ecume = B1.palette_frames(foam, pal8)
+    v1m = json.loads((V1OUT / 'manifest.json').read_text())
+    bub = [tuple(b) for b in v1m['ambiances']['jour']['bulles']]
+    bcols = [tuple(int(v) for v in pal8[3, 9]), tuple(int(v) for v in pal8[2, 8]), tuple(int(v) for v in pal8[1, 8])]
+    _ZRV1['prairie'] = {'calques': {k: lay[k] for k in V1_INDEX}, 'ecume': ecume, 'bulles': B1.bubble_frames(bub, bcols),
+                        'recalage': reg, 'ecume_palette_8': pal8.tolist(), 'bulles_couleurs': bcols}
+    return _ZRV1['prairie']
+
+
 def v1_layer(amb, name):
+    if amb == 'crepuscule':
+        return dusk_meadow()['calques'][name].copy()
     return np.array(Image.open(V1OUT / 'calques' / amb / f'ZRV1{AMB[amb]}_{V1_INDEX[name]:02d}_{name}.png').convert('RGBA'))
 
 
@@ -314,7 +395,7 @@ def crest_sprites(sheet):
         pair = []
         for s, m in bs[:2]:
             crop = sheet[s]; h_, w_ = m.shape
-            size = (max(1, round(w_ * CREST_SCALE)), max(1, round(h_ * CREST_SCALE)))
+            size = (CREST_W, max(1, round(h_ * CREST_SCALE)))      # largeur de V24P04A, épaisseur selon la rangée
             pair.append(down_rgba(crop, m, size, pal))
         sprites.append(pair)
     return sprites
@@ -333,7 +414,7 @@ def swell_rows():
     return k
 
 
-def swell_frames(sprites, sea_region):
+def swell_frames(sprites, sea_region, sea_rgb):
     """Crête k au cran s : profondeur u = k + s/12, bas du sprite en y(u), colonnes tous les 96 px ; taille selon u,
     écume pleine / mince en alternance (cran + colonne), comme les deux états alternés de V24P04A. u = k + 1 au cran 12
     = crête k + 1 au cran 0 : la boucle est fermée par construction."""
@@ -354,90 +435,84 @@ def swell_frames(sprites, sea_region):
                 ys, xs = np.nonzero(sp[..., 3] == 255)
                 ty = ys + y - h_ + 1; tx = (xs + x0) % W; ok = (ty >= YH) & (ty < H)
                 a[ty[ok], tx[ok]] = sp[ys[ok], xs[ok]]
+            # ligne de houle continue sous les crêtes (V24P04A) : pas d'interstice entre deux crêtes d'une rangée
+            row_sp = [swell_sp[0]] if cls == 0 else sprites[cls - 1]
+            off = min(sp.shape[0] - 1 - int(np.nonzero((sp[..., 3] == 255).any(1))[0].max()) for sp in row_sp)
+            yl = y - off
+            if YH <= yl < H and u >= SIZE_BOUNDS[0]:                 # 1 px, la mer assombrie de 15 % (même teinte)
+                xs_l = np.nonzero(a[yl, :, 3] == 0)[0]
+                a[yl, xs_l, :3] = (sea_rgb[yl, xs_l] * SWELL_LINE).round().astype('uint8'); a[yl, xs_l, 3] = 255
         a[~sea_region] = 0
         frames.append(a)
     return frames
 
 
-def foam_frames(swell, meadow, sea_region, cols):
-    """Écume au pied de la prairie : là où une crête touche le bord (6 px au-dessus), gerbe blanche de 2 px ; au cran
-    suivant il en reste 1 px ; bulles (pixels isolés 3 à 5 px au-dessus) les deux crans d'après."""
-    edge = np.full(W, -1)
-    for x in range(W):
-        c = np.nonzero(meadow[YH:, x])[0]
-        if len(c):
-            edge[x] = YH + c[0]
-    hit = np.zeros((SWELL_STEPS, W), bool)
-    for s, f in enumerate(swell):
-        al = f[..., 3] == 255
-        for x in range(W):
-            e = edge[x]
-            if e > YH + 6:
-                hit[s, x] = al[e - 6:e, x].any()
-    white, pale = cols
+def reflet_dashes(sheet, idx):
+    """Planche de reflets générée : colonne idx (0 lune, 1 aube, 2 crépuscule) -> traits (composantes) replacés sous l'astre.
+    Hauteur de la colonne -> [YH + 1, YH + 1 + REFLET_SPAN] ; largeur x REFLET_SX ; épaisseur 1 px au loin, 2 px près ;
+    les étincelles (composantes hautes) gardent leur forme au cinquième."""
+    fg = ~is_magenta(sheet); cx_ = np.nonzero(fg.any(0))[0]
+    groups = np.split(cx_, np.nonzero(np.diff(cx_) > 10)[0] + 1)
+    g = groups[idx]; x0, x1 = int(g[0]), int(g[-1])
+    sub, m = sheet[:, x0:x1 + 1], fg[:, x0:x1 + 1]
+    rows = np.nonzero(m.any(1))[0]; ytop, ybot = int(rows.min()), int(rows.max()); axis = (x1 - x0) / 2
+    pal = palette_of(sub[m], 16)
+    lab, n = nd.label(m, structure=np.ones((3, 3)))
+    dashes = []
+    for i, sl in enumerate(nd.find_objects(lab)):
+        mm = lab[sl] == i + 1
+        if mm.sum() < 6:
+            continue
+        cy = (sl[0].start + sl[0].stop - 1) / 2; cx = (sl[1].start + sl[1].stop - 1) / 2
+        v = (cy - ytop) / (ybot - ytop); h_, w_ = mm.shape
+        if h_ > 18:                                   # étincelle en croix
+            size = (max(3, round(w_ * 0.2)), max(3, round(h_ * 0.2))); thr = 0.3
+        else:
+            size = (max(1, round(w_ * REFLET_SX)), 1 if v < 0.45 else 2); thr = 0.35
+        spr = down_rgba(sub[sl], mm, size, pal, thr)
+        if not (spr[..., 3] == 255).any():
+            continue
+        dashes.append({'y': int(round(YH + 1 + v * REFLET_SPAN - size[1] / 2)), 'dx': (cx - axis) * REFLET_SX, 'spr': spr,
+                       'ph': (hsh(idx, i, 11) % 1000) / 1000 * 2 * math.pi})
+    return dashes, {'colonne_brut': [x0, x1], 'rangees_brut': [ytop, ybot], 'traits': len(dashes)}
+
+
+def u_of_y(y):
+    """Profondeur de houle u à la rangée y (inverse de swell_y ; prolongée en ligne droite au-dessus de u = 0)."""
+    d = y - YH - SWELL_D0
+    return d / SWELL_A if d < 0 else (-SWELL_A + math.sqrt(SWELL_A ** 2 + 4 * SWELL_B * d)) / (2 * SWELL_B)
+
+
+def reflet_frames(dashes, xc, sea_region):
+    """12 crans calés sur la houle : chaque trait oscille de A sin(phi), phi = 2 pi (s/12 - u(y)) - la déformation descend
+    vers le rivage avec les crêtes - et s'éteint brièvement quand sin(2 phi + phase propre) < -0,85. Boucle fermée."""
     frames = []
     for s in range(SWELL_STEPS):
         a = np.zeros((H, W, 4), 'uint8')
-        for x in range(W):
-            e = edge[x]
-            if e <= YH + 6:
+        for d in dashes:
+            ph = 2 * math.pi * (s / SWELL_STEPS - u_of_y(d['y']))
+            if math.sin(2 * ph + d['ph']) < -0.85:
                 continue
-            if hit[s, x]:
-                a[e - 2:e, x, :3] = white; a[e - 2:e, x, 3] = 255
-            elif hit[(s - 1) % SWELL_STEPS, x]:
-                a[e - 1, x, :3] = pale; a[e - 1, x, 3] = 255
-            for back in (1, 2):
-                if hit[(s - back) % SWELL_STEPS, x] and hsh(x, s, back) % 5 == 0:
-                    yb = e - 3 - hsh(x, s) % 3; a[yb, x, :3] = pale; a[yb, x, 3] = 255
+            sp = d['spr']; h_, w_ = sp.shape[:2]; amp = 1 + (d['y'] - YH) / 45
+            x0 = int(round(xc + d['dx'] + amp * math.sin(ph) - w_ / 2))
+            ys, xs = np.nonzero(sp[..., 3] == 255); ty, tx = ys + d['y'], xs + x0
+            ok = (ty >= YH) & (ty < H) & (tx >= 0) & (tx < W)
+            a[ty[ok], tx[ok]] = sp[ys[ok], xs[ok]]
         a[~sea_region] = 0
         frames.append(a)
     return frames
 
 
-# ---------------------------------------------------------------- reflet de l'astre
-def reflection_bands(xc, d):
-    """Bandes de reflet (générées) : sous l'astre, de l'horizon vers la prairie, plus larges et plus épaisses en approchant."""
-    bands = []; y = YH + 1; i = 0
-    while y < H:
-        dist = y - YH; h = 1 + dist // 30; hw = d * 0.35 + dist * 0.22
-        n = 1 + hsh(i, 1) % 2 + (1 if dist > 60 else 0); dashes = []
-        for k in range(n):
-            c = ((hsh(i, k, 2) % 1000) / 1000 * 2 - 1) * hw * 0.55
-            L = hw * (0.35 + 0.5 * (hsh(i, k, 3) % 1000) / 1000)
-            dashes.append((c, L, (hsh(i, k, 4) % 1000) / 1000 * 2 * math.pi, (hsh(i, k, 5) % 1000) / 1000 * 2 * math.pi))
-        bands.append({'y': y, 'h': h, 'hw': hw, 'dashes': dashes})
-        y += h + 1 + dist // 45; i += 1
-    return bands
-
-
-def reflection_frames(bands, xc, cols, sea_region):
-    """Chaque trait : décalage A sin(2 pi s/12 + phi), longueur x (0,8 + 0,2 cos(...)), éteint quand sin(2 theta + phi) < -0,7.
-    Couleur : cœur / milieu / bord selon la distance à l'axe. Période 12 crans : boucle fermée, calée sur la houle."""
-    core, mid, edge = cols; frames = []
-    for s in range(SWELL_STEPS):
-        th = 2 * math.pi * s / SWELL_STEPS; a = np.zeros((H, W, 4), 'uint8')
-        for b in bands:
-            amp = 1 + (b['y'] - YH) / 35
-            for c, L, ph, ps in b['dashes']:
-                if math.sin(2 * th + ph) < -0.7:
-                    continue
-                cx = xc + c + amp * math.sin(th + ph); ln = L * (0.8 + 0.2 * math.cos(th + ps))
-                x0, x1 = int(round(cx - ln / 2)), int(round(cx + ln / 2))
-                for x in range(max(0, x0), min(W, x1 + 1)):
-                    r = abs(x - xc) / max(b['hw'], 1)
-                    col = core if r < 0.3 else mid if r < 0.65 else edge
-                    a[b['y']:b['y'] + b['h'], x, :3] = col; a[b['y']:b['y'] + b['h'], x, 3] = 255
-        a[~sea_region] = 0
-        frames.append(a)
-    return frames
-
-
-def light_crests(frames, bands, xc, cols):
+def light_crests(frames, refl, cols):
     """Les crêtes qui passent dans la colonne de reflet prennent les couleurs de l'astre (cœur / milieu)."""
-    hw = np.zeros(H)
-    for b in bands:
-        hw[b['y']:b['y'] + b['h'] + 1 + (b['y'] - YH) // 45] = b['hw']
-    xs = np.arange(W)[None, :]; inside = np.abs(xs - xc) < hw[:, None]
+    u = np.zeros((H, W), bool)
+    for f in refl:
+        u |= f[..., 3] == 255
+    inside = np.zeros((H, W), bool)
+    for y in range(H):
+        xs = np.nonzero(u[max(0, y - 3):y + 4].any(0))[0]
+        if len(xs):
+            inside[y, xs.min():xs.max() + 1] = True
     out = []
     for f in frames:
         g = f.copy(); m = (g[..., 3] == 255) & inside; l = lum(g[..., :3])
@@ -448,23 +523,49 @@ def light_crests(frames, bands, xc, cols):
 
 # ---------------------------------------------------------------- nuages
 def cloud_strip(raw):
-    fg = ~is_magenta(raw); cnt = fg.sum(1)
-    bottom = max(y for y in range(raw.shape[0]) if cnt[y] > 0.9 * raw.shape[1])
-    top = 490 + int(np.argmin(cnt[490:580]))            # rangée la plus vide entre les bancs du milieu et du bas
-    band, m = raw[top:bottom + 1], fg[top:bottom + 1]
-    m[:2] = False
-    wide = CLOUD_PERIOD + CLOUD_BLEND
-    size = (wide, max(1, round(m.shape[0] * wide / m.shape[1])))
+    """Banc généré : du premier pixel de nuage jusqu'à CLOUD_BASE_RAW rangées dans la base pleine. Un sommet plat de plus
+    de CLOUD_FLAT_MIN px (nuage rogné par le générateur) est arrondi : ses colonnes descendent en demi-ellipse, le liseré
+    clair du sommet descend avec elles."""
+    raw = raw.copy(); fg = ~is_magenta(raw); Wr = raw.shape[1]
+    top = int(np.nonzero(fg.any(1))[0].min())
+    bottom = next(y for y in range(top, raw.shape[0]) if fg[y].all()) + CLOUD_BASE_RAW
+    tops = np.array([int(np.argmax(fg[:, x])) for x in range(Wr)])
+    runs, s0 = [], 0
+    for x in range(1, Wr + 1):
+        if x == Wr or tops[x] != tops[s0]:
+            if x - s0 >= CLOUD_FLAT_MIN:
+                runs.append((s0, x - 1, int(tops[s0])))
+            s0 = x
+    for x0, x1, ty in runs:
+        c = (x0 + x1) / 2; hw = (x1 - x0) / 2 + 6
+        for x in range(max(0, int(c - hw)), min(Wr, int(c + hw) + 1)):
+            d = int(round(CLOUD_DOME * (1 - math.sqrt(max(0.0, 1 - ((x - c) / hw) ** 2)))))
+            t = int(tops[x])
+            if d <= 0 or t > ty + CLOUD_DOME:
+                continue
+            col, cm = raw[t:t + 80, x].copy(), fg[t:t + 80, x].copy(); n = len(col)
+            raw[t:t + d, x] = (255, 0, 255); fg[t:t + d, x] = False
+            raw[t + d:t + n, x] = col[:n - d]; fg[t + d:t + n, x] = cm[:n - d]
+    tops = np.array([int(np.argmax(fg[:, x])) for x in range(Wr)]); K = 24
+    cost = {wc: float(np.abs(tops[wc:wc + K] - tops[:K]).mean()
+                      + np.abs(raw[top:bottom + 1, wc:wc + K] - raw[top:bottom + 1, :K]).mean() / 20)
+            for wc in range(*CLOUD_CUT_RANGE)}
+    wc = min(cost, key=cost.get)                     # la colonne wc - 1 est suivie de la colonne 0 : même silhouette
+    ext = round(CLOUD_TINT * wc / CLOUD_PERIOD)
+    band, m = raw[top:bottom + 1, :wc + ext], fg[top:bottom + 1, :wc + ext]
+    wide = CLOUD_PERIOD + CLOUD_TINT
+    size = (wide, max(1, round((bottom + 1 - top) * CLOUD_PERIOD / wc)))
     pal = palette_of(band[m], 24)
     s = down_rgba(band, m, size, pal).astype(float)
     out = s[:, :CLOUD_PERIOD].copy()
-    for x in range(CLOUD_BLEND):                       # raccord : les 24 premières colonnes glissent de la suite vers le début
-        w = (x + 0.5) / CLOUD_BLEND
-        out[:, x] = w * s[:, x] + (1 - w) * s[:, CLOUD_PERIOD + x]
+    for x in range(CLOUD_TINT):                        # raccord des teintes seulement (l'alpha reste celui de la colonne)
+        w = (x + 0.5) / CLOUD_TINT; both = (s[:, x, 3] > 0) & (s[:, CLOUD_PERIOD + x, 3] > 0)
+        out[both, x, :3] = w * s[both, x, :3] + (1 - w) * s[both, CLOUD_PERIOD + x, :3]
     res = np.zeros(out.shape, 'uint8'); al = out[..., 3] > 127
     res[al, :3] = nearest(out[al, :3], pal); res[al, 3] = 255
     res[-1, :, :3] = np.where(res[-1, :, 3:] == 255, res[-1, :, :3], res[-2, :, :3]); res[-1, :, 3] = 255   # base pleine
-    return res, pal, {'rangees_brut': [int(top), int(bottom)], 'taille_bande': list(res.shape[1::-1])}
+    return res, pal, {'rangees_brut': [int(top), int(bottom)], 'taille_bande': list(res.shape[1::-1]),
+                      'sommets_arrondis': [list(r) for r in runs], 'coupe_brut': [0, int(wc)], 'ecart_raccord': round(cost[wc], 2)}
 
 
 def cloud_frames(strip, hidden):
@@ -520,14 +621,14 @@ def astre_sprite(sheet, idx, d):
 
 # ---------------------------------------------------------------- couleurs d'aube et de nuit (bruts ZRV1)
 def amb_samples(amb):
-    a = rgb(V1LOT / 'bruts' / f'decor_{amb}.png'); l = lum(a)
+    a = rgb(AMB_RAW[amb]); l = lum(a)
     yy, xx = np.mgrid[:a.shape[0], :a.shape[1]]
-    col = {'nuit': 600, 'aube': 480}[amb]                           # colonne du reflet dans le brut ZRV1
+    col = AMB_ASTRE[amb][0]                           # colonne du reflet dans le brut ZRV1
     refl = np.abs(xx - col) < 130
     blue = (a[..., 2] > a[..., 0] + 25) if amb == 'nuit' else np.ones(l.shape, bool)       # ciel d'aube rose et violet
-    astre = {'nuit': (600, 36, 62), 'aube': (480, 100, 48)}[amb]                        # disque de l'astre ZRV1 exclu
+    astre = AMB_ASTRE[amb]                                                              # disque de l'astre exclu
     astre = (xx - astre[0]) ** 2 + (yy - astre[1]) ** 2 <= astre[2] ** 2
-    sky = (yy < {'nuit': 60, 'aube': 78}[amb]) & blue & ~astre & (l < 235) & (nd.median_filter(l, 5) > l - 25)
+    sky = (yy < {'nuit': 60, 'aube': 78, 'crepuscule': 80}[amb]) & blue & ~astre & (l < 235) & (nd.median_filter(l, 5) > l - 25)
     sea = (yy > 190) & (yy < 420) & ~refl & (l < 150) & ((a[..., 2] > a[..., 0] + 40) if amb == 'nuit' else (a[..., 2] >= a[..., 1]))   # sans reflets dorés
     crest = (yy > 190) & (yy < 420) & ~refl & (l >= 150)
     cloud = (yy > 75) & (yy < 175) & ~((xx > 430) & (xx < 780)) & (l > 90)
@@ -677,7 +778,7 @@ def make_all():
     mnt, info['montagne'] = mountain_layer(rgb(RAW / 'montagne_jour.png'))
     day['montagne'] = mnt; mmask = mnt[..., 3] == 255
     info['montagne']['base_sur_horizon'] = bool(mmask[YH - 1].any())
-    strip, cpal, info['nuages'] = cloud_strip(rgb(RAW / 'mer_de_nuages_jour.png'))
+    strip, cpal, info['nuages'] = cloud_strip(rgb(RAW / 'banc_nuages_jour.png'))
     # houle
     sprites = crest_sprites(rgb(RAW / 'cretes_jour.png'))
     info['cretes'] = {'tailles_px': [[list(s.shape[1::-1]) for s in pair] for pair in sprites]}
@@ -695,7 +796,7 @@ def make_all():
         if all(y < cloud_top and not mmask[y, x] and not ast[y, x] for y, x, *_ in px):
             stars.append(([tuple(p) for p in px], [tuple(p) for p in core], off))
     info['etoiles'] = {'zrv1': len(sc['pixels']), 'gardees': len(stars)}
-    astres = rgb(RAW / 'astres.png')
+    astres = rgb(RAW / 'astres.png'); refl_sheet = rgb(RAW / 'reflets_astres.png')
     out = {}
     for amb in AMB:
         L = {}
@@ -717,22 +818,29 @@ def make_all():
         L['ciel'] = ([ciel], 60); L['mer'] = ([merl], 60); L['montagne'] = ([mont], 60)
         L['nuages'] = (cloud_frames(strip_a, mont[..., 3] == 255), CLOUD_TICKS)
         L['scintillement'] = (glint_frames(gl, gcols, gwhite), GLINT_TICKS)
-        sw = swell_frames(spr, sea_region)
-        crest_px = np.concatenate([s[s[..., 3] == 255][:, :3] for pair in spr for s in pair]).astype(int)
-        foam_white = crest_px[np.argmax(lum(crest_px))]; foam_pale = crest_px[np.argsort(lum(crest_px))[int(len(crest_px) * 0.7)]]
+        sw = swell_frames(spr, sea_region, merl[..., :3].astype(float))
         if amb in ASTRE:
             A = ASTRE[amb]; sp = astre_sprite(astres, A['sprite'], A['d'])
+            if amb == 'crepuscule':                                  # soleil couchant : couleurs du soleil du brut
+                ra = rgb(AMB_RAW[amb]); cxr, cyr, rr = AMB_ASTRE[amb]; yy_, xx_ = np.mgrid[:ra.shape[0], :ra.shape[1]]
+                disc = ((xx_ - cxr) ** 2 + (yy_ - cyr) ** 2 <= (rr - 8) ** 2) & (ra[..., 0] > 200) & (ra[..., 2] < 150)
+                smp = ra[disc]; smp = smp[np.argsort(lum(smp))]; r0 = A['d'] / 2 - 0.5
+                yy2, xx2 = np.mgrid[:A['d'], :A['d']]; rn = np.hypot(yy2 - r0, xx2 - r0) / (A['d'] / 2)
+                ring = np.clip((rn * 5).astype(int), 0, 4)             # 5 anneaux : cœur clair -> bord rouge
+                qs = [0.72, 0.64, 0.55, 0.46, 0.36]
+                m_ = sp[..., 3] == 255
+                for k_ in range(5):
+                    sp[m_ & (ring == k_), :3] = smp[int(qs[k_] * (len(smp) - 1))]
             al = np.zeros((H, W, 4), 'uint8'); x0, y0 = A['c'][0] - A['d'] // 2, A['c'][1] - A['d'] // 2
             al[y0:y0 + A['d'], x0:x0 + A['d']] = sp
             L['astre'] = ([al], 60)
-            spx = sp[sp[..., 3] == 255][:, :3].astype(int); ls = lum(spx)
-            core = spx[np.argsort(ls)[int(len(ls) * 0.92)]]; mid = spx[np.argsort(ls)[int(len(ls) * 0.6)]]
-            seacol = merl[YH + 40, A['c'][0], :3].astype(int)
-            edge = ((mid + seacol) / 2).round().astype(int)
-            bands = reflection_bands(A['c'][0], A['d'])
-            L['reflet'] = (reflection_frames(bands, A['c'][0], (core, mid, edge), sea_region), SWELL_TICKS)
-            sw = light_crests(sw, bands, A['c'][0], (core, mid))
-            info.setdefault('reflet', {})[amb] = {'x': A['c'][0], 'bandes': len(bands), 'couleurs': [c.tolist() for c in (core, mid, edge)]}
+            dashes, rinfo = reflet_dashes(refl_sheet, REFLET_COL[amb])
+            rf = reflet_frames(dashes, A['c'][0], sea_region)
+            L['reflet'] = (rf, SWELL_TICKS)
+            rpx = np.concatenate([d['spr'][d['spr'][..., 3] == 255][:, :3] for d in dashes]).astype(int); lr = lum(rpx)
+            core = rpx[np.argsort(lr)[int(len(lr) * 0.95)]]; mid = rpx[np.argsort(lr)[int(len(lr) * 0.6)]]
+            sw = light_crests(sw, rf, (core, mid))
+            info.setdefault('reflet', {})[amb] = {'x': A['c'][0], **rinfo, 'couleurs': [c.tolist() for c in (core, mid)]}
         if amb == 'nuit':
             L['etoiles'] = (star_frames(stars), STAR_TICKS)
         L['houle'] = (sw, SWELL_TICKS)
@@ -822,10 +930,16 @@ def build(apercu=False):
         'format': '4:3 vaste', 'size_px': [W, H], 'grid_8px': [W // 8, H // 8], 'horizon_y': YH,
         'demande': 'ZRV2 : mer comme V24P04A (houle qui roule, horizon qui scintille), zone multicalque (mer, ciel, nuages, '
                    'montagne separes), montagne raccordee a l horizon, nuages de la mer de nuages animes (pas de nuages ajoutes), '
-                   'fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages',
+                   'fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages ; '
+                   'puis (ensemble valide) : reflets de la lune et du crepuscule passes au generateur, nuages sans rognure, vagues '
+                   'sans interstices, ajouter un crepuscule ; ecume et bulles de ZRV1 gardees',
         'choix': {'mer': 'generee avec V24P04A en reference (reponse de l utilisateur), animee par les lois de V24P04A',
                   'version': 'nouvelle version, ZRV1 gardee (reponse de l utilisateur)',
                   'layout': 'celui de ZRV1 (prairie, horizon, montagne, collisions, marqueurs) (demande de l utilisateur)',
+                  'ecume_bulles': 'celles de ZRV1 (demande de l utilisateur) : jour, aube, nuit = calques de ZRV1 ; crepuscule = meme '
+                                  'methode (palette 8 de s01p02a transposee sur le brut de crepuscule, memes bulles)',
+                  'crepuscule': 'quatrieme ambiance ; prairie : recette des ambiances de ZRV1 sur un brut de crepuscule recale au pixel',
+                  'vagues': 'cretes elargies a 78 px sur le motif de 96 (comme V24P04A) et ligne de houle continue de 1 px sous chaque rangee',
                   'petits_pics': 'les petits pics sombres de la mer de nuages de ZRV1 ne sont pas repris : la mer de nuages est '
                                  'remplacee par le banc qui passe derriere la montagne'},
         'base': 'branche de session : calques de ZRV1, utilitaires de ZRV1 et d ESN1 ; etude des animations pour le rendu ROM ; '
@@ -843,15 +957,17 @@ def build(apercu=False):
                  'manifest_sha256': sha(V1OUT / 'manifest.json')},
         'mesures': info,
         'houle': {'crans': SWELL_STEPS, 'frame_length_ticks': SWELL_TICKS, 'loi_y': f'y(u) = {YH} + {SWELL_D0} + {SWELL_A} u + {SWELL_B} u^2',
-                  'u': 'k + cran / 12', 'periode_x': SWELL_PERIOD_X, 'bornes_tailles': SIZE_BOUNDS, 'echelle_cretes': CREST_SCALE},
+                  'u': 'k + cran / 12', 'periode_x': SWELL_PERIOD_X, 'bornes_tailles': SIZE_BOUNDS, 'echelle_cretes': CREST_SCALE,
+                  'largeur_cretes_px': CREST_W, 'ligne_de_houle': f'1 px continu, mer x {SWELL_LINE}, des u >= {SIZE_BOUNDS[0]}'},
         'scintillement': {'crans': GLINT_STEPS, 'frame_length_ticks': GLINT_TICKS, 'niveaux': GLINT_LEVELS},
         'nuages': {'periode_px': CLOUD_PERIOD, 'pas_px': CLOUD_PAS, 'phases': CLOUD_PHASES, 'frame_length_ticks': CLOUD_TICKS,
-                   'raccord_px': CLOUD_BLEND, 'hauteur_px': int(strip.shape[0])},
+                   'raccord': f'coupe du brut choisie la ou la silhouette se raccorde ; fondu des teintes seules sur {CLOUD_TINT} colonnes', 'hauteur_px': int(strip.shape[0])},
         'fleurs': {'phases': 4, 'frame_length_ticks': FLOWER_TICKS, 'loi': 'A B A C : en B et C chaque tete descend de 1 px et '
                    'penche de +1 / -1 px (sens propre a la tete) ; mesure sur le GIF Sky Peak (images 0 = 2, decalage (±1, +1))'},
         'etoiles': {'phases': STAR_PHASES, 'frame_length_ticks': STAR_TICKS},
         'astres': ASTRE,
         'ambiances': report,
+        'crepuscule': {k: dusk_meadow()[k] for k in ('recalage', 'ecume_palette_8', 'bulles_couleurs')},
         'access': {'entry_px': entry, 'reveil_px': reveil, 'path_found_16x16': reach, 'cells_explored': explored,
                    'blocked_cells': int(blocked.sum()), 'walkable_cells': int((~blocked).sum()), 'origine': 'masque praticable de ZRV1'},
         'pmdo': {'target': '0.8.12', 'namespace': NAMESPACE, 'assets': ASSET, 'tiles_per_bank': counts, 'markers': markers, 'warps': 'aucun'},
