@@ -24,6 +24,8 @@ Même jour, sur « Lance la suite ! » : lot **Entrée Jardin secret** (`renders
 
 Même jour, sur « j'aimerais que tu regardes les animations canoniques des map magma / de l'eau par exemple sur la map S01P02A » : **étude** `renders/etude_animations_canoniques_sky_v1/` (source `source/etude_animations_canoniques_sky_v1/`, aperçu `apercu_etude_animations_canoniques_sky_v1.html`). Fichiers de la ROM lus depuis `pret/pmd-sky` : l'eau et la lave sont des rotations de palette, avec leurs vraies durées. Le Ground du port `PMD-SKY-PMDO-PORT` dédoublonne les frames et fixe `FrameLength` à 10 : lave fausse 72 à 89 % du temps. Pistes exactes calculées et vérifiées tick par tick ; 9 tests PASS. **Suite proposée, à faire confirmer** : appliquer le vrai cycle de palette à nos cartes (ETC2 avec la mer de s01p03a, carte de magma avec le cycle de d41p41a), ou porter fidèlement des cartes du port.
 
+Même jour, sur « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE ! » : **série validée par l'utilisateur**, et **mod unique** des 18 entrées (`renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip`, namespace `guilde_entrees_sud_nord`, galerie `apercu_mod_guilde_entrees_v1.html`, source `source/mod_guilde_entrees_v1/`, 6 tests PASS). Chaque nouvelle carte de la série doit être ajoutée à `MAPS` dans `build_mod.py`.
+
 **Serveur d'aperçus, à relancer au début de chaque session** : `python3 source/serveur_apercus/serve.py --port 8000`, via l'outil de processus de fond. Il écoute sur 0.0.0.0 et sa page d'accueil liste tous les aperçus, les entrées sud → nord en tête.
 
 ## Branches sœurs de la série (relevé du 27 septembre)

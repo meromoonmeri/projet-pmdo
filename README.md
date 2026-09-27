@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Mod PMDO unique — les 18 entrées de donjon sud → nord (27 septembre 2026)
+
+- Mod : `renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip` (26 Mo), namespace `guilde_entrees_sud_nord`.
+- Galerie : `apercu_mod_guilde_entrees_v1.html` (une vignette par carte, lien vers son aperçu animé) ; planche `renders/mod_guilde_entrees_v1/planche_cartes.png`.
+- Source : `source/mod_guilde_entrees_v1/` (`build_mod.py`, `test_mod.py`).
+
+**Demande de l'utilisateur** : « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE ! ». La série est **validée par l'utilisateur** (sur les aperçus ; toujours aucun test en jeu).
+
+Le mod regroupe les 18 Grounds de la série (ESN1, ESN2, ECN1, ERN1, EGN1, EBN1 en portrait 424 × 632 ; EJN1, EWC1-3, EUL1, EMF1, EQS1, ESC1, ETC1, ECV1, EMT1, EJS1 en 4:3 768 × 576). Les 219 banques `.tile` et les Grounds sont copiés **octet pour octet** depuis les ZIP projets versionnés des lots ; l'index des tuiles est fusionné ; les scripts de carte passent sous le namespace commun, sans changement. ZIP reproductible (horodatages fixes). 6 tests PASS, dont une installation complète dans un mod existant (simulation, installation, réinstallation sans effet, carte éditée protégée) ; 3 mutations vérifiées.
+
 ## Étude — animations canoniques d'eau et de magma (PMD Ciel) et leur portage PMDO (27 septembre 2026)
 
 - Aperçu : `apercu_etude_animations_canoniques_sky_v1.html` : piste exacte et piste du port rejouées côte à côte, avec la formule du moteur.

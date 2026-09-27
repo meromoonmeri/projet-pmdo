@@ -809,3 +809,16 @@ Règles et recettes :
 
 9 tests PASS. 4 mutations vérifiées. Chiffres : s01p02a mer 10 × 10, fleurs 4 × 12, port faux 16,7 % du temps sur les cases animées ; d41p41a lave 13 × 10, port faux 88,7 % ; v03p08a 10 × 12, 10 × 8 et 20 × 8, port faux 71,7 %. Étude en 20 s environ. Pas de runtime.
 
+### Mod unique des entrées (mod_guilde_entrees_v1) — « JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE » (27 septembre)
+
+Lot `source/mod_guilde_entrees_v1/`, namespace `guilde_entrees_sud_nord`, sortie `renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip`, galerie `apercu_mod_guilde_entrees_v1.html`.
+
+- **Ne rien refaire** : lire chaque banque et chaque Ground dans le ZIP projet versionné du lot, et les copier tels quels. Le test compare octet pour octet et vérifie qu'aucun fichier n'est en trop ou en moins.
+- **Nouvelle carte de la série** : l'ajouter à `MAPS` dans `build_mod.py`, puis relancer le build et les tests. Le test « toutes les cartes » échoue si un lot `renders/entree_*_sud_nord_v*/` avec ZIP projet n'est pas dans le mod.
+- **Installeur** : `source/pmdo_cote/INSTALLER.py` copie `index.idx` comme un fichier ordinaire, et une réinstallation le voit en conflit. Les lots (17 sur 18 ; ESN1 a encore l'ancien) et le mod appliquent le correctif au build. Test : installer, réinstaller sans effet, carte éditée protégée.
+- **Validation** : l'utilisateur a validé la série sur les aperçus. Les manifestes des lots gardent `art_approved:false` (leurs tests l'exigent) ; la validation est notée dans le manifeste du mod. `runtime_tested` reste faux partout.
+- **ZIP reproductible** : `ZipInfo` à date fixe, fichiers triés. Deux builds donnent le même sha256.
+- **Planche** : la police par défaut de Pillow n'a pas d'accents ; prendre DejaVuSans.
+
+6 tests PASS. 3 mutations vérifiées : octet changé dans une banque, banque retirée de l'index, tuile citée inexistante. Build en 45 s environ.
+
