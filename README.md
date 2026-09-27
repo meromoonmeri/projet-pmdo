@@ -1,5 +1,28 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FVS1 — Fin Vapeur : sommet de Steam Cave, première zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « Fait des zone fin de donjon multicalque de la série entrée on passe au fin », puis « Lance toi ». Les questions sur la portée, le layout et la référence sont restées sans réponse, donc l'agent a choisi :
+
+- une fin par biome de la série, dans l'ordre du mod, **Vapeur d'abord** ;
+- la référence est la **vraie fin du jeu**, `Steam_Cave_Peak_TDS.png`, jamais prise dans la série ;
+- layout : arrivée au sud par le couloir qui sort du donjon, grande arène (marqueur `boss`), source chaude au nord (marqueur `source`), sans sortie ni warp.
+
+Rendu généré référencé : décor sur magenta (la source), sol seul, planche de 7 poses de vapeur. Calques, du bas vers le haut :
+
+- eau de la source, bulles ;
+- sol complet, sol de l'arène, margelle, évents, stalagmites ;
+- vapeur.
+
+L'eau (4 × 10 ticks) et les bulles (24 × 5) reprennent les fonctions et les poses de l'entrée Vapeur V2 : la fin ressemble à son entrée. Les trois évents crachent à tour de rôle des panaches d'environ 100 px, et des volutes montent de la source (24 × 5 ticks). La scène boucle en 2 s.
+
+- Fidélité du sol à la capture : 7.05 (seuil 35).
+- Aperçu : `apercu_fin_vapeur_sommet_v1.html`. Rendus : `renders/fin_vapeur_sommet_v1/`. Source : `source/fin_vapeur_sommet_v1/`.
+- 9 tests PASS, 5 mutations vérifiées.
+- Paquet : `FVS1_projet_pmdo_0812.zip` (Ground 0.8.12, préfixe `FVS1`) et `FVS1_calques_png_8px.zip`.
+- Pixels générés, pas de tuiles natives. Pas de runtime. Pas encore dans le mod unique.
+- Fins suivantes prévues, dans l'ordre du mod : Cratère (`Dark_Crater_Pit_TDS.png`), Ruine (`Sealed_Ruin_pit_TDS.png`), Givre, Bristle, Jungle (`Southern_Jungle_exit_S.png`), Waterfall Cave, Underground Lake, Mystifying Forest, Sables mouvants, Star Cave, Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret.
+
 ## ZRV2 — Zone de réveil V2 : la mer de V24P04A, montagne et nuages sur leurs propres calques (27 septembre 2026)
 
 - Aperçu : `apercu_zone_reveil_prairie_horizon_v2.html`. Boutons jour, aube, crépuscule et nuit, rejoué à 60 ticks/s, avec collisions et zoom sur l'horizon.

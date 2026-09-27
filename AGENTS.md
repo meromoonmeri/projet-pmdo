@@ -943,3 +943,30 @@ Pas de runtime. Pas dans le mod unique.
 - **Soleil couchant** : recoloré par anneaux (quantiles 0,72 → 0,36 du disque du brut).
 - **Réinitialisations** : l'espace est revenu 4 fois au commit parent. Pousser après chaque étape.
 
+## Fins de donjon de la série des entrées — FVS1 (Fin Vapeur), recette
+
+- **Portée choisie par l'agent** : une fin par biome de la série, dans l'ordre du mod. Référence = la vraie salle de fin du jeu quand une capture existe (`Steam_Cave_Peak_TDS`, `Dark_Crater_Pit_TDS`, `Sealed_Ruin_pit_TDS`, `Southern_Jungle_exit_S`…), sinon le rip de l'entrée. Si l'utilisateur précise autre chose, suivre sa consigne.
+- **Layout d'une fin** :
+  - arrivée au sud, par le couloir qui sort du donjon (marqueur `entrance`) ;
+  - grande arène au centre (marqueur `boss`) ;
+  - objectif au nord (marqueur `source`, ou selon le biome : trésor, autel, vue) ;
+  - aucune sortie, aucun warp, pas de `donjon_seuil`.
+  - Tests : chemins 16 × 16 de l'arrivée au boss et à l'objectif ; la bande nord est une paroi.
+- **Cohérence avec l'entrée** : reprendre par `loadmod` les fonctions d'animation de l'entrée (ici `water_phases`, `bubble_poses` et `BUBBLE_TIMELINE` de ESN2).
+  - Régler `E2.W, E2.H = 768, 576`, car ses fonctions lisent W et H à l'appel.
+  - Un test vérifie que la palette est celle de l'entrée.
+- **Réutilisation de Jungle** (`JM`) : `down_class`, `down_full` et `rgba` du gabarit 4:3 sont chargés depuis la Jungle. Les attributs de `BM` (Bristle) passent par `JM.BM`.
+- **Segmentation d'une salle à stalagmites** :
+  - sol = moyenne sur 11 px > 125 et écart-type sur 11 px < 20, plus grande composante, grains de texture de moins de 2500 px rebouchés ;
+  - margelle = hors sol, à moins de 48 px de la source ;
+  - évents = ellipses relevées à la main sur le brut (documentées dans le manifeste) ;
+  - le reste = parois.
+  - Les calques fixes voisins peuvent échanger des pixels sans que la scène change.
+- **Vapeur générée** :
+  - découper la planche par ses séparateurs noirs, relevés à la main ;
+  - garder la plus grande composante de chaque case ;
+  - réduction uniforme ×0,14 : à ×0,1, le panache ne faisait que 40 px ;
+  - palette de 5 teintes, plus le contour noir changé en brun sombre ;
+  - le pied du panache est posé en haut de l'évent ; les émetteurs sont décalés de 8 phases.
+- **Réinitialisations** : l'espace est revenu au commit parent jusque pendant un appel au générateur. Avant chaque commit, vérifier `git log -1`. Si HEAD vaut `95160e32`, copier le travail hors du dépôt, faire `git reset --hard origin/<branche>`, recopier, puis committer.
+
