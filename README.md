@@ -1,5 +1,26 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Clairière tropicale — 4:3, arrivée par un ponton, clairière de palmiers (27 septembre 2026)
+
+- Aperçu : `apercu_entree_clairiere_tropicale_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
+- Lot : `renders/entree_clairiere_tropicale_sud_nord_v1/` (`ETC1_projet_pmdo_0812.zip`, `ETC1_calques_png_8px.zip`, ORA, WebP animé, planche des poses).
+- Source : `source/entree_clairiere_tropicale_sud_nord_v1/`.
+
+**Demande de l'utilisateur** : « continue ! ». Carte suivante de la série ; l'agent a choisi le biome **clairière tropicale**, **à confirmer**. La capture `large.S01P03A…png` (palmiers, hibiscus, dalles de sable, rive, ponton, mer à vagues ; jeu et scène non confirmés) n'était la source d'aucun lot sur les 72 branches ni sur main.
+
+**Correction** : le relevé d'ESC1 donnait à tort `roadundergound` et `rockgeyserlike` comme libres partout. Ils ont servi de relayouts natifs sur d'anciennes branches, et les geysers sont déjà un motif de notre base. Détail dans `REPRISE_MAPS.md`.
+
+Méthode des textures canoniques = **rendu généré référencé**. Un premier décor à l'herbe acide (distance 69,8 au rip, seuil 35) a été **écarté**, pas retouché. Le décor retenu est une nouvelle génération avec la capture en référence, mer en magenta. Trois autres bruts : herbe complète et **témoin sans objets** (édités depuis le décor ; l'écart décor − témoin isole palmiers, fleurs et touffes), planche de papillons.
+
+L'arrivée est au sud, sur un long ponton au-dessus de la mer. Un chemin de dalles traverse une grande clairière bordée de jungle, de palmiers et d'hibiscus jusqu'au seuil de terre d'une entrée sombre, dans un tertre au nord.
+
+15 calques : sol complet, herbe, ombres (au pied du tertre), dalles, touffes, fleurs, jungle, palmiers, tertre, seuil, profondeur, rive, ponton, mer, papillons. Deux animations de 24 × 5 ticks :
+
+- **mer** : profil de 48 px, crête et 9 bleus **relevés pixel par pixel sur la capture** ; les vagues montent de 2 px par phase vers la rive. Contre la terre, seule la bande sombre de la capture : **aucun liseré clair** ;
+- **papillons** : 4 papillons générés, battement de 8 phases, vol en huit fermé.
+
+Boucles fermées (testé). Fidélité au rip : herbe 20,4, jungle 33,5, dalles 13,3 (seuil 35). 13 tests PASS ; 5 mutations vérifiées. Pas de test PMDO en jeu.
+
 ## Entrée Star Cave — 4:3, grotte de cristaux étoilée, réf. Star Cave (27 septembre 2026)
 
 - Aperçu : `apercu_entree_star_cave_sud_nord_v1.html`, aussi listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).

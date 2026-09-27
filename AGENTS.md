@@ -688,6 +688,7 @@ Build reproductible : 105 fichiers identiques sur 106, seul l'ORA change (horoda
 Choix du biome, avec la leçon d'EQS1 appliquée : les rips candidats ont été cherchés dans tout l'arbre et dans les 70 branches distantes, à la fois par nom de fichier et par nom de dossier de lot.
 
 - `starcave`, `roadundergound`, `rockgeyserlike`, `junglewaterfallzonepmdsky` et `oldcastlepmd` ne sont la source d'aucun lot. Ils n'apparaissent qu'en « pending_layout » dans `zones_relayout_v1/v2`.
+  - **Corrigé après coup (lot ETC1)** : c'est faux pour `roadundergound`, `rockgeyserlike` et `junglewaterfallzonepmdsky`, déjà utilisés sur d'anciennes branches (détail dans `REPRISE_MAPS.md`). Seuls `starcave` (désormais ESC1) et `oldcastlepmd` étaient vraiment libres.
 - `secretgarden` est déjà produit sur deux anciennes branches, `01a0d315` et `01a0d4b6`.
 
 Règles et recettes :
@@ -720,3 +721,25 @@ Règles et recettes :
 - grain teinté de magenta.
 
 Fidélité : sol 5,7 et cristal 5,3 sur le brut ; sol 7,3, parois 4,0 et blocs 3,9 sur les calques. Build reproductible (101 fichiers identiques sur 102, hors ORA), en 30 s environ. Pas de runtime.
+
+### Entrée Clairière tropicale (ETC1) — « continue ! » (27 septembre)
+
+Référence `large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png` (456 × 456, clairière tropicale, rive, ponton et mer à vagues ; jeu et scène non confirmés). Lot `source/entree_clairiere_tropicale_sud_nord_v1/`, préfixe `ETC1`, namespace `entree_clairiere_tropicale_sud_nord`, aperçu `apercu_entree_clairiere_tropicale_sud_nord_v1.html`.
+
+**Correction du relevé d'ESC1** : roadundergound et rockgeyserlike n'étaient pas libres (voir la ligne corrigée ci-dessus et `REPRISE_MAPS.md`). Le choix d'ETC1 a été fait avec `git grep -l -I -F <nom> origin/<b> -- '*.py' '*.md'` sur **les 72 têtes et main**, inventaires écartés. `large.S01P03A` n'était cité que par `zones_bg_audit_v1`.
+
+Règles et recettes :
+
+- **Brut hors seuil = écarté, pas retouché** : le premier décor avait une herbe acide (distance 69,8 > 35). Il est gardé dans `bruts/ecartes/`, marqué `ecarte` dans le manifeste, jamais lu par le build (test). Le décor retenu est une **nouvelle génération** : édition du premier essai avec le rip en seconde référence, prompt « recolour the grass to match the second image exactly ».
+- **Témoin sans objets** : un 4e brut, le décor édité sans palmiers, fleurs, touffes ni cailloux, recalé (0, 0). L'écart décor − témoin (lissé 3 px > 28, fermé, trous bouchés) isole proprement les objets posés sur la jungle, là où la couleur seule confond les palmes et les buissons. Classement par composante : > 2500 px = palmier, ≥ 12 % de pixels de fleur saturés = fleurs, le reste = touffes et cailloux.
+- **Magenta et hibiscus roses** : les fleurs roses passent le test de teinte magenta. La mer est donc le magenta **relié au bord sud**. Le générateur a aussi peint un filet rose-blanc contre la rive (le liseré du rip) : il est rendu à l'eau (b > g − 15, lum > 120, à ≤ 5 px du magenta), puis recouvert par la bande sombre.
+- **Mer du rip sans liseré** :
+  - profil vertical de 48 couleurs relevé sur une colonne du rip, crête relevée colonne par colonne sur un tronçon **qui se referme** (y(0) = y(72)) : la mer se répète tous les 72 px sans saut et la banque de tuiles reste petite ;
+  - les vagues avancent de période / phases = 2 px par phase ;
+  - ≤ 2 px de la terre : seulement la couleur la plus sombre du rip ; ≤ 8 px : les couleurs claires deviennent un bleu moyen du rip (la crête s'apaise). Bords de l'image comptés comme de l'eau (`np.pad(..., constant_values=True)` avant la distance).
+- **Palettes par matière** : un groupe partagé herbe + dalles + touffes ramenait les dalles au vert (0 pixel de sable) ; un groupe fleurs + jungle effaçait les hibiscus. La coupe médiane suit les matières dominantes : faire un groupe par matière rare. Un test vérifie le sable des dalles et les pixels saturés des fleurs.
+- **Ombres à mesurer par obstacle** : contre la jungle, l'herbe ne s'assombrit pas ; au pied du tertre, si (lum 162 contre 202). Le premier profil, mesuré seulement contre la jungle, avait conclu à tort « pas d'ombres », et cette herbe sombre bouchait l'accès à la bouche.
+- **Sol sec jusqu'à la bouche** : un calque `seuil` (sol de terre de la bouche, entre les montants de l'arche = étendue de la bouche dans son tiers bas) ; sous la bouche entre les montants, rien n'est tertre ni jungle, et la transition olive terre → herbe rejoint les ombres. Sans cela, la première dalle était avalée par le tertre et le seuil de donjon restait à 25 px de la bouche. Test : ni jungle ni eau sous la bouche entre les montants, praticable > 90 % dans la bande centrale, `donjon_seuil` à < 8 px de la bouche.
+- **Planche de poses serrée** : quand des sprites sont plus proches que la fenêtre, garder pour chaque fenêtre la seule composante (fermée 3 px) qui contient son centre, **avec un fond propre à chaque fenêtre** (un masque global gardait la composante voisine d'une autre fenêtre).
+
+13 tests PASS. 5 mutations vérifiées : trait blanc sur la rive, phase de mer figée, phase de papillons dupliquée, ombres à la couleur moyenne de l'herbe, jungle devant la bouche. Une mutation « ombres = un pixel d'herbe quelconque » n'échouait pas, parce que le pixel choisi était sombre (lum 185) : muter avec la couleur moyenne. Fidélité : herbe 20,4, jungle 32,0, dalles 25,1 sur le brut ; herbe 20,4, jungle 33,5, dalles 13,3 sur les calques. Build reproductible (92 fichiers identiques sur 93, hors ORA), en 30 s environ. Pas de runtime.

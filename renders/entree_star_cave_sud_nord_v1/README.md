@@ -23,7 +23,7 @@ Leçon d'EQS1 appliquée : chaque rip candidat a été cherché dans **tout l'ar
   - `secretgarden` : déjà produit sur deux anciennes branches (`jardin_secret`, `secretgarden_reseau`) ;
   - `junglewaterfallzonepmdsky` : ce serait encore une cascade ;
   - `oldcastlepmd` : une salle au trésor, un intérieur ;
-  - `roadundergound` (route souterraine violette) et `rockgeyserlike` (geysers) : libres, gardés pour la suite.
+  - `roadundergound` (route souterraine violette) et `rockgeyserlike` (geysers) : donnés ici à tort comme libres. **Correction du 27 septembre** : tous deux ont servi de relayouts natifs sur d'anciennes branches (`01a0b211`, et `01a0d42e` / `01a0d546` pour roadundergound), et les geysers sont déjà un motif de notre base (`jungle_geysers_v2`, `steam_cave_geysers_v1`). Voir `REPRISE_MAPS.md`.
 
 ## Méthode : textures canoniques par rendu généré référencé
 
