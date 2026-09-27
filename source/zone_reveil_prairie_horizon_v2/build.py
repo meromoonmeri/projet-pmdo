@@ -112,6 +112,7 @@ GEN = [
 ]
 # ---- lois d'animation
 SWELL_STEPS, SWELL_TICKS = 12, 10                  # V24P04A : BPA 12 crans x 10 ticks
+SWELL_PASSES = 2                                   # V24P04A (12 images décodées) : une crête avance de 2 rangées par cycle, 5 à 8 px par cran
 GLINT_STEPS, GLINT_TICKS = 16, 4                   # V24P04A : palettes animées 16 crans x 4 ticks
 GLINT_LEVELS = [1, 1, 2, 2, 1, 1, 0, 0, 0, 0, 1, 1, 2, 1, 0, 0]   # 0 éteint, 1 couleur du brut, 2 blanc
 CLOUD_PERIOD, CLOUD_PAS, CLOUD_TICKS = 256, 1, 8
@@ -415,9 +416,9 @@ def swell_rows():
 
 
 def swell_frames(sprites, sea_region, sea_rgb):
-    """Crête k au cran s : profondeur u = k + s/12, bas du sprite en y(u), colonnes tous les 96 px ; taille selon u,
-    écume pleine / mince en alternance (cran + colonne), comme les deux états alternés de V24P04A. u = k + 1 au cran 12
-    = crête k + 1 au cran 0 : la boucle est fermée par construction."""
+    """Crête k au cran s : profondeur u = k + 2s/12 (V24P04A : 2 rangées par cycle), bas du sprite en y(u), colonnes tous les 96 px ; taille selon u,
+    écume pleine / mince en alternance (cran + colonne), comme les deux états alternés de V24P04A. u = k + 2 au cran 12
+    = crête k + 2 au cran 0 : la boucle est fermée par construction."""
     swell_sp = []
     for sp in sprites[0]:                             # houle naissante : ombre sombre seule
         s2 = sp.copy(); m = s2[..., 3] == 255; l = lum(s2[..., :3])
@@ -426,7 +427,7 @@ def swell_frames(sprites, sea_region, sea_rgb):
     for s in range(SWELL_STEPS):
         a = np.zeros((H, W, 4), 'uint8')
         for k in range(K - 1, -1, -1):
-            u = k + s / SWELL_STEPS; y = int(round(swell_y(u)))
+            u = k + SWELL_PASSES * s / SWELL_STEPS; y = int(round(swell_y(u)))
             cls = sum(u >= b for b in SIZE_BOUNDS)      # 0 = houle, 1..4 = tailles
             for j in range(W // SWELL_PERIOD_X):
                 v = (s + j) % 2
@@ -484,13 +485,13 @@ def u_of_y(y):
 
 
 def reflet_frames(dashes, xc, sea_region):
-    """12 crans calés sur la houle : chaque trait oscille de A sin(phi), phi = 2 pi (s/12 - u(y)) - la déformation descend
+    """12 crans calés sur la houle : chaque trait oscille de A sin(phi), phi = 2 pi (2s/12 - u(y)) - la déformation descend
     vers le rivage avec les crêtes - et s'éteint brièvement quand sin(2 phi + phase propre) < -0,85. Boucle fermée."""
     frames = []
     for s in range(SWELL_STEPS):
         a = np.zeros((H, W, 4), 'uint8')
         for d in dashes:
-            ph = 2 * math.pi * (s / SWELL_STEPS - u_of_y(d['y']))
+            ph = 2 * math.pi * (SWELL_PASSES * s / SWELL_STEPS - u_of_y(d['y']))
             if math.sin(2 * ph + d['ph']) < -0.85:
                 continue
             sp = d['spr']; h_, w_ = sp.shape[:2]; amp = 1 + (d['y'] - YH) / 45
@@ -865,6 +866,10 @@ def build(apercu=False):
         for amb, L in out.items():
             for tk in (0, 30, 60):
                 scene(L, tk).save(d / f'{amb}_t{tk:03d}.png')
+        mont = Image.new('RGB', (384 * 3, 180 * 4))                # les 12 crans de la mer (moitié gauche), comme V24P04A
+        for i in range(SWELL_STEPS):
+            mont.paste(scene(out['jour'], i * SWELL_TICKS).crop((0, YH - 10, 384, YH + 170)), ((i % 3) * 384, (i // 3) * 180))
+        mont.save(d / 'mer_12_crans.png')
         print(json.dumps(info, indent=1, ensure_ascii=False)[:3000]); return
     gfx = loadmod('pmdo_codec', R / 'source/pmdo_cote/build.py')
     tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
@@ -957,7 +962,7 @@ def build(apercu=False):
                  'manifest_sha256': sha(V1OUT / 'manifest.json')},
         'mesures': info,
         'houle': {'crans': SWELL_STEPS, 'frame_length_ticks': SWELL_TICKS, 'loi_y': f'y(u) = {YH} + {SWELL_D0} + {SWELL_A} u + {SWELL_B} u^2',
-                  'u': 'k + cran / 12', 'periode_x': SWELL_PERIOD_X, 'bornes_tailles': SIZE_BOUNDS, 'echelle_cretes': CREST_SCALE,
+                  'u': 'k + 2 cran / 12', 'rangees_par_cycle': SWELL_PASSES, 'periode_x': SWELL_PERIOD_X, 'bornes_tailles': SIZE_BOUNDS, 'echelle_cretes': CREST_SCALE,
                   'largeur_cretes_px': CREST_W, 'ligne_de_houle': f'1 px continu, mer x {SWELL_LINE}, des u >= {SIZE_BOUNDS[0]}'},
         'scintillement': {'crans': GLINT_STEPS, 'frame_length_ticks': GLINT_TICKS, 'niveaux': GLINT_LEVELS},
         'nuages': {'periode_px': CLOUD_PERIOD, 'pas_px': CLOUD_PAS, 'phases': CLOUD_PHASES, 'frame_length_ticks': CLOUD_TICKS,
