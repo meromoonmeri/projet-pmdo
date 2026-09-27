@@ -881,3 +881,46 @@ Recette d'une **scène panoramique avec la mer animée du jeu** :
 5. case de mer praticable.
 
 Pas de runtime. Pas encore dans le mod unique.
+
+Lot `source/zone_reveil_prairie_horizon_v2/`, préfixe `ZRV2`.
+
+- Banques `ZRV2J_`, `ZRV2A_` et `ZRV2N_`.
+- Namespace `zone_reveil_prairie_horizon_v2`.
+- Assets `zrv2_zone_reveil_{jour,aube,nuit}`.
+- Aperçu `apercu_zone_reveil_prairie_horizon_v2.html`.
+
+Demande : la mer de V24P04A, une zone multicalque, les nuages derrière la montagne. Correction de l'utilisateur : **garder le layout de ZRV1** et ne refaire que la mer et l'arrière-plan.
+
+Recette d'une **refonte d'arrière-plan multicalque sur un layout existant** :
+
+- **Layout** : reprendre tels quels les calques de prairie, le masque praticable et les marqueurs du lot parent. La région de mer se recalcule : `(y ≥ horizon) & ~fill_holes(prairie ∪ 16 rangées du bas)`. Elle est identique au masque de ZRV1 (test).
+- **Bruts séparés, un par calque**, tous générés avec `images=[V24P04A ×4]` :
+  - ciel et mer ;
+  - planche de crêtes sur magenta, en 5 rangées de 2 états ;
+  - banc de nuages sur magenta ;
+  - astres sur magenta.
+
+  Montagne : une édition du **recadrage serré ×2** de la montagne du parent (le cadre entier donne une montagne géante), recalée par facteur et origine.
+- **Magenta** : `(r − g > 40) & (b − g > 40)`. Avec 90, les bords teintés de magenta restent et donnent des traits violets.
+- **Horizon du brut ciel et mer** : première rangée où la moyenne du rouge passe sous 120. Les paillettes relèvent la moyenne de la mer ; un seuil à 90 ne trouve rien.
+- **Houle** : chaque crête k est au cran s à la profondeur u = k + s/12, avec son bas en `y(u)`. La taille dépend de u, et les deux états alternent (cran + colonne). La boucle est fermée par construction. La dernière crête doit sortir de la mer avant de disparaître : `y(K−1) − h_max + 1 >` dernière rangée de mer (test).
+- **Montagne raccordée** : si le brut touche le bord du cadre, ne pas couper. Prolonger chaque flanc en pente (droite ajustée sur les 30 rangées au-dessus du contact) en recopiant la texture du pied en miroir. Une droite ajustée sur tout le bas du flanc, appliquée à toutes les rangées, coupe le sommet.
+- **Nuages derrière la montagne** : bande tournée, puis `a[montagne] = 0` dans le calque. La montagne est dessinée par-dessus de toute façon.
+- **Aube et nuit** :
+  - `recolor_rank` (même quantile de luminance) sur des échantillons des bruts du parent, en **excluant le disque de l'astre**. Sinon, la montagne de nuit prend des taches jaunes.
+  - Mer d'aube sans reflets dorés (b ≥ g).
+  - Le ciel d'aube se fait **par rangée** (profil vertical du ciel du parent, tramage du jour gardé). Le rang de luminance donne un lilas uni.
+- **Soleil d'aube au-dessus du banc de nuages** : derrière, on n'en voit qu'un croissant, qui ressemble à une lune.
+- **Aperçu** : les 256 phases de nuages ne sont pas mises dans la page. Une bande par ambiance est reconstituée depuis les phases 0 et 128, et le JS la fait défiler sous la montagne. Écart 0 avec l'empilement des calques aux ticks 0, 808 et 1999, hors navigateur.
+- **Poids** : 12 134 tuiles de nuages par ambiance ; build en 6 min ; projet de 6,7 Mo, calques de 35 Mo.
+
+16 tests PASS. 5 mutations vérifiées :
+
+1. pixel de nuage sur la montagne ;
+2. houle décalée de 5 px ;
+3. flanc de montagne coupé à la verticale ;
+4. fleurs A ≠ A ;
+5. reflet déplacé hors de la colonne.
+
+Pas de runtime. Pas dans le mod unique.
+

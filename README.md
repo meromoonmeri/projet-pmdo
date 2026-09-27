@@ -1,5 +1,41 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## ZRV2 — Zone de réveil V2 : la mer de V24P04A, montagne et nuages sur leurs propres calques (27 septembre 2026)
+
+- Aperçu : `apercu_zone_reveil_prairie_horizon_v2.html`. Boutons jour, aube et nuit, rejoué à 60 ticks/s, avec collisions et zoom sur l'horizon.
+- Lot : `renders/zone_reveil_prairie_horizon_v2/`. Il contient `ZRV2_projet_pmdo_0812.zip` (trois Grounds), `ZRV2_calques_png_8px.zip` et un README détaillé.
+- Source : `source/zone_reveil_prairie_horizon_v2/`, 16 tests PASS.
+
+**Demande de l'utilisateur** :
+
+- « regarde l'animation de la mer V24P04A et des nuages, c'est ce que je te demandais pour la zone réveil » ;
+- zone multicalque : la mer sur son propre calque, le ciel, les nuages et la montagne séparés ;
+- montagne « raccordée logiquement à l'horizon » ;
+- animer les nuages déjà présents, sans en ajouter ;
+- fleurs animées comme à Sky Peak ;
+- reflet de la lune sur la mer, animé logiquement.
+
+Puis : « garder le layout de la v1, juste corriger la mer et le background, laisser la montagne, mais les nuages derrière la montagne : la mer ⇒ montagne ⇒ nuage ».
+
+**Réponses aux questions** : la mer est générée avec V24P04A en référence ; c'est une nouvelle version, et ZRV1 est gardée.
+
+- **Layout de ZRV1, inchangé** (test) : prairie, masque de mer, collisions, `reveil` (376, 240), `entrance` (384, 560).
+- **17 calques**, avec la profondeur demandée :
+  - ciel, puis étoiles, puis lune ou soleil ;
+  - ensuite les **nuages**, puis la **montagne**, puis la **mer** ;
+  - puis scintillement, houle, reflet et écume ;
+  - enfin la prairie (herbe, chemin, fleurs, rochers, buissons) et le Top.
+- **Bruts générés** avec V24P04A en référence : ciel et mer, planche de crêtes, banc de nuages, astres. La montagne de ZRV1 a été redessinée seule, à partir de son recadrage.
+- **Lois de V24P04A** relevées dans la ROM :
+  - houle en 12 crans de 10 ticks : les crêtes naissent en houle sombre à 40 px sous l'horizon, grandissent en descendant selon `y(u) = 156 + 40u + 4u²` et suivent un motif de 96 px ;
+  - scintillement de l'horizon en 16 crans de 4 ticks.
+- **Nuages** : banc de 256 px posé sur l'horizon, qui glisse de 1 px par cran (256 × 8 ticks), toujours derrière la montagne (test).
+- **Montagne** : ses flancs sont prolongés en pente jusqu'à l'horizon, sans bord vertical (test). Les petits pics sombres de ZRV1 ne sont pas repris.
+- **Reflet** : colonne de traits sous la lune (nuit) ou le soleil (aube), qui ondule au rythme de la houle. Les crêtes qui la traversent prennent la couleur de l'astre. La lune se lève derrière le sommet.
+- **Fleurs** : cycle A B A C du GIF Sky Peak, en 4 phases de 12 ticks.
+- **Aube et nuit** : couleurs reprises des bruts de ZRV1. À l'aube, le ciel suit le dégradé de ZRV1 ligne par ligne.
+- Pixels générés, pas de tuiles natives. 5 mutations vérifiées. Pas de runtime. **Pas dans le mod unique.**
+
 ## ZRV1 — Zone de réveil : la prairie de Sky Peak face à l'océan, jour, aube et nuit (27 septembre 2026)
 
 - Aperçu : `apercu_zone_reveil_prairie_horizon_v1.html`. Boutons jour, aube et nuit, rejoué à 60 ticks/s, avec collisions et zoom.

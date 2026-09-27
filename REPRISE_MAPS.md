@@ -31,6 +31,14 @@ Même jour, sur la demande de la **zone de départ** (« zone où le Pokémon se
 - L'écume et les bulles sont l'exception explicite à la règle « pas de liseré blanc ».
 - ZRV1 n'est **pas dans le mod unique**. C'est une zone, pas une entrée de la série : l'y ajouter seulement si l'utilisateur le demande.
 
+Même jour, sur « regarde l'animation de la mer V24P04A et des nuages, c'est ce que je te demandais pour la zone réveil », puis « je veux garder le layout de la v1 juste corrige la mer et le background laisse la montagne mais faut que les nuages soient derrière la montagne : la mer ⇒ montagne ⇒ nuage » : lot **ZRV2** (`renders/zone_reveil_prairie_horizon_v2/`, aperçu `apercu_zone_reveil_prairie_horizon_v2.html`, 16 tests PASS).
+
+- Layout de ZRV1 inchangé.
+- Mer générée avec V24P04A en référence et animée par ses lois : houle 12 × 10, scintillement 16 × 4.
+- Ciel, nuages, montagne et mer sur des calques séparés. Les nuages défilent derrière la montagne de ZRV1, dont les flancs sont prolongés jusqu'à l'horizon.
+- Reflet animé de la lune et du soleil ; fleurs A B A C.
+- ZRV1 est gardée. ZRV2 n'est **pas dans le mod unique**.
+
 Même jour, sur « Je veux un petit temple miniature qui tiens sur la buche celebi gardien secret » puis « lance la suite ! » : lot **EJS2**, Jardin secret V2 avec le temple de Celebi (`renders/entree_jardin_secret_sud_nord_v2/`, aperçu `apercu_entree_jardin_secret_sud_nord_v2.html`, 13 tests PASS). Un seul brut nouveau, collé sur la souche ; le reste est le décor d'EJS1 au pixel près. La porte du temple est l'entrée, et Celebi est un emblème qui luit. Ce sont des choix de l'agent, **à confirmer**. EJS2 est ajoutée au mod unique (19 cartes, version 1.1.0.0).
 
 Même jour, sur « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET LANCE LA SUITE ! » : **série validée par l'utilisateur**, et **mod unique** des 18 entrées (`renders/mod_guilde_entrees_v1/guilde_entrees_sud_nord_pmdo_0812.zip`, namespace `guilde_entrees_sud_nord`, galerie `apercu_mod_guilde_entrees_v1.html`, source `source/mod_guilde_entrees_v1/`, 6 tests PASS). Chaque nouvelle carte de la série doit être ajoutée à `MAPS` dans `build_mod.py`.
@@ -50,7 +58,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2 et ZRV1.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1 et ZRV2.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 

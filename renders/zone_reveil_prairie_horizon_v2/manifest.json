@@ -1,0 +1,766 @@
+{
+ "lot": "zone_reveil_prairie_horizon_v2",
+ "prefix": "ZRV2",
+ "prefixes_banques": {
+  "jour": "ZRV2J",
+  "aube": "ZRV2A",
+  "nuit": "ZRV2N"
+ },
+ "format": "4:3 vaste",
+ "size_px": [
+  768,
+  576
+ ],
+ "grid_8px": [
+  96,
+  72
+ ],
+ "horizon_y": 116,
+ "demande": "ZRV2 : mer comme V24P04A (houle qui roule, horizon qui scintille), zone multicalque (mer, ciel, nuages, montagne separes), montagne raccordee a l horizon, nuages de la mer de nuages animes (pas de nuages ajoutes), fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages",
+ "choix": {
+  "mer": "generee avec V24P04A en reference (reponse de l utilisateur), animee par les lois de V24P04A",
+  "version": "nouvelle version, ZRV1 gardee (reponse de l utilisateur)",
+  "layout": "celui de ZRV1 (prairie, horizon, montagne, collisions, marqueurs) (demande de l utilisateur)",
+  "petits_pics": "les petits pics sombres de la mer de nuages de ZRV1 ne sont pas repris : la mer de nuages est remplacee par le banc qui passe derriere la montagne"
+ },
+ "base": "branche de session : calques de ZRV1, utilitaires de ZRV1 et d ESN1 ; etude des animations pour le rendu ROM ; aucun emprunt aux branches soeurs",
+ "method": "textures canoniques = rendu genere REFERENCE ; aucun pixel natif",
+ "references": {
+  "v24p04a": {
+   "file": "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000.png",
+   "sha256": "1329cd60a336410cf5464773293b17b121be5c841ab8f9538505c2d7d66f388a"
+  },
+  "v24p02a": {
+   "file": "source/zone_reveil_prairie_horizon_v2/references/v24p02a_t000.png",
+   "sha256": "3b539e3bdf8b9e5607de7f2def7d07a1613e6e264c5d2a075c69d941930eb87d"
+  },
+  "skypeak": {
+   "file": "source/zone_reveil_prairie_horizon_v2/references/skypeak_gif_frame0.png",
+   "sha256": "7727ccf253623f2010c281c9aae5b70f2919a3ceac8d233dbfbf463dabdb1479"
+  },
+  "nuit_native": {
+   "file": "bgnightbackgroundpmdskyda.png",
+   "sha256": "954e5b431aebef54b1eeb3a77b919bb3cfba13ca9ddb71fd45cca489c047f9c7"
+  },
+  "gif_skypeak": {
+   "file": "2cwdrrs469f61.gif",
+   "sha256": "5daefc3facdc90c5d33425db0c149854cc64555856d571473f47d311b63e3d47"
+  }
+ },
+ "reference_rom": {
+  "depot": "pret/pmd-sky",
+  "commit": "c8073235b39746a7ee74e6cea16c730bd91a1e67",
+  "cartes": [
+   "v24p04a",
+   "v24p02a"
+  ],
+  "v24p04a": {
+   "bpa": "12 crans x 10 ticks (houle)",
+   "palettes_animees": "4 palettes, 16 crans x 4 ticks (dont une de 4 crans), scintillement de l horizon",
+   "motif_horizontal_px": 96,
+   "cretes_px_sous_horizon": [
+    65,
+    106,
+    153
+   ]
+  }
+ },
+ "generation": [
+  {
+   "file": "ciel_mer_jour.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000_x4.png"
+   ],
+   "essais": "deuxieme generation (la premiere, identique et conforme, a ete perdue avant commit par une reinitialisation de l espace de travail) ; conforme",
+   "prompt": "Pokémon Mystery Dungeon Explorers of Sky background, pixel art, exactly the same colours, palette and pixel style as the reference image (the ocean horizon scene). Side view of the open ocean seen from a high place. The horizon is a perfectly straight horizontal line at 30 percent of the image height. Above the horizon: clear blue sky gradient only, darker blue at the top, pale near the horizon, absolutely no clouds, no mountains, no sun. Below the horizon: the ocean, a bright cyan band with many tiny white glitter sparkles right under the horizon, then horizontal bands getting deeper blue toward the bottom, with thin faint darker swell lines. No white wave crests, no foam, no land, no characters, no text."
+  },
+  {
+   "file": "cretes_jour.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000_x4.png"
+   ],
+   "essais": "deuxieme generation (meme cas) ; conforme ; la 5e rangee (vague pleine, deferlante) n est pas utilisee",
+   "prompt": "Sprite sheet, pixel art, exactly the same colours and pixel style as the white foam wave crests in the reference image (Pokémon Mystery Dungeon Explorers of Sky ocean). On a solid flat magenta background (#FF00FF): isolated ocean wave crests seen from the side, each one a gentle double-hump wave line of white and pale cyan foam with a thin darker blue shadow under it. Arrange them in 5 rows from very small and thin (top row) to large (bottom row), 2 crests per row: left crest full foam, right crest thinner breaking foam. Well separated, nothing touching, no water background, no text."
+  },
+  {
+   "file": "mer_de_nuages_jour.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000_x4.png"
+   ],
+   "essais": "troisieme generation : la premiere (references GIF + 232233) recopiait la prairie de Sky Peak en neige, ecartee ; la deuxieme, conforme, perdue avant commit ; celle-ci donne trois bancs empiles, seul celui du bas (base plate) est utilise",
+   "prompt": "Pixel art, same colours and pixel style as the clouds sitting on the horizon in the reference image (Pokémon Mystery Dungeon Explorers of Sky). A single long, low horizontal bank of fluffy white and pale blue-grey cumulus clouds seen far away, spanning the full image width, seamlessly tileable left to right, continuous without gaps. Its bottom edge is a perfectly straight horizontal line; its top edge is puffy billows of varying height. The bank is centred vertically; everything above and below it is solid flat magenta (#FF00FF). No sky, no sea, no mountains, no text."
+  },
+  {
+   "file": "montagne_jour.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/references/v1_montagne_x380_y0_x2.png"
+   ],
+   "essais": "deuxieme essai : le premier (brut ZRV1 entier en entree) peignait une montagne geante plein cadre, ecarte (bruts/ecartes/) ; celui-ci garde le cadrage (rapport 2,444 identique a l entree)",
+   "prompt": "Edit this pixel art image, keeping the exact same framing, size and position. Keep the big snowy mountain and its lower blue ridges exactly as they are. Remove every cloud (the small clouds near the summit and the cloud band at the bottom): where the clouds covered the mountain, continue the mountain's slopes and ridges straight down with the same icy blue rock and snow until the very bottom edge of the image, widening naturally. Replace the sky and everything that is not mountain with solid flat magenta (#FF00FF)."
+  },
+  {
+   "file": "astres.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v1/bruts/decor_nuit.png",
+    "source/zone_reveil_prairie_horizon_v1/bruts/decor_aube.png"
+   ],
+   "essais": "deuxieme generation (meme cas) ; conforme",
+   "prompt": "Pixel art sprite sheet, same pixel style and colours as the moon in the first reference image and the sun in the second (Pokémon Mystery Dungeon Explorers of Sky). On a solid flat magenta background (#FF00FF): on the left, a large round full moon, pale yellow with soft darker yellow craters and a thin light rim; on the right, a large round rising sun disk, warm golden yellow with a lighter centre. Both perfectly round, same size, well separated, no glow halo, no clouds, no text."
+  }
+ ],
+ "raw_inputs": [
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/ciel_mer_jour.png",
+   "sha256": "3ebdf51d18a264da05b758520c7ed0ce474e8c7d8fd8d18be9fb574fbdd848a0",
+   "size": [
+    1184,
+    911
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/cretes_jour.png",
+   "sha256": "66766eccda2a0b33ec3b294934b2f58b05de155449108039b0df529150491214",
+   "size": [
+    1184,
+    911
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/mer_de_nuages_jour.png",
+   "sha256": "93532c979149c736f70429d1667f14f04ae67c2b6e5030df5776040f31e52f19",
+   "size": [
+    1200,
+    896
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/montagne_jour.png",
+   "sha256": "ba72486d816b4a85f3c807c63e385ea9c5fa84e68007ec5aacfddd39250c0259",
+   "size": [
+    1604,
+    656
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/astres.png",
+   "sha256": "899be082128ed0bc7c13ae80046f9eb95e6344c9695823aa0ef8cf9b7dd6d66c",
+   "size": [
+    1200,
+    896
+   ]
+  }
+ ],
+ "zrv1": {
+  "calques": {
+   "sol_complet": "ac448897c446255f3588126a429b0de2eec5ccb9de78e225a0ad5abbfff518bd",
+   "herbe": "03308a39d53a3645afe75492bc01ea583eba1919f3a5b92ac177d798b4412815",
+   "chemin": "b08c59903b5c0b030feb287ba0b6bd1ac4f0628ded70515f1aa45e02df8c6175",
+   "fleurs": "3070f75009e3b7792b434345d3ecf9323ea2d7bb5cfe01c6231453a95ff7e283",
+   "rochers": "4abb7b1d5ca3ed39ffaa94587b023a63f272188d14e17367e0c9d1b4d91f1e95",
+   "buissons": "f76329597c64dd740795ed9179e91a53d302903f15dc9d2222a442a5d5bc0d02"
+  },
+  "manifest_sha256": "7cb5bc50fd6cb5959211a8d59f533a1408cf0cd41978fb80edb508f694405df5"
+ },
+ "mesures": {
+  "mer_identique_zrv1": true,
+  "ciel_mer": {
+   "horizon_brut": 273,
+   "facteur_vertical": 0.4249,
+   "facteur_horizontal": 0.6486
+  },
+  "scintillement": {
+   "paillettes": 274,
+   "pixels": 1079
+  },
+  "montagne": {
+   "origine_x": 243.29,
+   "facteur": 0.17634,
+   "taille": [
+    283,
+    116
+   ],
+   "base_sur_horizon": true
+  },
+  "nuages": {
+   "rangees_brut": [
+    540,
+    851
+   ],
+   "taille_bande": [
+    256,
+    73
+   ]
+  },
+  "cretes": {
+   "tailles_px": [
+    [
+     [
+      48,
+      11
+     ],
+     [
+      48,
+      10
+     ]
+    ],
+    [
+     [
+      61,
+      14
+     ],
+     [
+      61,
+      13
+     ]
+    ],
+    [
+     [
+      78,
+      18
+     ],
+     [
+      76,
+      16
+     ]
+    ],
+    [
+     [
+      93,
+      22
+     ],
+     [
+      88,
+      19
+     ]
+    ]
+   ]
+  },
+  "fleurs": {
+   "tetes": 280
+  },
+  "etoiles": {
+   "zrv1": 9,
+   "gardees": 9
+  },
+  "reflet": {
+   "aube": {
+    "x": 236,
+    "bandes": 57,
+    "couleurs": [
+     [
+      252,
+      225,
+      158
+     ],
+     [
+      250,
+      205,
+      94
+     ],
+     [
+      193,
+      164,
+      114
+     ]
+    ]
+   },
+   "nuit": {
+    "x": 384,
+    "bandes": 57,
+    "couleurs": [
+     [
+      254,
+      246,
+      171
+     ],
+     [
+      252,
+      244,
+      171
+     ],
+     [
+      128,
+      150,
+      154
+     ]
+    ]
+   }
+  }
+ },
+ "houle": {
+  "crans": 12,
+  "frame_length_ticks": 10,
+  "loi_y": "y(u) = 116 + 40 + 40 u + 4 u^2",
+  "u": "k + cran / 12",
+  "periode_x": 96,
+  "bornes_tailles": [
+   0.4,
+   1.2,
+   2.0,
+   2.8
+  ],
+  "echelle_cretes": 0.157
+ },
+ "scintillement": {
+  "crans": 16,
+  "frame_length_ticks": 4,
+  "niveaux": [
+   1,
+   1,
+   2,
+   2,
+   1,
+   1,
+   0,
+   0,
+   0,
+   0,
+   1,
+   1,
+   2,
+   1,
+   0,
+   0
+  ]
+ },
+ "nuages": {
+  "periode_px": 256,
+  "pas_px": 1,
+  "phases": 256,
+  "frame_length_ticks": 8,
+  "raccord_px": 24,
+  "hauteur_px": 73
+ },
+ "fleurs": {
+  "phases": 4,
+  "frame_length_ticks": 12,
+  "loi": "A B A C : en B et C chaque tete descend de 1 px et penche de +1 / -1 px (sens propre a la tete) ; mesure sur le GIF Sky Peak (images 0 = 2, decalage (±1, +1))"
+ },
+ "etoiles": {
+  "phases": 24,
+  "frame_length_ticks": 5
+ },
+ "astres": {
+  "nuit": {
+   "sprite": 0,
+   "d": 64,
+   "c": [
+    384,
+    34
+   ]
+  },
+  "aube": {
+   "sprite": 1,
+   "d": 40,
+   "c": [
+    236,
+    32
+   ]
+  }
+ },
+ "ambiances": {
+  "jour": {
+   "layers": [
+    {
+     "index": 0,
+     "nom": "sol_complet",
+     "file": "calques/jour/ZRV2J_00_sol_complet.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 1,
+     "nom": "ciel",
+     "file": "calques/jour/ZRV2J_01_ciel.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 4,
+     "nom": "nuages",
+     "file": "animation/jour/nuages/ZRV2J_04_nuages_fNNN.png",
+     "phases": 256,
+     "ticks": 8
+    },
+    {
+     "index": 5,
+     "nom": "montagne",
+     "file": "calques/jour/ZRV2J_05_montagne.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 6,
+     "nom": "mer",
+     "file": "calques/jour/ZRV2J_06_mer.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 7,
+     "nom": "scintillement",
+     "file": "animation/jour/scintillement/ZRV2J_07_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
+     "index": 8,
+     "nom": "houle",
+     "file": "animation/jour/houle/ZRV2J_08_houle_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 10,
+     "nom": "ecume",
+     "file": "animation/jour/ecume/ZRV2J_10_ecume_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 11,
+     "nom": "herbe",
+     "file": "calques/jour/ZRV2J_11_herbe.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 12,
+     "nom": "chemin",
+     "file": "calques/jour/ZRV2J_12_chemin.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 13,
+     "nom": "fleurs",
+     "file": "animation/jour/fleurs/ZRV2J_13_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
+     "index": 14,
+     "nom": "rochers",
+     "file": "calques/jour/ZRV2J_14_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 15,
+     "nom": "buissons",
+     "file": "calques/jour/ZRV2J_15_buissons.png",
+     "phases": 1,
+     "ticks": 60
+    }
+   ]
+  },
+  "aube": {
+   "layers": [
+    {
+     "index": 0,
+     "nom": "sol_complet",
+     "file": "calques/aube/ZRV2A_00_sol_complet.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 1,
+     "nom": "ciel",
+     "file": "calques/aube/ZRV2A_01_ciel.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 3,
+     "nom": "astre",
+     "file": "calques/aube/ZRV2A_03_astre.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 4,
+     "nom": "nuages",
+     "file": "animation/aube/nuages/ZRV2A_04_nuages_fNNN.png",
+     "phases": 256,
+     "ticks": 8
+    },
+    {
+     "index": 5,
+     "nom": "montagne",
+     "file": "calques/aube/ZRV2A_05_montagne.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 6,
+     "nom": "mer",
+     "file": "calques/aube/ZRV2A_06_mer.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 7,
+     "nom": "scintillement",
+     "file": "animation/aube/scintillement/ZRV2A_07_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
+     "index": 8,
+     "nom": "houle",
+     "file": "animation/aube/houle/ZRV2A_08_houle_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 9,
+     "nom": "reflet",
+     "file": "animation/aube/reflet/ZRV2A_09_reflet_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 10,
+     "nom": "ecume",
+     "file": "animation/aube/ecume/ZRV2A_10_ecume_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 11,
+     "nom": "herbe",
+     "file": "calques/aube/ZRV2A_11_herbe.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 12,
+     "nom": "chemin",
+     "file": "calques/aube/ZRV2A_12_chemin.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 13,
+     "nom": "fleurs",
+     "file": "animation/aube/fleurs/ZRV2A_13_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
+     "index": 14,
+     "nom": "rochers",
+     "file": "calques/aube/ZRV2A_14_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 15,
+     "nom": "buissons",
+     "file": "calques/aube/ZRV2A_15_buissons.png",
+     "phases": 1,
+     "ticks": 60
+    }
+   ]
+  },
+  "nuit": {
+   "layers": [
+    {
+     "index": 0,
+     "nom": "sol_complet",
+     "file": "calques/nuit/ZRV2N_00_sol_complet.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 1,
+     "nom": "ciel",
+     "file": "calques/nuit/ZRV2N_01_ciel.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 2,
+     "nom": "etoiles",
+     "file": "animation/nuit/etoiles/ZRV2N_02_etoiles_fNNN.png",
+     "phases": 24,
+     "ticks": 5
+    },
+    {
+     "index": 3,
+     "nom": "astre",
+     "file": "calques/nuit/ZRV2N_03_astre.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 4,
+     "nom": "nuages",
+     "file": "animation/nuit/nuages/ZRV2N_04_nuages_fNNN.png",
+     "phases": 256,
+     "ticks": 8
+    },
+    {
+     "index": 5,
+     "nom": "montagne",
+     "file": "calques/nuit/ZRV2N_05_montagne.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 6,
+     "nom": "mer",
+     "file": "calques/nuit/ZRV2N_06_mer.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 7,
+     "nom": "scintillement",
+     "file": "animation/nuit/scintillement/ZRV2N_07_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
+     "index": 8,
+     "nom": "houle",
+     "file": "animation/nuit/houle/ZRV2N_08_houle_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 9,
+     "nom": "reflet",
+     "file": "animation/nuit/reflet/ZRV2N_09_reflet_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 10,
+     "nom": "ecume",
+     "file": "animation/nuit/ecume/ZRV2N_10_ecume_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 11,
+     "nom": "herbe",
+     "file": "calques/nuit/ZRV2N_11_herbe.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 12,
+     "nom": "chemin",
+     "file": "calques/nuit/ZRV2N_12_chemin.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 13,
+     "nom": "fleurs",
+     "file": "animation/nuit/fleurs/ZRV2N_13_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
+     "index": 14,
+     "nom": "rochers",
+     "file": "calques/nuit/ZRV2N_14_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 15,
+     "nom": "buissons",
+     "file": "calques/nuit/ZRV2N_15_buissons.png",
+     "phases": 1,
+     "ticks": 60
+    }
+   ]
+  }
+ },
+ "access": {
+  "entry_px": [
+   384,
+   560
+  ],
+  "reveil_px": [
+   376,
+   240
+  ],
+  "path_found_16x16": true,
+  "cells_explored": 1560,
+  "blocked_cells": 3445,
+  "walkable_cells": 3467,
+  "origine": "masque praticable de ZRV1"
+ },
+ "pmdo": {
+  "target": "0.8.12",
+  "namespace": "zone_reveil_prairie_horizon_v2",
+  "assets": {
+   "jour": "zrv2_zone_reveil_jour",
+   "aube": "zrv2_zone_reveil_aube",
+   "nuit": "zrv2_zone_reveil_nuit"
+  },
+  "tiles_per_bank": {
+   "ZRV2J_00_SOL": 2,
+   "ZRV2J_01_CIEL": 1441,
+   "ZRV2J_04_NUAGES": 12134,
+   "ZRV2J_05_MONTAGNE": 283,
+   "ZRV2J_06_MER": 1870,
+   "ZRV2J_07_SCINTILLEMENT": 884,
+   "ZRV2J_08_HOULE": 707,
+   "ZRV2J_10_ECUME": 396,
+   "ZRV2J_11_HERBE": 3026,
+   "ZRV2J_12_CHEMIN": 145,
+   "ZRV2J_13_FLEURS": 2893,
+   "ZRV2J_14_ROCHERS": 74,
+   "ZRV2J_15_BUISSONS": 276,
+   "ZRV2A_00_SOL": 2,
+   "ZRV2A_01_CIEL": 1441,
+   "ZRV2A_03_ASTRE": 27,
+   "ZRV2A_04_NUAGES": 12134,
+   "ZRV2A_05_MONTAGNE": 283,
+   "ZRV2A_06_MER": 1870,
+   "ZRV2A_07_SCINTILLEMENT": 884,
+   "ZRV2A_08_HOULE": 884,
+   "ZRV2A_09_REFLET": 556,
+   "ZRV2A_10_ECUME": 396,
+   "ZRV2A_11_HERBE": 3256,
+   "ZRV2A_12_CHEMIN": 122,
+   "ZRV2A_13_FLEURS": 2892,
+   "ZRV2A_14_ROCHERS": 74,
+   "ZRV2A_15_BUISSONS": 276,
+   "ZRV2N_00_SOL": 2,
+   "ZRV2N_01_CIEL": 1441,
+   "ZRV2N_02_ETOILES": 25,
+   "ZRV2N_03_ASTRE": 65,
+   "ZRV2N_04_NUAGES": 12134,
+   "ZRV2N_05_MONTAGNE": 283,
+   "ZRV2N_06_MER": 1870,
+   "ZRV2N_07_SCINTILLEMENT": 883,
+   "ZRV2N_08_HOULE": 841,
+   "ZRV2N_09_REFLET": 517,
+   "ZRV2N_10_ECUME": 396,
+   "ZRV2N_11_HERBE": 3173,
+   "ZRV2N_12_CHEMIN": 156,
+   "ZRV2N_13_FLEURS": 2897,
+   "ZRV2N_14_ROCHERS": 74,
+   "ZRV2N_15_BUISSONS": 275
+  },
+  "markers": {
+   "reveil": [
+    376,
+    240
+   ],
+   "entrance": [
+    384,
+    560
+   ]
+  },
+  "warps": "aucun"
+ },
+ "art_approved": false,
+ "runtime_tested": false
+}
