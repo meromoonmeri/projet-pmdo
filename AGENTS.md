@@ -777,3 +777,18 @@ Règles et recettes :
 
 10 tests PASS. 6 mutations vérifiées : éclair blanc, éclair sur le plateau, phase Fading figée, frappe déplacée au manifeste (détectée après correction du test), arc allumé sans éclair, trou dans le sable. Fidélité : sable 4,0, roche 6,8, ciel 7,4, nuages sombres 19,5 et clairs 13,5 sur le brut ; sable 5,8, falaise 10,4, piton 2,2, ciel 7,9, nuages 16,6 / 15,9 sur les calques. Build en 45 s environ. Pas de runtime.
 
+### Entrée Jardin secret (EJS1) — « Lance la suite ! » (27 septembre)
+
+Référence `secretgarden.png` (408 × 408). Lot `source/entree_jardin_secret_sud_nord_v1/`, préfixe `EJS1`, namespace `entree_jardin_secret_sud_nord`, aperçu `apercu_entree_jardin_secret_sud_nord_v1.html`.
+
+Règles et recettes :
+
+- **Trois bruts, chacun édité depuis le précédent** : décor (rip en référence), témoin sans objets (depuis le décor), sol complet (depuis le témoin). Le sol complet demandé depuis le décor donnait des touffes vert acide (43,2) ; depuis le rip seul, des plaques tramées (45,7). Les deux sont écartés et gardés, avec leur distance au manifeste ; un test la recalcule.
+- **Rampe exacte d'un faisceau** : relever les couleurs du rayon du rip et les trier par luminance ; chaque pixel du faisceau généré prend le cran le plus proche. L'animation déplace le cran (`± 2`), atténué sur les crans sombres, pour éviter une arête contre le fond. Test : phase 0 = rayon du rendu, souffle exact, bord figé.
+- **Objet du décor posé sur une zone du témoin** : le témoin met du rayon là où le décor a un rocher. Retirer de la zone les composantes « décor ≠ témoin » dont moins de 30 % des pixels ont la couleur de la zone dans le décor.
+- **Escalier** : prendre toute la colonne sous le trou (± 2 px), pas les seuls barreaux clairs, qui ne touchent pas l'herbe.
+- **Lisières fines classées en haie** : un arc texturé entre prairie et allée barrait l'allée. Ouvrir le masque des haies de 5 px puis le redilater dans le masque d'origine. Diagnostic : étiqueter les cases 2 × 2 libres et comparer l'étiquette de la rangée du bas à celle du seuil.
+- **Ombres coupées par un contour** : les ombres au pied des arbres sont séparées de l'herbe par un contour de 1 à 3 px. Calculer la connexité sur le praticable fermé de 2 px, puis restreindre au praticable.
+- **Lucioles et souche** : un test « jamais sur la souche ni le trou » a trouvé deux lucioles qui partaient des racines ; elles ont été décalées.
+
+11 tests PASS. 8 mutations vérifiées : pixel de rayon hors rampe, phase de lucioles décalée, distance du sol complet au manifeste, cran de rampe au manifeste, case praticable bloquée dans le Ground, ORA altérée, préfixe repris, masque des marches vidé. Fidélité : fond 9,9, herbe claire 8,7, herbe 8,5, roche 20,1 sur le brut ; prairie 30,5, herbe 8,1, ombres 2,2, rochers 20,5, fond 11,7 sur les calques. Build en 30 s environ. Pas de runtime.

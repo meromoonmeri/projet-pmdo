@@ -1,5 +1,24 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Jardin secret — 4:3, prairie fleurie, souche à marches sous un rayon de lumière (27 septembre 2026)
+
+- Aperçu : `apercu_entree_jardin_secret_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
+- Lot : `renders/entree_jardin_secret_sud_nord_v1/` (`EJS1_projet_pmdo_0812.zip`, `EJS1_calques_png_8px.zip`, ORA, WebP animé, planche de la rampe).
+- Source : `source/entree_jardin_secret_sud_nord_v1/`.
+
+**Demande de l'utilisateur** : « Lance la suite ! ». Carte suivante de la série ; l'agent a choisi le biome **jardin secret** (`secretgarden.png`), **à confirmer**. Cette capture n'avait jamais servi à une entrée de la série, seulement à d'anciens lots sur `01a0d315` et `01a0d4b6`, dont rien n'est repris. Après EJS1, seule `oldcastlepmd` (un intérieur) reste libre partout.
+
+Méthode des textures canoniques = **rendu généré référencé**, la capture en référence : décor complet (premier essai, conforme), témoin sans objets édité depuis le décor (segmentation seulement), sol d'herbe complet édité depuis le témoin (troisième essai ; deux essais écartés à 43,2 et 45,7, gardés dans `bruts/ecartes/`).
+
+L'arrivée est au sud, par une allée entre deux haies. Elle ouvre sur une grande prairie fleurie semée d'arbres et de rochers, bordée de haies, jusqu'aux marches d'une souche dorée, au nord, sous un rayon de lumière verte.
+
+14 calques : sol complet, prairie, herbe, ombres, fleurs, rochers, arbres, haies, souche, marches, profondeur, fond, rayon, lucioles. Deux animations de 24 × 5 ticks (2 s) :
+
+- **rayon** : chaque pixel du faisceau généré prend le cran le plus proche sur la **rampe exacte des 22 verts du rayon de la capture**, puis « respire » de ± 2 crans ; bords sombres atténués ;
+- **lucioles** : 10 points aux couleurs exactes du rayon qui montent en ondulant, surtout dans le faisceau.
+
+Boucles fermées (testé). Fidélité au rip : fond 9,9, herbe claire 8,7, herbe 8,5, roche 20,1 sur le brut ; calques finaux ≤ 30,5 (prairie, la plus jaune ; seuil 35). 11 tests PASS ; 8 mutations vérifiées. Pas de test PMDO en jeu.
+
 ## Entrée Mt. Thunder — 4:3, sommet d'orage au-dessus des nuages, éclairs de la planche (27 septembre 2026)
 
 - Aperçu : `apercu_entree_mt_thunder_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
