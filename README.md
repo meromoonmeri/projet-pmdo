@@ -1,5 +1,24 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Mt. Thunder — 4:3, sommet d'orage au-dessus des nuages, éclairs de la planche (27 septembre 2026)
+
+- Aperçu : `apercu_entree_mt_thunder_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
+- Lot : `renders/entree_mt_thunder_sud_nord_v1/` (`EMT1_projet_pmdo_0812.zip`, `EMT1_calques_png_8px.zip`, ORA, WebP animé, planche des sprites).
+- Source : `source/entree_mt_thunder_sud_nord_v1/`.
+
+**Demande de l'utilisateur** : « Continue ! Très bon travail ». Carte suivante de la série ; l'agent a choisi le biome **sommet d'orage (Mt. Thunder)**, **à confirmer**. Relevé sur les 97 images de la racine : plus aucune n'est libre partout, sauf `oldcastlepmd` (un intérieur). La planche de Mt. Thunder (*Red Rescue Team*) n'a jamais servi à une entrée de la série. Elle n'a servi qu'au lot hors série `mt_thunder_orage_v1`, sur trois anciennes branches, dont rien n'est repris.
+
+Méthode des textures canoniques = **rendu généré référencé**, la planche en référence : décor complet (premier essai, conforme) et sol de sable complet. Les nuages sont mesurés **par ton**, parce qu'une moyenne unique de tons discrets dépendait des proportions (41,3, mesure écartée et gardée dans le manifeste).
+
+L'arrivée est au sud, sur une crête de sable qui sort des nuages. Elle monte vers un grand plateau bordé de falaises, coupé par un gradin ouvert au centre, jusqu'à la grotte d'un piton rocheux au nord. Mer de nuages d'orage autour.
+
+12 calques : sol complet, sable, cailloux, pics, falaise, piton, seuil, profondeur, ciel, nuages, lueurs, éclairs. Deux animations de 48 × 5 ticks (4 s) :
+
+- **éclairs** : les 4 éclairs **copiés pixel par pixel de la planche**, en « Normal » (240,240,0) pendant 2 phases puis en « Fading » (160,152,32) pendant 2 phases. Six frappes par boucle ; l'éclair 1 à gauche seulement, les éclairs 2 à 4 aussi en miroir à droite, comme l'indique la planche ;
+- **lueurs** : l'arc « Flash » exact de la planche s'allume sur les nuages au pied de chaque éclair.
+
+Boucles fermées (testé). Fidélité au rip : sable 4,0, roche 6,8, ciel 7,4, nuages sombres 19,5, nuages clairs 13,5 sur le brut ; tous les calques finaux ≤ 16,6 (seuil 35). 10 tests PASS ; 6 mutations vérifiées. Pas de test PMDO en jeu.
+
 ## Entrée Couloir violet — 4:3, couloir rocheux qui s'ouvre sur une grande salle (27 septembre 2026)
 
 - Aperçu : `apercu_entree_couloir_violet_sud_nord_v1.html`, listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).

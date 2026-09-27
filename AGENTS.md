@@ -760,3 +760,20 @@ Règles et recettes :
 - **Chute accélérée** : pas de 5, 7, 9 px. Un test « ≤ 8 px par phase » a échoué au premier passage : c'était le test qui était faux ; il vérifie désormais des pas croissants, ≤ 9 px.
 
 12 tests PASS. 5 mutations vérifiées : pixel d'éboulis hors rip, trou dans le sol, pose de gravillon altérée, chute déplacée dans le manifeste, phase de poussière dupliquée. Fidélité : sol 6,5 et roche 6,3 sur le brut ; sol 8,9, rochers 4,5, blocs 25,6 sur les calques. Build en 30 s environ. Pas de runtime.
+
+### Entrée Mt. Thunder (EMT1) — « Continue ! Très bon travail » (27 septembre)
+
+Référence `Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png` (432 × 498 : scène y < 352, planche d'éclairs dessous). Lot `source/entree_mt_thunder_sud_nord_v1/`, préfixe `EMT1`, namespace `entree_mt_thunder_sud_nord`, aperçu `apercu_entree_mt_thunder_sud_nord_v1.html`.
+
+Règles et recettes :
+
+- **Relevé des rips par clés courtes** : `git grep -o -h -I -F -f clés.txt origin/<b>` sur les 72 têtes, un seul appel par tête (quelques secondes au total). Les clés sont le code des `large.*` (`P04P01C`), le nom du lieu pour les noms GBA/DS (`Mt. Thunder`), le radical pour les autres. Les noms de fichiers complets sous-comptent : `Murky Forest` donnait 0 au lieu de 56. Résultat du 27 septembre : **plus aucune capture de la racine n'est libre partout**, sauf `oldcastlepmd` (un intérieur) ; `large.P21P02A` est un doublon de `forêtglomypmdsky`. Il reste des captures jamais utilisées pour une **entrée** de la série, mais déjà utilisées hors série : Mt. Thunder (désormais EMT1) et secretgarden.
+- **Planche avec sprites d'animation** : quand la capture fournit ses sprites (éclairs, arc, pastilles de couleurs), les copier tels quels (composante de la couleur exacte dans une boîte relevée), lire les couleurs sur les pastilles, et tester l'égalité pixel à pixel. Mesurer la fidélité sur la seule **scène** (ici y < 352), jamais sur la planche noire.
+- **Fidélité d'une matière faite de tons discrets** (nuages, ciel) : mesurer **par ton** (bandes de luminance), pas en un seul groupe. La moyenne d'un groupe mélangé dépend des proportions des tons, pas de leur couleur : 41,3 ici, contre 7,4 / 19,5 / 13,5 par ton. La mesure écartée reste au manifeste avec sa raison, et un test la recalcule : on l'explique, on ne la cache pas.
+- **Relief qui touche le bord haut** : le sommet gris du piton, ouvert sur le bord, échappait à `binary_fill_holes`. Compter comme relief une rangée virtuelle au-dessus de l'image, sur l'étendue du piton, avant de boucher les trous.
+- **Objets creux** : les pics sont clairs à l'intérieur, et seul leur contour sortait comme « non-sable ». Fermer de 2 px et boucher les trous des îlots.
+- **Seuil de terre sous la bouche** : même recette qu'ETC1, mais colonne par colonne, de la bouche jusqu'au premier sable (≤ 30 px). Sans lui, la bande praticable sous la grotte restait à 75 %.
+- **Mutation au manifeste** : si le test recalcule l'animation depuis les constantes du build, une donnée modifiée au manifeste passe inaperçue. Passer au calcul les données lues dans le manifeste (`strikes=`), et comparer aussi les positions dérivées (arcs).
+
+10 tests PASS. 6 mutations vérifiées : éclair blanc, éclair sur le plateau, phase Fading figée, frappe déplacée au manifeste (détectée après correction du test), arc allumé sans éclair, trou dans le sable. Fidélité : sable 4,0, roche 6,8, ciel 7,4, nuages sombres 19,5 et clairs 13,5 sur le brut ; sable 5,8, falaise 10,4, piton 2,2, ciel 7,9, nuages 16,6 / 15,9 sur les calques. Build en 45 s environ. Pas de runtime.
+
