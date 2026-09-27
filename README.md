@@ -2,8 +2,8 @@
 
 ## ZRV2 — Zone de réveil V2 : la mer de V24P04A, montagne et nuages sur leurs propres calques (27 septembre 2026)
 
-- Aperçu : `apercu_zone_reveil_prairie_horizon_v2.html`. Boutons jour, aube et nuit, rejoué à 60 ticks/s, avec collisions et zoom sur l'horizon.
-- Lot : `renders/zone_reveil_prairie_horizon_v2/`. Il contient `ZRV2_projet_pmdo_0812.zip` (trois Grounds), `ZRV2_calques_png_8px.zip` et un README détaillé.
+- Aperçu : `apercu_zone_reveil_prairie_horizon_v2.html`. Boutons jour, aube, crépuscule et nuit, rejoué à 60 ticks/s, avec collisions et zoom sur l'horizon.
+- Lot : `renders/zone_reveil_prairie_horizon_v2/`. Il contient `ZRV2_projet_pmdo_0812.zip` (quatre Grounds), `ZRV2_calques_png_8px.zip` et un README détaillé.
 - Source : `source/zone_reveil_prairie_horizon_v2/`, 16 tests PASS.
 
 **Demande de l'utilisateur** :
@@ -34,7 +34,23 @@ Puis : « garder le layout de la v1, juste corriger la mer et le background, lai
 - **Reflet** : colonne de traits sous la lune (nuit) ou le soleil (aube), qui ondule au rythme de la houle. Les crêtes qui la traversent prennent la couleur de l'astre. La lune se lève derrière le sommet.
 - **Fleurs** : cycle A B A C du GIF Sky Peak, en 4 phases de 12 ticks.
 - **Aube et nuit** : couleurs reprises des bruts de ZRV1. À l'aube, le ciel suit le dégradé de ZRV1 ligne par ligne.
-- Pixels générés, pas de tuiles natives. 5 mutations vérifiées. Pas de runtime. **Pas dans le mod unique.**
+- Pixels générés, pas de tuiles natives. Pas de runtime. **Pas dans le mod unique.**
+
+**Ajustements après validation de l'ensemble** : « faut que tu passes le reflet de la lune et crépuscule au générateur », « que les nuages soient pas crop », « les mouvements des vagues, y'a des interstices entre elles, faut quelque chose de plus logique », « faut aussi un crépuscule », « les écume et bulle de la v1 sont bien », puis « les nuages doivent être arrondis en haut, y'a des crops de nuage ! … et faut le mouvement de la mer de PMD ».
+
+- **Quatrième ambiance, crépuscule** (banques `ZRV2C_`).
+  - La prairie vient d'une édition générée du décor de ZRV1, recalée au pixel près (meilleur décalage (0, 0)).
+  - Ciel du violet à l'orange, soleil couchant à demi derrière le banc, reflet rouge orangé.
+- **Reflets générés** : une planche de trois colonnes (lune, aube, crépuscule). Chaque trait est replacé sous l'astre et ondule avec la houle.
+- **Nuages sans rognure** : nouveau banc généré, entier. Le seul sommet plat que le générateur avait coupé (70 px) est arrondi en dôme parabolique.
+  - La coupe de la boucle se fait là où les silhouettes se raccordent, avec un fondu des teintes seules.
+  - Des tests vérifient l'absence de plateau de plus de 10 px et de colonne isolée.
+- **Mouvement de la mer de PMD** : les 12 images de la houle de V24P04A ont été décodées depuis `pret/pmd-sky` (BMA, BPC, BPL, BPA) : `references/v24p04a_12_crans_bpa.png`.
+  - Une crête y avance d'une rangée en 6 crans (5 à 8 px par cran), sans décalage horizontal.
+  - Elle naît en ligne sombre sous l'horizon, puis devient une double bosse blanche. ZRV2 suit cette cadence.
+- **Vagues sans interstices** : crêtes de 78 px sur un motif de 96 px (comme V24P04A), plus une ligne de houle continue de 1 px sous chaque rangée.
+- **Écume et bulles de ZRV1** reprises telles quelles ; au crépuscule, même méthode.
+- Montagne gardée à sa taille.
 
 ## ZRV1 — Zone de réveil : la prairie de Sky Peak face à l'océan, jour, aube et nuit (27 septembre 2026)
 

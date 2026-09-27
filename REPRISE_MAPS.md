@@ -38,6 +38,7 @@ Même jour, sur « regarde l'animation de la mer V24P04A et des nuages, c'est ce
 - Ciel, nuages, montagne et mer sur des calques séparés. Les nuages défilent derrière la montagne de ZRV1, dont les flancs sont prolongés jusqu'à l'horizon.
 - Reflet animé de la lune et du soleil ; fleurs A B A C.
 - ZRV1 est gardée. ZRV2 n'est **pas dans le mod unique**.
+- Ensuite, « je valide l'ensemble », avec des ajustements : reflets générés, nuages sans rognure (dôme), vagues sans interstices, **crépuscule ajouté** (4 Grounds), écume et bulles de ZRV1, et la cadence de houle décodée de V24P04A (`references/v24p04a_12_crans_bpa.png`).
 
 Même jour, sur « Je veux un petit temple miniature qui tiens sur la buche celebi gardien secret » puis « lance la suite ! » : lot **EJS2**, Jardin secret V2 avec le temple de Celebi (`renders/entree_jardin_secret_sud_nord_v2/`, aperçu `apercu_entree_jardin_secret_sud_nord_v2.html`, 13 tests PASS). Un seul brut nouveau, collé sur la souche ; le reste est le décor d'EJS1 au pixel près. La porte du temple est l'entrée, et Celebi est un emblème qui luit. Ce sont des choix de l'agent, **à confirmer**. EJS2 est ajoutée au mod unique (19 cartes, version 1.1.0.0).
 

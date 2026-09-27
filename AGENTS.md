@@ -924,3 +924,22 @@ Recette d'une **refonte d'arrière-plan multicalque sur un layout existant** :
 
 Pas de runtime. Pas dans le mod unique.
 
+**ZRV2, ajustements après validation** (crépuscule, reflets générés, nuages sans rognure, cadence de V24P04A, écume et bulles de ZRV1) :
+
+- **Mouvement d'une mer de PMD** : décoder la carte du jeu au lieu de deviner. `gh api -H "Accept: application/vnd.github.raw" repos/pret/pmd-sky/contents/files/MAP_BG/<carte>.{bma,bpc,bpl}` et `<carte>{1,5}.bpa`.
+  - Puis `bma.to_pil(bpc, bpl, [bpa1, None, None, None, bpa5, None, None, None], include_collision=False, include_unknown_data_block=False, pal_ani=False)`, qui donne une image par cran de BPA.
+  - Avec `pal_ani=True`, les images mêlent BPA et palettes (52 au lieu de 12) et font apparaître des carrés.
+  - V24P04A : une crête avance d'une rangée en 6 crans, soit `u = k + 2s/12`.
+- **Nouvelle ambiance sur un layout validé** : éditer le décor du parent (`images=[jour, aube]`), vérifier `recalage` = (0, 0), puis appliquer la recette du parent.
+  - Les masques sont identiques au jour. Écume : palette 8 transposée.
+- **Reflets au générateur** : une planche de colonnes de traits sur magenta. Chaque composante devient un trait replacé.
+  - `down_rgba` avec un seuil de 0,35.
+  - Phase `2π(2s/12 − u(y))`, avec `u(y)` l'inverse de la loi de houle.
+- **Banc de nuages** : une seule bande demandée ; prendre celle du haut.
+  - Arrondir les sommets plats de 40 px ou plus en **parabole**, en n'abaissant chaque colonne que jusqu'à la courbe.
+  - Une demi-ellipse reste plate à 8 px, et abaisser toutes les colonnes de la même profondeur détache des lamelles.
+  - Raccord : coupe choisie par ressemblance des silhouettes, fondu des teintes seules (fondre l'alpha crée des pics).
+- **Crêtes** : largeur fixe de 78 px sur 96 et ligne continue de 1 px (la mer × 0,85) : plus de trous entre les vagues.
+- **Soleil couchant** : recoloré par anneaux (quantiles 0,72 → 0,36 du disque du brut).
+- **Réinitialisations** : l'espace est revenu 4 fois au commit parent. Pousser après chaque étape.
+
