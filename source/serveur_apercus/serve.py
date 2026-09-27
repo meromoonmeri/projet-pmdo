@@ -86,11 +86,21 @@ class Handler(SimpleHTTPRequestHandler):
         pass
 
 
+class Server(ThreadingHTTPServer):
+    daemon_threads = True
+
+    def handle_error(self, request, client_address):
+        import sys
+        if isinstance(sys.exc_info()[1], (BrokenPipeError, ConnectionResetError)):
+            return                                # le navigateur a coupé en cours de transfert : sans gravité
+        super().handle_error(request, client_address)
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--port', type=int, default=8000)
     ap.add_argument('--bind', default='0.0.0.0')
     a = ap.parse_args()
-    srv = ThreadingHTTPServer((a.bind, a.port), partial(Handler, directory=str(R)))
+    srv = Server((a.bind, a.port), partial(Handler, directory=str(R)))
     print(f'Aperçus : http://{a.bind}:{a.port}/  (racine {R})', flush=True)
     srv.serve_forever()
