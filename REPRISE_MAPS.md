@@ -12,6 +12,10 @@ Reprise du 26 septembre, 09 h 20 UTC (session `arena/01a0dd03`, branchée sur `0
 
 Reprise du 27 septembre (session `arena/01a0e2f1`, branchée sur `95160e32` = EUL1) : sur « poursuis le projet », lot **Entrée Sables mouvants** (`renders/entree_sables_mouvants_sud_nord_v1/`, préfixe `EQS1`, réf. `witheringdesert.png` = Furnace Desert, aperçu `apercu_entree_sables_mouvants_sud_nord_v1.html`). Biome choisi par l'agent, **à confirmer**. Fosse de sable mouvant, chutes de sable, poussière et rayons animés ; 14 tests PASS.
 
+Même jour, sur « poursuis les prochaines maps ! faut tourner le serveur dans la session arena » : lot **Entrée Star Cave** (`renders/entree_star_cave_sud_nord_v1/`, préfixe `ESC1`, réf. `starcavepmdsky.png`, aperçu `apercu_entree_star_cave_sud_nord_v1.html`). Biome choisi par l'agent, **à confirmer**. Étoiles aux formes exactes du rip, reflets des cristaux et poussière d'étoile animés ; 13 tests PASS.
+
+**Serveur d'aperçus, à relancer au début de chaque session** : `python3 source/serveur_apercus/serve.py --port 8000`, via l'outil de processus de fond. Il écoute sur 0.0.0.0 et sa page d'accueil liste tous les aperçus, les entrées sud → nord en tête.
+
 ## Branches sœurs de la série (relevé du 27 septembre)
 
 Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) ; `01a0e017` travaille sur un autre historique. Aucune n'a été fusionnée et rien n'en a été repris. Leurs têtes étaient identiques au démarrage et avant le commit d'EQS1.
@@ -25,7 +29,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1 et ESC1.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 
@@ -82,7 +86,7 @@ Gabarit 4:3 à copier : `source/entree_jungle_sud_nord_v1/` (`build.py`, `test_b
 
 `.venv` et `.cache` ne sont pas persistés : recréer la première, puis relancer le `build.py` d'un lot avant ses tests, qui relisent le Ground dans `.cache`. Un rebuild réécrit l'ORA avec de nouveaux horodatages ZIP : restaurer le fichier s'il n'a pas d'autre changement.
 
-`entrancecascade.png` (vraie entrée de Waterfall Cave) sert désormais à EWC1. `Mystifying_Forest_entrance_TDS.png` sert désormais à EMF1. `Underground_Lake_shore_TDS.png` sert désormais à EUL1 (lac souterrain, chaussée jusqu'à la grotte). `witheringdesert.png` (Furnace Desert, *Rescue Team*) sert désormais à EQS1. Il servait déjà hors de la série : duo désert DB1 dans `dungeon_biomes_v1`, biome swap en eau dans `01a0d498`. **Les références que ce paragraphe donnait comme libres (Foggy Forest Base Camp, Sealed Ruin pit, Southern Jungle exit 2, etc.) ont toutes été prises sur les branches sœurs** (relevé du 27 septembre). Rips de la racine encore jamais pris comme référence d'une entrée de la série : starcavepmdsky, rockgeyserlike, Steam_Cave_Peak_TDS, secretgarden, energeticforest, finalisland, roadundergound, junglewaterfallzonepmdsky, oldcastlepmd, volcanicpit (1). Certains servent déjà hors série (energeticforest, finalisland et volcanicpit dans DB1) : chercher le nom dans tout l'arbre et dans toutes les branches avant de choisir.
+`entrancecascade.png` (vraie entrée de Waterfall Cave) sert désormais à EWC1. `Mystifying_Forest_entrance_TDS.png` sert désormais à EMF1. `Underground_Lake_shore_TDS.png` sert désormais à EUL1 (lac souterrain, chaussée jusqu'à la grotte). `witheringdesert.png` (Furnace Desert, *Rescue Team*) sert désormais à EQS1. Il servait déjà hors de la série : duo désert DB1 dans `dungeon_biomes_v1`, biome swap en eau dans `01a0d498`. **Les références que ce paragraphe donnait comme libres (Foggy Forest Base Camp, Sealed Ruin pit, Southern Jungle exit 2, etc.) ont toutes été prises sur les branches sœurs** (relevé du 27 septembre). `starcavepmdsky.png` sert désormais à ESC1. Rips de la racine encore jamais pris comme référence d'une entrée de la série : rockgeyserlike, Steam_Cave_Peak_TDS, secretgarden, energeticforest, finalisland, roadundergound, junglewaterfallzonepmdsky, oldcastlepmd, volcanicpit (1). Certains servent déjà hors série : energeticforest, finalisland et volcanicpit dans DB1 ; secretgarden sur les anciennes branches `01a0d315` et `01a0d4b6`. Libres partout au 27 septembre (seulement listés « pending_layout » par `zones_relayout`) : roadundergound, rockgeyserlike, junglewaterfallzonepmdsky, oldcastlepmd. Chercher le nom dans tout l'arbre et dans toutes les branches avant de choisir, par nom de fichier **et** par nom de dossier de lot.
 
 ## Repérage effectué
 

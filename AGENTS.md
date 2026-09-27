@@ -671,3 +671,52 @@ Règles et recettes :
 - ombres aussi claires que le sable.
 
 Build reproductible : 105 fichiers identiques sur 106, seul l'ORA change (horodatages). Il prend environ 30 s. Pas de runtime.
+
+### Serveur d'aperçus et Entrée Star Cave (ESC1) — « poursuis les prochaines maps ! faut tourner le serveur dans la session arena » (27 septembre)
+
+**Serveur d'aperçus** : l'utilisateur veut voir les maps dans la session Arena.
+
+- Outil : `source/serveur_apercus/serve.py`, bibliothèque standard seulement (marche sans `.venv`).
+- Lancement : `python3 source/serveur_apercus/serve.py --port 8000`, **avec l'outil de processus de fond** (pas en bash) ; il écoute sur `0.0.0.0`.
+- La page « / » liste les `apercu_*.html` de la racine, les entrées sud → nord en tête. L'ordre suit la date du commit qui les a ajoutés ; les aperçus pas encore commités sont marqués « nouveau ».
+- L'index est recalculé à chaque visite : une map ajoutée pendant la session apparaît sans redémarrage.
+- `.git` et `.venv` ne sont pas servis.
+- **Le relancer au début de chaque session.**
+
+**ESC1** : référence `starcavepmdsky.png`, deux vues de 504 × 504 dont la seconde avec la bouche. Lot `source/entree_star_cave_sud_nord_v1/`, préfixe `ESC1`, namespace `entree_star_cave_sud_nord`, aperçu `apercu_entree_star_cave_sud_nord_v1.html`.
+
+Choix du biome, avec la leçon d'EQS1 appliquée : les rips candidats ont été cherchés dans tout l'arbre et dans les 70 branches distantes, à la fois par nom de fichier et par nom de dossier de lot.
+
+- `starcave`, `roadundergound`, `rockgeyserlike`, `junglewaterfallzonepmdsky` et `oldcastlepmd` ne sont la source d'aucun lot. Ils n'apparaissent qu'en « pending_layout » dans `zones_relayout_v1/v2`.
+- `secretgarden` est déjà produit sur deux anciennes branches, `01a0d315` et `01a0d4b6`.
+
+Règles et recettes :
+
+- **Effet ponctuel du rip = sprites relevés, pas redessinés** (étoiles) :
+  - isoler les couleurs propres à l'effet ;
+  - étiqueter en 8-connexité ;
+  - compter les formes distinctes en texte (`.W.` / `lml`…) ;
+  - reprendre les formes les plus fréquentes telles quelles.
+  - Tests : chaque forme existe dans le rip ; à chaque phase, chaque tache est un sprite entier et exact ; les fichiers sont identiques au recalcul depuis la liste du manifeste.
+  - Demander au générateur un décor **sans** l'effet (« no sparkles, no stars ») et vérifier qu'il n'y en a pas (0 pixel blanc).
+- **Reflets sur une matière (palette cycling localisé)** : on prend les facettes (quantile de luminance du calque), leur cran dans une rampe de couleurs du rip, et une vague périodique en u = x + y qui relève de +1 ou +2 crans.
+  - La période doit valoir pas × phases.
+  - **Mesure de l'avance** par moyenne circulaire : elle est bruitée par la répartition inégale des facettes (15 à 26 px pour un pas de 20). On teste une avance toujours positive et la moyenne. L'égalité exacte avec la formule est vérifiée phase par phase.
+- **Frange magenta des planches de poses** : le générateur fond les poses pâles dans le fond malgré la consigne, par exemple (220,105,243). Le seuil d'EQS1 (r−g et b−g > 40) les gardait et donnait des grains violets.
+  - Fond = magenta pur **et** pixels teintés (r−g > 60 et b−g > 60), ni gardés ni recolorés.
+  - Une pose entièrement teintée est écartée et documentée (`poses_ecartees`). Un test (pas de magenta ni de frange) couvre la régression.
+- **Sol qui mène à la bouche** : sans règle dédiée, le dégradé sombre du sol devant le trou (lum 95 → 40) retombait dans les parois, et une bande de paroi séparait le sol de la bouche. On l'ajoute aux ombres (≤ 40 px de la bouche, écart-type < 6, lum > 38). Un test vérifie que la bouche touche les ombres.
+- **Fonctions génériques extraites d'EQS1** (`reduce_pose`, `paste`, `write_ora`, `ground_project`) : copiées par extraction de texte, avec remplacement des libellés. Un `assert` vérifie qu'il ne reste aucun texte du désert.
+
+13 tests PASS. 8 mutations vérifiées :
+
+- phase d'étoiles remplacée ;
+- pixel d'étoile hors rip ;
+- branche d'étoile retirée ;
+- reflet sur le sol ;
+- reflets assombris ;
+- poussière 23 = 10 ;
+- ombres claires ;
+- grain teinté de magenta.
+
+Fidélité : sol 5,7 et cristal 5,3 sur le brut ; sol 7,3, parois 4,0 et blocs 3,9 sur les calques. Build reproductible (101 fichiers identiques sur 102, hors ORA), en 30 s environ. Pas de runtime.

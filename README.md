@@ -1,5 +1,32 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Star Cave — 4:3, grotte de cristaux étoilée, réf. Star Cave (27 septembre 2026)
+
+- Aperçu : `apercu_entree_star_cave_sud_nord_v1.html`, aussi listé en tête par le serveur d'aperçus (`python3 source/serveur_apercus/serve.py`, port 8000).
+- Lot : `renders/entree_star_cave_sud_nord_v1/` (`ESC1_projet_pmdo_0812.zip`, `ESC1_calques_png_8px.zip`, ORA, WebP animé, planche des poses).
+- Source : `source/entree_star_cave_sud_nord_v1/`.
+
+**Demande de l'utilisateur** : « poursuis les prochaines maps ! faut tourner le serveur dans la session arena ». Deux réponses :
+
+- le **serveur d'aperçus** tourne dans la session : sa page d'accueil liste les 131 aperçus, les entrées sud → nord en tête ;
+- la carte suivante. L'agent a choisi le biome **Star Cave**, grotte de cristaux étoilée, **à confirmer**. La capture `starcavepmdsky.png` n'était la source d'aucun lot, sur aucune branche ; elle n'apparaissait que dans des inventaires.
+
+Méthode des textures canoniques = **rendu généré référencé**. La capture est passée au générateur, qui produit trois bruts :
+
+- le décor complet en 4:3, **sans étoiles** puisqu'elles sont animées à part ;
+- un sol complet édité depuis le décor ;
+- une planche de poussière d'étoile sur magenta.
+
+L'arrivée est au sud par un couloir entre deux avancées de cristal. Il débouche sur une grande caverne, et le sol s'assombrit jusqu'à l'entrée sombre au nord.
+
+La map compte 9 calques : sol complet, sol, ombres, parois de cristal, blocs, profondeur, reflets, étoiles et poussière d'étoile. Elle a trois animations de 24 × 5 ticks :
+
+- **étoiles** : les **4 formes relevées pixel par pixel sur la capture** (croix blanche, croix lavande, étoile lavande, étoile verte), à ses couleurs exactes. Chaque étoile grandit et décroît, ou jaillit puis s'éteint ;
+- **reflets** : une vague diagonale parcourt les facettes claires des cristaux, avec la seule rampe cyan de la capture ;
+- **poussière d'étoile** : des orbes générées montent du sol puis se dispersent en nuée. La frange magenta de la planche est traitée comme du fond, et une pose entièrement teintée est écartée.
+
+Toutes les boucles sont fermées (testé). Fidélité au rip mesurée par test : sol 7,3, parois 4,0, blocs 3,9 (seuil 35). 13 tests PASS ; 8 mutations vérifiées. Pas de test PMDO en jeu.
+
 ## Entrée Sables mouvants — 4:3, désert aux chutes de sable et fosse qui aspire, réf. Furnace Desert (27 septembre 2026)
 
 - Aperçu : `apercu_entree_sables_mouvants_sud_nord_v1.html`.
