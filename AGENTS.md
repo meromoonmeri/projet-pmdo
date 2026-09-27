@@ -970,3 +970,12 @@ Pas de runtime. Pas dans le mod unique.
   - le pied du panache est posé en haut de l'évent ; les émetteurs sont décalés de 8 phases.
 - **Réinitialisations** : l'espace est revenu au commit parent jusque pendant un appel au générateur. Avant chaque commit, vérifier `git log -1`. Si HEAD vaut `95160e32`, copier le travail hors du dépôt, faire `git reset --hard origin/<branche>`, recopier, puis committer.
 
+## Fins de donjon — FCF1 (Fin Cratère), ajouts à la recette
+
+- Objectif du biome : l'emblème de feu (marqueur `embleme`). Le rebord nord n'est pas une paroi mais un anneau de roche devant la lave : le test « aucune sortie » vérifie que le sol praticable ne touche ni le haut ni les côtés, seulement le bas.
+- Fonctions reprises de ECN1 par `loadmod` : `lava_phases`, `sparkle_families`, `bubble_poses`, `BUBBLE_TIMELINE`, `place` (régler `EC.W, EC.H = 768, 576`). Le Ground reprend `ground_project` de FVS1 en redéfinissant ses globales de module (`STAGE`, `PFX`, `ASSET`, `NAMESPACE`, `HERE`, `W`, `H`), puis renomme le marqueur et le texte du Mod.xml (avec une assertion sur le texte d'origine).
+- Segmentation d'un plateau dans la lave : lave = magenta dilaté de 2 px ; sol = moyenne 11 px > 62 et saturation < 30, plus grande composante ; emblème = tons de feu saturés du quart nord ; rebord = reste de la composante de terre qui contient le sol ; pitons = autres composantes de terre.
+- **Palette commune et petits éléments saturés** : la MEDIANCUT à 96 couleurs, dominée par le gris, changeait les rouges de l'emblème en brun. L'emblème est donc ramené aux 8 tons de lave de ECN1 (`snap_lava`), hors palette commune.
+- **Lueur** : rampe décalée d'un cran vers le chaud (`accent → clair`). Avec la rampe des braises (`bande → clair`), l'emblème devenait rouge sombre à t = 0. Ne faire pulser que les jaunes et oranges (g > 110), pour garder le dessin rouge.
+- Si le générateur ne rend pas le sol seul : répéter en miroir une plage propre du décor, documenter la plage (`SOL_PATCH`) et la tester.
+

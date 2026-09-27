@@ -1,5 +1,20 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FCF1 — Fin Cratère : fosse de Dark Crater, deuxième zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « passons à la suite » après FVS1. Deuxième fin de la série, dans l'ordre du mod : **Cratère**, d'après la vraie fin du jeu, `Dark_Crater_Pit_TDS.png`.
+
+- Layout : arrivée au sud par la pointe du plateau (`entrance`), grand plateau de pierre au milieu de la lave (`boss`), emblème de feu sur le rebord nord (`embleme`). Aucune sortie, aucun warp.
+- Rendu généré référencé : décor sur magenta (la lave). Le générateur a renvoyé deux réponses vides pour le sol seul : `sol_complet` est donc une plage de sol du décor répétée en miroir (documentée dans le manifeste et testée).
+- Calques, du bas vers le haut : lave, éclats, bulles ; sol complet, sol du plateau, rebord, pitons, emblème ; lueur.
+- La lave (4 × 10 ticks), les éclats de Métano recolorés (4 × 10) et les bulles de lave (24 × 5) reprennent les fonctions et les poses de l'entrée Cratère (ECN1). La lueur fait pulser les jaunes de l'emblème et les braises du rebord (6 × 10 ticks, méthode des braises de ECN1). Les anneaux rouges de l'emblème restent fixes. La scène boucle en 2 s.
+- Fidélité du sol à la capture : 2.18 (seuil 35).
+- Aperçu : `apercu_fin_cratere_fosse_v1.html`. Rendus : `renders/fin_cratere_fosse_v1/`. Source : `source/fin_cratere_fosse_v1/`.
+- 9 tests PASS, 5 mutations vérifiées.
+- Paquet : `FCF1_projet_pmdo_0812.zip` (Ground 0.8.12, préfixe `FCF1`) et `FCF1_calques_png_8px.zip`.
+- Pixels générés, pas de tuiles natives (sauf les éclats, pixels de Métano recolorés). Pas de runtime. Pas encore dans le mod unique.
+- Fin suivante : Ruine (`Sealed_Ruin_pit_TDS.png`).
+
 ## FVS1 — Fin Vapeur : sommet de Steam Cave, première zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « Fait des zone fin de donjon multicalque de la série entrée on passe au fin », puis « Lance toi ». Les questions sur la portée, le layout et la référence sont restées sans réponse, donc l'agent a choisi :
