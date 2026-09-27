@@ -416,7 +416,7 @@ def swell_rows():
 
 
 def swell_frames(sprites, sea_region, sea_rgb):
-    """Crête k au cran s : profondeur u = k + 2s/12 (V24P04A : 2 rangées par cycle), bas du sprite en y(u), colonnes tous les 96 px ; taille selon u,
+    """Crête k au cran s : profondeur u = k + (2s/12 mod 1) (V24P04A : 2 rangées par cycle), bas du sprite en y(u), colonnes tous les 96 px ; taille selon u,
     écume pleine / mince en alternance (cran + colonne), comme les deux états alternés de V24P04A. u = k + 2 au cran 12
     = crête k + 2 au cran 0 : la boucle est fermée par construction."""
     swell_sp = []
@@ -427,7 +427,7 @@ def swell_frames(sprites, sea_region, sea_rgb):
     for s in range(SWELL_STEPS):
         a = np.zeros((H, W, 4), 'uint8')
         for k in range(K - 1, -1, -1):
-            u = k + SWELL_PASSES * s / SWELL_STEPS; y = int(round(swell_y(u)))
+            u = k + (SWELL_PASSES * s / SWELL_STEPS) % 1; y = int(round(swell_y(u)))   # une rangée neuve naît tous les 6 crans
             cls = sum(u >= b for b in SIZE_BOUNDS)      # 0 = houle, 1..4 = tailles
             for j in range(W // SWELL_PERIOD_X):
                 v = (s + j) % 2

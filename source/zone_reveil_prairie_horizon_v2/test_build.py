@@ -183,7 +183,7 @@ class Build(unittest.TestCase):
             fr = frames(amb, 'houle'); self.assertEqual(len(fr), 12)
             for s, f in enumerate(fr):
                 a = alpha(f)
-                want = {int(round(B.swell_y(k + 2 * s / 12))) for k in range(K)}
+                want = {int(round(B.swell_y(k + (2 * s / 12) % 1))) for k in range(K)}
                 bottoms = {y for y in range(YH, top_meadow) if a[y].any() and not a[y + 1].any()}
                 # rangées transparentes au pied des sprites : le bas visible est au plus 3 px au-dessus de y(u)
                 self.assertTrue(all(any(0 <= w - y <= 3 for w in want) for y in bottoms), (amb, s, sorted(bottoms), sorted(want)))
@@ -192,7 +192,7 @@ class Build(unittest.TestCase):
                 self.assertTrue((a[YH:top_meadow] == np.roll(a[YH:top_meadow], 192, axis=1)).all())
                 # pas d'interstice : les rangées de crêtes (u >= 0,4) ont une ligne continue sur toute la largeur de mer
                 for k in range(K):
-                    u = k + 2 * s / 12
+                    u = k + (2 * s / 12) % 1
                     if u >= B.SIZE_BOUNDS[0]:
                         yc = int(round(B.swell_y(u)))
                         yl = [y for y in range(yc - 3, yc + 1) if YH <= y < H and SEA[y].all()]

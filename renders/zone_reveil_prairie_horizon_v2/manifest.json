@@ -4,6 +4,7 @@
  "prefixes_banques": {
   "jour": "ZRV2J",
   "aube": "ZRV2A",
+  "crepuscule": "ZRV2C",
   "nuit": "ZRV2N"
  },
  "format": "4:3 vaste",
@@ -16,11 +17,14 @@
   72
  ],
  "horizon_y": 116,
- "demande": "ZRV2 : mer comme V24P04A (houle qui roule, horizon qui scintille), zone multicalque (mer, ciel, nuages, montagne separes), montagne raccordee a l horizon, nuages de la mer de nuages animes (pas de nuages ajoutes), fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages",
+ "demande": "ZRV2 : mer comme V24P04A (houle qui roule, horizon qui scintille), zone multicalque (mer, ciel, nuages, montagne separes), montagne raccordee a l horizon, nuages de la mer de nuages animes (pas de nuages ajoutes), fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages ; puis (ensemble valide) : reflets de la lune et du crepuscule passes au generateur, nuages sans rognure, vagues sans interstices, ajouter un crepuscule ; ecume et bulles de ZRV1 gardees",
  "choix": {
   "mer": "generee avec V24P04A en reference (reponse de l utilisateur), animee par les lois de V24P04A",
   "version": "nouvelle version, ZRV1 gardee (reponse de l utilisateur)",
   "layout": "celui de ZRV1 (prairie, horizon, montagne, collisions, marqueurs) (demande de l utilisateur)",
+  "ecume_bulles": "celles de ZRV1 (demande de l utilisateur) : jour, aube, nuit = calques de ZRV1 ; crepuscule = meme methode (palette 8 de s01p02a transposee sur le brut de crepuscule, memes bulles)",
+  "crepuscule": "quatrieme ambiance ; prairie : recette des ambiances de ZRV1 sur un brut de crepuscule recale au pixel",
+  "vagues": "cretes elargies a 78 px sur le motif de 96 (comme V24P04A) et ligne de houle continue de 1 px sous chaque rangee",
   "petits_pics": "les petits pics sombres de la mer de nuages de ZRV1 ne sont pas repris : la mer de nuages est remplacee par le banc qui passe derriere la montagne"
  },
  "base": "branche de session : calques de ZRV1, utilitaires de ZRV1 et d ESN1 ; etude des animations pour le rendu ROM ; aucun emprunt aux branches soeurs",
@@ -83,12 +87,31 @@
    "prompt": "Sprite sheet, pixel art, exactly the same colours and pixel style as the white foam wave crests in the reference image (Pokémon Mystery Dungeon Explorers of Sky ocean). On a solid flat magenta background (#FF00FF): isolated ocean wave crests seen from the side, each one a gentle double-hump wave line of white and pale cyan foam with a thin darker blue shadow under it. Arrange them in 5 rows from very small and thin (top row) to large (bottom row), 2 crests per row: left crest full foam, right crest thinner breaking foam. Well separated, nothing touching, no water background, no text."
   },
   {
-   "file": "mer_de_nuages_jour.png",
+   "file": "banc_nuages_jour.png",
    "images": [
-    "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000_x4.png"
+    "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000_x4.png",
+    "source/zone_reveil_prairie_horizon_v2/bruts/ecartes/mer_de_nuages_jour_trois_bancs.png"
    ],
-   "essais": "troisieme generation : la premiere (references GIF + 232233) recopiait la prairie de Sky Peak en neige, ecartee ; la deuxieme, conforme, perdue avant commit ; celle-ci donne trois bancs empiles, seul celui du bas (base plate) est utilise",
-   "prompt": "Pixel art, same colours and pixel style as the clouds sitting on the horizon in the reference image (Pokémon Mystery Dungeon Explorers of Sky). A single long, low horizontal bank of fluffy white and pale blue-grey cumulus clouds seen far away, spanning the full image width, seamlessly tileable left to right, continuous without gaps. Its bottom edge is a perfectly straight horizontal line; its top edge is puffy billows of varying height. The bank is centred vertically; everything above and below it is solid flat magenta (#FF00FF). No sky, no sea, no mountains, no text."
+   "essais": "remplace mer_de_nuages_jour.png (trois bancs colles : la dalle du banc du milieu rognait les nuages du bas, ecarte dans bruts/ecartes/) ; deux bancs encore, seul celui du haut (ciel magenta au-dessus) est utilise ; un sommet plat de 70 px (x 217-286) est arrondi par le build",
+   "prompt": "Pixel art, same colours and pixel style as the clouds on the horizon in the first reference (Pokémon Mystery Dungeon Explorers of Sky) and the cloud style of the second reference. ONE single low horizontal bank of fluffy white and pale blue-grey cumulus clouds, spanning the full image width, seamlessly tileable left to right. The bank occupies only the lower 40 percent of the image; its bottom edge is a perfectly straight horizontal line touching the bottom of the image; its top edge is round puffy billows of varying height, every billow complete and rounded. The whole upper 60 percent of the image is solid flat magenta (#FF00FF) with nothing in it. No second bank, no sky, no sea, no mountains, no text."
+  },
+  {
+   "file": "reflets_astres.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/references/v24p04a_t000_x4.png",
+    "source/zone_reveil_prairie_horizon_v1/bruts/decor_nuit.png"
+   ],
+   "essais": "premiere generation ; conforme (demande : reflet de la lune et du crepuscule passes au generateur)",
+   "prompt": "Pixel art sprite sheet in the same pixel style as the reference images (Pokémon Mystery Dungeon Explorers of Sky ocean and moon). On a solid flat magenta background (#FF00FF): three separate vertical columns of light reflected on the sea surface, as seen under a low moon or sun on water. Each column is made only of short horizontal wavy dashes and glints of light stacked from top to bottom, very narrow and thin at the top, getting wider, longer and more spaced toward the bottom, with gaps of magenta between dashes. Left column: pale silver-yellow moonlight. Middle column: warm golden dawn light. Right column: deep orange and red sunset light. Tall columns, well separated, no water drawn, no moon, no sun, no text."
+  },
+  {
+   "file": "decor_crepuscule_zrv1.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v1/bruts/decor_jour.png",
+    "source/zone_reveil_prairie_horizon_v1/bruts/decor_aube.png"
+   ],
+   "essais": "premiere generation ; recalee au pixel sur le jour de ZRV1 (meilleur decalage (0, 0)) : couleurs de la prairie, du ciel, de la mer, de la montagne, des nuages et du soleil du crepuscule",
+   "prompt": "Edit the first image into a sunset dusk scene, keeping exactly the same layout, framing, shapes and every object at the same pixel position (meadow, flowers, rocks, bushes, path, sea, mountain, clouds). Only change the lighting and colours: sky from deep violet at the top to orange and red near the horizon, a large low orange-red setting sun on the right side just above the clouds, clouds lit pink-orange from below, mountain warm rose and purple, sea deep purple-blue with orange glints, meadow grass warm olive-orange in the evening light with long soft shadows, flowers keep their pink. Same pixel art style as the second image (the dawn version)."
   },
   {
    "file": "montagne_jour.png",
@@ -126,8 +149,24 @@
    ]
   },
   {
-   "file": "source/zone_reveil_prairie_horizon_v2/bruts/mer_de_nuages_jour.png",
-   "sha256": "93532c979149c736f70429d1667f14f04ae67c2b6e5030df5776040f31e52f19",
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour.png",
+   "sha256": "f9007a7d1a1a0725b85fa319ba2d96f8d2bb382f7a733084bcdba0247ef9350e",
+   "size": [
+    1200,
+    896
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/reflets_astres.png",
+   "sha256": "42171d57d50a8865d7a0ec7997e3a0bf4584f2a6320592f577389ccfac79e110",
+   "size": [
+    896,
+    1200
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/decor_crepuscule_zrv1.png",
+   "sha256": "0cbd6a84c91e79d1f2bff4c4b05713665085edde8c5a1cb18b478280b1ff5807",
    "size": [
     1200,
     896
@@ -183,33 +222,45 @@
   },
   "nuages": {
    "rangees_brut": [
-    540,
-    851
+    276,
+    494
    ],
    "taille_bande": [
     256,
-    73
-   ]
+    61
+   ],
+   "sommets_arrondis": [
+    [
+     217,
+     286,
+     276
+    ]
+   ],
+   "coupe_brut": [
+    0,
+    914
+   ],
+   "ecart_raccord": 7.2
   },
   "cretes": {
    "tailles_px": [
     [
      [
-      48,
+      78,
       11
      ],
      [
-      48,
+      78,
       10
      ]
     ],
     [
      [
-      61,
+      78,
       14
      ],
      [
-      61,
+      78,
       13
      ]
     ],
@@ -219,17 +270,17 @@
       18
      ],
      [
-      76,
+      78,
       16
      ]
     ],
     [
      [
-      93,
+      78,
       22
      ],
      [
-      88,
+      78,
       19
      ]
     ]
@@ -245,43 +296,73 @@
   "reflet": {
    "aube": {
     "x": 236,
-    "bandes": 57,
+    "colonne_brut": [
+     318,
+     577
+    ],
+    "rangees_brut": [
+     5,
+     1157
+    ],
+    "traits": 97,
     "couleurs": [
      [
-      252,
-      225,
-      158
+      253,
+      244,
+      147
      ],
      [
-      250,
-      205,
-      94
+      247,
+      213,
+      118
+     ]
+    ]
+   },
+   "crepuscule": {
+    "x": 560,
+    "colonne_brut": [
+     617,
+     877
+    ],
+    "rangees_brut": [
+     5,
+     1156
+    ],
+    "traits": 101,
+    "couleurs": [
+     [
+      242,
+      102,
+      30
      ],
      [
-      193,
-      164,
-      114
+      178,
+      48,
+      16
      ]
     ]
    },
    "nuit": {
     "x": 384,
-    "bandes": 57,
+    "colonne_brut": [
+     18,
+     277
+    ],
+    "rangees_brut": [
+     5,
+     1156
+    ],
+    "traits": 94,
     "couleurs": [
      [
-      254,
-      246,
-      171
+      249,
+      241,
+      210
      ],
      [
-      252,
-      244,
-      171
-     ],
-     [
-      128,
-      150,
-      154
+      217,
+      220,
+      199
      ]
     ]
    }
@@ -291,7 +372,8 @@
   "crans": 12,
   "frame_length_ticks": 10,
   "loi_y": "y(u) = 116 + 40 + 40 u + 4 u^2",
-  "u": "k + cran / 12",
+  "u": "k + 2 cran / 12",
+  "rangees_par_cycle": 2,
   "periode_x": 96,
   "bornes_tailles": [
    0.4,
@@ -299,7 +381,9 @@
    2.0,
    2.8
   ],
-  "echelle_cretes": 0.157
+  "echelle_cretes": 0.157,
+  "largeur_cretes_px": 78,
+  "ligne_de_houle": "1 px continu, mer x 0.85, des u >= 0.4"
  },
  "scintillement": {
   "crans": 16,
@@ -328,8 +412,8 @@
   "pas_px": 1,
   "phases": 256,
   "frame_length_ticks": 8,
-  "raccord_px": 24,
-  "hauteur_px": 73
+  "raccord": "coupe du brut choisie la ou la silhouette se raccorde ; fondu des teintes seules sur 16 colonnes",
+  "hauteur_px": 61
  },
  "fleurs": {
   "phases": 4,
@@ -355,6 +439,14 @@
    "c": [
     236,
     32
+   ]
+  },
+  "crepuscule": {
+   "sprite": 1,
+   "d": 48,
+   "c": [
+    560,
+    50
    ]
   }
  },
@@ -414,41 +506,48 @@
      "index": 10,
      "nom": "ecume",
      "file": "animation/jour/ecume/ZRV2J_10_ecume_fNNN.png",
-     "phases": 12,
+     "phases": 10,
      "ticks": 10
     },
     {
      "index": 11,
-     "nom": "herbe",
-     "file": "calques/jour/ZRV2J_11_herbe.png",
-     "phases": 1,
-     "ticks": 60
+     "nom": "bulles",
+     "file": "animation/jour/bulles/ZRV2J_11_bulles_fNNN.png",
+     "phases": 24,
+     "ticks": 5
     },
     {
      "index": 12,
-     "nom": "chemin",
-     "file": "calques/jour/ZRV2J_12_chemin.png",
+     "nom": "herbe",
+     "file": "calques/jour/ZRV2J_12_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 13,
-     "nom": "fleurs",
-     "file": "animation/jour/fleurs/ZRV2J_13_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 14,
-     "nom": "rochers",
-     "file": "calques/jour/ZRV2J_14_rochers.png",
+     "nom": "chemin",
+     "file": "calques/jour/ZRV2J_13_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 14,
+     "nom": "fleurs",
+     "file": "animation/jour/fleurs/ZRV2J_14_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 15,
+     "nom": "rochers",
+     "file": "calques/jour/ZRV2J_15_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 16,
      "nom": "buissons",
-     "file": "calques/jour/ZRV2J_15_buissons.png",
+     "file": "calques/jour/ZRV2J_16_buissons.png",
      "phases": 1,
      "ticks": 60
     }
@@ -523,41 +622,164 @@
      "index": 10,
      "nom": "ecume",
      "file": "animation/aube/ecume/ZRV2A_10_ecume_fNNN.png",
-     "phases": 12,
+     "phases": 10,
      "ticks": 10
     },
     {
      "index": 11,
-     "nom": "herbe",
-     "file": "calques/aube/ZRV2A_11_herbe.png",
-     "phases": 1,
-     "ticks": 60
+     "nom": "bulles",
+     "file": "animation/aube/bulles/ZRV2A_11_bulles_fNNN.png",
+     "phases": 24,
+     "ticks": 5
     },
     {
      "index": 12,
-     "nom": "chemin",
-     "file": "calques/aube/ZRV2A_12_chemin.png",
+     "nom": "herbe",
+     "file": "calques/aube/ZRV2A_12_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 13,
-     "nom": "fleurs",
-     "file": "animation/aube/fleurs/ZRV2A_13_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 14,
-     "nom": "rochers",
-     "file": "calques/aube/ZRV2A_14_rochers.png",
+     "nom": "chemin",
+     "file": "calques/aube/ZRV2A_13_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 14,
+     "nom": "fleurs",
+     "file": "animation/aube/fleurs/ZRV2A_14_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 15,
+     "nom": "rochers",
+     "file": "calques/aube/ZRV2A_15_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 16,
      "nom": "buissons",
-     "file": "calques/aube/ZRV2A_15_buissons.png",
+     "file": "calques/aube/ZRV2A_16_buissons.png",
+     "phases": 1,
+     "ticks": 60
+    }
+   ]
+  },
+  "crepuscule": {
+   "layers": [
+    {
+     "index": 0,
+     "nom": "sol_complet",
+     "file": "calques/crepuscule/ZRV2C_00_sol_complet.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 1,
+     "nom": "ciel",
+     "file": "calques/crepuscule/ZRV2C_01_ciel.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 3,
+     "nom": "astre",
+     "file": "calques/crepuscule/ZRV2C_03_astre.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 4,
+     "nom": "nuages",
+     "file": "animation/crepuscule/nuages/ZRV2C_04_nuages_fNNN.png",
+     "phases": 256,
+     "ticks": 8
+    },
+    {
+     "index": 5,
+     "nom": "montagne",
+     "file": "calques/crepuscule/ZRV2C_05_montagne.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 6,
+     "nom": "mer",
+     "file": "calques/crepuscule/ZRV2C_06_mer.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 7,
+     "nom": "scintillement",
+     "file": "animation/crepuscule/scintillement/ZRV2C_07_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
+     "index": 8,
+     "nom": "houle",
+     "file": "animation/crepuscule/houle/ZRV2C_08_houle_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 9,
+     "nom": "reflet",
+     "file": "animation/crepuscule/reflet/ZRV2C_09_reflet_fNNN.png",
+     "phases": 12,
+     "ticks": 10
+    },
+    {
+     "index": 10,
+     "nom": "ecume",
+     "file": "animation/crepuscule/ecume/ZRV2C_10_ecume_fNNN.png",
+     "phases": 10,
+     "ticks": 10
+    },
+    {
+     "index": 11,
+     "nom": "bulles",
+     "file": "animation/crepuscule/bulles/ZRV2C_11_bulles_fNNN.png",
+     "phases": 24,
+     "ticks": 5
+    },
+    {
+     "index": 12,
+     "nom": "herbe",
+     "file": "calques/crepuscule/ZRV2C_12_herbe.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 13,
+     "nom": "chemin",
+     "file": "calques/crepuscule/ZRV2C_13_chemin.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 14,
+     "nom": "fleurs",
+     "file": "animation/crepuscule/fleurs/ZRV2C_14_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
+     "index": 15,
+     "nom": "rochers",
+     "file": "calques/crepuscule/ZRV2C_15_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 16,
+     "nom": "buissons",
+     "file": "calques/crepuscule/ZRV2C_16_buissons.png",
      "phases": 1,
      "ticks": 60
     }
@@ -639,46 +861,848 @@
      "index": 10,
      "nom": "ecume",
      "file": "animation/nuit/ecume/ZRV2N_10_ecume_fNNN.png",
-     "phases": 12,
+     "phases": 10,
      "ticks": 10
     },
     {
      "index": 11,
-     "nom": "herbe",
-     "file": "calques/nuit/ZRV2N_11_herbe.png",
-     "phases": 1,
-     "ticks": 60
+     "nom": "bulles",
+     "file": "animation/nuit/bulles/ZRV2N_11_bulles_fNNN.png",
+     "phases": 24,
+     "ticks": 5
     },
     {
      "index": 12,
-     "nom": "chemin",
-     "file": "calques/nuit/ZRV2N_12_chemin.png",
+     "nom": "herbe",
+     "file": "calques/nuit/ZRV2N_12_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 13,
-     "nom": "fleurs",
-     "file": "animation/nuit/fleurs/ZRV2N_13_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 14,
-     "nom": "rochers",
-     "file": "calques/nuit/ZRV2N_14_rochers.png",
+     "nom": "chemin",
+     "file": "calques/nuit/ZRV2N_13_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 14,
+     "nom": "fleurs",
+     "file": "animation/nuit/fleurs/ZRV2N_14_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 15,
+     "nom": "rochers",
+     "file": "calques/nuit/ZRV2N_15_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 16,
      "nom": "buissons",
-     "file": "calques/nuit/ZRV2N_15_buissons.png",
+     "file": "calques/nuit/ZRV2N_16_buissons.png",
      "phases": 1,
      "ticks": 60
     }
    ]
   }
+ },
+ "crepuscule": {
+  "recalage": {
+   "ecart_moyen": 0.675,
+   "ecart_decale_1px": 0.828
+  },
+  "ecume_palette_8": [
+   [
+    [
+     57,
+     50,
+     89
+    ],
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     132,
+     86,
+     104
+    ],
+    [
+     129,
+     78,
+     91
+    ],
+    [
+     132,
+     86,
+     104
+    ],
+    [
+     185,
+     116,
+     116
+    ],
+    [
+     226,
+     156,
+     141
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ],
+   [
+    [
+     79,
+     50,
+     81
+    ],
+    [
+     57,
+     50,
+     89
+    ],
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     220,
+     150,
+     146
+    ],
+    [
+     132,
+     86,
+     104
+    ],
+    [
+     183,
+     107,
+     92
+    ],
+    [
+     165,
+     105,
+     113
+    ],
+    [
+     206,
+     140,
+     140
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ],
+   [
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     79,
+     50,
+     81
+    ],
+    [
+     57,
+     50,
+     89
+    ],
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     205,
+     138,
+     139
+    ],
+    [
+     220,
+     150,
+     146
+    ],
+    [
+     98,
+     65,
+     92
+    ],
+    [
+     183,
+     107,
+     92
+    ],
+    [
+     165,
+     105,
+     113
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     129,
+     78,
+     91
+    ]
+   ],
+   [
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     79,
+     50,
+     81
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     186,
+     116,
+     116
+    ],
+    [
+     205,
+     138,
+     139
+    ],
+    [
+     78,
+     56,
+     89
+    ],
+    [
+     98,
+     65,
+     92
+    ],
+    [
+     183,
+     107,
+     92
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     129,
+     78,
+     91
+    ]
+   ],
+   [
+    [
+     178,
+     114,
+     116
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     162,
+     104,
+     112
+    ],
+    [
+     186,
+     116,
+     116
+    ],
+    [
+     81,
+     48,
+     72
+    ],
+    [
+     81,
+     48,
+     72
+    ],
+    [
+     98,
+     65,
+     92
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     129,
+     78,
+     91
+    ]
+   ],
+   [
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     178,
+     114,
+     116
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     79,
+     50,
+     81
+    ],
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     132,
+     86,
+     104
+    ],
+    [
+     162,
+     104,
+     112
+    ],
+    [
+     81,
+     48,
+     72
+    ],
+    [
+     81,
+     48,
+     72
+    ],
+    [
+     98,
+     65,
+     92
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ],
+   [
+    [
+     110,
+     73,
+     96
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     178,
+     114,
+     116
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     162,
+     90,
+     88
+    ],
+    [
+     132,
+     86,
+     104
+    ],
+    [
+     78,
+     56,
+     89
+    ],
+    [
+     98,
+     65,
+     92
+    ],
+    [
+     183,
+     107,
+     92
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ],
+   [
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     110,
+     73,
+     96
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     178,
+     114,
+     116
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     129,
+     78,
+     91
+    ],
+    [
+     162,
+     90,
+     88
+    ],
+    [
+     98,
+     65,
+     92
+    ],
+    [
+     183,
+     107,
+     92
+    ],
+    [
+     165,
+     105,
+     113
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ],
+   [
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     110,
+     73,
+     96
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     205,
+     138,
+     139
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     146,
+     91,
+     104
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     76,
+     57,
+     94
+    ],
+    [
+     129,
+     78,
+     91
+    ],
+    [
+     183,
+     107,
+     92
+    ],
+    [
+     165,
+     105,
+     113
+    ],
+    [
+     206,
+     140,
+     140
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ],
+   [
+    [
+     74,
+     57,
+     94
+    ],
+    [
+     96,
+     64,
+     94
+    ],
+    [
+     111,
+     72,
+     96
+    ],
+    [
+     110,
+     73,
+     96
+    ],
+    [
+     186,
+     116,
+     116
+    ],
+    [
+     205,
+     138,
+     139
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     212,
+     145,
+     144
+    ],
+    [
+     129,
+     78,
+     91
+    ],
+    [
+     76,
+     57,
+     94
+    ],
+    [
+     132,
+     86,
+     104
+    ],
+    [
+     185,
+     116,
+     116
+    ],
+    [
+     226,
+     156,
+     141
+    ],
+    [
+     80,
+     49,
+     77
+    ],
+    [
+     76,
+     57,
+     94
+    ]
+   ]
+  ],
+  "bulles_couleurs": [
+   [
+    205,
+    138,
+    139
+   ],
+   [
+    205,
+    138,
+    139
+   ],
+   [
+    220,
+    150,
+    146
+   ]
+  ]
  },
  "access": {
   "entry_px": [
@@ -701,53 +1725,73 @@
   "assets": {
    "jour": "zrv2_zone_reveil_jour",
    "aube": "zrv2_zone_reveil_aube",
+   "crepuscule": "zrv2_zone_reveil_crepuscule",
    "nuit": "zrv2_zone_reveil_nuit"
   },
   "tiles_per_bank": {
    "ZRV2J_00_SOL": 2,
    "ZRV2J_01_CIEL": 1441,
-   "ZRV2J_04_NUAGES": 12134,
+   "ZRV2J_04_NUAGES": 7793,
    "ZRV2J_05_MONTAGNE": 283,
    "ZRV2J_06_MER": 1870,
    "ZRV2J_07_SCINTILLEMENT": 884,
-   "ZRV2J_08_HOULE": 707,
-   "ZRV2J_10_ECUME": 396,
-   "ZRV2J_11_HERBE": 3026,
-   "ZRV2J_12_CHEMIN": 145,
-   "ZRV2J_13_FLEURS": 2893,
-   "ZRV2J_14_ROCHERS": 74,
-   "ZRV2J_15_BUISSONS": 276,
+   "ZRV2J_08_HOULE": 1294,
+   "ZRV2J_10_ECUME": 1724,
+   "ZRV2J_11_BULLES": 118,
+   "ZRV2J_12_HERBE": 3026,
+   "ZRV2J_13_CHEMIN": 145,
+   "ZRV2J_14_FLEURS": 2893,
+   "ZRV2J_15_ROCHERS": 74,
+   "ZRV2J_16_BUISSONS": 276,
    "ZRV2A_00_SOL": 2,
    "ZRV2A_01_CIEL": 1441,
    "ZRV2A_03_ASTRE": 27,
-   "ZRV2A_04_NUAGES": 12134,
+   "ZRV2A_04_NUAGES": 7793,
    "ZRV2A_05_MONTAGNE": 283,
    "ZRV2A_06_MER": 1870,
    "ZRV2A_07_SCINTILLEMENT": 884,
-   "ZRV2A_08_HOULE": 884,
-   "ZRV2A_09_REFLET": 556,
-   "ZRV2A_10_ECUME": 396,
-   "ZRV2A_11_HERBE": 3256,
-   "ZRV2A_12_CHEMIN": 122,
-   "ZRV2A_13_FLEURS": 2892,
-   "ZRV2A_14_ROCHERS": 74,
-   "ZRV2A_15_BUISSONS": 276,
+   "ZRV2A_08_HOULE": 1355,
+   "ZRV2A_09_REFLET": 552,
+   "ZRV2A_10_ECUME": 1724,
+   "ZRV2A_11_BULLES": 118,
+   "ZRV2A_12_HERBE": 3256,
+   "ZRV2A_13_CHEMIN": 122,
+   "ZRV2A_14_FLEURS": 2892,
+   "ZRV2A_15_ROCHERS": 74,
+   "ZRV2A_16_BUISSONS": 276,
+   "ZRV2C_00_SOL": 2,
+   "ZRV2C_01_CIEL": 1441,
+   "ZRV2C_03_ASTRE": 38,
+   "ZRV2C_04_NUAGES": 7793,
+   "ZRV2C_05_MONTAGNE": 283,
+   "ZRV2C_06_MER": 1870,
+   "ZRV2C_07_SCINTILLEMENT": 884,
+   "ZRV2C_08_HOULE": 1350,
+   "ZRV2C_09_REFLET": 654,
+   "ZRV2C_10_ECUME": 1724,
+   "ZRV2C_11_BULLES": 118,
+   "ZRV2C_12_HERBE": 3267,
+   "ZRV2C_13_CHEMIN": 145,
+   "ZRV2C_14_FLEURS": 2894,
+   "ZRV2C_15_ROCHERS": 74,
+   "ZRV2C_16_BUISSONS": 276,
    "ZRV2N_00_SOL": 2,
    "ZRV2N_01_CIEL": 1441,
    "ZRV2N_02_ETOILES": 25,
    "ZRV2N_03_ASTRE": 65,
-   "ZRV2N_04_NUAGES": 12134,
+   "ZRV2N_04_NUAGES": 7793,
    "ZRV2N_05_MONTAGNE": 283,
    "ZRV2N_06_MER": 1870,
    "ZRV2N_07_SCINTILLEMENT": 883,
-   "ZRV2N_08_HOULE": 841,
-   "ZRV2N_09_REFLET": 517,
-   "ZRV2N_10_ECUME": 396,
-   "ZRV2N_11_HERBE": 3173,
-   "ZRV2N_12_CHEMIN": 156,
-   "ZRV2N_13_FLEURS": 2897,
-   "ZRV2N_14_ROCHERS": 74,
-   "ZRV2N_15_BUISSONS": 275
+   "ZRV2N_08_HOULE": 1318,
+   "ZRV2N_09_REFLET": 445,
+   "ZRV2N_10_ECUME": 1724,
+   "ZRV2N_11_BULLES": 118,
+   "ZRV2N_12_HERBE": 3173,
+   "ZRV2N_13_CHEMIN": 156,
+   "ZRV2N_14_FLEURS": 2897,
+   "ZRV2N_15_ROCHERS": 74,
+   "ZRV2N_16_BUISSONS": 275
   },
   "markers": {
    "reveil": [
