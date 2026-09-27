@@ -4,7 +4,7 @@
 
 - Aperçu : `apercu_zone_reveil_prairie_horizon_v2.html`. Boutons jour, aube, crépuscule et nuit, rejoué à 60 ticks/s, avec collisions et zoom sur l'horizon.
 - Lot : `renders/zone_reveil_prairie_horizon_v2/`. Il contient `ZRV2_projet_pmdo_0812.zip` (quatre Grounds), `ZRV2_calques_png_8px.zip` et un README détaillé.
-- Source : `source/zone_reveil_prairie_horizon_v2/`, 16 tests PASS.
+- Source : `source/zone_reveil_prairie_horizon_v2/`, 17 tests PASS, 5 mutations vérifiées.
 
 **Demande de l'utilisateur** :
 
