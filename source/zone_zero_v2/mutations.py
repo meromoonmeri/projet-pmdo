@@ -52,7 +52,11 @@ def m_herbes_sur_falaise():
 def m_herbe_floue():
     p = O / f'calques/{P}_06_sol.png'; a = img(p); m = (a[..., :3] == (135, 247, 119)).all(2); m[::2] = False; a[m, :3] = (128, 238, 108); save(p, a)
 def m_embruns_loin():
-    p = O / f'animation/embruns/{P}_14_embruns_f03.png'; a = img(p); a[300:304, 380:384] = (255, 255, 255, 255); save(p, a)
+    p = O / f'animation/embruns/{P}_14_embruns_f03.png'; a = img(p); near = np.zeros(a.shape[:2], bool)
+    for c in json.loads((O / 'manifest.json').read_text())['cascades']['rects']:
+        near[max(0, c['y0']):c['y1'] + 24, max(0, c['x0'] - 30):c['x1'] + 30] = True
+    y, x = next((y, x) for y, x in ((300, 380), (500, 200), (300, 600), (560, 20), (100, 700)) if not near[y:y + 4, x:x + 4].any())
+    a[y:y + 4, x:x + 4] = (255, 255, 255, 255); save(p, a)
 def m_embruns_figes(): save(O / f'animation/embruns/{P}_14_embruns_f05.png', img(O / f'animation/embruns/{P}_14_embruns_f04.png'))
 def m_papillon_saut(): man(lambda d: d['haute_qualite']['papillons']['trajets'][0][10].__setitem__(0, d['haute_qualite']['papillons']['trajets'][0][10][0] + 30))
 def m_papillons_absents():
