@@ -15,7 +15,7 @@
   - **touffes au vent** : poses et cycle de l'entrée Bristle, 12 × 10, rafale d'ouest ;
   - **rafales de sable** : 44 traînées claires qui naissent, filent vers l'est et s'éteignent, 24 × 5. Chaque traînée refait le même trajet, donc la boucle est exacte.
   - La scène boucle en 2 s.
-- Fidélité : sable 13.42 (seuil 35), roche grise 14.79 (seuil 25). Vignette : 35.62, garde-fou large à 45, car elle est floue et désaturée.
+- Fidélité : sable 13.25 (seuil 35), roche grise 14.75 (seuil 25). Vignette : 35.76, garde-fou large à 45, car elle est floue et désaturée.
 - 8 tests PASS. 6 mutations détectées : rafales figées, rafales sur la roche, rafales invisibles, touffes figées, ouverture au nord, Azurill loin du fond.
 - Aperçu : `apercu_fin_bristle_sommet_v1.html`. Paquets : `FBS1_projet_pmdo_0812.zip` (1.4 Mo) et `FBS1_calques_png_8px.zip` (4.26 Mo).
 - Pixels générés ou calculés, pas de tuiles natives. Pas de runtime. Pas dans le mod unique.
