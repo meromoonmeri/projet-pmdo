@@ -1,5 +1,31 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RAZ3 — Réseau Zone Zéro, route 3 : fond cristallin (28 septembre 2026)
+
+**Demande** : « je choisis toutes les options recommandées + 3 routes, choisis les textures de référence pour composer cette zone inédite », dernière route du réseau (RAZ1 → RAZ2 → **RAZ3** → EAZ1).
+
+- `renders/zone_zero_v1/RAZ3/` (préfixe `RAZ3`, aperçu `apercu_route_zone_zero_3.html`).
+- **Références composées** (choix de l'agent), toutes vérifiées au pixel près :
+  - `D17P34A`, le lac de cristal : matière et loi de l'eau ;
+  - `P03P01A` : la loi et la palette des cascades ;
+  - `D17P11A`, l'entrée de la grotte de cristal : comparaison de la roche, et référence gardée pour EAZ1.
+- Le brut est généré à partir des deux découpes de style ×2, en une seule passe.
+- **Layout** :
+  - un lac remplit le cratère ;
+  - un chemin de sol hexagonal lumineux part du sud et s'ouvre sur une grande place de cristal (`place`) ;
+  - le chemin se resserre ensuite par une rangée de dalles plates jusqu'au **tunnel sombre de la paroi nord** (`sortie`, vers EAZ1) ;
+  - deux cascades tombent de la paroi de roche bleue dans le lac.
+- **Écarts au plan annoncé** : les parois sont en roche bleue incrustée de cristaux, pas en ocre. La sortie est le tunnel de la paroi nord, pas le bord haut.
+- **Eau à la loi de la ROM** (relevée sur le rendu animé de D17P34A) : 4 images de 10 ticks, toutes différentes, cycle 0-1-2-3, sans aller-retour ni défilement, 11 à 17 % des pixels changent à chaque image.
+  - Recalculée avec les 12 tons exacts de l'eau native : cellules de Worley arrondies q = F1/F2 de 52 × 24 px, dans un domaine déformé par des sinus fixes pour onduler les traits.
+  - Chaque centre fait un tour de son petit cercle en 4 phases.
+- Les dalles hexagonales plates sont aussi claires que les cristaux : elles sont comptées comme sol par un rectangle mesuré sur le brut, sinon le chemin nord est coupé de la place.
+- Fidélité (seuil 35) : sol 10,9, sol complet 9,5, cristaux 31,6. La roche (62,2 contre D17P11A, plus grise) est signalée et non seuillée.
+- Scintillements : 90 éclats aux teintes téra sur les cristaux, 12 × 5 ticks.
+- 9 tests PASS : tons exacts de la ROM, boucle sans aller-retour ni défilement, décalage exact de 32 px des cascades, un seul sol continu, sortie devant le tunnel. 7 mutations détectées.
+- Paquets : `RAZ3_projet_pmdo_0812.zip` (1,6 Mo) et `RAZ3_calques_png_8px.zip` (6,0 Mo). Pas de runtime, pas de warp.
+- Suivants : **EAZ1**, l'entrée de la grotte de cristal (D17P11A), puis une **zone de ruines** où des Zarbi sortent de déchirures de la réalité.
+
 ## RAZ2 — Réseau Zone Zéro, route 2 : terrasses aux cascades (28 septembre 2026)
 
 **Demande** : « la suite !! », deuxième map du réseau Zone Zéro (RAZ1 → **RAZ2** → RAZ3 → EAZ1).
