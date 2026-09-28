@@ -1173,3 +1173,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Vérifier un préfixe sur les 72 branches sans rien fetcher** : `gh api repos/<repo>/git/trees/<sha>?recursive=1`, avec les SHA de `git ls-remote --heads` ; vérifier aussi `truncated`. Compter environ 2 minutes.
 - **Mutations** : le script est versionné (`source/zone_zero_v2/mutations.py <lot>`) et survit aux réinitialisations de l'espace de travail.
 
+## Zone Zéro fleurie — passe haute qualité (RAF1-3), ajouts à la recette
+
+- **Réduction ×0,64 = herbe floue** : pour une herbe « Sky Peak HQ », aplatir au ton dominant de la référence les pixels de la règle d'herbe **à moins de 40 du ton dominant du lot**. Sans cette borne, le chemin d'herbe rase clair de RAF1 disparaissait. Ensuite, semer des touffes et des fleurs **calculées**, nettes, animées en A B A C comme le GIF.
+- **Quantification commune sol + sol complet** : le médian-cut, dominé par l'herbe, écrasait les buissons ronds du sol en un seul olive (84,110,52). Quantifier chaque calque seul (sol : 128 couleurs).
+- **Massifs de fleurs soudés aux falaises** : la règle des pétales attrape aussi la roche turquoise saturée. Aucune règle de couleur ni de composante ne les sépare. Ils sont relevés à la main en boîtes 768 × 576 (`massifs_falaise` dans la config), rendus au sol et redessinés.
+- **Embruns** : les faire partir du bord haut de l'écume (masque d'écume), pas de `y1` du rectangle de cascade, qui tombe au milieu de l'écume (blanc sur blanc, invisible).
+- **Fleurs redessinées** : découper les images sur la zone admise (praticable, lisière, troncs, arbres, végétation), sinon l'ombre et le penché débordent sur les parois.
+- **Perte de travail** : l'espace de travail a été réinitialisé en pleine passe ; `haute_qualite.py`, non poussé, a dû être réécrit. Pousser dès que le module existe, même avant les tests.
+

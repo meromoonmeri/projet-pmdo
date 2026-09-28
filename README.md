@@ -1,5 +1,39 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RAF1, RAF2, RAF3 — passe « haute qualité » (28 septembre 2026)
+
+**Demande** : « faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualité less fleur avec plein de couleur des cascade de la brume etc ».
+
+Les trois routes fleuries sont refaites **en place** : mêmes préfixes, l'ancien état reste dans l'historique git. RAZ1-3 et EAZ1 ne sont pas touchées.
+
+**Constat** : à Sky Peak, l'herbe est un aplat franc semé de touffes en étoile et de fleurs rondes nettes, et toute la prairie se balance en A B A C. Chez nous, la réduction ×0,64 donnait une herbe floue et des fleurs baveuses.
+
+La nouvelle passe `source/zone_zero_v2/haute_qualite.py` est appelée par `build.py` après `make_all`. **Tout y est calculé** ; seuls les tons sont relevés sur le GIF :
+- **Herbe** : aplat au ton dominant de Sky Peak (135,247,119), à moins de 40 du ton du lot, donc le chemin clair reste.
+- **Nettoyage** : les restes flous et les tiges maigres redeviennent de l'herbe.
+- **Massifs flous repris** :
+  - ceux du sol, automatiquement ;
+  - ceux classés falaises, par boîtes `massifs_falaise` (RAF2 : 2, RAF3 : 6), qui deviennent praticables.
+- **Nouveau calque `herbes`** : touffes en étoile, 4 × 12 ticks en A B A C.
+- **Fleurs** : sprites nets de 7 px (4 pétales, reflet, cœur, ombre verte) en **8 couleurs**, plus des massifs en plus. Même loi A B A C.
+- **Nouveau calque `embruns`** : 24 × 10 ticks. Des gouttelettes partent du haut de l'écume de chaque cascade et montent de 34 px.
+- **Nouveau calque `papillons`** : 48 × 10 ticks, boucles de Lissajous fermées, pas ≤ 4 px.
+- **Quantification** : le sol est quantifié seul sur 128 couleurs, sinon les buissons ronds tombaient en olive plat. Les falaises et les buissons passent à 96 couleurs.
+
+Résultats :
+
+| Lot | Calques | Fleurs | Touffes | Papillons | Herbe | Arbres | Falaises |
+|---|---|---|---|---|---|---|---|
+| RAF1 | 16 | 141 | 66 | 8 | 12,1 | 8,5 | 32,4 |
+| RAF2 | 16 | 217 | 51 | 5 | 10,4 | 8,5 | 21,5 |
+| RAF3 | 16 | 270 | 55 | 8 | 10,7 | 8,5 | 44,8 (signalée) |
+
+- Le seuil strict de l'herbe passe de 12 à 15, car l'aplat au ton dominant est à 11,4 de la moyenne de la règle d'herbe du GIF.
+- **Tests** : 12/12 par lot, dont le nouveau `test_haute_qualite`.
+- **Mutations** : 23/23 détectées par lot (8 nouvelles pour la passe HQ).
+- Paquets PMDO 0.8.12 et ZIP de calques refaits : RAF1 1,3 / 8,0 Mo, RAF2 1,3 / 8,2 Mo, RAF3 1,3 / 7,5 Mo.
+- Pas de runtime, pas de warp.
+
 ## RAF3 — Zone Zéro fleurie : fond du cratère et tunnel (28 septembre 2026)
 
 **Demande** (renvoyée telle quelle) : « pour les zone arena faut la texture sky peak et les fleur de différente couleur et les arbre pmd et les cascade garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur ». RAF1 et RAF2 couvraient déjà RAZ1 et RAZ2 ; **RAF3** fait la même chose pour **RAZ3**, qui est gardée. EAZ1, un intérieur de grotte, n'est pas retouchée.
