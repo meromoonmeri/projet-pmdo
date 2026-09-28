@@ -387,7 +387,8 @@ def build():
     masks = dict(sol=ex['floor'], cristaux=ex['walls'], embleme=D['emb'], runes=D['rl'] > 0)
     for k, v in masks.items():
         Image.fromarray((v * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_masque_{k}.png')
-    Image.fromarray((D['rl'] * 20).astype('uint8')).save(OUT / 'masques' / f'{PFX}_etiquettes_runes.png')
+    assert D['rl'].max() * 18 <= 255                                                       # 14 x 18 = 252
+    Image.fromarray((D['rl'] * 18).astype('uint8')).save(OUT / 'masques' / f'{PFX}_etiquettes_runes.png')
     stack_named = [('sol_complet', [layers['sol_complet']], 60), ('sol', [layers['sol']], 60), ('cristaux', [layers['cristaux']], 60),
                    ('reflets', D['reff'], REF_TICKS), ('embleme', D['ef'], EMB_TICKS), ('runes', D['rf'], EMB_TICKS),
                    ('scintillements', D['sf'], SPK_TICKS)]
