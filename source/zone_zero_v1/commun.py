@@ -45,7 +45,7 @@ def cascade_column(w, h, t, seed):
     n2 = rng.integers(0, 11, w)[None, :].astype(float)                       # stries des zones bleues
     n3 = rng.integers(0, 7, w)[None, :].astype(float)                        # flammes au-dessus de la bande
     y = np.arange(h)[:, None]
-    d = (y - CASC_STEP * t - 8 * (1 - u)) % CASC_PERIOD                     # V : la bande descend plus bas au centre
+    d = (y - CASC_STEP * t - np.round(8 * (1 - u)).astype(int)) % CASC_PERIOD   # V (décalage entier : raccord exact)
     par = (x[None, :] + y) % 2
     reach = 0.78 - 0.66 * np.clip((d - 20 - 0.5 * n2) / 68, 0, 1) + 0.05 * (n2 - 5) / 5   # cœur marine en pointe vers le bas
     lvl = np.where(u < reach, 0, np.where(u < reach + 0.1, 1, np.where(u > 0.58, np.where(n2 % 3 == 0, 3, 4), np.where(n2 % 2 == 0, 3, 2))))

@@ -91,7 +91,8 @@ def classify(a):
     blue = (b > r + 40) & (b >= g) & ~void
     white = (mn > 165) & (b >= r - 5) & ~void
     pool = (g > r + 30) & (b > g) & (r < 50) & (b < 120) & ~void
-    cols = (blue | white)[0:40].mean(0) > 0.9                                  # cascades : colonnes d'eau qui partent du bord haut
+    cols = (blue | white)[0:40].mean(0) > 0.75                                 # cascades : colonnes d'eau qui partent du bord haut
+    cols = nd.binary_closing(cols, iterations=3)                               # stries sombres du bord comprises
     runs, x = [], 0
     while x < Ws:
         if cols[x]:
@@ -109,8 +110,8 @@ def classify(a):
         y = 0
         while y < Hs and wet[y]:
             y += 1
-        wide = wh[:, max(0, x0 - 10):x0].mean(1) + wh[:, x1:x1 + 10].mean(1)      # l'écume déborde de la colonne
-        yb = next((yy for yy in range(60, min(Hs, y + 40)) if wide[yy] > 0.6), y)
+        wide = np.minimum(wh[:, max(0, x0 - 10):x0].mean(1), wh[:, x1:x1 + 10].mean(1))   # l'écume déborde des deux côtés
+        yb = next((yy for yy in range(y // 2, min(Hs, y + 40)) if wide[yy] > 0.3), y)
         falls.append({'x0': x0, 'x1': x1, 'y_ecume': int(yb)}); casc[:yb, x0:x1] = True
     lab, _ = nd.label(wh & ~casc); foam = np.zeros_like(casc)
     for f in falls:
@@ -201,9 +202,12 @@ def fidelity(D):
     m768 = D['mat'][ys[:, None], xs[None, :]]
     mat768 = {k: m768 == i for i, k in enumerate(('prairie', 'chemin', 'pelouse'))}
     sol = D['layers']['sol']; walk = sol[..., 3] == 255
-    for nm, lay, mask in (('prairie', sol, walk & mat768['prairie']), ('pelouse', sol, walk & mat768['pelouse']),
+    mats = [('prairie', sol, walk & mat768['prairie'])]
+    if (walk & mat768['pelouse']).sum() > 0.05 * walk.sum():                  # pelouse mesurée seulement si c'est une vraie matière
+        mats.append(('pelouse', sol, walk & mat768['pelouse']))
+    for nm, lay, mask in mats + [
                           ('sol_complet', D['layers']['sol_complet'], D['layers']['sol_complet'][..., 3] == 255),
-                          ('falaises', D['layers']['falaises'], D['layers']['falaises'][..., 3] == 255)):
+                          ('falaises', D['layers']['falaises'], D['layers']['falaises'][..., 3] == 255)]:
         crop = REF_CROPS['prairie' if nm == 'sol_complet' else nm]
         px = lay[mask][:, :3].astype(float); x0, y0, x1, y1 = crop
         ref = rip[y0:y1, x0:x1].reshape(-1, 3).mean(0); ours = px.mean(0)
@@ -212,6 +216,9 @@ def fidelity(D):
     px = sol[walk & mat768['chemin']][:, :3].astype(float)
     out['chemin'] = {'rgb': [round(float(v), 1) for v in px.mean(0)], 'pixels': int(len(px)),
                      'note': 'herbe rase claire : ton absent de P03P01A (choix du generateur, garde comme matiere a part), non seuille'}
+    if 'pelouse' not in out:
+        out['pelouse_absente'] = {'pixels': int((walk & mat768['pelouse']).sum()),
+                                  'note': 'la pelouse du bord gauche a ete remplacee par des buissons (edition : aucune sortie laterale)'}
     out['seuil'] = FIDELITY_MAX
     return out
 
@@ -238,6 +245,16 @@ def ground_project(stack, blocked, markers, gfx, tools):
     return counts
 
 
+EDIT_ZONE = (540, 860, 0, 330)              # zone de l'édition (y0, y1, x0, x1) dans le brut
+
+
+def edit_gap():
+    a, b = rgb(RAW / 'decor_magenta_v0.png'), rgb(RAW / 'decor_magenta.png')
+    d = np.abs(a - b).sum(2); z = np.zeros(d.shape, bool); y0, y1, x0, x1 = EDIT_ZONE; z[y0:y1, x0:x1] = True
+    return {'zone_y0_y1_x0_x1': list(EDIT_ZONE), 'somme_rvb_moyenne': round(float(d[~z].mean()), 2),
+            'part_pixels_ecart_60': round(float((d[~z] > 60).mean()), 4)}
+
+
 def reach_map(blocked, start):
     """Cases (coin haut-gauche d'un personnage 2 x 2) atteignables depuis start, 4-voisinage."""
     gh, gw = blocked.shape
@@ -258,7 +275,7 @@ def build():
         (OUT / d).mkdir(parents=True, exist_ok=True)
     D = make_all(); layers, ex = D['layers'], D['ex']
     fid = fidelity(D)
-    assert all(fid[k]['distance'] < FIDELITY_MAX for k in ('prairie', 'pelouse', 'sol_complet', 'falaises')), fid
+    assert all(fid[k]['distance'] < FIDELITY_MAX for k in ('prairie', 'pelouse', 'sol_complet', 'falaises') if k in fid), fid
     for k, v in ex.items():
         Image.fromarray((v * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_masque_{k}.png')
     Image.fromarray((D['casc'] * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_masque_cascades_rect.png')
@@ -344,8 +361,13 @@ def build():
                   'plage de prairie du brut en miroir',
         'reference_da': {'code': 'P03P01A', 'fichier': 'source/zone_zero_v1/reference/P03P01A.png', 'sha256': sha(REF),
                          'origine': 'capture junglewaterfallzonepmdsky.png, identifiee P03P01A au pixel pres par source/outil_maps_pmdsky'},
-        'raw_inputs': [{'file': f'source/{LOT}/bruts/decor_magenta.png', 'sha256': sha(RAW / 'decor_magenta.png'), 'size': list(SRC),
-                        'images': ['source/zone_zero_v1/reference/P03P01A_decoupe_style_x2.png'], 'utilise': True}],
+        'raw_inputs': [{'file': f'source/{LOT}/bruts/decor_magenta_v0.png', 'sha256': sha(RAW / 'decor_magenta_v0.png'), 'size': list(SRC),
+                        'images': ['source/zone_zero_v1/reference/P03P01A_decoupe_style_x2.png'], 'utilise': False,
+                        'note': 'premier rendu ; la pelouse touchait le bord gauche (sortie laterale)'},
+                       {'file': f'source/{LOT}/bruts/decor_magenta.png', 'sha256': sha(RAW / 'decor_magenta.png'), 'size': list(SRC),
+                        'images': [f'source/{LOT}/bruts/decor_magenta_v0.png'], 'utilise': True,
+                        'edition': 'un seul changement : bande de buissons le long du bord gauche (y 600-780)',
+                        'ecart_hors_zone': edit_gap()}],
         'sol_complet': {'methode': 'plage du brut en miroir', 'plage_y0_y1_x0_x1': list(SOL_PATCH),
                         'note': 'deux sols generes ecartes (trop sature, distance ~35 ; puis generateur sans reponse)'},
         'normalization': {'scale': S, 'crop_x': JM.CROP_X, 'miettes_vers_buissons_px': D['n_speck'],
