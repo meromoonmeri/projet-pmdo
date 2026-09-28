@@ -203,13 +203,13 @@
     160.0
    ],
    "rgb": [
-    84.5,
-    123.1,
-    137.1
+    85.9,
+    124.9,
+    138.5
    ],
    "pixels_ref": 28590,
-   "pixels": 134194,
-   "distance": 51.99
+   "pixels": 141573,
+   "distance": 49.52
   },
   "arbres": {
    "ref": "Apple_Woods_entrance_TDS, coeurs de 4 feuillages (boites 30 x 30 verifiees a l oeil)",
@@ -1858,9 +1858,10 @@
   }
  },
  "cristaux": {
-  "pixels_cristal": 70289,
-  "pixels_contour": 4186,
+  "pixels_cristal": 57437,
+  "pixels_contour": 2393,
   "eclats": 36,
+  "bases_piliers": 137,
   "tons_base": [
    [
     150,
@@ -2150,7 +2151,7 @@
   "phases": 24,
   "frame_length_ticks": 10,
   "demande": "je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc",
-  "loi": "cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs) sortis du calque falaises ; base blanche en 5 tons selon la luminance d origine (les facettes restent) + contour indigo ; reflets : bande diagonale de 34 px (periode 96 px, +4 px par phase) aux 8 teintes de l arc-en-ciel posees sur le blanc, teinte = ((x + y) / 8 + t / 3) mod 8 (la couleur tourne : rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ; 36 eclats 1-2-3-2-1",
+  "loi": "cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs ; composantes gardees si >= 5 % de facettes tres claires, lum > 205, pour laisser les reflets de roche) sortis du calque falaises, bases menthe des piliers du calque sol rattachees ; base blanche en 5 tons selon la luminance d origine (les facettes restent) + contour indigo ; reflets : bande diagonale de 34 px (periode 96 px, +4 px par phase) aux 8 teintes de l arc-en-ciel posees sur le blanc, teinte = ((x + y) / 8 + t / 3) mod 8 (la couleur tourne : rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ; 36 eclats 1-2-3-2-1",
   "nature": "pixels calcules (recoloration des cristaux du brut genere), pas des tuiles natives"
  },
  "scene_loop_ticks": 480,
@@ -2195,9 +2196,9 @@
    "EAF1_04_LUEURS": 137,
    "EAF1_05_EAU": 264,
    "EAF1_06_SOL": 895,
-   "EAF1_07_FALAISES": 3690,
-   "EAF1_08_CRISTAUX": 2044,
-   "EAF1_09_REFLETS": 13081,
+   "EAF1_07_FALAISES": 3718,
+   "EAF1_08_CRISTAUX": 1332,
+   "EAF1_09_REFLETS": 10225,
    "EAF1_10_HERBES": 168,
    "EAF1_11_FLEURS": 1077,
    "EAF1_12_BUISSONS": 229,

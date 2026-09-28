@@ -745,7 +745,7 @@ def build(m):
                        if k in [t for t, _, _ in stack_named]},
         'cristaux': None if D['cristaux'] is None else dict(D['cristaux_stats'], phases=HQ.REFLETS_PHASES, frame_length_ticks=HQ.REFLETS_TICKS,
             demande='je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc',
-            loi=('cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs) sortis du calque falaises ; '
+            loi=('cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs ; composantes gardees si >= 5 % de facettes tres claires, lum > 205, pour laisser les reflets de roche) sortis du calque falaises, bases menthe des piliers du calque sol rattachees ; '
                  'base blanche en 5 tons selon la luminance d origine (les facettes restent) + contour indigo ; reflets : bande diagonale '
                  'de 34 px (periode 96 px, +4 px par phase) aux 8 teintes de l arc-en-ciel posees sur le blanc, teinte = ((x + y) / 8 + t / 3) mod 8 '
                  '(la couleur tourne : rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ; 36 eclats 1-2-3-2-1'),

@@ -187,13 +187,13 @@
     160.0
    ],
    "rgb": [
-    85.1,
-    134.7,
-    144.4
+    84.4,
+    133.6,
+    143.9
    ],
    "pixels_ref": 28590,
-   "pixels": 41156,
-   "distance": 44.78
+   "pixels": 37694,
+   "distance": 45.82
   },
   "arbres": {
    "ref": "Apple_Woods_entrance_TDS, coeurs de 4 feuillages (boites 30 x 30 verifiees a l oeil)",
@@ -259,14 +259,16 @@
   "animation/eau/RAF3_05_eau_fNN.png",
   "calques/RAF3_06_sol.png",
   "calques/RAF3_07_falaises.png",
-  "animation/herbes/RAF3_08_herbes_fNN.png",
-  "animation/fleurs/RAF3_09_fleurs_fNN.png",
-  "calques/RAF3_10_buissons.png",
-  "calques/RAF3_11_arbres.png",
-  "animation/cascades/RAF3_12_cascades_fNN.png",
-  "animation/ecume/RAF3_13_ecume_fNN.png",
-  "animation/embruns/RAF3_14_embruns_fNN.png",
-  "animation/papillons/RAF3_15_papillons_fNN.png"
+  "calques/RAF3_08_cristaux.png",
+  "animation/reflets/RAF3_09_reflets_fNN.png",
+  "animation/herbes/RAF3_10_herbes_fNN.png",
+  "animation/fleurs/RAF3_11_fleurs_fNN.png",
+  "calques/RAF3_12_buissons.png",
+  "calques/RAF3_13_arbres.png",
+  "animation/cascades/RAF3_14_cascades_fNN.png",
+  "animation/ecume/RAF3_15_ecume_fNN.png",
+  "animation/embruns/RAF3_16_embruns_fNN.png",
+  "animation/papillons/RAF3_17_papillons_fNN.png"
  ],
  "profondeur": {
   "carte": "assombrissement lisse (gaussienne 6) du gouffre genere, normalise p5-p95, nul au bord (10 px)",
@@ -533,6 +535,7 @@
     240,
     110
    ],
+   "seuil_aplat": 40,
    "herbe_aplatie_px": 134202,
    "restes_flous_px": 1101,
    "tiges_effacees_px": 3155,
@@ -2555,7 +2558,309 @@
    "phases": 48,
    "frame_length_ticks": 10,
    "boucle_ticks": 480
+  },
+  "reflets": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 240
   }
+ },
+ "cristaux": {
+  "pixels_cristal": 32447,
+  "pixels_contour": 1685,
+  "eclats": 36,
+  "bases_piliers": 156,
+  "tons_base": [
+   [
+    150,
+    156,
+    196
+   ],
+   [
+    188,
+    194,
+    226
+   ],
+   [
+    220,
+    224,
+    244
+   ],
+   [
+    240,
+    242,
+    252
+   ],
+   [
+    255,
+    255,
+    255
+   ]
+  ],
+  "contour": [
+   92,
+   96,
+   140
+  ],
+  "arc_en_ciel": {
+   "rouge": [
+    255,
+    96,
+    120
+   ],
+   "orange": [
+    255,
+    164,
+    88
+   ],
+   "jaune": [
+    255,
+    232,
+    104
+   ],
+   "vert": [
+    128,
+    232,
+    140
+   ],
+   "cyan": [
+    104,
+    222,
+    255
+   ],
+   "bleu": [
+    122,
+    140,
+    255
+   ],
+   "mauve": [
+    192,
+    118,
+    255
+   ],
+   "rose": [
+    255,
+    120,
+    210
+   ]
+  },
+  "palette_reflets": [
+   [
+    116,
+    203,
+    238
+   ],
+   [
+    127,
+    214,
+    246
+   ],
+   [
+    129,
+    144,
+    238
+   ],
+   [
+    134,
+    210,
+    155
+   ],
+   [
+    136,
+    222,
+    251
+   ],
+   [
+    140,
+    155,
+    246
+   ],
+   [
+    144,
+    221,
+    164
+   ],
+   [
+    149,
+    163,
+    251
+   ],
+   [
+    153,
+    229,
+    169
+   ],
+   [
+    161,
+    230,
+    253
+   ],
+   [
+    167,
+    235,
+    255
+   ],
+   [
+    171,
+    182,
+    253
+   ],
+   [
+    175,
+    236,
+    187
+   ],
+   [
+    177,
+    188,
+    255
+   ],
+   [
+    180,
+    128,
+    238
+   ],
+   [
+    181,
+    241,
+    188
+   ],
+   [
+    190,
+    139,
+    246
+   ],
+   [
+    199,
+    147,
+    251
+   ],
+   [
+    212,
+    170,
+    253
+   ],
+   [
+    218,
+    175,
+    255
+   ],
+   [
+    225,
+    112,
+    141
+   ],
+   [
+    225,
+    130,
+    206
+   ],
+   [
+    225,
+    161,
+    118
+   ],
+   [
+    225,
+    210,
+    129
+   ],
+   [
+    232,
+    240,
+    255
+   ],
+   [
+    236,
+    123,
+    149
+   ],
+   [
+    236,
+    140,
+    214
+   ],
+   [
+    236,
+    172,
+    126
+   ],
+   [
+    236,
+    221,
+    138
+   ],
+   [
+    245,
+    131,
+    154
+   ],
+   [
+    245,
+    149,
+    219
+   ],
+   [
+    245,
+    180,
+    131
+   ],
+   [
+    245,
+    229,
+    143
+   ],
+   [
+    248,
+    157,
+    175
+   ],
+   [
+    248,
+    171,
+    227
+   ],
+   [
+    248,
+    196,
+    156
+   ],
+   [
+    248,
+    236,
+    166
+   ],
+   [
+    255,
+    162,
+    176
+   ],
+   [
+    255,
+    176,
+    228
+   ],
+   [
+    255,
+    202,
+    158
+   ],
+   [
+    255,
+    241,
+    167
+   ],
+   [
+    255,
+    255,
+    255
+   ]
+  ],
+  "phases": 24,
+  "frame_length_ticks": 10,
+  "demande": "je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc",
+  "loi": "cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs ; composantes gardees si >= 5 % de facettes tres claires, lum > 205, pour laisser les reflets de roche) sortis du calque falaises, bases menthe des piliers du calque sol rattachees ; base blanche en 5 tons selon la luminance d origine (les facettes restent) + contour indigo ; reflets : bande diagonale de 34 px (periode 96 px, +4 px par phase) aux 8 teintes de l arc-en-ciel posees sur le blanc, teinte = ((x + y) / 8 + t / 3) mod 8 (la couleur tourne : rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ; 36 eclats 1-2-3-2-1",
+  "nature": "pixels calcules (recoloration des cristaux du brut genere), pas des tuiles natives"
  },
  "scene_loop_ticks": 480,
  "access": {
@@ -2599,15 +2904,17 @@
    "RAF3_04_LUEURS": 136,
    "RAF3_05_EAU": 370,
    "RAF3_06_SOL": 1194,
-   "RAF3_07_FALAISES": 2684,
-   "RAF3_08_HERBES": 186,
-   "RAF3_09_FLEURS": 1280,
-   "RAF3_10_BUISSONS": 441,
-   "RAF3_11_ARBRES": 641,
-   "RAF3_12_CASCADES": 141,
-   "RAF3_13_ECUME": 265,
-   "RAF3_14_EMBRUNS": 760,
-   "RAF3_15_PAPILLONS": 659
+   "RAF3_07_FALAISES": 2513,
+   "RAF3_08_CRISTAUX": 946,
+   "RAF3_09_REFLETS": 6907,
+   "RAF3_10_HERBES": 186,
+   "RAF3_11_FLEURS": 1280,
+   "RAF3_12_BUISSONS": 441,
+   "RAF3_13_ARBRES": 641,
+   "RAF3_14_CASCADES": 141,
+   "RAF3_15_ECUME": 265,
+   "RAF3_16_EMBRUNS": 760,
+   "RAF3_17_PAPILLONS": 659
   },
   "banks": [
    "RAF3_00_SOL",
@@ -2618,14 +2925,16 @@
    "RAF3_05_EAU",
    "RAF3_06_SOL",
    "RAF3_07_FALAISES",
-   "RAF3_08_HERBES",
-   "RAF3_09_FLEURS",
-   "RAF3_10_BUISSONS",
-   "RAF3_11_ARBRES",
-   "RAF3_12_CASCADES",
-   "RAF3_13_ECUME",
-   "RAF3_14_EMBRUNS",
-   "RAF3_15_PAPILLONS"
+   "RAF3_08_CRISTAUX",
+   "RAF3_09_REFLETS",
+   "RAF3_10_HERBES",
+   "RAF3_11_FLEURS",
+   "RAF3_12_BUISSONS",
+   "RAF3_13_ARBRES",
+   "RAF3_14_CASCADES",
+   "RAF3_15_ECUME",
+   "RAF3_16_EMBRUNS",
+   "RAF3_17_PAPILLONS"
   ],
   "runtime_tested": false,
   "warp": "aucun (raccords a scripter)"

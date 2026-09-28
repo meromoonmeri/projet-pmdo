@@ -425,23 +425,38 @@ def crystal_mask(fal):
     rgb = fal[..., :3].astype(int); r, g, b = rgb.transpose(2, 0, 1)
     lum = rgb @ [.299, .587, .114]; mn = rgb.min(2); sat = rgb.max(2) - mn; al = fal[..., 3] == 255
     body = al & (((g - r > 45) & (g - b < 50) & (b - r > 20) & (lum > 125)) | ((mn > 200) & (sat < 70)))
+    lab, n = nd.label(body); idx = np.arange(1, n + 1)
+    sz = nd.sum(body, lab, idx); pale = nd.sum(body & (lum > 205), lab, idx)
+    # un vrai cristal a des facettes très claires ; les reflets de roche turquoise (145,197,196) n'en ont pas
+    body = np.isin(lab, idx[(sz >= 12) & (pale >= 0.05 * sz)])
     body = nd.binary_closing(body, iterations=1) & al
-    lab, n = nd.label(body); sz = nd.sum(body, lab, range(1, n + 1))
-    body = np.isin(lab, [i + 1 for i, v in enumerate(sz) if v >= 12])
     nb = nd.convolve(body.astype(int), np.ones((3, 3), int), mode='constant')
     outline = al & ~body & (nb >= 3) & (lum < 125)
     return body, outline, lum
 
 
+def pillar_bases(sol, body):
+    """Bases menthe des piliers de cristal peintes dans le calque sol (176,235,158) : rattachées si elles touchent un cristal."""
+    rgb = sol[..., :3].astype(int); r, g, b = rgb.transpose(2, 0, 1); lum = rgb @ [.299, .587, .114]
+    m = (sol[..., 3] == 255) & (r > 150) & (g - r > 35) & (g - r < 85) & (lum > 185) & (b > 120)
+    lab, n = nd.label(m)
+    hit = np.unique(lab[nd.binary_dilation(body, iterations=2) & m])
+    return np.isin(lab, hit[hit > 0])
+
+
 def crystal_pass(D, rng):
     L = D['layers']; fal = L['falaises']
     body, outline, lum = crystal_mask(fal)
+    ext = pillar_bases(L['sol'], body) & ~body & ~outline
+    if ext.any():
+        srgb = L['sol'][..., :3].astype(int) @ np.array([.299, .587, .114])
+        lum = np.where(ext, srgb, lum); body = body | ext
     level = np.digitize(lum, [150, 175, 200, 225])                                 # 0..4
     base = np.zeros((H, W, 4), 'uint8')
     for k, t in enumerate(CRISTAL_TONS):
         m = body & (level == k); base[m, :3] = t; base[m, 3] = 255
     base[outline, :3] = CRISTAL_CONTOUR; base[outline, 3] = 255
-    fal[body | outline] = 0                                                        # les cristaux quittent le calque falaises
+    fal[(body | outline) & ~ext] = 0                                                        # les cristaux quittent le calque falaises
     yy, xx = np.mgrid[:H, :W]
     shade = {(k, lv): reflet_couleur(k, lv) for k in range(8) for lv in range(5)}
     # éclats : points les plus clairs, espacés de 14 px au moins
@@ -477,7 +492,7 @@ def crystal_pass(D, rng):
                 if 0 <= py < H and 0 <= px < W and halo[py, px]:
                     e[py, px, :3] = (255, 255, 255) if (dy, dx) == (0, 0) else (232, 240, 255); e[py, px, 3] = 255
         frames.append(e)
-    stats = dict(pixels_cristal=int(body.sum()), pixels_contour=int(outline.sum()), eclats=len(pts),
+    stats = dict(pixels_cristal=int(body.sum()), pixels_contour=int(outline.sum()), eclats=len(pts), bases_piliers=int(ext.sum()),
                  tons_base=[list(t) for t in CRISTAL_TONS], contour=list(CRISTAL_CONTOUR),
                  arc_en_ciel={k: list(c) for k, c in ARC_EN_CIEL},
                  palette_reflets=sorted({shade[k] for k in shade} | {(255, 255, 255), (232, 240, 255)}))

@@ -541,6 +541,7 @@
     241,
     104
    ],
+   "seuil_aplat": 40,
    "herbe_aplatie_px": 119252,
    "restes_flous_px": 1367,
    "tiges_effacees_px": 2368,
@@ -2882,6 +2883,7 @@
    "boucle_ticks": 480
   }
  },
+ "cristaux": null,
  "scene_loop_ticks": 480,
  "access": {
   "markers": {
