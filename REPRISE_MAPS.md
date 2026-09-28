@@ -57,6 +57,7 @@ Le 28 septembre, sur « Fait des zone fin de donjon multicalque de la série ent
 - Suite des options recommandées : **Entrée Zone Zéro, grotte de cristal** (`renders/zone_zero_v1/EAZ1/`, préfixe `EAZ1`, aperçu `apercu_entree_zone_zero.html`, 7 tests PASS, loi de palette ROM de D17P11A). **Le réseau Zone Zéro est complet** (RAZ1 → RAZ2 → RAZ3 → EAZ1) ; les warps restent à scripter.
 - Sur « une zone de ruine avec des Zarbi qui sortent de déchirures dans la réalité » : **Ruines Zarbi, déchirures** (`renders/ruines_zarbi_v1/RZD1/`, préfixe `RZD1`, aperçu `apercu_ruines_zarbi.html`, 9 tests PASS). Réf. D28P44A (matières de la ruine) + D30P34A (réalité qui se désagrège) ; loi de palette ROM du vitrail de D30P34A au bord des failles ; Zarbi calculés (`zarbi.py`).
 - Sur « je veux que tu génères les colonnes de magma » : **Arène de Groudon V3** (`renders/arene_groudon_magma_v3/`, préfixe `AGM3`, aperçu `apercu_arene_groudon_magma_v3.html`, 10 tests PASS, AGM1 et AGM2 gardées). Colonnes aux pixels générés (`bruts/colonne_magenta.png`, animées par `colonnes_generees.py`), le reste repris d'AGM2. Suivant : map style Colonnes Lances (CLR1).
+- Sur « une map style colonne lance ruin etc avec les texture pmd » : **Colonnes Lances, ruines** (`renders/colonnes_lances_v1/CLR1/`, préfixe `CLR1`, aperçu `apercu_colonnes_lances.html`, 8 tests PASS). Réf. D30P42A (sommet intact, loi de palette ROM du vitrail) + D28P33A (grand escalier) ; nuages générés qui dérivent.
   - Référence `D42P41A` (fond marin gravé). Sceau de Kyogre au centre, fosse abyssale au nord, marqueurs `kyogre` et `sceau`.
   - Abysse en tourbillon, caustiques et nappes, onde lumineuse sur toutes les gravures, algues, bulles, scintillements.
 
@@ -88,7 +89,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1, FRP1, FGG1, FGG2, FBS1, FJS1, FWC1, FOC1, ECM1, AGM1, AGM2, RAZ1, RAZ2, RAZ3, EAZ1, RZD1 et AGM3.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1, FRP1, FGG1, FGG2, FBS1, FJS1, FWC1, FOC1, ECM1, AGM1, AGM2, RAZ1, RAZ2, RAZ3, EAZ1, RZD1, AGM3 et CLR1.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 

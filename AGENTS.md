@@ -1124,3 +1124,13 @@ Pas de runtime. Pas dans le mod unique.
 - **Gerbe coupée par le bord du brut** : un cadrage trop serré (x 150-700) et le bas de l'image font des rectangles de lave posés sur le lac. Prendre toute la largeur de la gerbe et, sous la bouche, ne garder qu'une ellipse à bord ondulé. Commencer la couronne au-dessus des premiers bras (ligne 780 et non 940), sinon ses bras sont coupés droit.
 - **Zone autorisée hors du lac** : les pixels du corps de la colonne déjà peints, pas un rectangle autour du corps (sinon des marches droites apparaissent).
 - **Colonnes devant et derrière** : placer les bouches dans les tronçons de lac libre (distance au bord > 12) mesurés ligne par ligne, et décaler en x celles du fond pour que celles de devant ne les cachent pas.
+
+## Colonnes Lances — CLR1, ajouts à la recette
+
+- **Ciel animé sur une map de la ROM au ciel fixe** : générer le décor avec le ciel en magenta pur et, à part, une feuille de bandes de nuages sur magenta (découpe ×3 des nuages de la référence). Le ton uni du ciel est repris de la ROM. Le bas des bandes générées a le ton du ciel, donc leur bord plat disparaît.
+- **Taille des nuages** : mesurer les festons de la ROM (~25 px) et réduire la feuille en conséquence (× 0,45 au lieu de l'échelle du décor, × 0,64).
+- **Dérive continue en boucle fermée** : bande rendue périodique par fondu de 60 px (alpha prémultiplié), période = pas × phases (4 × 120 = 480 px). Pour alléger le Ground, ne dessiner que dans les cases où le ciel se voit (les cases vides sont ignorées, les tuiles dédoublonnées). Tester `b[:, :-4] == a[:, 4:]` sur le ciel visible, raccord compris, et l'absence de nuage dans les 3 premières lignes (sommets jamais coupés).
+- **Liseré rose** : un seuil magenta strict (G < 80) laisse des pixels antialiasés rosés au bord de la plateforme et au bas des bandes. Ajouter les pixels « R − G > 45 et B − G > 35 » à moins de 3 px du magenta pur, puis tester qu'aucun calque n'en contient.
+- **Obstacles de même ton que le sol** (colonnes, colonnes couchées, autel) : aucune règle de couleur ne les sépare des briques. Les mesurer à la main sur une grille de 20 px posée sur le brut (fût + socle ; capsule pour une colonne couchée), les écrire dans le manifeste et tester qu'ils sont bloquants.
+- **Loi de palette sur un vitrail généré aux verts nombreux** : les quantiles de luminance peuvent vider une classe (beaucoup d'égalités). Classer par rang (`argsort` stable) : tiers sombre fixe, tiers moyen rampe a, tiers clair rampe b.
+- **Noms de fichiers d'une animation de plus de 100 phases** : `fNNN`. Les tests et `package.py` lisent le motif avec `re.search(r'fN+', …)`.

@@ -1,5 +1,29 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## CLR1 — Colonnes Lances : ruines du sommet dans les nuages (28 septembre 2026)
+
+**Demande** : « une map style colonne lance ruin etc avec les texture pmd ».
+
+- `renders/colonnes_lances_v1/CLR1/` (préfixe `CLR1`, aperçu `apercu_colonnes_lances.html`). Map 4:3, arrivée au sud.
+- **Références**, rendues depuis la ROM (`rom --only D28,D29,D30`) :
+  - `D30P42A` : sommet intact, avec briques, colonnes cannelées, autel à vitrail vert, rochers en lévitation et mer de nuages dorée ; c'est l'analogue PMD le plus proche des Colonnes Lances ;
+  - `D28P33A` : grand escalier à balustres.
+  - Les noms de lieu ne sont pas affirmés.
+- **Bruts générés** : le décor (deux découpes ×2, ciel en magenta pur, gardé sans édition) et une feuille de 4 bandes de nuages (découpe ×3 des nuages de D30P42A).
+- **Layout** :
+  - grand escalier au sud (`entrance`) ;
+  - esplanade de briques dans un cercle de huit colonnes, debout ou brisées, avec trois colonnes couchées (`centre`) ;
+  - autel à vitrail au nord sur une terrasse haute (`autel`) ;
+  - mer de nuages et rochers en lévitation tout autour.
+  - Colonnes et autel ont les tons des briques : leurs obstacles sont mesurés à la main sur le brut.
+- **Animations** (boucle de 1200 ticks) :
+  - **vitrail** : loi de palette ROM de D30P42A, 2 rampes de 12 tons vert → cyan, 22 tons natifs ;
+  - **nuages** : bandes rendues périodiques (480 px) qui dérivent de 4 px par pas, 120 × 10 ticks ; le ciel garde le ton uni de la ROM ;
+  - **rochers** qui flottent ;
+  - **éclats de lumière** qui montent de l'autel.
+- Fidélité (seuil 35) : briques 8,1, piliers 7,2, escalier 7,0, nuages 8,8.
+- 8 tests PASS, 9 mutations détectées. Paquets : `CLR1_projet_pmdo_0812.zip` (1,4 Mo) et `CLR1_calques_png_8px.zip` (11,8 Mo). Pas de runtime, pas de warp.
+
 ## AGM3 — Arène de Groudon V3 : colonnes de magma générées (28 septembre 2026)
 
 **Demande** : « je veux que tu génères les colonnes de magma ». Les colonnes d'AGM2 étaient calculées ; en AGM3, **leurs pixels viennent du générateur d'images**. AGM1 et AGM2 sont gardées.
