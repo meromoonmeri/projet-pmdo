@@ -54,12 +54,13 @@ CFG = {
                  titre='Route Zone Zero 2 fleurie - terrasses aux cascades (4:3)',
                  decor='decor_magenta.png', chaine=['decor_magenta.png'], gouffre='decor_gouffre.png',
                  stairs=[(425, 568, 340, 452), (0, 18, 966, 1030)], entree_x=249, sortie=(639, 4), belvedere=(470, 452), graine=5,
-                 edition_b=None),
+                 edition_b=None, massifs_falaise=[(22, 548, 54, 576), (443, 543, 480, 576)]),
     'raf3': dict(PFX='RAF3', base='raz3', NAMESPACE='route_zone_zero_fleurie_3', ASSET='raf3_fond_fleuri',
                  titre='Route Zone Zero 3 fleurie - fond du cratere et tunnel (4:3)',
                  decor='decor_magenta.png', chaine=['decor_magenta.png'], gouffre='decor_gouffre.png',
                  stairs=[(275, 338, 548, 668)], entree_x=390, sortie=(388, 64), belvedere=(236, 372), graine=9,
-                 edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)]),
+                 edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)],
+                 massifs_falaise=[(245, 170, 298, 202), (430, 277, 477, 311), (272, 400, 332, 442), (270, 445, 302, 477)]),
 }
 GRASS = (128, 240, 104)
 
@@ -73,12 +74,15 @@ C = loadmod('zone_zero_commun', R / 'source/zone_zero_v1/commun.py')
 JM = loadmod('ejn1_outils', R / 'source/entree_jungle_sud_nord_v1/build.py')
 BM = JM.BM
 FV = loadmod('fvs1_fin', R / 'source/fin_vapeur_sommet_v1/build.py')
+HQ = loadmod('zone_zero_v2_hq', HERE / 'haute_qualite.py')
 assert (JM.W, JM.H, JM.SRC) == (W, H, SRC)
 S = JM.SCALE
 ANIM = {'brume_profonde': DEEP_TICKS, 'brume_haute': HIGH_TICKS, 'lueurs': GLINT_TICKS, 'eau': C.RIPPLE_TICKS,
-        'fleurs': FLOWER_TICKS, 'cascades': C.CASC_TICKS, 'ecume': C.FOAM_TICKS}
+        'herbes': HQ.HERBES_TICKS, 'fleurs': FLOWER_TICKS, 'cascades': C.CASC_TICKS, 'ecume': C.FOAM_TICKS,
+        'embruns': HQ.EMBRUNS_TICKS, 'papillons': HQ.PAPILLONS_TICKS}
 PHASES = {'brume_profonde': DEEP_PHASES, 'brume_haute': HIGH_PHASES, 'lueurs': GLINT_PHASES, 'eau': C.RIPPLE_PHASES,
-          'fleurs': FLOWER_PHASES, 'cascades': C.CASC_PHASES, 'ecume': C.FOAM_PHASES}
+          'herbes': HQ.HERBES_PHASES, 'fleurs': FLOWER_PHASES, 'cascades': C.CASC_PHASES, 'ecume': C.FOAM_PHASES,
+          'embruns': HQ.EMBRUNS_PHASES, 'papillons': HQ.PAPILLONS_PHASES}
 assert all(LOOP_TICKS % (PHASES[k] * ANIM[k]) == 0 for k in ANIM)
 assert DEEP_PHASES * DEEP_STEP == 96 and -HIGH_PHASES * HIGH_STEP == 192
 
@@ -440,7 +444,13 @@ def make_all(m):
     grass = ex['floor'] & ~petal & ~stairs & grass_rule(full)
     gi = nd.distance_transform_edt(~grass, return_distances=False, return_indices=True)
     solc = full[gi[0], gi[1]]
-    layers = BM.quantize_layers({'sol_complet': JM.rgba(solc, ~ex['void']), 'sol': JM.rgba(cols['floor'], ex['floor'])})
+    def q_(e, nc):                                                                # quantification propre à chaque calque
+        m_ = e[..., 3] == 255
+        qq = Image.fromarray(e[..., :3]).quantize(colors=nc, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+        e[..., :3] = np.array(qq.convert('RGB')); e[~m_] = 0
+        return e
+    # HQ : sol quantifié seul sur 128 couleurs (la palette commune dominée par l'herbe écrasait les buissons ronds en olive)
+    layers = {'sol_complet': q_(JM.rgba(solc, ~ex['void']), 64), 'sol': q_(JM.rgba(cols['floor'], ex['floor']), 128)}
     # fleurs : taches de pétales + 1 px autour, retirées du sol (le sol montre l'herbe voisine dessous)
     fmask = morph(nd.binary_dilation, petal, 1) & ex['floor'] & ~stairs
     fl = np.zeros((H, W, 4), 'uint8'); fl[fmask, :3] = full[fmask]; fl[fmask, 3] = 255
@@ -448,8 +458,8 @@ def make_all(m):
     sol[fmask, :3] = g_under[fmask]
     layers['sol'] = sol
     abyss = np.zeros((H, W, 4), 'uint8'); abyss[ex['void'], :3] = full[ex['void']]; abyss[ex['void'], 3] = 255
-    for nm, e, nc in (('abime', abyss, 64), ('falaises', JM.rgba(cols['walls'], ex['walls'] & ~casc), 40),
-                      ('buissons', JM.rgba(cols['veg'], ex['veg'] & ~casc), 32), ('eau_fixe', base, 16), ('fleurs', fl, 48)):
+    for nm, e, nc in (('abime', abyss, 64), ('falaises', JM.rgba(cols['walls'], ex['walls'] & ~casc), 96),
+                      ('buissons', JM.rgba(cols['veg'], ex['veg'] & ~casc), 96), ('eau_fixe', base, 16), ('fleurs', fl, 48)):
         m_ = e[..., 3] == 255
         q = Image.fromarray(e[..., :3]).quantize(colors=nc, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
         e[..., :3] = np.array(q.convert('RGB')); e[~m_] = 0; layers[nm] = e
@@ -581,10 +591,11 @@ def build(m):
     v1 = loadmod('esn1', R / 'source/entree_sud_nord_generee_v1/build.py')
     for d in ['calques', 'animation', 'masques', 'review']:
         shutil.rmtree(OUT / d, ignore_errors=True)
-    anims = ['brume_profonde', 'brume_haute', 'lueurs', 'eau', 'fleurs', 'cascades', 'ecume']
+    anims = ['brume_profonde', 'brume_haute', 'lueurs', 'eau', 'herbes', 'fleurs', 'cascades', 'ecume', 'embruns', 'papillons']
     for d in ['calques', 'masques', 'review'] + [f'animation/{k}' for k in anims]:
         (OUT / d).mkdir(parents=True, exist_ok=True)
     D = make_all(m); L, ex = D['layers'], D['ex']
+    D = HQ.apply(D, grass_rule, c['graine'] * 10 + 1, c.get('massifs_falaise', ()))   # passe haute qualité
     masks = dict(sol=ex['floor'], vide=ex['void'], falaises=ex['walls'], vegetation=ex['veg'], eau=D['wet'], cascades=D['casc'],
                  escaliers=D['stairs'], fleurs=D['fmask'], lisiere=D['zone'], troncs=D['trunks'], arbres_brut=D['trees_raw'])
     for k, v in masks.items():
@@ -593,8 +604,9 @@ def build(m):
     stack_named = [('sol_complet', [L['sol_complet']], 60), ('abime', [L['abime']], 60),
                    ('brume_profonde', D['deep'], DEEP_TICKS), ('brume_haute', D['high'], HIGH_TICKS), ('lueurs', D['gfr'], GLINT_TICKS),
                    ('eau', D['rf'], C.RIPPLE_TICKS), ('sol', [L['sol']], 60), ('falaises', [L['falaises']], 60),
-                   ('fleurs', D['ffr'], FLOWER_TICKS), ('buissons', [L['buissons']], 60), ('arbres', [L['arbres']], 60),
-                   ('cascades', D['cf'], C.CASC_TICKS), ('ecume', D['ff'], C.FOAM_TICKS)]
+                   ('herbes', D['herbes'], HQ.HERBES_TICKS), ('fleurs', D['ffr'], FLOWER_TICKS), ('buissons', [L['buissons']], 60),
+                   ('arbres', [L['arbres']], 60), ('cascades', D['cf'], C.CASC_TICKS), ('ecume', D['ff'], C.FOAM_TICKS),
+                   ('embruns', D['embruns'], HQ.EMBRUNS_TICKS), ('papillons', D['papillons'], HQ.PAPILLONS_TICKS)]
     files = {}
     for i, (nm, frames, tk) in enumerate(stack_named):
         if len(frames) == 1:
@@ -693,8 +705,23 @@ def build(m):
                                        'tons': HIGH_TONES, 'loi': 'voiles clairs, bruit periodique (192 px) translate de -8 px par phase (sens oppose, 4 fois plus vite : parallaxe)'},
                        'lueurs': {'phases': GLINT_PHASES, 'frame_length_ticks': GLINT_TICKS, 'nombre': len(D['glints']),
                                   'loi': 'eclats 1-2-3-2-1 puis repos, seulement profondeur > 0,7'}},
-        'fleurs': {'phases': FLOWER_PHASES, 'frame_length_ticks': FLOWER_TICKS, 'tetes': D['n_fleurs'],
-                   'loi': 'A B A C (GIF Sky Peak) : en B et C chaque tete descend de 1 px et penche de +-1 px'},
+        'fleurs': {'phases': FLOWER_PHASES, 'frame_length_ticks': FLOWER_TICKS, 'tetes': D['n_fleurs'], 'couleurs': D['hq']['couleurs'],
+                   'dessin': 'fleurs nettes de 7 px calculees (petale, 4 encoches, bord sombre, reflet en damier, coeur) + ombre verte ; massifs du rendu redessines dans leur couleur, massifs en plus de toutes les couleurs',
+                   'palettes': {k: [list(t) for t in v] for k, v in HQ.PALETTES.items()},
+                   'loi': 'A B A C (GIF Sky Peak) : en B et C chaque fleur descend de 1 px et penche de +-1 px'},
+        'haute_qualite': {'demande': 'faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualite les fleur avec plein de couleur des cascade de la brume etc',
+                          'stats': {k: v for k, v in D['hq'].items() if k not in ('papillons', 'trajets')},
+                          'herbe': {'ton': list(HQ.SKY_GRASS),
+                                    'regle': 'pixels d herbe (regle herbe) a moins de 40 du ton dominant du lot -> aplat au ton dominant du GIF Sky Peak ; restes flous <= 60 px entoures d herbe -> aplat ; le chemin clair reste'},
+                          'herbes': {'phases': HQ.HERBES_PHASES, 'frame_length_ticks': HQ.HERBES_TICKS, 'touffes': D['hq']['touffes'],
+                                     'tons': [list(t) for t in HQ.TUFT_TONES],
+                                     'loi': 'etoiles de 6 brins de 5 px, grille de 26 px en quinconce ; A B A C, brins du haut penches de +-1 px en B et C (GIF Sky Peak : toute la prairie se balance)'},
+                          'embruns': {'phases': HQ.EMBRUNS_PHASES, 'frame_length_ticks': HQ.EMBRUNS_TICKS, 'gouttelettes': D['hq']['gouttelettes'],
+                                      'loi': 'au pied de chaque cascade, chaque gouttelette monte de 26 px sur la boucle, derive en sinus et s efface (trame de Bayer)'},
+                          'papillons': {'phases': HQ.PAPILLONS_PHASES, 'frame_length_ticks': HQ.PAPILLONS_TICKS, 'liste': D['hq']['papillons'],
+                                        'trajets': D['hq']['trajets'],
+                                        'loi': 'Lissajous fermee x = cx + ax sin(2 pi t / 48 + phi), y = cy + ay sin(4 pi t / 48 + psi) ; ailes ouvertes / fermees une phase sur deux'},
+                          'nature': 'pixels calcules (pas des tuiles natives) ; seuls les tons de l herbe, des touffes et des fleurs corail sont releves sur le GIF Sky Peak'},
         'arbres': {'plantes': D['placed'], 'du_brut_pixels': int(D['trees_raw'].sum()),
                    'lisiere': 'masses de buissons du brut (>= 1500 px) + bandes de 40 px aux bords gauche et droit, 34 px au bas (hors couloir d entree), 30 px en haut (hors sortie)'},
         'cascades': {'phases': C.CASC_PHASES, 'frame_length_ticks': C.CASC_TICKS, 'rects': D['rects'], 'loi': 'P03P01A : motif 96 px, 32 px par image'},
