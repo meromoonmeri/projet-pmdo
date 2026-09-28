@@ -239,7 +239,7 @@ def fidelity(D):
                      'note': 'herbe rase claire : ton absent de P03P01A (choix du generateur, garde comme matiere a part), non seuille'}
     if 'pelouse' not in out:
         out['pelouse_absente'] = {'pixels': int((walk & mat768['pelouse']).sum()),
-                                  'note': 'la pelouse du bord gauche a ete remplacee par des buissons (edition : aucune sortie laterale)'}
+                                  'note': 'pas de pelouse dans ce brut (pixels isoles mal classes, non mesures)'}
     out['seuil'] = FIDELITY_MAX
     return out
 
