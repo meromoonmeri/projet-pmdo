@@ -1,5 +1,25 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FBS1 — Fin Bristle : sommet de Mt. Bristle, cinquième zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « continue ! » après FGG2. La série des fins reprend dans l'ordre du mod : **Bristle**.
+
+- Vraie fin : Mt. Bristle Peak, où les héros battent Drowzee pour sauver Azurill (Bulbapedia). La salle n'est disponible qu'en vignette de 110 × 120 px (`source/fin_bristle_sommet_v1/reference/`) : une clairière de sable carrée, fermée de rochers gris en pointes. Elle donne la composition ; les textures viennent de `Mt_Bristle_entrance_TD.png`.
+- Layout : arrivée au sud par un couloir de sable entre deux aiguilles (`entrance`), grande clairière pour le boss (`boss`), Azurill au fond nord (`azurill`). Les blocs bruns bloquent. Aucune autre sortie, aucun warp.
+- Rendu généré référencé, sans liquide. Deux bruts écartés :
+  - la vignette agrandie donnait des rochers flous ;
+  - un premier essai au rip seul sortait en 1376 × 768, avec un chemin ouvert au nord.
+- Sol complet : sable seul généré depuis une découpe propre du sable du rip.
+- Calques, du bas vers le haut : sol complet, sable, rafales, rochers, touffes, falaises.
+- Animations :
+  - **touffes au vent** : poses et cycle de l'entrée Bristle, 12 × 10, rafale d'ouest ;
+  - **rafales de sable** : 44 traînées claires qui naissent, filent vers l'est et s'éteignent, 24 × 5. Chaque traînée refait le même trajet, donc la boucle est exacte.
+  - La scène boucle en 2 s.
+- Fidélité : sable 13.42 (seuil 35), roche grise 14.79 (seuil 25). Vignette : 35.62, garde-fou large à 45, car elle est floue et désaturée.
+- 8 tests PASS. 6 mutations détectées : rafales figées, rafales sur la roche, rafales invisibles, touffes figées, ouverture au nord, Azurill loin du fond.
+- Aperçu : `apercu_fin_bristle_sommet_v1.html`. Paquets : `FBS1_projet_pmdo_0812.zip` (1.4 Mo) et `FBS1_calques_png_8px.zip` (4.26 Mo).
+- Pixels générés ou calculés, pas de tuiles natives. Pas de runtime. Pas dans le mod unique.
+
 ## FGG2 — Fin Givre V2 : sans cristal, aurores boréales au nord (28 septembre 2026)
 
 **Demande** : « Il faut pas de cristal stp et on aurait aimé voir les aurore boreal dans le design texture canonique de la référence adapté a notre layout ». FGG1 est gardée à côté.

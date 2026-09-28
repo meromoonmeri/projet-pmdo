@@ -37,7 +37,11 @@ Le 28 septembre, sur « Fait des zone fin de donjon multicalque de la série ent
 - Les derniers ajustements de ZRV2 (« corrige les nuages », animer les lignes de houle peintes dans la mer fixe) sont **faits** : bancs raccordés sur 768 px, calque `ondes`, 18 tests PASS.
 - Sur « Il faut pas de cristal stp et on aurait aimé voir les aurore boreal dans le design texture canonique de la référence adapté a notre layout » : **Fin Givre V2** (`renders/fin_givre_aurore_v2/`, préfixe `FGG2`, aperçu `apercu_fin_givre_aurore_v2.html`, 13 tests PASS).
   - Layout de FGG1 sans cristal. Nord ouvert sur un ciel de nuit, avec les aurores de `aurorepmdsky.png` régénérées en panorama, sur leur calque (12 × 10, une géométrie). Ciel et étoiles sur des calques séparés.
-  - FGG1 est gardée. La série des fins reprend ensuite avec Bristle.
+  - FGG1 est gardée.
+- Sur « continue ! » : cinquième fin, **Fin Bristle** (`renders/fin_bristle_sommet_v1/`, préfixe `FBS1`, aperçu `apercu_fin_bristle_sommet_v1.html`, 8 tests PASS).
+  - Sommet de Mt. Bristle (Drowzee, Azurill) : clairière de sable fermée, couloir au sud. Vignette en référence de composition, textures de `Mt_Bristle_entrance_TD.png`.
+  - Touffes au vent de EBN1 et rafales de sable.
+  - Fin suivante dans l'ordre du mod : à choisir parmi les entrées restantes (Jungle, Amp, etc.).
 
 Même jour, sur « regarde l'animation de la mer V24P04A et des nuages, c'est ce que je te demandais pour la zone réveil », puis « je veux garder le layout de la v1 juste corrige la mer et le background laisse la montagne mais faut que les nuages soient derrière la montagne : la mer ⇒ montagne ⇒ nuage » : lot **ZRV2** (`renders/zone_reveil_prairie_horizon_v2/`, aperçu `apercu_zone_reveil_prairie_horizon_v2.html`, 18 tests PASS après la correction des nuages et des ondes).
 
@@ -67,7 +71,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1, FRP1, FGG1, FGG2, ECM1 et AGM1.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1, FRP1, FGG1, FGG2, FBS1, ECM1 et AGM1.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 

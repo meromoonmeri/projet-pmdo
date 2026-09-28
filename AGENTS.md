@@ -1025,3 +1025,11 @@ Pas de runtime. Pas dans le mod unique.
 - **Fidélité de l'aurore** : mesurée sur l'aurore entière avant découpe (texture). La partie visible est notée à part : les franges cyan passent sous les pics, ce n'est pas un écart de texture.
 - **Test « une seule géométrie »** : recalculer la base et vérifier que chaque phase testée est exactement la base décalée colonne par colonne selon la loi du manifeste, puis découpée par le ciel. Ce test attrape aussi le défilement. Le centre horizontal de l'aurore visible bouge de quelques px à cause de la découpe : ne pas le tester.
 
+## Fins de donjon — FBS1 (Fin Bristle), ajouts à la recette
+
+- **Vignette de la vraie salle en référence image** : ne pas la donner au générateur, même agrandie en plus proche voisin. Il recopie ses gros pixels flous sur les rochers. Décrire sa composition en texte et ne donner que le rip du biome.
+- **Format 4:3** : préciser « (1200 x 896) » et « closed at the top, NO opening at the top » pour une fin en cul-de-sac. Sans cela, un rip plus haut que large donne du 16:9 avec le couloir du rip qui traverse la carte.
+- **Salle sans liquide ni clé** : sable = composante reliée au bas de l'image ; falaises = complément exact. Touffes et blocs isolés dans la roche passent aux falaises. Après `down_class`, des miettes de sable (10 px) peuvent rester dans la roche : les passer aux falaises avec la couleur de `down_full`, car la couleur de classe y est vide.
+- **Touffes animées sur un décor généré** : masque vert dilaté de 3 px (1 px laissait un anneau de pixels de contour). `EB.tuft_poses(decor, masque)` de EBN1 fonctionne tel quel sur un décor 1200 × 896 (sa palette vient des touffes du décor). Base de la touffe = bas du blob × `S` − `CROP_X`.
+- **Particules de vent sur le sable** : les tons clairs du calque sable sont invisibles (écart < 15). Mêler le ton le plus clair (99,5 %) avec du blanc, à 50 % pour la tête et 25 % pour la queue ; le test exige plus de 20 d'écart à la moyenne du sable. Boucle fermée sans défilement : chaque traînée refait le même trajet toutes les 24 phases, visible 12 phases puis éteinte pendant son retour.
+
