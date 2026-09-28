@@ -1,5 +1,27 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FJS1 — Fin Jungle : fond de Southern Jungle, sixième zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « poursuis ! » après FBS1. La série des fins reprend dans l'ordre du mod : **Jungle** (après l'entrée EJN1).
+
+- Vraie fin : `Southern_Jungle_exit_S.png` (PMD Sky, épisode spécial 4 « Here Comes Team Charm! »). On y voit une clairière de sable jaune olive, une pelouse à gauche, un rocher gris au fond, des fougères et des palmes, et une canopée très sombre au premier plan. Le combat de fin n'est pas nommé, car les sources consultées ne s'accordent pas.
+- Layout : arrivée au sud par un chemin de sable (`entrance`), grande clairière pour le combat (`boss`), objectif devant le rocher gris au nord (`objectif`). Aucune autre sortie, aucun warp.
+- Rendu généré référencé, en trois étapes, toutes avec la capture :
+  1. décor 4:3 (sable rose et pelouse fluo, couleurs écartées) ;
+  2. recoloration vers le sable et l'herbe de la capture (`bruts/decor_etape_recolore.png`) ;
+  3. bord gauche fermé par des buissons, parce que la pelouse touchait le bord et faisait une sortie (`bruts/decor.png`).
+- Sol complet : sable seul généré depuis une découpe propre du sable de la capture.
+- Calques, du bas vers le haut : sol complet, sable, pelouse, feuilles, rocher, jungle, papillons, canopée.
+- Animations :
+  - **feuilles** : 14 feuilles tombent de la jungle en se balançant, se posent sur le sable puis s'effacent, 48 × 5. Chaque feuille refait la même chute, donc la boucle est exacte. Elles restent sur le sable (vert sur la pelouse, elles seraient invisibles).
+  - **papillons** : poses générées de l'entrée Jungle, 6 vols en huit fermés, 48 × 5.
+  - La scène boucle en 4 s.
+- Fidélité : sable 19.15 et pelouse 16.82 (seuil 35), mesurées contre la capture.
+- Le rocher a sa propre palette de 16 couleurs : dans la palette commune, ses gris viraient à l'olive du sable.
+- 9 tests PASS. 7 mutations détectées : rocher olive, feuille sur la pelouse, papillons figés, trou dans la pelouse, objectif loin du rocher, ouverture au nord, loi des feuilles.
+- Aperçu : `apercu_fin_jungle_sud_v1.html`. Paquets : `FJS1_projet_pmdo_0812.zip` (1.37 Mo) et `FJS1_calques_png_8px.zip` (4.08 Mo).
+- Pixels générés ou calculés, pas de tuiles natives. Pas de runtime. Pas dans le mod unique.
+
 ## FBS1 — Fin Bristle : sommet de Mt. Bristle, cinquième zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « continue ! » après FGG2. La série des fins reprend dans l'ordre du mod : **Bristle**.

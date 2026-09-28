@@ -1033,3 +1033,11 @@ Pas de runtime. Pas dans le mod unique.
 - **Touffes animées sur un décor généré** : masque vert dilaté de 3 px (1 px laissait un anneau de pixels de contour). `EB.tuft_poses(decor, masque)` de EBN1 fonctionne tel quel sur un décor 1200 × 896 (sa palette vient des touffes du décor). Base de la touffe = bas du blob × `S` − `CROP_X`.
 - **Particules de vent sur le sable** : les tons clairs du calque sable sont invisibles (écart < 15). Mêler le ton le plus clair (99,5 %) avec du blanc, à 50 % pour la tête et 25 % pour la queue ; le test exige plus de 20 d'écart à la moyenne du sable. Boucle fermée sans défilement : chaque traînée refait le même trajet toutes les 24 phases, visible 12 phases puis éteinte pendant son retour.
 
+## Fins de donjon — FJS1 (Fin Jungle), ajouts à la recette
+
+- **Vraie fin en couleur comme seule référence** : le générateur peut recolorer le décor (sable rose, pelouse fluo) tout en gardant bien la composition. Corriger par une édition dédiée avec la capture en seconde image (« recolor sand and grass to match the reference »), puis mesurer à nouveau.
+- **Matière qui touche le bord de l'image** (pelouse jusqu'au bord gauche) : c'est une sortie. Le générateur ne la ferme que sur une édition à un seul changement : « bande de buissons d'environ 120 px le long du bord gauche ».
+- **Segmentation jungle** : sable (R, G > 120, B < 140, R − B > 40) ; pelouse (G > R + 25, G > B + 40, lum > 105, lissée) ; sol = composante reliée au bas ; canopée = luminance lissée < 42 reliée aux bords ; jungle = le reste.
+- **Rocher gris au bord du sol** : ne pas limiter les gris au voisinage du sol, sinon seule la base est prise. Prendre la composante grise (sat < 35, lum > 75) qui touche le plus le sol, reboucher, dilater de 3 px pour le contour. Lui donner une palette propre de 16 couleurs, sinon la palette commune le vire à l'olive.
+- **Feuilles qui tombent** : sprites 6 × 4 dans 3 tons des palmes du décor, départ au bord jungle du **sable** seulement (sur la pelouse, vert sur vert, invisible). k = (t − phase) mod 48 : chute 20 phases (y + 2k, balancier ±4 px), 6 phases posée, puis effacée. Le test vérifie la loi du manifeste feuille par feuille.
+- **Papillons de EJN1 réutilisés** : `JM.butterfly_poses()`. Borne du pas par phase d'un huit : 2π(ax + 2ay)/48, pas un seuil fixe.
