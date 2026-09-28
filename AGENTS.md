@@ -1145,3 +1145,22 @@ Pas de runtime. Pas dans le mod unique.
 - **Loi des scintillements ROM** : relever les périodes de *toutes* les étoiles (ici grandes 16, petites 11 ou 16), pas seulement de la première. Les ramener aux diviseurs de la boucle (18 et 9 sur 54) et le noter.
 - **Reflets en bandes qui bouclent** : deux bandes espacées de D = moitié du parcours, qui avancent de D par boucle ; la 2e sort quand la 1re arrive à sa place. Tester le masque de la phase 54 recalculé contre la phase 0.
 
+## Zone Zéro fleurie — RAF1 et RAF2, ajouts à la recette
+
+- **Retexturer une map existante** : repasser au générateur le brut du lot d'origine, avec des découpes ×2 des nouvelles références (Sky Peak, Apple Woods). Le layout est gardé. Garder le lot d'origine et créer un nouveau préfixe.
+- **Planche d'éléments générée à part** (arbres) : le générateur se trompe de couleur, malgré un RGB explicite dans le prompt (émeraude, puis kaki ; distances de 56 et 51). Découper plutôt les éléments qu'il a peints **dans les bruts de décor** (composantes de feuillage de 5000 à 12500 px, remplissage > 0,55, h/l 0,9-1,3, hors bords, plus le tronc brun), puis les réduire et les mettre en miroir. Garder les planches rejetées en trace dans le manifeste.
+- **Édition « creuse le gouffre »** : le générateur refait aussi la prairie et le chemin. Ne prendre ses pixels que dans le masque magenta du décor (grandes composantes seulement : de petites fleurs violettes passent la règle magenta).
+- **Profondeur qui se voit vraiment** : une brume tramée sur 3 % du vide ne suffit pas. Il faut :
+  - une carte de profondeur (assombrissement lissé du gouffre, normalisé p5-p95, nul à moins de 10 px du bord) ;
+  - un dégradé statique vers le bleu nuit (45 % au fond) ;
+  - une brume du fond plus dense vers le bas ;
+  - des voiles clairs en sens opposé et plus rapides (parallaxe).
+  Tester que le fond est plus sombre que le bord, que la brume épaissit vers le fond, et que chaque phase bouge (changement mesuré par rapport à la brume elle-même, pas au vide entier).
+- **Pièges de classification sur un sol fleuri** :
+  - le sol en « uniforme-9 de la règle d'herbe > 0,55 » exclut les massifs de fleurs, les chemins et les escaliers. Reboucher les trous du sol qui sont surtout floraux (jusqu'à 25 000 px) et ajouter les chemins et les rectangles d'escalier mesurés ;
+  - les reflets clairs des marches et les massifs de **fleurs bleues** passent les règles de l'eau. Exclure les escaliers ; ne garder comme eau que les composantes qui touchent une chute ou l'écume, ou qui font au moins 6000 px ;
+  - symptôme : une sortie qui tombe au mauvais endroit. Regarder `review/*_collisions_marqueurs.png` avant tout.
+- **Bandes de lisière** : sur une bande fine au bord, la règle « couverture de la zone > 0,35 » refuse tous les arbres, ce qui laisse un mur invisible. Accepter l'arbre si son pied est dans la bande.
+- **Masque praticable exporté** (`masques/*_masque_praticable.png`) : les tests recomptent les cases bloquées à partir de ce masque, et vérifient les fleurs praticables, les troncs bloquants et l'escalier praticable.
+- **Vérifier les préfixes des branches sœurs sans les fetcher** : fetcher les 72 branches a gonflé `.git` à 13 Go et rempli le disque. Passer par `gh api repos/<repo>/git/trees/<sha>?recursive=1`. Pour nettoyer : ne supprimer que les packs sans objet atteignable (`git show-index` croisé avec `git rev-list --objects --all`), reconditionner les objets atteignables des autres packs récents avec `git pack-objects`, puis lancer `git fsck`.
+

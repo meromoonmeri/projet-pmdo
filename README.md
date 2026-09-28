@@ -1,5 +1,38 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RAF1 et RAF2 — Zone Zéro fleurie : Sky Peak, fleurs, arbres PMD, gouffres profonds (28 septembre 2026)
+
+**Demande** : « pour les zone area faut la texture sky peak et les fleur de differente couleur et les arbre pmd et les cascade garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur ».
+
+- Nouveaux lots **RAF1** (lèvre du cratère, nouvelle version de RAZ1) et **RAF2** (terrasses aux cascades, nouvelle version de RAZ2). RAZ1 et RAZ2 sont gardées ; RAZ3 et EAZ1 (cristal) ne sont pas touchées.
+  - Sorties : `renders/zone_zero_v2/RAF1|RAF2/`.
+  - Aperçus : `apercu_route_zone_zero_fleurie_1.html` et `apercu_route_zone_zero_fleurie_2.html`.
+  - Un seul `build.py` et un seul `package.py` pour les deux, dans `source/zone_zero_v2/`.
+- **Références** :
+  - Sky Peak (`2cwdrrs469f61.gif`, image 0) pour l'herbe, les falaises et les fleurs ;
+  - Apple Woods (`Apple_Woods_entrance_TDS.png`) pour les arbres ;
+  - P03P01A pour la loi et la palette des cascades.
+- **Bruts générés** : le décor (brut RAZ, avec des découpes Sky Peak et Apple Woods ×2, gouffre en magenta) et le gouffre (édition du décor, gardée **seulement** dans le masque magenta).
+- **13 calques**, un par élément : sol complet, abîme, brume profonde, brume haute, lueurs, eau, sol, falaises, **fleurs**, buissons, **arbres**, **cascades**, écume.
+- **Profondeur des trous** :
+  - dégradé du gouffre vers le bleu nuit, selon une carte de profondeur ;
+  - brume du fond tramée, plus dense vers le bas (+4 px par phase) ;
+  - voiles clairs en sens opposé, plus rapides (−8 px par phase), pour la parallaxe ;
+  - 34 éclats lointains au fond.
+- **Fleurs** : loi du GIF Sky Peak (A B A C, 4 × 12 ticks). RAF1 a 61 têtes en 4 couleurs ; RAF2 en a 281 en 5 couleurs.
+- **Arbres PMD** : des feuillages entiers découpés dans les bruts de décor (8 sprites), plantés en lisière (59 dans RAF1, 51 dans RAF2). Deux planches d'arbres générées à part ont été **rejetées** pour leur couleur (distance à Apple Woods de 56 et 51).
+- **Fidélité** (seuil 35) :
+
+  | Lot | Herbe | Arbres | Falaises (signalées, non seuillées) |
+  |---|---|---|---|
+  | RAF1 | 9,7 | 8,5 | 32,2 |
+  | RAF2 | 5,2 | 8,5 | 20,5 |
+
+- **Collisions** : on marche sur les fleurs, les chemins et l'escalier de RAF2. Les troncs et les arbres bloquent.
+- 11 tests PASS par lot, et 28 mutations détectées (14 par lot).
+- Paquets : `RAF1_projet_pmdo_0812.zip` (1,5 Mo) et `RAF1_calques_png_8px.zip` (8,2 Mo) ; `RAF2_projet_pmdo_0812.zip` (1,6 Mo) et `RAF2_calques_png_8px.zip` (8,4 Mo).
+- Boucle de 480 ticks. Pas de runtime, pas de warp.
+
 ## ATP1 — Arène de Terapagos : cristal prismatique (28 septembre 2026)
 
 **Demande** : « Fait une zone de crystal de verre qui reflette les spectre de couleur une arene pour terragos […] avec des rune et signe qui pulse etc ».
