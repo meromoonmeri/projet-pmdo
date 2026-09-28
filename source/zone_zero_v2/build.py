@@ -517,7 +517,7 @@ def ground_project(m, stack, blocked, markers, gfx, tools):
     doc = json.loads(doc_p.read_text()); o = doc['Object']
     o['Name'] = {'DefaultText': c['titre'], 'LocalTexts': {}}
     o['Comment'] = ('PMDO 0.8.12. Route generee 4:3 (ref. Sky Peak + Apple Woods, cascades a la loi de P03P01A) : herbe et falaises '
-                    'de Sky Peak, fleurs de cinq couleurs animees (A B A C), arbres PMD, gouffre genere avec brume en parallaxe. '
+                    'de Sky Peak, fleurs multicolores animees (A B A C), arbres PMD, gouffre genere avec degrade de profondeur et brume en parallaxe. '
                     'Arrivee au sud, sortie au nord. Aucun warp.')
     for mk in o['Entities'][0]['Markers']:
         mk['EntName'] = {'boss': 'sortie', 'source': 'belvedere'}.get(mk['EntName'], mk['EntName'])
