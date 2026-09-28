@@ -203,13 +203,13 @@
     160.0
    ],
    "rgb": [
-    96.8,
-    136.6,
-    148.3
+    84.5,
+    123.1,
+    137.1
    ],
    "pixels_ref": 28590,
-   "pixels": 162641,
-   "distance": 32.34
+   "pixels": 134194,
+   "distance": 51.99
   },
   "arbres": {
    "ref": "Apple_Woods_entrance_TDS, coeurs de 4 feuillages (boites 30 x 30 verifiees a l oeil)",
@@ -275,14 +275,16 @@
   "animation/eau/EAF1_05_eau_fNN.png",
   "calques/EAF1_06_sol.png",
   "calques/EAF1_07_falaises.png",
-  "animation/herbes/EAF1_08_herbes_fNN.png",
-  "animation/fleurs/EAF1_09_fleurs_fNN.png",
-  "calques/EAF1_10_buissons.png",
-  "calques/EAF1_11_arbres.png",
-  "animation/cascades/EAF1_12_cascades_fNN.png",
-  "animation/ecume/EAF1_13_ecume_fNN.png",
-  "animation/embruns/EAF1_14_embruns_fNN.png",
-  "animation/papillons/EAF1_15_papillons_fNN.png"
+  "calques/EAF1_08_cristaux.png",
+  "animation/reflets/EAF1_09_reflets_fNN.png",
+  "animation/herbes/EAF1_10_herbes_fNN.png",
+  "animation/fleurs/EAF1_11_fleurs_fNN.png",
+  "calques/EAF1_12_buissons.png",
+  "calques/EAF1_13_arbres.png",
+  "animation/cascades/EAF1_14_cascades_fNN.png",
+  "animation/ecume/EAF1_15_ecume_fNN.png",
+  "animation/embruns/EAF1_16_embruns_fNN.png",
+  "animation/papillons/EAF1_17_papillons_fNN.png"
  ],
  "profondeur": {
   "carte": "assombrissement lisse (gaussienne 6) du gouffre genere, normalise p5-p95, nul au bord (10 px)",
@@ -1848,7 +1850,308 @@
    "phases": 48,
    "frame_length_ticks": 10,
    "boucle_ticks": 480
+  },
+  "reflets": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 240
   }
+ },
+ "cristaux": {
+  "pixels_cristal": 70289,
+  "pixels_contour": 4186,
+  "eclats": 36,
+  "tons_base": [
+   [
+    150,
+    156,
+    196
+   ],
+   [
+    188,
+    194,
+    226
+   ],
+   [
+    220,
+    224,
+    244
+   ],
+   [
+    240,
+    242,
+    252
+   ],
+   [
+    255,
+    255,
+    255
+   ]
+  ],
+  "contour": [
+   92,
+   96,
+   140
+  ],
+  "arc_en_ciel": {
+   "rouge": [
+    255,
+    96,
+    120
+   ],
+   "orange": [
+    255,
+    164,
+    88
+   ],
+   "jaune": [
+    255,
+    232,
+    104
+   ],
+   "vert": [
+    128,
+    232,
+    140
+   ],
+   "cyan": [
+    104,
+    222,
+    255
+   ],
+   "bleu": [
+    122,
+    140,
+    255
+   ],
+   "mauve": [
+    192,
+    118,
+    255
+   ],
+   "rose": [
+    255,
+    120,
+    210
+   ]
+  },
+  "palette_reflets": [
+   [
+    116,
+    203,
+    238
+   ],
+   [
+    127,
+    214,
+    246
+   ],
+   [
+    129,
+    144,
+    238
+   ],
+   [
+    134,
+    210,
+    155
+   ],
+   [
+    136,
+    222,
+    251
+   ],
+   [
+    140,
+    155,
+    246
+   ],
+   [
+    144,
+    221,
+    164
+   ],
+   [
+    149,
+    163,
+    251
+   ],
+   [
+    153,
+    229,
+    169
+   ],
+   [
+    161,
+    230,
+    253
+   ],
+   [
+    167,
+    235,
+    255
+   ],
+   [
+    171,
+    182,
+    253
+   ],
+   [
+    175,
+    236,
+    187
+   ],
+   [
+    177,
+    188,
+    255
+   ],
+   [
+    180,
+    128,
+    238
+   ],
+   [
+    181,
+    241,
+    188
+   ],
+   [
+    190,
+    139,
+    246
+   ],
+   [
+    199,
+    147,
+    251
+   ],
+   [
+    212,
+    170,
+    253
+   ],
+   [
+    218,
+    175,
+    255
+   ],
+   [
+    225,
+    112,
+    141
+   ],
+   [
+    225,
+    130,
+    206
+   ],
+   [
+    225,
+    161,
+    118
+   ],
+   [
+    225,
+    210,
+    129
+   ],
+   [
+    232,
+    240,
+    255
+   ],
+   [
+    236,
+    123,
+    149
+   ],
+   [
+    236,
+    140,
+    214
+   ],
+   [
+    236,
+    172,
+    126
+   ],
+   [
+    236,
+    221,
+    138
+   ],
+   [
+    245,
+    131,
+    154
+   ],
+   [
+    245,
+    149,
+    219
+   ],
+   [
+    245,
+    180,
+    131
+   ],
+   [
+    245,
+    229,
+    143
+   ],
+   [
+    248,
+    157,
+    175
+   ],
+   [
+    248,
+    171,
+    227
+   ],
+   [
+    248,
+    196,
+    156
+   ],
+   [
+    248,
+    236,
+    166
+   ],
+   [
+    255,
+    162,
+    176
+   ],
+   [
+    255,
+    176,
+    228
+   ],
+   [
+    255,
+    202,
+    158
+   ],
+   [
+    255,
+    241,
+    167
+   ],
+   [
+    255,
+    255,
+    255
+   ]
+  ],
+  "phases": 24,
+  "frame_length_ticks": 10,
+  "demande": "je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc",
+  "loi": "cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs) sortis du calque falaises ; base blanche en 5 tons selon la luminance d origine (les facettes restent) + contour indigo ; reflets : bande diagonale de 34 px (periode 96 px, +4 px par phase) aux 8 teintes de l arc-en-ciel posees sur le blanc, teinte = ((x + y) / 8 + t / 3) mod 8 (la couleur tourne : rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ; 36 eclats 1-2-3-2-1",
+  "nature": "pixels calcules (recoloration des cristaux du brut genere), pas des tuiles natives"
  },
  "scene_loop_ticks": 480,
  "access": {
@@ -1892,15 +2195,17 @@
    "EAF1_04_LUEURS": 137,
    "EAF1_05_EAU": 264,
    "EAF1_06_SOL": 895,
-   "EAF1_07_FALAISES": 4221,
-   "EAF1_08_HERBES": 168,
-   "EAF1_09_FLEURS": 1077,
-   "EAF1_10_BUISSONS": 229,
-   "EAF1_11_ARBRES": 365,
-   "EAF1_12_CASCADES": 121,
-   "EAF1_13_ECUME": 182,
-   "EAF1_14_EMBRUNS": 672,
-   "EAF1_15_PAPILLONS": 379
+   "EAF1_07_FALAISES": 3690,
+   "EAF1_08_CRISTAUX": 2044,
+   "EAF1_09_REFLETS": 13081,
+   "EAF1_10_HERBES": 168,
+   "EAF1_11_FLEURS": 1077,
+   "EAF1_12_BUISSONS": 229,
+   "EAF1_13_ARBRES": 365,
+   "EAF1_14_CASCADES": 121,
+   "EAF1_15_ECUME": 182,
+   "EAF1_16_EMBRUNS": 672,
+   "EAF1_17_PAPILLONS": 379
   },
   "banks": [
    "EAF1_00_SOL",
@@ -1911,14 +2216,16 @@
    "EAF1_05_EAU",
    "EAF1_06_SOL",
    "EAF1_07_FALAISES",
-   "EAF1_08_HERBES",
-   "EAF1_09_FLEURS",
-   "EAF1_10_BUISSONS",
-   "EAF1_11_ARBRES",
-   "EAF1_12_CASCADES",
-   "EAF1_13_ECUME",
-   "EAF1_14_EMBRUNS",
-   "EAF1_15_PAPILLONS"
+   "EAF1_08_CRISTAUX",
+   "EAF1_09_REFLETS",
+   "EAF1_10_HERBES",
+   "EAF1_11_FLEURS",
+   "EAF1_12_BUISSONS",
+   "EAF1_13_ARBRES",
+   "EAF1_14_CASCADES",
+   "EAF1_15_ECUME",
+   "EAF1_16_EMBRUNS",
+   "EAF1_17_PAPILLONS"
   ],
   "runtime_tested": false,
   "warp": "aucun (raccords a scripter)"

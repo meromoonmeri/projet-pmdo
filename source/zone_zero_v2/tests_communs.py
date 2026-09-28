@@ -105,7 +105,10 @@ def make(lot):
             self.assertFalse(M['art_approved']); self.assertFalse(M['pmdo']['runtime_tested'])
 
         def test_calques_ordre_tailles_alpha(self):
-            self.assertEqual(NAMES, NAMES_ATTENDUS)
+            att = list(NAMES_ATTENDUS)
+            if CF.get('cristaux'):                                                              # cristaux : base + reflets après falaises
+                i = att.index('falaises') + 1; att[i:i] = ['cristaux', 'reflets']
+            self.assertEqual(NAMES, att)
             files = [Path(p).name for p in ORDER]
             self.assertTrue(all(n.startswith(PFX + '_') for n in files)); self.assertEqual(len(files), len(set(files)))
             self.assertEqual((W, H, W * 3), (768, 576, H * 4))                                  # 4:3
@@ -298,6 +301,54 @@ def make(lot):
             bx, by = mk['belvedere']
             d = ndimage.distance_transform_edt(~MASK['vide'])
             self.assertLess(d[by:by + 16, bx:bx + 16].min(), 40)                                    # belvédère près du gouffre
+
+        def test_cristaux_blancs_reflets_arc_en_ciel(self):
+            if not CF.get('cristaux'):
+                self.assertNotIn('cristaux', NAMES); self.assertIsNone(M.get('cristaux')); self.assertNotIn('reflets', AN)
+                return
+            cm = M['cristaux']; base = STACK['cristaux'][0]; ba = alpha(base)
+            self.assertGreater(ba.sum(), 2500)
+            self.assertEqual(ba.sum(), cm['pixels_cristal'] + cm['pixels_contour'])
+            tons = {tuple(t) for t in cm['tons_base']} | {tuple(cm['contour'])}
+            self.assertTrue(colors(base) <= tons)
+            v = base[ba][:, :3].astype(int); body = ba & ~(base[..., :3] == cm['contour']).all(2)
+            vb = base[body][:, :3].astype(int)
+            self.assertGreater(float((vb @ [.299, .587, .114]).mean()), 200)                       # base blanche
+            self.assertLess(float((vb.max(1) - vb.min(1)).mean()), 45)                            # peu saturée
+            self.assertGreater(float((vb.min(1) >= 240).mean()), 0.3)
+            # les cristaux menthe ont quitté le calque falaises (règle du cœur menthe pâle)
+            f = STACK['falaises'][0].astype(int); r, g, b = f[..., 0], f[..., 1], f[..., 2]
+            core = alpha(STACK['falaises'][0]) & (g > r + 20) & (abs(b - g) < 25) & (f[..., :3].min(2) > 150)
+            self.assertLess(int(core.sum()), 0.02 * ba.sum()); self.assertFalse((ba & alpha(STACK['falaises'][0])).any())
+            # reflets : 24 phases x 10, dans les cristaux, chaque phase différente, boucle fermée sur 480 ticks
+            rf = STACK['reflets']; self.assertEqual((len(rf), AN['reflets']['frame_length_ticks']), (24, 10))
+            self.assertEqual((cm['phases'], cm['frame_length_ticks']), (24, 10))
+            halo = ndimage.binary_dilation(body, iterations=1)
+            pal = {tuple(c) for c in cm['palette_reflets']}
+            for t, a in enumerate(rf):
+                self.assertFalse((alpha(a) & ~halo).any(), t); self.assertTrue(colors(a) <= pal, t)
+                self.assertGreater(alpha(a).sum(), 0.08 * body.sum(), t)
+                self.assertFalse((a == rf[(t + 1) % 24]).all(), t)
+            # arc-en-ciel : les 8 teintes présentes à chaque phase ; la couleur change au même pixel (rouge, mauve...)
+            arc = {k: np.array(c, float) for k, c in cm['arc_en_ciel'].items()}
+            self.assertEqual(list(arc), ['rouge', 'orange', 'jaune', 'vert', 'cyan', 'bleu', 'mauve', 'rose'])
+            def teinte(c):
+                c = np.array(c, float)
+                if c.min() >= 225 and c.max() - c.min() < 30:
+                    return 'eclat'
+                return min(arc, key=lambda k: np.corrcoef(c - c.mean(), arc[k] - arc[k].mean())[0, 1] * -1)
+            tmap = {c: teinte(c) for c in pal}
+            for t in (0, 7, 15, 23):
+                self.assertEqual({tmap[c] for c in colors(rf[t])} - {'eclat'}, set(arc), t)
+            st = np.stack([a for a in rf]); on = st[..., 3] == 255
+            ys, xs = np.nonzero(on.sum(0) >= 6)
+            vus = []
+            for y, x in list(zip(ys, xs))[::max(1, len(ys) // 200)]:
+                vus.append(len({tmap[tuple(int(u) for u in st[t, y, x, :3])] for t in range(24) if on[t, y, x]} - {'eclat'}))
+            self.assertGreaterEqual(max(vus), 4); self.assertGreater(float(np.mean(vus)), 1.5)
+            # éclats scintillants 1-2-3-2-1
+            self.assertGreaterEqual(cm['eclats'], 12)
+            self.assertGreater(sum(((a[..., :3] == 255).all(2) & alpha(a)).sum() for a in rf), cm['eclats'] * 3)
 
         def test_ground_aller_retour(self):
             doc = json.loads((S / f"Data/Ground/{M['pmdo']['asset']}.rsground").read_text()); o = doc['Object']
