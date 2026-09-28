@@ -21,9 +21,10 @@ La <strong>mer</strong> est générée d'après la carte V24P04A de PMD Ciel et 
 <li>les crêtes naissent en houle sombre sous l'horizon, grandissent en descendant et roulent vers la prairie (12 crans de 10 ticks, motif de 96 px) ;</li>
 <li>cadence décodée des 12 images de V24P04A : une crête avance d'une rangée en 6 crans ;</li>
 <li>chaque crête couvre presque tout le motif, et une fine ligne de houle continue court sous chaque rangée : pas de trou entre les vagues ;</li>
-<li>l'horizon scintille (16 crans de 4 ticks).</li>
+<li>l'horizon scintille (16 crans de 4 ticks) ;</li>
+<li>les fines lignes de houle et les reflets clairs peints dans la mer ne sont plus figés : sur leur propre calque, ils décrivent l'orbite de l'eau au rythme de la houle.</li>
 </ul>
-Le <strong>banc de nuages</strong> défile lentement derrière la <strong>montagne de la V1</strong>, dont les flancs descendent jusqu'à l'horizon. La profondeur va de l'avant vers l'arrière : <strong>mer, montagne, nuages</strong>.
+Le <strong>banc de nuages</strong> fait toute la largeur de l'écran (trois bancs générés raccordés : aucun nuage ne se répète) et défile lentement derrière la <strong>montagne de la V1</strong>, dont les flancs descendent jusqu'à l'horizon. La profondeur va de l'avant vers l'arrière : <strong>mer, montagne, nuages</strong>.
 La nuit, la lune se lève derrière le sommet ; à l'aube, le soleil se lève ; au crépuscule, il se couche derrière les nuages.
 Chaque astre a un reflet sur la mer, dessiné au générateur, qui ondule au rythme de la houle. L'écume et les bulles sont celles de la V1. Les fleurs se balancent comme à Sky Peak.</p>
 <div class="bar">
@@ -45,7 +46,8 @@ Non testé dans PMDO. Les petits pics sombres de la mer de nuages de la V1 ne so
 <tr><td>Reflet de l'astre</td><td>12 × 10 ticks</td><td>planche de reflets générée (lune, aube, crépuscule) ; ondulation calée sur la houle</td></tr>
 <tr><td>Écume, bulles</td><td>10 × 10, 24 × 5 ticks</td><td>celles de la V1 (palette 8 de s01p02a) ; crépuscule : même méthode</td></tr>
 <tr><td>Scintillement de l'horizon</td><td>16 × 4 ticks</td><td>cadence des palettes animées de V24P04A</td></tr>
-<tr><td>Nuages</td><td>256 × 8 ticks (34 s)</td><td>banc généré avec V24P04A en référence (sommet rogné arrondi en dôme), 1 px par cran, boucle de 256 px</td></tr>
+<tr><td>Nuages</td><td>384 × 16 ticks (102 s)</td><td>trois bancs générés raccordés là où les silhouettes se prolongent (sommet rogné arrondi en dôme), 2 px par cran, boucle de 768 px : aucune répétition à l'écran</td></tr>
+<tr><td>Ondes</td><td>12 × 10 ticks</td><td>lignes de houle et reflets clairs peints dans la mer générée, extraits sur leur calque ; orbite de l'eau calée sur la houle</td></tr>
 <tr><td>Montagne</td><td>fixe</td><td>celle de la V1, redessinée seule, flancs prolongés jusqu'à l'horizon</td></tr>
 <tr><td>Étoiles (nuit)</td><td>24 × 5 ticks</td><td>étoiles de la V1</td></tr></table>
 </main>

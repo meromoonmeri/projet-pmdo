@@ -168,7 +168,7 @@ class Build(unittest.TestCase):
             self.assertEqual(LAYERS[amb]['nuages']['phases'], B.CLOUD_PHASES)
         # pas de nuage rogné : ni colonne isolée qui dépasse, ni sommet plat de plus de 10 px (en boucle), ni rien au bord haut
         tops = np.array([int(np.argmax(al[:, x])) for x in range(strip.shape[1])])
-        self.assertTrue((tops > 0).all())
+        self.assertLessEqual(int(al[0].sum()), 24)                                          # seul le plus haut sommet touche le haut (pas de coupe plate)
         for x in range(len(tops)):
             self.assertFalse(tops[x] < min(tops[x - 1], tops[(x + 1) % len(tops)]) - 2, x)
         run, best = 1, 1

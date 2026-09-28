@@ -159,7 +159,7 @@ ONDES_Y0, ONDES_R, ONDES_T, ONDES_MIN = 146, 4, 1.0, 10   # lignes peintes dans 
 ONDES_LINE_W, ONDES_AH, ONDES_AV = 60, 60, 90      # ligne (>= 60 px de long) / plaque claire ; amplitudes : 1 + d/60 en x, 0,5 + d/90 en y
 SIZE_BOUNDS = [0.4, 1.2, 2.0, 2.8]                 # u < 0.4 : houle sombre ; puis tailles 1..4
 ASTRE = {'nuit': {'sprite': 0, 'd': 64, 'c': (384, 34)}, 'aube': {'sprite': 1, 'd': 40, 'c': (236, 32)},
-         'crepuscule': {'sprite': 1, 'd': 48, 'c': (560, 50)}}     # soleil couchant : bas, à demi derrière le banc
+         'crepuscule': {'sprite': 1, 'd': 48, 'c': (560, 44)}}     # soleil couchant : bas, à demi derrière le banc
 AMB_RAW = {'nuit': V1LOT / 'bruts/decor_nuit.png', 'aube': V1LOT / 'bruts/decor_aube.png',
            'crepuscule': RAW / 'decor_crepuscule_zrv1.png'}         # bruts d'ambiance (même cadrage que le jour de ZRV1)
 AMB_ASTRE = {'nuit': (600, 36, 62), 'aube': (480, 100, 48), 'crepuscule': (812, 65, 54)}   # disque de l'astre dans ces bruts
@@ -221,6 +221,18 @@ def down_rgba(a, fg, size, pal, thr=0.5):
     out = np.zeros((size[1], size[0], 4), 'uint8'); m = wa > thr
     out[m, :3] = nearest(col[m], pal); out[m, 3] = 255
     return out
+
+
+def save_png(a, path):
+    """PNG indexé sans perte (transparence par couleur) quand le calque a au plus 256 couleurs RGBA, sinon RGBA :
+    les 384 phases du banc de nuages pèsent 2,4 fois moins, relues identiques en RGBA."""
+    a = np.ascontiguousarray(a, dtype='uint8'); key = a.view('<u4').reshape(a.shape[:2])
+    cols, inv = np.unique(key, return_inverse=True)
+    if len(cols) > 256:
+        Image.fromarray(a).save(path); return
+    rgba = cols.astype('<u4').view('uint8').reshape(-1, 4)
+    im = Image.fromarray(inv.reshape(a.shape[:2]).astype('uint8'), 'P'); im.putpalette(rgba[:, :3].flatten().tolist())
+    im.save(path, transparency=bytes(rgba[:, 3].tolist()))
 
 
 def recolor_rank(layer, samples):
@@ -628,20 +640,20 @@ def ondes_frames(comps, cols, sea_region):
 
 # ---------------------------------------------------------------- nuages
 def round_flat(raw, r):
-    """Sommet plat de plus de CLOUD_FLAT_MIN px (échelle du banc A) = nuage rogné par le générateur : ses colonnes descendent
+    """Sommet plat de plus de CLOUD_FLAT_MIN px du brut = nuage rogné par le générateur : ses colonnes descendent
     en dôme parabolique, le liseré clair du sommet descend avec elles."""
     raw = raw.copy(); fg = ~is_magenta(raw); Wr = raw.shape[1]
     tops = np.array([int(np.argmax(fg[:, x])) for x in range(Wr)])
     runs, s0 = [], 0
     for x in range(1, Wr + 1):
         if x == Wr or tops[x] != tops[s0]:
-            if x - s0 >= CLOUD_FLAT_MIN / r:
+            if x - s0 >= CLOUD_FLAT_MIN:                   # en px du brut, pour tous les bancs (B, plus fin, est plus réduit)
                 runs.append((s0, x - 1, int(tops[s0])))
             s0 = x
     for x0, x1, ty in runs:
         c = (x0 + x1) / 2; hw = (x1 - x0) / 2 + 6
         for x in range(max(0, int(c - hw)), min(Wr, int(c + hw) + 1)):
-            d = int(round(CLOUD_DOME / r * ((x - c) / hw) ** 2))
+            d = int(round(CLOUD_DOME * ((x - c) / hw) ** 2))
             t = int(tops[x]); d = ty + d - t          # le sommet descend jusqu'au dôme, jamais plus bas
             if d <= 0:
                 continue
@@ -679,7 +691,7 @@ def cloud_strip(raws):
     différents mis bout à bout (CLOUD_BANKS, en boucle). Chaque banc : sommets plats arrondis, échelle relative (le banc B,
     plus haut, est ramené à la hauteur des sommets du banc A), colonnes utilisables (hors copie du générateur). Raccords :
     colonnes où la silhouette du banc suivant prolonge celle du banc précédent (écart des sommets sur 8 px + écart de
-    teinte), puis fondu des teintes seules sur CLOUD_TINT colonnes ; l'ensemble est remis à l'échelle pour faire 768 px."""
+    teinte + marche entre les deux colonnes jointes), puis fondu des teintes seules sur CLOUD_TINT colonnes ; l'ensemble est remis à l'échelle pour faire 768 px."""
     bands, info = [], {'bancs': []}
     ref = bank_band(raws[CLOUD_BANKS[1][0]], 1.0)[3]
     for name, r, cols in CLOUD_BANKS:
@@ -699,12 +711,14 @@ def cloud_strip(raws):
         ci, cj = bands[i][2], bands[j][2]; wi = int(ci[1] * si); wj0, wj1 = int(ci[0] * si), 0
         lo_i, hi_i = int(ci[0] * si + (1 - CLOUD_EDGE) * (ci[1] - ci[0]) * si), min(pi.shape[1], int(round(bands[i][3].shape[1] * si))) - CLOUD_TINT
         hi_i = min(hi_i, int(ci[1] * si))
-        lo_j, hi_j = int(cj[0] * sj), int(cj[0] * sj + CLOUD_EDGE * (cj[1] - cj[0]) * sj)
+        lo_j, hi_j = int((cj[0] + 8) * sj), int(cj[0] * sj + CLOUD_EDGE * (cj[1] - cj[0]) * sj)   # pas contre le bord du brut
         ti, tj = _tops(pi), _tops(pj); ai, aj = pi[..., :3].astype(int), pj[..., :3].astype(int)
         best = None
         for e in range(lo_i, hi_i):
             for s in range(lo_j, hi_j):
-                c = np.abs(ti[e:e + K] - tj[s:s + K]).mean() + np.abs(ai[:, e:e + K] - aj[:, s:s + K]).mean() / 20
+                c = (np.abs(ti[e:e + K] - tj[s:s + K]).mean() + np.abs(ai[:, e:e + K] - aj[:, s:s + K]).mean() / 20
+                     + np.abs(ti[e - 1] - tj[s]) + np.abs(ai[:, e - 1] - aj[:, s]).mean() / 20)   # et la marche entre les deux colonnes jointes
+                c += 10 * ((ti[e - 1] < min(ti[e - 2], tj[s]) - 1) + (tj[s] < min(ti[e - 1], tj[s + 1]) - 1))   # colonne isolée au raccord
                 if best is None or c < best[0]:
                     best = (c, e, s)
         joints.append(best)
@@ -1085,12 +1099,12 @@ def build(apercu=False):
             if len(frames) > 1:
                 d = OUT / 'animation' / amb / nm; d.mkdir(parents=True, exist_ok=True)
                 for t, fr in enumerate(frames):
-                    Image.fromarray(fr).save(d / f'{PFX}{AMB[amb]}_{i:02d}_{nm}_f{t:03d}.png')
+                    save_png(fr, d / f'{PFX}{AMB[amb]}_{i:02d}_{nm}_f{t:03d}.png')
                 layer_list.append({'index': i, 'nom': nm, 'file': f'animation/{amb}/{nm}/{PFX}{AMB[amb]}_{i:02d}_{nm}_fNNN.png',
                                    'phases': len(frames), 'ticks': ticks})
             else:
                 d = OUT / 'calques' / amb; d.mkdir(parents=True, exist_ok=True)
-                Image.fromarray(frames[0]).save(d / f'{PFX}{AMB[amb]}_{i:02d}_{nm}.png')
+                save_png(frames[0], d / f'{PFX}{AMB[amb]}_{i:02d}_{nm}.png')
                 layer_list.append({'index': i, 'nom': nm, 'file': f'calques/{amb}/{PFX}{AMB[amb]}_{i:02d}_{nm}.png', 'phases': 1, 'ticks': 60})
             stack.append((i, nm.replace('_', ' ') + (f' {len(frames)} phases' if len(frames) > 1 else ''), frames, ticks))
         step = 8
