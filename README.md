@@ -1,5 +1,36 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FOC1 — Fin Océan : arène de Kyogre sous la mer (28 septembre 2026)
+
+**Demande** : « fait une zone de fin donjon sous l'ocean avec des motif sur toute la zone et des nuance deau des effet de bulle etc une zone ou y'aura kyogre apres etc elle doit etre magnifique ».
+
+- **Référence canonique** : `D42P41A`, rendue par le nouvel outil `source/outil_maps_pmdsky` (copie dans `source/fin_ocean_kyogre_v1/reference/`). C'est un fond marin bleu gravé d'anneaux de bulles et de fissures de corail, avec un anneau de roche bleue et des scintillements multicolores. Aucune map sous-marine jouable n'existe dans PMD Sky ; c'est la plus proche (choix de l'agent).
+- Layout : arrivée au sud (`entrance`), grande arène ovale, **sceau de Kyogre** gravé au centre (`sceau`), **fosse abyssale** au nord entourée de corniches en gradins non praticables (`kyogre`, au bord sud de la fosse). Algues et coraux sur les parois. Aucune autre sortie, aucun warp.
+- Rendu généré référencé, fosse en magenta (découpe de style ×3 de la référence) ; sol complet généré depuis une découpe du sol (×4).
+- Calques, du bas vers le haut : sol complet, abysse, sol, nuances d'eau, motifs lumineux, parois, coraux, algues, bulles, scintillements.
+- Animations, toutes fermées sur 240 ticks :
+  - **abysse** : tourbillon à 3 bras, 7 tons sombres, 24 × 10 ;
+  - **nuances d'eau** : caustiques fines ondulées (F2 − F1, domaine déformé, traits discontinus) + nappes de lumière et d'ombre, 16 × 15 ;
+  - **motifs lumineux** : le sceau s'allume, puis une onde part du sceau et parcourt les 13 841 pixels gravés du sol, 24 × 10 ;
+  - **algues** : 29 touffes, cisaillement depuis la base fixe, 12 × 20 ;
+  - **bulles** : 69 bulles de 18 sources (fosse, évents gravés, algues), naissent, montent en oscillant, éclatent, 48 × 5 ;
+  - **scintillements** : 80 étoiles aux 4 teintes de la référence, 12 × 5.
+- Fidélité : sol 12.2, sol complet 4.03, parois 30.1 (seuil 35).
+- 12 tests PASS. Mutations détectées : couleur étrangère dans l'abysse, bulles figées, base d'algue qui glisse, phase des motifs éteinte, sol au bord nord.
+- Aperçu : `apercu_fin_ocean_kyogre_v1.html`. Paquets : `FOC1_projet_pmdo_0812.zip` (2.67 Mo) et `FOC1_calques_png_8px.zip` (7.44 Mo).
+- Pixels générés ou calculés, pas de tuiles natives. Kyogre n'est pas placé (marqueur seul). Pas de runtime. Pas dans le mod unique.
+
+## Outil maps PMD Sky — toutes les maps et BG d'Explorers of Sky (28 septembre 2026)
+
+- `source/outil_maps_pmdsky/recuperer_maps.py` (README dans le dossier) :
+  - `rom` : les 473 entrées de `bg_list.dat` (pret/pmd-sky épinglé), 468 rendues avec skytemple-files, dont 154 animées (PNG + WebP dans `.cache/maps_pmdsky/rom/`) ;
+  - `galerie` : la galerie projectpokemon, catégorie 12. Non testable ici : la sandbox coupe le TLS vers projectpokemon.org ;
+  - `identifie` : rattache les captures nommées du dépôt aux codes (26 au pixel près, 4 probables) ;
+  - `cherche`.
+- **Vérifié** : le préfixe `dNN` n'est **pas** le `DUNGEON_ID` (D04 = Waterfall Cave, D54 = Southern Jungle…). Seules les identifications par capture donnent un nom.
+- Versionnés : `index_rom.json`, planches contact JPEG par lettre et `planches/references_zone_zero.jpg`.
+- Le réseau de routes Zone Zéro demandé avant FOC1 n'est pas commencé (questions de cadrage restées sans réponse).
+
 ## FWC1 — Fin Waterfall Cave : salle du joyau, septième zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « continue ! » après FJS1. La série des fins reprend dans l'ordre du mod : **Waterfall Cave** (entrées EWC1 à EWC3).

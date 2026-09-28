@@ -48,6 +48,10 @@ Le 28 septembre, sur « Fait des zone fin de donjon multicalque de la série ent
   - Salle du joyau d'après la vraie salle (`Waterfall_Cave_gem_TDS.png`) : chemin de galets et cristaux entre deux bassins, joyau géant au nord. Pas de boss dans le jeu (le joyau déclenche la vague).
   - Eau à réseau de reflets calculée (Worley arrondi, tons de la capture), joyau qui pulse, cristaux qui scintillent.
   - Fin suivante dans l'ordre du mod : Underground Lake (EUL1).
+- Sur la demande Zone Zéro : **outil de récupération des maps PMD Sky** (`source/outil_maps_pmdsky/`, README, 5 tests). 468 maps rendues depuis pret/pmd-sky ; le préfixe `dNN` n'est pas le `DUNGEON_ID`. Le réseau de routes Zone Zéro n'est pas commencé : les questions de cadrage (références, nombre de routes, type d'entrée) sont restées sans réponse et une nouvelle demande est arrivée.
+- Sur « zone de fin de donjon sous l'océan… Kyogre… magnifique » : **Fin Océan** (`renders/fin_ocean_kyogre_v1/`, préfixe `FOC1`, aperçu `apercu_fin_ocean_kyogre_v1.html`, 12 tests PASS).
+  - Référence `D42P41A` (fond marin gravé). Sceau de Kyogre au centre, fosse abyssale au nord, marqueurs `kyogre` et `sceau`.
+  - Abysse en tourbillon, caustiques et nappes, onde lumineuse sur toutes les gravures, algues, bulles, scintillements.
 
 Même jour, sur « regarde l'animation de la mer V24P04A et des nuages, c'est ce que je te demandais pour la zone réveil », puis « je veux garder le layout de la v1 juste corrige la mer et le background laisse la montagne mais faut que les nuages soient derrière la montagne : la mer ⇒ montagne ⇒ nuage » : lot **ZRV2** (`renders/zone_reveil_prairie_horizon_v2/`, aperçu `apercu_zone_reveil_prairie_horizon_v2.html`, 18 tests PASS après la correction des nuages et des ondes).
 
@@ -77,7 +81,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1, FRP1, FGG1, FGG2, FBS1, FJS1, FWC1, ECM1 et AGM1.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1, FRP1, FGG1, FGG2, FBS1, FJS1, FWC1, FOC1, ECM1 et AGM1.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 
