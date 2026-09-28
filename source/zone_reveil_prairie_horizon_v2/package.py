@@ -56,13 +56,13 @@ def main():
                     segs.append({'type': 'fixe', 'img': uri_img(np.array(acc))}); acc = None
                 cols = np.array(Image.open(O / x['file'].replace('fNNN', 'f000')).convert('RGBA'))
                 h = M['nuages']['hauteur_px']; band = cols[M['horizon_y'] - h:M['horizon_y']]
-                # bande de l'ambiance : phase 0 = bande sans décalage ; les pixels masqués par la montagne sont repris
-                # de la phase 128 (décalée de 128 px) pour reconstituer la bande complète
-                c2 = np.array(Image.open(O / x['file'].replace('fNNN', 'f128')).convert('RGBA'))[M['horizon_y'] - h:M['horizon_y']]
-                full = band[:, :256].copy()
-                for k in range(W // 256):
-                    part = band[:, k * 256:(k + 1) * 256]; m = (full[..., 3] == 0) & (part[..., 3] > 0); full[m] = part[m]
-                    part = np.roll(c2[:, k * 256:(k + 1) * 256], -128, axis=1); m = (full[..., 3] == 0) & (part[..., 3] > 0); full[m] = part[m]
+                # bande de l'ambiance (période = largeur de l'écran) : phase 0, les pixels masqués par la montagne sont
+                # repris de la phase de mi-parcours (bande décalée d'une demi-période)
+                N = M['nuages']; ph = N['phases'] // 2; sh = ph * N['pas_px']
+                c2 = np.array(Image.open(O / x['file'].replace('fNNN', f'f{ph:03d}')).convert('RGBA'))[M['horizon_y'] - h:M['horizon_y']]
+                full = band[:, :N['periode_px']].copy()
+                part = np.roll(c2[:, :N['periode_px']], -sh, axis=1); m = (full[..., 3] == 0) & (part[..., 3] > 0); full[m] = part[m]
+                assert (full[-1, :, 3] > 0).all()
                 segs.append({'type': 'nuages', 'img': uri_img(full)})
                 continue
             if x['phases'] == 1:

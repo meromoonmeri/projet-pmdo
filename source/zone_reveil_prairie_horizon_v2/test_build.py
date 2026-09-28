@@ -68,7 +68,9 @@ class Build(unittest.TestCase):
             self.assertEqual(sha(R / v['file']), v['sha256'], k)
         g = {x['file']: x for x in M['generation']}
         self.assertEqual(set(g), {'ciel_mer_jour.png', 'cretes_jour.png', 'banc_nuages_jour.png', 'montagne_jour.png', 'astres.png',
-                                  'reflets_astres.png', 'decor_crepuscule_zrv1.png'})
+                                  'reflets_astres.png', 'decor_crepuscule_zrv1.png', 'banc_nuages_jour_b.png', 'banc_nuages_jour_c.png'})
+        for k in ('banc_nuages_jour_b.png', 'banc_nuages_jour_c.png'):                     # bancs de plus : style du banc A
+            self.assertTrue(any('banc_nuages' in i for i in g[k]['images']), k)
         for k in ('ciel_mer_jour.png', 'cretes_jour.png', 'banc_nuages_jour.png', 'reflets_astres.png'):   # V24P04A en référence
             self.assertTrue(any('v24p04a' in i for i in g[k]['images']), k)
         self.assertTrue(any('v1_montagne' in i for i in g['montagne_jour.png']['images']))  # la montagne de ZRV1
@@ -113,7 +115,7 @@ class Build(unittest.TestCase):
             sky, mont, mer = alpha(frame(amb, 'ciel')), alpha(frame(amb, 'montagne')), alpha(frame(amb, 'mer'))
             self.assertTrue(sky[:YH].all()); self.assertFalse(sky[YH:].any())
             self.assertTrue((mer == SEA).all()); self.assertFalse(mont[YH:].any())
-            for nom in ('scintillement', 'houle', 'reflet', 'ecume'):
+            for nom in ('ondes', 'scintillement', 'houle', 'reflet', 'ecume'):
                 if nom in LAYERS[amb]:
                     for f in frames(amb, nom):
                         self.assertTrue((alpha(f) <= SEA).all(), (amb, nom))
@@ -137,29 +139,75 @@ class Build(unittest.TestCase):
 
     def test_nuages_defilent_boucle_fermee(self):
         strip = load(O / 'masques/ZRV2_jour_nuages_bande.png')
-        self.assertEqual(strip.shape[1], B.CLOUD_PERIOD); self.assertEqual(W % B.CLOUD_PERIOD, 0)
+        self.assertEqual(strip.shape[1], B.CLOUD_PERIOD); self.assertEqual(B.CLOUD_PERIOD, W)     # période = écran entier
         self.assertEqual(B.CLOUD_PHASES * B.CLOUD_PAS % B.CLOUD_PERIOD, 0)
+        self.assertEqual(B.CLOUD_PAS / B.CLOUD_TICKS, 1 / 8)                                 # vitesse de ZRV2 gardée
         self.assertTrue((strip == rebuilt()['strip']).all())
         self.assertTrue(alpha(strip)[-1].all())                                           # le banc est posé sur l'horizon
-        # raccord : la bande est continue en boucle (écart moyen entre la dernière et la première colonne comme ailleurs)
-        a = strip[..., :3].astype(int); d = np.abs(np.diff(a, axis=1)).mean(); seam = np.abs(a[:, 0] - a[:, -1]).mean()
-        self.assertLess(seam, d * 2.5)
+        # aucun nuage répété à l'écran : la bande n'a pas de période plus courte que l'écran (l'ancienne : 256 px)
+        al = alpha(strip)
+        for p in (128, 192, 256, 384):
+            self.assertGreater((al != np.roll(al, p, axis=1)).mean(), 0.05, p)
+        # les colonnes du banc A recopiées par le générateur dans le banc c (x 375-1075) ne sont pas reprises deux fois
+        bancs = M['mesures']['nuages']['bancs']
+        self.assertEqual([b['brut'] for b in bancs], [b[0] for b in B.CLOUD_BANKS])
+        a_ = next(b for b in bancs if b['brut'] == 'banc_nuages_jour.png'); self.assertLessEqual(a_['coupe_brut'][1], 375)
+        self.assertEqual(sum(b['largeur_px'] for b in bancs), W)
+        self.assertEqual(a_['sommets_arrondis'], [[217, 286, 276]])
+        # raccords : la bande est continue en boucle (écart entre colonnes voisines aux raccords comme ailleurs)
+        a = strip[..., :3].astype(int); d = np.abs(np.diff(a, axis=1)).mean()
+        x = 0
+        for b in bancs:
+            seam = np.abs(a[:, x % W] - a[:, x - 1]).mean(); self.assertLess(seam, d * 2.5, (b['brut'], x)); x += b['largeur_px']
         mont = alpha(frame('jour', 'montagne')); want = B.cloud_frames(strip, mont)
-        for t in (0, 1, 100, 255):
+        for t in (0, 1, 100, B.CLOUD_PHASES - 1):
             self.assertTrue((want[t] == frame('jour', 'nuages', t)).all(), t)
-        self.assertTrue((np.roll(strip, B.CLOUD_PHASES * B.CLOUD_PAS, axis=1) == strip).all())    # phase 256 = phase 0
+        self.assertTrue((np.roll(strip, B.CLOUD_PHASES * B.CLOUD_PAS, axis=1) == strip).all())    # dernière phase + 1 = phase 0
         self.assertFalse((frame('jour', 'nuages', 0) == frame('jour', 'nuages', 1)).all())
+        for amb in B.AMB:
+            self.assertEqual(LAYERS[amb]['nuages']['phases'], B.CLOUD_PHASES)
         # pas de nuage rogné : ni colonne isolée qui dépasse, ni sommet plat de plus de 10 px (en boucle), ni rien au bord haut
-        al = alpha(strip); tops = np.array([int(np.argmax(al[:, x])) for x in range(strip.shape[1])])
+        tops = np.array([int(np.argmax(al[:, x])) for x in range(strip.shape[1])])
+        self.assertTrue((tops > 0).all())
         for x in range(len(tops)):
             self.assertFalse(tops[x] < min(tops[x - 1], tops[(x + 1) % len(tops)]) - 2, x)
         run, best = 1, 1
         for x in range(1, 2 * len(tops)):
             run = run + 1 if tops[x % len(tops)] == tops[(x - 1) % len(tops)] else 1; best = max(best, run)
         self.assertLessEqual(best, 10)
-        self.assertEqual(M['mesures']['nuages']['sommets_arrondis'], [[217, 286, 276]])
-        for amb in B.AMB:                                                   # le banc entier tient dans le ciel
-            self.assertGreater(YH - strip.shape[0], 0)
+        self.assertGreater(YH - strip.shape[0], 30)                                        # le banc tient dans le bas du ciel
+
+    def test_ondes_lignes_peintes_animees(self):
+        """Les lignes de houle et plaques claires peintes dans la plaque ne sont plus statiques : extraites dans « ondes »,
+        plaque rebouchée avec son grain, orbite au rythme de la houle, boucle fermée."""
+        info = M['mesures']['ondes']; self.assertGreaterEqual(info['lignes'], 4); self.assertGreater(info['pixels'], 5000)
+        self.assertGreaterEqual(info['rangees'][0], B.ONDES_Y0)
+        o = B.ORDER; self.assertLess(o.index('mer'), o.index('ondes')); self.assertLess(o.index('ondes'), o.index('houle'))
+        rb = rebuilt()
+        for amb in B.AMB:
+            fr = frames(amb, 'ondes'); self.assertEqual(len(fr), B.SWELL_STEPS)
+            self.assertEqual(LAYERS[amb]['ondes']['ticks'], B.SWELL_TICKS)                    # calé sur la houle
+            for s_, f in enumerate(fr):
+                self.assertTrue((f == rb['out'][amb]['ondes'][0][s_]).all(), (amb, s_))
+                self.assertTrue((f == fr[(s_ + 6) % 12]).all())                              # une orbite par rangée de crêtes
+                ys = np.nonzero(alpha(f).any(1))[0]; self.assertGreaterEqual(ys.min(), B.ONDES_Y0 - 3)
+            self.assertFalse((fr[0] == fr[1]).all()); self.assertFalse((fr[0] == fr[3]).all())
+            mer = frame(amb, 'mer'); self.assertTrue((alpha(mer) == SEA).all())
+        # extraction : hors motifs la plaque est celle du brut ; les lignes ont quitté la plaque
+        sea_full = np.zeros((H, W, 3), int); hr, fy, sky, sea = B.sky_sea(B.rgb(B.RAW / 'ciel_mer_jour.png')); sea_full[YH:] = sea
+        mer = frame('jour', 'mer')[..., :3].astype(int)
+        f0 = frames('jour', 'ondes')
+        l_mer, l_raw = B.lum(mer), B.lum(sea_full)
+        def energy(l):
+            m = SEA.copy(); m[:B.ONDES_Y0] = False
+            from scipy import ndimage as nd_
+            v = np.abs(nd_.gaussian_filter1d(l - nd_.median_filter(l, size=(9, 1)), 3, axis=1)); return v[m].mean()
+        self.assertLess(energy(l_mer), 0.7 * energy(l_raw))                                  # la plaque n'a plus ses lignes
+        diff = (mer != sea_full).any(-1) & SEA; diff[:YH + 40] = False
+        self.assertLess(diff.sum(), 1.2 * info['pixels'])                                    # seuls les motifs ont été rebouchés
+        # orbite : dx = Ah cos phi, dy = Av sin phi ; la ligne de y ~ 225 bouge d'au moins 2 px
+        cy = [np.nonzero(alpha(f)[215:240])[0].mean() for f in f0[:6]]
+        self.assertGreaterEqual(max(cy) - min(cy), 1.5)
 
     def test_houle_loi_v24p04a(self):
         self.assertEqual((B.SWELL_STEPS, B.SWELL_TICKS, B.GLINT_STEPS, B.GLINT_TICKS), (12, 10, 16, 4))
