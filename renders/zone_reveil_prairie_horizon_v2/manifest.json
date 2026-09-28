@@ -17,7 +17,7 @@
   72
  ],
  "horizon_y": 116,
- "demande": "ZRV2 : mer comme V24P04A (houle qui roule, horizon qui scintille), zone multicalque (mer, ciel, nuages, montagne separes), montagne raccordee a l horizon, nuages de la mer de nuages animes (pas de nuages ajoutes), fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages ; puis (ensemble valide) : reflets de la lune et du crepuscule passes au generateur, nuages sans rognure, vagues sans interstices, ajouter un crepuscule ; ecume et bulles de ZRV1 gardees",
+ "demande": "ZRV2 : mer comme V24P04A (houle qui roule, horizon qui scintille), zone multicalque (mer, ciel, nuages, montagne separes), montagne raccordee a l horizon, nuages de la mer de nuages animes (pas de nuages ajoutes), fleurs animees comme Sky Peak, reflet anime de la lune ; garder le layout de ZRV1, profondeur mer -> montagne -> nuages ; puis (ensemble valide) : reflets de la lune et du crepuscule passes au generateur, nuages sans rognure, vagues sans interstices, ajouter un crepuscule ; ecume et bulles de ZRV1 gardees ; puis : corriger les nuages (le banc de 256 px revenait 3 fois a l ecran) et animer les mouvements deja peints dans la mer (lignes de houle statiques)",
  "choix": {
   "mer": "generee avec V24P04A en reference (reponse de l utilisateur), animee par les lois de V24P04A",
   "version": "nouvelle version, ZRV1 gardee (reponse de l utilisateur)",
@@ -49,6 +49,10 @@
   "gif_skypeak": {
    "file": "2cwdrrs469f61.gif",
    "sha256": "5daefc3facdc90c5d33425db0c149854cc64555856d571473f47d311b63e3d47"
+  },
+  "banc_style": {
+   "file": "source/zone_reveil_prairie_horizon_v2/references/banc_nuages_style_x520_y250_x2.png",
+   "sha256": "82be207b6e76445b575775b03f6c6d5b378ec9205506047cb3f8a8d69b6fbf52"
   }
  },
  "reference_rom": {
@@ -94,6 +98,22 @@
    ],
    "essais": "remplace mer_de_nuages_jour.png (trois bancs colles : la dalle du banc du milieu rognait les nuages du bas, ecarte dans bruts/ecartes/) ; deux bancs encore, seul celui du haut (ciel magenta au-dessus) est utilise ; un sommet plat de 70 px (x 217-286) est arrondi par le build",
    "prompt": "Pixel art, same colours and pixel style as the clouds on the horizon in the first reference (Pokémon Mystery Dungeon Explorers of Sky) and the cloud style of the second reference. ONE single low horizontal bank of fluffy white and pale blue-grey cumulus clouds, spanning the full image width, seamlessly tileable left to right. The bank occupies only the lower 40 percent of the image; its bottom edge is a perfectly straight horizontal line touching the bottom of the image; its top edge is round puffy billows of varying height, every billow complete and rounded. The whole upper 60 percent of the image is solid flat magenta (#FF00FF) with nothing in it. No second bank, no sky, no sea, no mountains, no text."
+  },
+  {
+   "file": "banc_nuages_jour_c.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour.png"
+   ],
+   "essais": "correction des nuages (le banc de 256 px revenait 3 fois a l ecran) : banc de plus demande avec le banc A en reference ; le generateur a recopie x 375-1075 du banc A, seules les colonnes differentes comptent comme matiere neuve (le brut entier est enchaine au banc A limite a x < 360)",
+   "prompt": "Pixel art, exactly the same colours, palette and pixel style as the upper cloud bank of the reference image. ONE single low horizontal bank of fluffy white and pale blue-grey cumulus clouds spanning the full image width, with a different arrangement of billows than the reference. The bank occupies only the lower 40 percent of the image; its bottom edge is a perfectly straight horizontal line touching the bottom of the image; its top edge is round puffy billows of varying height, every billow complete and rounded, with a few low dips between cloud groups. The whole upper 60 percent of the image is solid flat magenta (#FF00FF). No second bank, no sky, no sea, no mountains, no text."
+  },
+  {
+   "file": "banc_nuages_jour_b.png",
+   "images": [
+    "source/zone_reveil_prairie_horizon_v2/references/banc_nuages_style_x520_y250_x2.png"
+   ],
+   "essais": "deuxieme essai de banc de plus : recadrage du banc A seul en reference (le premier essai recopiait la composition) ; bosses de meme largeur que le banc A (105 px), sommets plus hauts : reduit a 0,62 pour garder la hauteur du banc A",
+   "prompt": "Pixel art, exactly the same cloud colours, shading and pixel style as the reference crop. A wide panorama: ONE single low horizontal bank of fluffy white and pale blue-grey cumulus clouds spanning the full image width, made of about eight separate rounded cloud groups of different heights with low dips between them. The bank occupies only the lower 35 percent of the image; its bottom is a solid pale blue-grey band ending in a perfectly straight horizontal line at the bottom of the image; every billow on top is complete and rounded, none cut. The whole upper 65 percent of the image is solid flat magenta (#FF00FF). Only one bank, no second row of clouds, no sky, no sea, no text."
   },
   {
    "file": "reflets_astres.png",
@@ -157,6 +177,22 @@
    ]
   },
   {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour_c.png",
+   "sha256": "7f35d013ce55db6fe97c7434a0e91206d11a8b876dc83d9871987e4fcbdac188",
+   "size": [
+    1200,
+    896
+   ]
+  },
+  {
+   "file": "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour_b.png",
+   "sha256": "bcef7f44e8ff4336442dfcfe02911cd4861b2f69f997abe92271ba103d020ae2",
+   "size": [
+    1584,
+    672
+   ]
+  },
+  {
    "file": "source/zone_reveil_prairie_horizon_v2/bruts/reflets_astres.png",
    "sha256": "42171d57d50a8865d7a0ec7997e3a0bf4584f2a6320592f577389ccfac79e110",
    "size": [
@@ -207,6 +243,16 @@
    "facteur_vertical": 0.4249,
    "facteur_horizontal": 0.6486
   },
+  "ondes": {
+   "pixels": 13629,
+   "motifs": 137,
+   "lignes": 9,
+   "plaques_claires": 128,
+   "rangees": [
+    146,
+    290
+   ]
+  },
   "scintillement": {
    "paillettes": 274,
    "pixels": 1079
@@ -221,26 +267,87 @@
    "base_sur_horizon": true
   },
   "nuages": {
-   "rangees_brut": [
-    276,
-    494
+   "bancs": [
+    {
+     "brut": "banc_nuages_jour_c.png",
+     "echelle_relative": 1.0,
+     "colonnes_utilisables": [
+      0,
+      1200
+     ],
+     "rangees_brut": [
+      304,
+      521
+     ],
+     "sommets_arrondis": [],
+     "coupe_brut": [
+      7,
+      1027
+     ],
+     "largeur_px": 356,
+     "ecart_raccord_suivant": 1.81
+    },
+    {
+     "brut": "banc_nuages_jour.png",
+     "echelle_relative": 1.0,
+     "colonnes_utilisables": [
+      0,
+      360
+     ],
+     "rangees_brut": [
+      276,
+      491
+     ],
+     "sommets_arrondis": [
+      [
+       217,
+       286,
+       276
+      ]
+     ],
+     "coupe_brut": [
+      13,
+      340
+     ],
+     "largeur_px": 114,
+     "ecart_raccord_suivant": 2.09
+    },
+    {
+     "brut": "banc_nuages_jour_b.png",
+     "echelle_relative": 0.6245,
+     "colonnes_utilisables": [
+      0,
+      1584
+     ],
+     "rangees_brut": [
+      172,
+      516
+     ],
+     "sommets_arrondis": [
+      [
+       266,
+       307,
+       268
+      ],
+      [
+       776,
+       821,
+       249
+      ]
+     ],
+     "coupe_brut": [
+      59,
+      1425
+     ],
+     "largeur_px": 298,
+     "ecart_raccord_suivant": 6.01
+    }
    ],
    "taille_bande": [
-    256,
-    61
+    768,
+    76
    ],
-   "sommets_arrondis": [
-    [
-     217,
-     286,
-     276
-    ]
-   ],
-   "coupe_brut": [
-    0,
-    914
-   ],
-   "ecart_raccord": 7.2
+   "echelle": 0.3491
   },
   "cretes": {
    "tailles_px": [
@@ -407,13 +514,24 @@
    0
   ]
  },
+ "ondes": {
+  "crans": 12,
+  "frame_length_ticks": 10,
+  "rangee_depart": 146,
+  "seuil": 1.0,
+  "demi_fenetre_verticale": 4,
+  "taille_min_px": 10,
+  "ligne_min_px": 60,
+  "loi": "orbite de l eau sous la houle : dx = (1 + d/60) cos phi, dy = (0,5 + d/90) sin phi, phi = 2 pi (2s/12 - u(y)), d = y - horizon ; les plaques claires s eteignent quand sin(2 phi + phase propre) < -0,85",
+  "raison": "demande : les mouvements deja peints dans la mer (lignes de houle, reflets clairs) restaient statiques"
+ },
  "nuages": {
-  "periode_px": 256,
-  "pas_px": 1,
-  "phases": 256,
-  "frame_length_ticks": 8,
-  "raccord": "coupe du brut choisie la ou la silhouette se raccorde ; fondu des teintes seules sur 16 colonnes",
-  "hauteur_px": 61
+  "periode_px": 768,
+  "pas_px": 2,
+  "phases": 384,
+  "frame_length_ticks": 16,
+  "raccord": "trois bancs generes differents mis bout a bout sur 768 px (aucun nuage repete a l ecran) ; coupes la ou la silhouette du banc suivant prolonge la precedente ; fondu des teintes seules sur 16 colonnes",
+  "hauteur_px": 76
  },
  "fleurs": {
   "phases": 4,
@@ -446,7 +564,7 @@
    "d": 48,
    "c": [
     560,
-    50
+    44
    ]
   }
  },
@@ -471,8 +589,8 @@
      "index": 4,
      "nom": "nuages",
      "file": "animation/jour/nuages/ZRV2J_04_nuages_fNNN.png",
-     "phases": 256,
-     "ticks": 8
+     "phases": 384,
+     "ticks": 16
     },
     {
      "index": 5,
@@ -490,64 +608,71 @@
     },
     {
      "index": 7,
-     "nom": "scintillement",
-     "file": "animation/jour/scintillement/ZRV2J_07_scintillement_fNNN.png",
-     "phases": 16,
-     "ticks": 4
-    },
-    {
-     "index": 8,
-     "nom": "houle",
-     "file": "animation/jour/houle/ZRV2J_08_houle_fNNN.png",
+     "nom": "ondes",
+     "file": "animation/jour/ondes/ZRV2J_07_ondes_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
-     "index": 10,
-     "nom": "ecume",
-     "file": "animation/jour/ecume/ZRV2J_10_ecume_fNNN.png",
-     "phases": 10,
+     "index": 8,
+     "nom": "scintillement",
+     "file": "animation/jour/scintillement/ZRV2J_08_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
+     "index": 9,
+     "nom": "houle",
+     "file": "animation/jour/houle/ZRV2J_09_houle_fNNN.png",
+     "phases": 12,
      "ticks": 10
     },
     {
      "index": 11,
+     "nom": "ecume",
+     "file": "animation/jour/ecume/ZRV2J_11_ecume_fNNN.png",
+     "phases": 10,
+     "ticks": 10
+    },
+    {
+     "index": 12,
      "nom": "bulles",
-     "file": "animation/jour/bulles/ZRV2J_11_bulles_fNNN.png",
+     "file": "animation/jour/bulles/ZRV2J_12_bulles_fNNN.png",
      "phases": 24,
      "ticks": 5
     },
     {
-     "index": 12,
-     "nom": "herbe",
-     "file": "calques/jour/ZRV2J_12_herbe.png",
-     "phases": 1,
-     "ticks": 60
-    },
-    {
      "index": 13,
-     "nom": "chemin",
-     "file": "calques/jour/ZRV2J_13_chemin.png",
+     "nom": "herbe",
+     "file": "calques/jour/ZRV2J_13_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 14,
-     "nom": "fleurs",
-     "file": "animation/jour/fleurs/ZRV2J_14_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 15,
-     "nom": "rochers",
-     "file": "calques/jour/ZRV2J_15_rochers.png",
+     "nom": "chemin",
+     "file": "calques/jour/ZRV2J_14_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 15,
+     "nom": "fleurs",
+     "file": "animation/jour/fleurs/ZRV2J_15_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 16,
+     "nom": "rochers",
+     "file": "calques/jour/ZRV2J_16_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 17,
      "nom": "buissons",
-     "file": "calques/jour/ZRV2J_16_buissons.png",
+     "file": "calques/jour/ZRV2J_17_buissons.png",
      "phases": 1,
      "ticks": 60
     }
@@ -580,8 +705,8 @@
      "index": 4,
      "nom": "nuages",
      "file": "animation/aube/nuages/ZRV2A_04_nuages_fNNN.png",
-     "phases": 256,
-     "ticks": 8
+     "phases": 384,
+     "ticks": 16
     },
     {
      "index": 5,
@@ -599,71 +724,78 @@
     },
     {
      "index": 7,
-     "nom": "scintillement",
-     "file": "animation/aube/scintillement/ZRV2A_07_scintillement_fNNN.png",
-     "phases": 16,
-     "ticks": 4
-    },
-    {
-     "index": 8,
-     "nom": "houle",
-     "file": "animation/aube/houle/ZRV2A_08_houle_fNNN.png",
+     "nom": "ondes",
+     "file": "animation/aube/ondes/ZRV2A_07_ondes_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
+     "index": 8,
+     "nom": "scintillement",
+     "file": "animation/aube/scintillement/ZRV2A_08_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
      "index": 9,
-     "nom": "reflet",
-     "file": "animation/aube/reflet/ZRV2A_09_reflet_fNNN.png",
+     "nom": "houle",
+     "file": "animation/aube/houle/ZRV2A_09_houle_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
      "index": 10,
-     "nom": "ecume",
-     "file": "animation/aube/ecume/ZRV2A_10_ecume_fNNN.png",
-     "phases": 10,
+     "nom": "reflet",
+     "file": "animation/aube/reflet/ZRV2A_10_reflet_fNNN.png",
+     "phases": 12,
      "ticks": 10
     },
     {
      "index": 11,
+     "nom": "ecume",
+     "file": "animation/aube/ecume/ZRV2A_11_ecume_fNNN.png",
+     "phases": 10,
+     "ticks": 10
+    },
+    {
+     "index": 12,
      "nom": "bulles",
-     "file": "animation/aube/bulles/ZRV2A_11_bulles_fNNN.png",
+     "file": "animation/aube/bulles/ZRV2A_12_bulles_fNNN.png",
      "phases": 24,
      "ticks": 5
     },
     {
-     "index": 12,
-     "nom": "herbe",
-     "file": "calques/aube/ZRV2A_12_herbe.png",
-     "phases": 1,
-     "ticks": 60
-    },
-    {
      "index": 13,
-     "nom": "chemin",
-     "file": "calques/aube/ZRV2A_13_chemin.png",
+     "nom": "herbe",
+     "file": "calques/aube/ZRV2A_13_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 14,
-     "nom": "fleurs",
-     "file": "animation/aube/fleurs/ZRV2A_14_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 15,
-     "nom": "rochers",
-     "file": "calques/aube/ZRV2A_15_rochers.png",
+     "nom": "chemin",
+     "file": "calques/aube/ZRV2A_14_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 15,
+     "nom": "fleurs",
+     "file": "animation/aube/fleurs/ZRV2A_15_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 16,
+     "nom": "rochers",
+     "file": "calques/aube/ZRV2A_16_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 17,
      "nom": "buissons",
-     "file": "calques/aube/ZRV2A_16_buissons.png",
+     "file": "calques/aube/ZRV2A_17_buissons.png",
      "phases": 1,
      "ticks": 60
     }
@@ -696,8 +828,8 @@
      "index": 4,
      "nom": "nuages",
      "file": "animation/crepuscule/nuages/ZRV2C_04_nuages_fNNN.png",
-     "phases": 256,
-     "ticks": 8
+     "phases": 384,
+     "ticks": 16
     },
     {
      "index": 5,
@@ -715,71 +847,78 @@
     },
     {
      "index": 7,
-     "nom": "scintillement",
-     "file": "animation/crepuscule/scintillement/ZRV2C_07_scintillement_fNNN.png",
-     "phases": 16,
-     "ticks": 4
-    },
-    {
-     "index": 8,
-     "nom": "houle",
-     "file": "animation/crepuscule/houle/ZRV2C_08_houle_fNNN.png",
+     "nom": "ondes",
+     "file": "animation/crepuscule/ondes/ZRV2C_07_ondes_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
+     "index": 8,
+     "nom": "scintillement",
+     "file": "animation/crepuscule/scintillement/ZRV2C_08_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
      "index": 9,
-     "nom": "reflet",
-     "file": "animation/crepuscule/reflet/ZRV2C_09_reflet_fNNN.png",
+     "nom": "houle",
+     "file": "animation/crepuscule/houle/ZRV2C_09_houle_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
      "index": 10,
-     "nom": "ecume",
-     "file": "animation/crepuscule/ecume/ZRV2C_10_ecume_fNNN.png",
-     "phases": 10,
+     "nom": "reflet",
+     "file": "animation/crepuscule/reflet/ZRV2C_10_reflet_fNNN.png",
+     "phases": 12,
      "ticks": 10
     },
     {
      "index": 11,
+     "nom": "ecume",
+     "file": "animation/crepuscule/ecume/ZRV2C_11_ecume_fNNN.png",
+     "phases": 10,
+     "ticks": 10
+    },
+    {
+     "index": 12,
      "nom": "bulles",
-     "file": "animation/crepuscule/bulles/ZRV2C_11_bulles_fNNN.png",
+     "file": "animation/crepuscule/bulles/ZRV2C_12_bulles_fNNN.png",
      "phases": 24,
      "ticks": 5
     },
     {
-     "index": 12,
-     "nom": "herbe",
-     "file": "calques/crepuscule/ZRV2C_12_herbe.png",
-     "phases": 1,
-     "ticks": 60
-    },
-    {
      "index": 13,
-     "nom": "chemin",
-     "file": "calques/crepuscule/ZRV2C_13_chemin.png",
+     "nom": "herbe",
+     "file": "calques/crepuscule/ZRV2C_13_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 14,
-     "nom": "fleurs",
-     "file": "animation/crepuscule/fleurs/ZRV2C_14_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 15,
-     "nom": "rochers",
-     "file": "calques/crepuscule/ZRV2C_15_rochers.png",
+     "nom": "chemin",
+     "file": "calques/crepuscule/ZRV2C_14_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 15,
+     "nom": "fleurs",
+     "file": "animation/crepuscule/fleurs/ZRV2C_15_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 16,
+     "nom": "rochers",
+     "file": "calques/crepuscule/ZRV2C_16_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 17,
      "nom": "buissons",
-     "file": "calques/crepuscule/ZRV2C_16_buissons.png",
+     "file": "calques/crepuscule/ZRV2C_17_buissons.png",
      "phases": 1,
      "ticks": 60
     }
@@ -819,8 +958,8 @@
      "index": 4,
      "nom": "nuages",
      "file": "animation/nuit/nuages/ZRV2N_04_nuages_fNNN.png",
-     "phases": 256,
-     "ticks": 8
+     "phases": 384,
+     "ticks": 16
     },
     {
      "index": 5,
@@ -838,71 +977,78 @@
     },
     {
      "index": 7,
-     "nom": "scintillement",
-     "file": "animation/nuit/scintillement/ZRV2N_07_scintillement_fNNN.png",
-     "phases": 16,
-     "ticks": 4
-    },
-    {
-     "index": 8,
-     "nom": "houle",
-     "file": "animation/nuit/houle/ZRV2N_08_houle_fNNN.png",
+     "nom": "ondes",
+     "file": "animation/nuit/ondes/ZRV2N_07_ondes_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
+     "index": 8,
+     "nom": "scintillement",
+     "file": "animation/nuit/scintillement/ZRV2N_08_scintillement_fNNN.png",
+     "phases": 16,
+     "ticks": 4
+    },
+    {
      "index": 9,
-     "nom": "reflet",
-     "file": "animation/nuit/reflet/ZRV2N_09_reflet_fNNN.png",
+     "nom": "houle",
+     "file": "animation/nuit/houle/ZRV2N_09_houle_fNNN.png",
      "phases": 12,
      "ticks": 10
     },
     {
      "index": 10,
-     "nom": "ecume",
-     "file": "animation/nuit/ecume/ZRV2N_10_ecume_fNNN.png",
-     "phases": 10,
+     "nom": "reflet",
+     "file": "animation/nuit/reflet/ZRV2N_10_reflet_fNNN.png",
+     "phases": 12,
      "ticks": 10
     },
     {
      "index": 11,
+     "nom": "ecume",
+     "file": "animation/nuit/ecume/ZRV2N_11_ecume_fNNN.png",
+     "phases": 10,
+     "ticks": 10
+    },
+    {
+     "index": 12,
      "nom": "bulles",
-     "file": "animation/nuit/bulles/ZRV2N_11_bulles_fNNN.png",
+     "file": "animation/nuit/bulles/ZRV2N_12_bulles_fNNN.png",
      "phases": 24,
      "ticks": 5
     },
     {
-     "index": 12,
-     "nom": "herbe",
-     "file": "calques/nuit/ZRV2N_12_herbe.png",
-     "phases": 1,
-     "ticks": 60
-    },
-    {
      "index": 13,
-     "nom": "chemin",
-     "file": "calques/nuit/ZRV2N_13_chemin.png",
+     "nom": "herbe",
+     "file": "calques/nuit/ZRV2N_13_herbe.png",
      "phases": 1,
      "ticks": 60
     },
     {
      "index": 14,
-     "nom": "fleurs",
-     "file": "animation/nuit/fleurs/ZRV2N_14_fleurs_fNNN.png",
-     "phases": 4,
-     "ticks": 12
-    },
-    {
-     "index": 15,
-     "nom": "rochers",
-     "file": "calques/nuit/ZRV2N_15_rochers.png",
+     "nom": "chemin",
+     "file": "calques/nuit/ZRV2N_14_chemin.png",
      "phases": 1,
      "ticks": 60
     },
     {
+     "index": 15,
+     "nom": "fleurs",
+     "file": "animation/nuit/fleurs/ZRV2N_15_fleurs_fNNN.png",
+     "phases": 4,
+     "ticks": 12
+    },
+    {
      "index": 16,
+     "nom": "rochers",
+     "file": "calques/nuit/ZRV2N_16_rochers.png",
+     "phases": 1,
+     "ticks": 60
+    },
+    {
+     "index": 17,
      "nom": "buissons",
-     "file": "calques/nuit/ZRV2N_16_buissons.png",
+     "file": "calques/nuit/ZRV2N_17_buissons.png",
      "phases": 1,
      "ticks": 60
     }
@@ -1731,67 +1877,71 @@
   "tiles_per_bank": {
    "ZRV2J_00_SOL": 2,
    "ZRV2J_01_CIEL": 1441,
-   "ZRV2J_04_NUAGES": 7793,
+   "ZRV2J_04_NUAGES": 15273,
    "ZRV2J_05_MONTAGNE": 283,
    "ZRV2J_06_MER": 1870,
-   "ZRV2J_07_SCINTILLEMENT": 884,
-   "ZRV2J_08_HOULE": 1294,
-   "ZRV2J_10_ECUME": 1724,
-   "ZRV2J_11_BULLES": 118,
-   "ZRV2J_12_HERBE": 3026,
-   "ZRV2J_13_CHEMIN": 145,
-   "ZRV2J_14_FLEURS": 2893,
-   "ZRV2J_15_ROCHERS": 74,
-   "ZRV2J_16_BUISSONS": 276,
+   "ZRV2J_07_ONDES": 4127,
+   "ZRV2J_08_SCINTILLEMENT": 884,
+   "ZRV2J_09_HOULE": 1294,
+   "ZRV2J_11_ECUME": 1724,
+   "ZRV2J_12_BULLES": 118,
+   "ZRV2J_13_HERBE": 3026,
+   "ZRV2J_14_CHEMIN": 145,
+   "ZRV2J_15_FLEURS": 2893,
+   "ZRV2J_16_ROCHERS": 74,
+   "ZRV2J_17_BUISSONS": 276,
    "ZRV2A_00_SOL": 2,
    "ZRV2A_01_CIEL": 1441,
    "ZRV2A_03_ASTRE": 27,
-   "ZRV2A_04_NUAGES": 7793,
+   "ZRV2A_04_NUAGES": 15273,
    "ZRV2A_05_MONTAGNE": 283,
    "ZRV2A_06_MER": 1870,
-   "ZRV2A_07_SCINTILLEMENT": 884,
-   "ZRV2A_08_HOULE": 1355,
-   "ZRV2A_09_REFLET": 552,
-   "ZRV2A_10_ECUME": 1724,
-   "ZRV2A_11_BULLES": 118,
-   "ZRV2A_12_HERBE": 3256,
-   "ZRV2A_13_CHEMIN": 122,
-   "ZRV2A_14_FLEURS": 2892,
-   "ZRV2A_15_ROCHERS": 74,
-   "ZRV2A_16_BUISSONS": 276,
+   "ZRV2A_07_ONDES": 4127,
+   "ZRV2A_08_SCINTILLEMENT": 884,
+   "ZRV2A_09_HOULE": 1355,
+   "ZRV2A_10_REFLET": 552,
+   "ZRV2A_11_ECUME": 1724,
+   "ZRV2A_12_BULLES": 118,
+   "ZRV2A_13_HERBE": 3256,
+   "ZRV2A_14_CHEMIN": 122,
+   "ZRV2A_15_FLEURS": 2892,
+   "ZRV2A_16_ROCHERS": 74,
+   "ZRV2A_17_BUISSONS": 276,
    "ZRV2C_00_SOL": 2,
    "ZRV2C_01_CIEL": 1441,
    "ZRV2C_03_ASTRE": 38,
-   "ZRV2C_04_NUAGES": 7793,
+   "ZRV2C_04_NUAGES": 15273,
    "ZRV2C_05_MONTAGNE": 283,
    "ZRV2C_06_MER": 1870,
-   "ZRV2C_07_SCINTILLEMENT": 884,
-   "ZRV2C_08_HOULE": 1350,
-   "ZRV2C_09_REFLET": 654,
-   "ZRV2C_10_ECUME": 1724,
-   "ZRV2C_11_BULLES": 118,
-   "ZRV2C_12_HERBE": 3267,
-   "ZRV2C_13_CHEMIN": 145,
-   "ZRV2C_14_FLEURS": 2894,
-   "ZRV2C_15_ROCHERS": 74,
-   "ZRV2C_16_BUISSONS": 276,
+   "ZRV2C_07_ONDES": 4127,
+   "ZRV2C_08_SCINTILLEMENT": 884,
+   "ZRV2C_09_HOULE": 1350,
+   "ZRV2C_10_REFLET": 654,
+   "ZRV2C_11_ECUME": 1724,
+   "ZRV2C_12_BULLES": 118,
+   "ZRV2C_13_HERBE": 3267,
+   "ZRV2C_14_CHEMIN": 145,
+   "ZRV2C_15_FLEURS": 2894,
+   "ZRV2C_16_ROCHERS": 74,
+   "ZRV2C_17_BUISSONS": 276,
    "ZRV2N_00_SOL": 2,
    "ZRV2N_01_CIEL": 1441,
    "ZRV2N_02_ETOILES": 25,
    "ZRV2N_03_ASTRE": 65,
-   "ZRV2N_04_NUAGES": 7793,
+   "ZRV2N_04_NUAGES": 15273,
    "ZRV2N_05_MONTAGNE": 283,
    "ZRV2N_06_MER": 1870,
-   "ZRV2N_07_SCINTILLEMENT": 883,
-   "ZRV2N_08_HOULE": 1318,
-   "ZRV2N_09_REFLET": 445,
-   "ZRV2N_10_ECUME": 1724,
-   "ZRV2N_11_BULLES": 118,
-   "ZRV2N_12_HERBE": 3173,
-   "ZRV2N_13_CHEMIN": 156,
-   "ZRV2N_14_FLEURS": 2897,
-   "ZRV2N_15_ROCHERS": 74,
-   "ZRV2N_16_BUISSONS": 275
+   "ZRV2N_07_ONDES": 4125,
+   "ZRV2N_08_SCINTILLEMENT": 883,
+   "ZRV2N_09_HOULE": 1318,
+   "ZRV2N_10_REFLET": 445,
+   "ZRV2N_11_ECUME": 1724,
+   "ZRV2N_12_BULLES": 118,
+   "ZRV2N_13_HERBE": 3173,
+   "ZRV2N_14_CHEMIN": 156,
+   "ZRV2N_15_FLEURS": 2897,
+   "ZRV2N_16_ROCHERS": 74,
+   "ZRV2N_17_BUISSONS": 275
   },
   "markers": {
    "reveil": [
