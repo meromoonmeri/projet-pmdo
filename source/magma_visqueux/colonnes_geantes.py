@@ -81,7 +81,7 @@ def column_phase(t, H, W, c, visible):
     ang = np.arctan2((yy - yb) / ry, (xx - x0) / rx)
     lip = 1 + 0.12 * np.sin(5 * ang + 2 * ph) + 0.08 * np.sin(9 * ang - 3 * ph + seed)
     crown = (d <= lip) & visible                                                 # gerbe autour du pied, jamais sur la roche
-    crown |= (d <= lip) & (np.abs(xx - x0) <= hw + 11) & (yy >= yb - ry)
+    crown |= (d <= lip) & (np.abs(xx - x0) <= hw + 11) & (yy >= yb - ry) & (yy <= yb)
     crest = np.sin(7 * ang - 4 * ph + 3 * d) > 0.55
     boil = np.sin(5 * ang + 3 * ph - 6 * d)                                    # bouillonnement : plaques et crêtes qui tournent
     cl = np.where(d > lip - 0.1, 0, np.where(d > lip - 0.3, np.where(np.sin(11 * ang + ph) > 0.3, 2, 1),

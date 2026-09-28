@@ -46,7 +46,7 @@ EMBER_PHASES, EMBER_TICKS = 6, 10
 PULSE = [0, 1, 2, 2, 1, 0]
 COLS = [  # colonnes géantes (coordonnées 768 x 576) : bouche, demi-largeur ; celles du fond plus étroites (perspective)
     {'nom': 'gauche_fond', 'x': 40, 'y': 206, 'demi': 20, 'decalage': 0, 'graine': 1},
-    {'nom': 'gauche_devant', 'x': 88, 'y': 432, 'demi': 28, 'decalage': 17, 'graine': 2},
+    {'nom': 'gauche_devant', 'x': 82, 'y': 432, 'demi': 28, 'decalage': 17, 'graine': 2},
     {'nom': 'droite_fond', 'x': 672, 'y': 202, 'demi': 20, 'decalage': 29, 'graine': 3},
     {'nom': 'droite_devant', 'x': 724, 'y': 434, 'demi': 28, 'decalage': 8, 'graine': 4}]
 FIDELITY_MAX = 35
