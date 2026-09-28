@@ -1,5 +1,21 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## AGM2 — Arène de Groudon V2 : signe à même le sol, colonnes de magma géantes (28 septembre 2026)
+
+**Demande** : « le signe doit pulser directement sur le sol de l'arene pas sur un estrade genere de nouvelle colonne de magma elle doit etre plus grande qu'on en voit pas le bout sur la map et plus impressionnante ».
+
+- Nouveau lot `renders/arene_groudon_magma_v2/` (préfixe `AGM2`, aperçu `apercu_arene_groudon_magma_v2.html`). AGM1 est conservée.
+- **Signe au sol** : le brut AGM1 a été édité par le générateur (brut AGM1 en image). Seul changement : le dais disparaît et le Ω, dans son anneau, est gravé à plat dans la pierre, Ø ≈ 250 px contre ≈ 135 px pour AGM1. Écart hors signe : 10,6 de somme RVB moyenne, et 0,12 % de pixels à plus de 60.
+  - Le signe fait partie du sol praticable, et le boss se tient au centre du Ω.
+  - La pulsation est la même qu'AGM1 (12 × 10 ticks, rouge → jaune vif), mais le halo s'étend sur la pierre : 1 px à partir du niveau 3, 3 px au pic.
+- **Colonnes géantes** : nouveau module `source/magma_visqueux/colonnes_geantes.py`. Quatre colonnes de 40 à 56 px de large montent du lac jusqu'au bord haut de la carte : leur sommet n'est jamais visible.
+  - La matière monte d'environ 12 px par phase, sur 48 × 5 ticks, et les quatre colonnes sont décalées.
+  - Chaque colonne a un cœur jaune, des filets dans l'axe, des plaques de croûte qui montent, des flancs rouge sombre, un contour sombre de 2 px et deux poussées par cycle.
+  - Au pied : une gerbe bouillonnante, 14 gouttes avec leurs anneaux d'impact, et des ondes sur le lac.
+- Fidélité : sol 13,7, qui monte avec la lueur du signe (seuil 35) ; magma 10,1 (seuil 12).
+- 10 tests PASS : signe sur le sol et praticable, halo qui s'étend, chaque colonne touche y = 0 à chaque phase, montée de la matière avec raccord 47 → 0, rien sur la roche sous les bouches, boss atteignable. Les 7 mutations sont détectées.
+- Paquets : `AGM2_projet_pmdo_0812.zip` (9,9 Mo) et `AGM2_calques_png_8px.zip` (13,4 Mo). Pixels générés ou calculés, pas de tuiles natives, aucun test dans PMDO.
+
 ## FOC1 — Fin Océan : arène de Kyogre sous la mer (28 septembre 2026)
 
 **Demande** : « fait une zone de fin donjon sous l'ocean avec des motif sur toute la zone et des nuance deau des effet de bulle etc une zone ou y'aura kyogre apres etc elle doit etre magnifique ».

@@ -1061,3 +1061,13 @@ Pas de runtime. Pas dans le mod unique.
 - **Onde sur les gravures** (motifs sur toute la zone) : gravures = sol plus sombre que la médiane 9 × 9 de plus de 10. Front r = (rmax + 120) t / N pour que la traîne soit éteinte au raccord. Tester l'éloignement du front, l'union des phases égale à toutes les gravures, et un minimum de pixels allumés par phase (sinon une phase éteinte passe).
 - **Algues** : cisaillement dx = A ((base − y) / h)^1,4 sin(…), base fixe. Remplir la paroi sous les algues avec le pixel de paroi le plus proche (`distance_transform_edt`, indices).
 - **Scintillements rapprochés** : imposer 7 px de distance (Tchebychev) entre étoiles, sinon un bras recouvre le centre d'une voisine et le test de phase échoue.
+
+## AGM2 (arène de Groudon V2), ajouts à la recette
+
+- **Retirer un élément d'un brut validé** (le dais) : éditer le brut précédent avec lui-même en image, avec un seul changement demandé. Mesurer l'écart hors de la zone changée (somme RVB moyenne < 20, moins de 1 % de pixels à plus de 60) et l'inscrire dans le manifeste. Si le brut édité est ré-encodé, il n'a plus de plage de sol propre : réutiliser le `sol_complet` du lot précédent, avec un test d'égalité à `make_sol(brut précédent)`.
+- **Signe à même le sol** : compter la zone du signe (ellipse `SIGN_RAW`) comme sol dans `classify`. Tester que le signe est entièrement praticable et que le boss est atteignable.
+- **Colonnes dont on ne voit pas le bout** (`colonnes_geantes.py`) : le corps va de y = 0 à la bouche. Le tester sur la ligne 0 à chaque phase.
+  - Les mêmes tons que le lac les rendent invisibles. Il faut des flancs sombres (niveau − 5,2 + 7 × prof^0,8), un contour de 2 px au niveau 0, une lisière rouge et un cœur clair.
+  - Gerbe du pied : ellipse (demi + 30, 17) dessinée **devant** le bas du corps. Sous la ligne de la bouche, la limiter à la lave visible, sinon l'évasement mord sur le rebord.
+- **Calcul par fenêtre** : ne calculer chaque colonne que dans sa fenêtre (`window()`). Le bruit plein cadre de quatre colonnes sur 48 phases fait tomber le shell (mémoire).
+- **Test de montée** : `best_shift` sur une bande axiale de 7 px, décalages de − 18 à 0. Le gagnant doit se situer entre − 15 et − 9 aux phases 0, 11, 23 et 47 (raccord).
