@@ -43,6 +43,20 @@ Même passe que RAF1-3 (`source/zone_zero_v2/haute_qualite.py`), avec un seuil d
 - **Embruns** : 70 gouttelettes au pied des deux cascades.
 - **Papillons** : 5, sur des boucles fermées.
 
+## Cristaux Zone Zéro : base blanche, reflets arc-en-ciel (29 septembre 2026)
+
+Demande : « je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc ».
+
+- **Sélection** : les cristaux menthe du décor sont repérés par une règle de couleur (g − r > 45, g − b < 50, luminance > 125, plus les reflets blancs). Une composante n'est gardée que si au moins 5 % de ses pixels sont des facettes très claires (luminance > 205) : les reflets turquoise de la roche restent dans les falaises. Les bases menthe des piliers, peintes dans le sol, sont rattachées quand elles touchent un cristal.
+- **Base blanche** (calque `cristaux`, fixe) : 57,437 px de cristal en 5 tons blanc-lavande selon la luminance d'origine, pour garder les facettes, et 2,393 px de contour indigo. Les cristaux quittent le calque `falaises`.
+- **Reflets** (calque `reflets`, 24 × 10 ticks) :
+  - une bande diagonale de 34 px (période 96 px) avance de 4 px par phase ;
+  - elle porte les 8 teintes de l'arc-en-ciel en bandes de 8 px, posées sur le blanc (rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ;
+  - la teinte d'un même pixel change toutes les 3 phases, si bien qu'un cristal passe du rouge au mauve au fil de la boucle ;
+  - 36 éclats en étoile (1-2-3-2-1) scintillent sur les facettes les plus claires ;
+  - la boucle est fermée : 24 × 4 px = 96 px, et 24 / 3 = 8 teintes.
+- Ce sont des pixels calculés (une recoloration du rendu généré), pas des tuiles natives.
+
 ## Calques (du bas vers le haut)
 
 | # | Calque | Animation |
@@ -54,22 +68,24 @@ Même passe que RAF1-3 (`source/zone_zero_v2/haute_qualite.py`), avec un seuil d
 | 04 | lueurs | 24 × 10 ticks : 34 éclats lointains |
 | 05 | eau | 3 × 10 ticks : rides dans les deux bassins |
 | 06 | sol | fixe : herbe Sky Peak en aplat franc, dalles |
-| 07 | falaises | fixe : parois des gouffres, cristaux, géode |
-| 08 | herbes | 4 × 12 ticks, A B A C : touffes en étoile |
-| 09 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C) : en B et C, chaque fleur descend de 1 px et penche de ±1 px |
-| 10 | buissons | fixe |
-| 11 | arbres | fixe : 13 arbres plantés, plus ceux du décor |
-| 12 | cascades | 3 × 10 ticks : loi de P03P01A |
-| 13 | ecume | 3 × 10 ticks |
-| 14 | embruns | 24 × 10 ticks : les gouttelettes partent du haut de l'écume, montent de 34 px et s'effacent |
-| 15 | papillons | 48 × 10 ticks : boucles de Lissajous fermées ; les ailes s'ouvrent et se ferment une phase sur deux |
-| 16 | Top (vide) | à vous |
+| 07 | falaises | fixe : parois des gouffres, géode (sans les cristaux) |
+| 08 | cristaux | fixe : les cristaux en **blanc** (5 tons qui gardent les facettes, contour indigo) |
+| 09 | reflets | 24 × 10 ticks : **bande arc-en-ciel** nacrée qui balaie les cristaux (+4 px par phase), couleur qui tourne (rouge → orange → jaune → vert → cyan → bleu → mauve → rose), 36 éclats qui scintillent |
+| 10 | herbes | 4 × 12 ticks, A B A C : touffes en étoile |
+| 11 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C) : en B et C, chaque fleur descend de 1 px et penche de ±1 px |
+| 12 | buissons | fixe |
+| 13 | arbres | fixe : 13 arbres plantés, plus ceux du décor |
+| 14 | cascades | 3 × 10 ticks : loi de P03P01A |
+| 15 | ecume | 3 × 10 ticks |
+| 16 | embruns | 24 × 10 ticks : les gouttelettes partent du haut de l'écume, montent de 34 px et s'effacent |
+| 17 | papillons | 48 × 10 ticks : boucles de Lissajous fermées ; les ailes s'ouvrent et se ferment une phase sur deux |
+| 18 | Top (vide) | à vous |
 
 La scène boucle en 480 ticks (8 s).
 
 **Collisions** : le sol, les dalles, les fleurs et les massifs sont praticables. On compte 5 465 cases bloquées sur 6 912.
 
-Contrôles : 12 tests (`source/zone_zero_v2/eaf1/test_build.py`) et mutations (`source/zone_zero_v2/mutations.py eaf1`).
+Contrôles : 13 tests (`source/zone_zero_v2/eaf1/test_build.py`), dont `test_cristaux_blancs_reflets_arc_en_ciel`, et 28 mutations toutes détectées (`source/zone_zero_v2/mutations.py eaf1`).
 
 ## Installation
 

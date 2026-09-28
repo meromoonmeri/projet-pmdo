@@ -41,6 +41,10 @@ LOTS = {
 HQ = ("<p><strong>Passe haute qualité</strong> : herbe Sky Peak en aplat franc (ton dominant du GIF), touffes en étoile qui se balancent "
       "(A B A C), fleurs nettes de 7 px en <strong>huit couleurs</strong>, <strong>embruns</strong> au pied des cascades et "
       "<strong>papillons</strong> sur des boucles fermées. Pixels calculés, pas des tuiles natives.</p>")
+CRISTAUX = ("<p><strong>Cristaux Zone Zéro</strong> : les cristaux menthe du décor deviennent <strong>blancs</strong> (5 tons qui gardent les facettes, "
+            "calque <code>cristaux</code>) et un calque <code>reflets</code> les traverse d'une <strong>bande arc-en-ciel</strong> nacrée "
+            "(rouge, orange, jaune, vert, cyan, bleu, mauve, rose) dont la couleur tourne au fil de la boucle, avec des éclats qui scintillent. "
+            "Pixels calculés (recoloration du rendu généré), pas des tuiles natives.</p>")
 NOTE = ("Le décor, le gouffre et les arbres sont des rendus générés à partir des références Sky Peak et Apple Woods, pas des tuiles natives "
         "(seules la loi et la palette de la cascade viennent de la ROM, via P03P01A). Marqueurs : jaune = <code>entrance</code>, "
         "bleu = <code>sortie</code>, rose = <code>belvedere</code>. Aucun warp : les raccords restent à scripter. Aucun test PMDO en jeu.")
@@ -87,7 +91,7 @@ def main(lot):
     data = {'size': M['size_px'], 'loop': M['scene_loop_ticks'], 'stack': stack, 'poses': [],
             'collisions': uri(O / f'review/{PFX}_collisions_marqueurs.png'), 'entry': M['access']['markers']['entrance']}
     anims = '<br>'.join(f"• <strong>{k}</strong> : {v['phases']} × {v['frame_length_ticks']} ticks" for k, v in M['animations'].items())
-    texte = L['texte'] + HQ + f"<p>Animations, toutes en boucle fermée sur {M['scene_loop_ticks']} ticks ({M['scene_loop_ticks'] // 60} s) :<br>{anims}</p>"
+    texte = L['texte'] + HQ + (CRISTAUX if M.get('cristaux') else '') + f"<p>Animations, toutes en boucle fermée sur {M['scene_loop_ticks']} ticks ({M['scene_loop_ticks'] // 60} s) :<br>{anims}</p>"
     page = ((HERE / 'viewer_template.html').read_text().replace('__DATA__', json.dumps(data)).replace('__TITRE__', L['titre'])
             .replace('__TEXTE__', texte).replace('__NOTE__', NOTE).replace('__PFX__', PFX))
     (R / L['apercu']).write_text(page)

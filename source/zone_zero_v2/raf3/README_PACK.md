@@ -55,7 +55,21 @@ Demande : « faut que les zone route area zero soit magnifique avec la verdure s
 - **Embruns** au pied des cascades, et **papillons**.
 - **Sol et buissons** : le sol est quantifié seul sur 128 couleurs, sinon les buissons ronds du sol tombaient en olive plat. Les falaises et les buissons passent à 96 couleurs.
 
-Contrôles : 12 tests, dont `test_haute_qualite`, et 23 mutations toutes détectées (`source/zone_zero_v2/mutations.py raf3`).
+Contrôles : 13 tests, dont `test_haute_qualite` et `test_cristaux_blancs_reflets_arc_en_ciel`, et 28 mutations toutes détectées (`source/zone_zero_v2/mutations.py raf3`).
+
+## Cristaux Zone Zéro : base blanche, reflets arc-en-ciel (29 septembre 2026)
+
+Demande : « je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc ».
+
+- **Sélection** : les cristaux menthe du décor sont repérés par une règle de couleur (g − r > 45, g − b < 50, luminance > 125, plus les reflets blancs). Une composante n'est gardée que si au moins 5 % de ses pixels sont des facettes très claires (luminance > 205) : les reflets turquoise de la roche restent dans les falaises. Les bases menthe des piliers, peintes dans le sol, sont rattachées quand elles touchent un cristal.
+- **Base blanche** (calque `cristaux`, fixe) : 32,447 px de cristal en 5 tons blanc-lavande selon la luminance d'origine, pour garder les facettes, et 1,685 px de contour indigo. Les cristaux quittent le calque `falaises`.
+- **Reflets** (calque `reflets`, 24 × 10 ticks) :
+  - une bande diagonale de 34 px (période 96 px) avance de 4 px par phase ;
+  - elle porte les 8 teintes de l'arc-en-ciel en bandes de 8 px, posées sur le blanc (rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ;
+  - la teinte d'un même pixel change toutes les 3 phases, si bien qu'un cristal passe du rouge au mauve au fil de la boucle ;
+  - 36 éclats en étoile (1-2-3-2-1) scintillent sur les facettes les plus claires ;
+  - la boucle est fermée : 24 × 4 px = 96 px, et 24 / 3 = 8 teintes.
+- Ce sont des pixels calculés (une recoloration du rendu généré), pas des tuiles natives.
 
 ## Calques (du bas vers le haut)
 
@@ -70,16 +84,18 @@ Les calques et leurs lois sont les mêmes que dans RAF1 et RAF2 :
 | 04 | lueurs | 24 × 10 ticks : 34 éclats lointains |
 | 05 | eau | 3 × 10 ticks : rides dans les deux bassins |
 | 06 | sol | fixe : herbe Sky Peak en **aplat franc** (135,247,119, ton dominant du GIF) et chemin |
-| 07 | falaises | fixe, cristaux compris |
-| 08 | herbes | 4 × 12 ticks, A B A C : 55 **touffes en étoile** nettes (tons relevés sur Sky Peak) ; en B et C les brins du haut penchent de ±1 px |
-| 09 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C) : en B et C chaque fleur descend de 1 px et penche de ±1 px. 270 **fleurs nettes de 7 px** (4 pétales, reflet, cœur, ombre verte) en **huit couleurs** : corail, rouge, rose, orange, jaune, blanc, bleu, violet |
-| 10 | buissons | fixe |
-| 11 | arbres | fixe : 23 arbres plantés, plus ceux du décor |
-| 12 | cascades | 3 × 10 ticks : loi de P03P01A |
-| 13 | ecume | 3 × 10 ticks |
-| 14 | embruns | 24 × 10 ticks : 81 gouttelettes partent du haut de l'écume de chaque cascade, montent de 34 px en ondulant et s'effacent (trame de Bayer) |
-| 15 | papillons | 48 × 10 ticks : 8 papillons de couleurs différentes sur des boucles fermées (Lissajous) au-dessus de la prairie ; ailes ouvertes et fermées une phase sur deux |
-| 16 | Top (vide) | à vous |
+| 07 | falaises | fixe : parois des gouffres (sans les cristaux) |
+| 08 | cristaux | fixe : les cristaux en **blanc** (5 tons qui gardent les facettes, contour indigo) |
+| 09 | reflets | 24 × 10 ticks : **bande arc-en-ciel** nacrée qui balaie les cristaux (+4 px par phase), couleur qui tourne (rouge → orange → jaune → vert → cyan → bleu → mauve → rose), 36 éclats qui scintillent |
+| 10 | herbes | 4 × 12 ticks, A B A C : 55 **touffes en étoile** nettes (tons relevés sur Sky Peak) ; en B et C les brins du haut penchent de ±1 px |
+| 11 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C) : en B et C chaque fleur descend de 1 px et penche de ±1 px. 270 **fleurs nettes de 7 px** (4 pétales, reflet, cœur, ombre verte) en **huit couleurs** : corail, rouge, rose, orange, jaune, blanc, bleu, violet |
+| 12 | buissons | fixe |
+| 13 | arbres | fixe : 23 arbres plantés, plus ceux du décor |
+| 14 | cascades | 3 × 10 ticks : loi de P03P01A |
+| 15 | ecume | 3 × 10 ticks |
+| 16 | embruns | 24 × 10 ticks : 81 gouttelettes partent du haut de l'écume de chaque cascade, montent de 34 px en ondulant et s'effacent (trame de Bayer) |
+| 17 | papillons | 48 × 10 ticks : 8 papillons de couleurs différentes sur des boucles fermées (Lissajous) au-dessus de la prairie ; ailes ouvertes et fermées une phase sur deux |
+| 18 | Top (vide) | à vous |
 
 La scène boucle en 480 ticks (8 s).
 

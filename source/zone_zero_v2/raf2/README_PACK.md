@@ -45,7 +45,7 @@ Demande : « faut que les zone route area zero soit magnifique avec la verdure s
 - **Embruns** au pied des cascades, et **papillons**.
 - **Sol et buissons** : le sol est quantifié seul sur 128 couleurs, sinon les buissons ronds du sol tombaient en olive plat. Les falaises et les buissons passent à 96 couleurs.
 
-Contrôles : 12 tests, dont `test_haute_qualite`, et 23 mutations toutes détectées (`source/zone_zero_v2/mutations.py raf2`).
+Contrôles : 13 tests (dont `test_haute_qualite` ; le test des cristaux vérifie qu'il n'y en a pas ici), et 23 mutations toutes détectées (`source/zone_zero_v2/mutations.py raf2`).
 
 ## Calques (du bas vers le haut)
 
