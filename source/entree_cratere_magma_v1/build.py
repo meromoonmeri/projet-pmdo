@@ -124,7 +124,7 @@ def classify(a):
 
 def fill_behind_cascades(layers, cascade, names=('falaises', 'cendre')):
     """Décor derrière la lame : le rectangle vert du brut est regarni en miroir du décor voisin (falaise ou cendre
-    générées), rangée par rangée, chaque pixel dans le calque d'où il vient, seulement si les deux côtés sont du décor
+    générées), rangée par rangée, dans le calque des falaises (non praticable), seulement si les deux côtés sont du décor
     (pas de magma) ; la lame de la cascade serpente devant."""
     src = np.zeros((H, W), int) - 1
     for k, nm in enumerate(names):
@@ -138,8 +138,7 @@ def fill_behind_cascades(layers, cascade, names=('falaises', 'cendre')):
                 continue
             pairs = [(x0 + j, x0 - 1 - j) for j in range(hl)] + [(x1 - j, x1 + 1 + j) for j in range(hr)]
             for dst, sx in pairs:
-                k = src[y, sx]
-                layers[names[k]][y, dst] = layers[names[k]][y, sx]
+                layers[names[0]][y, dst] = layers[names[src[y, sx]]][y, sx]   # décor fixe non praticable
 
 
 def ember_frames(a, ember_full, ember):
@@ -333,7 +332,7 @@ def build():
                   'periode_texture': list(MG.PERIOD), 'cellule': MG.CELL, 'derive': 'une periode (96 px) vers le sud par boucle',
                   'pieds_cascade': [list(p) for p in D['feet']],
                   'origine': 'module source/magma_visqueux/magma.py (bruit de Worley periodique, rampe relevee sur la lave du rip de la fosse) ; pixels calcules'},
-        'cascades': {'phases': MG.PHASES, 'frame_length_ticks': MG.TICKS, 'descente': '2 periodes (x2,5) par boucle',
+        'cascades': {'phases': MG.PHASES, 'frame_length_ticks': MG.TICKS, 'descente': '1 periode de matiere (96 x 2,5 = 240 px) par boucle, 7,5 px par phase',
                      'origine': 'meme matiere etiree verticalement, bords de croute ondulants, pied dechiquete'},
         'colonnes': {'phases': MG.COL_PHASES, 'frame_length_ticks': MG.COL_TICKS, 'events': D['vents'],
                      'chronologie': '0-11 bouche qui palpite, 12-15 gonflement, 16-21 jaillissement, 22-31 colonne, 32-35 retombee, 22-45 gouttes, 34-43 anneau',

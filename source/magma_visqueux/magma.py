@@ -136,7 +136,7 @@ def magma_phases(mask, visible, feet=(), drift=(0, 1), seed=3, crust=0.12, phase
 
 
 # ---------------------------------------------------------------- cascades
-def cascade_phases(mask, seed=11, falls=2, phases=PHASES, foot_rows=7):
+def cascade_phases(mask, seed=11, falls=1, phases=PHASES, foot_rows=7):
     """Cascades visqueuses sur `mask` : la matière descend de `falls` périodes (y, x2,5) par boucle.
 
     Les bords sont une croûte sombre d'épaisseur variable qui descend avec la coulée : la lame claire serpente
