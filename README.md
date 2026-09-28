@@ -1,5 +1,22 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## EAF1 — Entrée Zone Zéro fleurie : la géode du donjon (29 septembre 2026)
+
+**Demande** : « la suite ! », après la passe haute qualité des routes. Le maillon suivant du réseau fleuri est l'entrée du donjon. **EAF1** remplace EAZ1 dans ce réseau ; EAZ1, une grotte de cristal sombre de l'ancienne série, est gardée. Le réseau devient : RAF1 → RAF2 → RAF3 → **EAF1** → ATP1.
+
+- Sorties : `renders/zone_zero_v2/EAF1/`, aperçu `apercu_entree_zone_zero_fleurie.html`. Même build que les RAF (`source/zone_zero_v2/build.py eaf1`), passe haute qualité comprise.
+- **Bruts générés**, dans l'ordre :
+  1. le décor EAZ1 repeint au style RAF3 et Sky Peak ;
+  2. une édition qui élargit le magenta ;
+  3. l'édition « gouffre » : le générateur a refait le layout, avec deux grands gouffres qui encadrent une chaussée fleurie montant vers la géode. Ce layout, plus beau, a été gardé ;
+  4. ce layout avec le fond des gouffres en magenta pur, qui sert de décor. Le gouffre n'est pris dans l'édition que sous ce masque.
+- **Pas japonais** : ce sont des dalles vert sauge, traitées comme un chemin (`dalles` dans la config).
+- **Contenu** : 16 calques ; 234 fleurs nettes en 7 couleurs ; 51 touffes ; 2 cascades avec 70 gouttelettes d'embruns ; 5 papillons ; 13 arbres plantés.
+- **Fidélité** : herbe 3,4 et arbres 8,5, seuillées ; falaises 32,3, signalées.
+- 12 tests PASS ; 23 mutations détectées.
+- Paquets : `EAF1_projet_pmdo_0812.zip` (1,2 Mo) et `EAF1_calques_png_8px.zip` (7,2 Mo).
+- Pas de runtime, pas de warp. Les raccords (RAF3 → EAF1 → donjon) restent à scripter.
+
 ## RAF1, RAF2, RAF3 — passe « haute qualité » (28 septembre 2026)
 
 **Demande** : « faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualité less fleur avec plein de couleur des cascade de la brume etc ».

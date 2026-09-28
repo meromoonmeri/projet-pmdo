@@ -1182,3 +1182,10 @@ Pas de runtime. Pas dans le mod unique.
 - **Fleurs redessinées** : découper les images sur la zone admise (praticable, lisière, troncs, arbres, végétation), sinon l'ombre et le penché débordent sur les parois.
 - **Perte de travail** : l'espace de travail a été réinitialisé en pleine passe ; `haute_qualite.py`, non poussé, a dû être réécrit. Pousser dès que le module existe, même avant les tests.
 
+## Zone Zéro fleurie — EAF1, ajouts à la recette
+
+- **Nouvelle map dans le build générique des RAF** : ajouter une entrée `CFG`. Paramètres propres au lot : `base_raw`, `demande`, `lecture`, `sortie_y_max` (sortie en grotte plus basse que 96 px), `arbres_min` (prairie étroite bordée de gouffres), `aplat_max` (herbe plus tramée), `dalles` (couleur d'un chemin de dalles), `massifs_falaise`.
+- **Édition « gouffre » qui refait le layout** : si le nouveau layout est meilleur, le garder. Redemander une version du même layout avec seulement le fond des gouffres en magenta pur. Elle sert de décor, et l'édition fournit les pixels du gouffre sous ce masque. Mesurer l'écart hors masque (ici 15) et le noter.
+- **Belvédère** : quand le magenta ne couvre que le fond du gouffre, les parois forment une bande de paroi et le bord praticable est loin du vide. Choisir le belvédère parmi les cases libres les plus proches du vide, calculées sur les masques exportés.
+- **Commits** : une commande `python … && git commit` enchaînée par des retours à la ligne commite même si le script Python échoue. Relire `git show --stat` après chaque réinitialisation.
+
