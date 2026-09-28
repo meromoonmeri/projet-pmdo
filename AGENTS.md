@@ -1164,3 +1164,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Masque praticable exporté** (`masques/*_masque_praticable.png`) : les tests recomptent les cases bloquées à partir de ce masque, et vérifient les fleurs praticables, les troncs bloquants et l'escalier praticable.
 - **Vérifier les préfixes des branches sœurs sans les fetcher** : fetcher les 72 branches a gonflé `.git` à 13 Go et rempli le disque. Passer par `gh api repos/<repo>/git/trees/<sha>?recursive=1`. Pour nettoyer : ne supprimer que les packs sans objet atteignable (`git show-index` croisé avec `git rev-list --objects --all`), reconditionner les objets atteignables des autres packs récents avec `git pack-objects`, puis lancer `git fsck`.
 
+## Zone Zéro fleurie — RAF3, ajouts à la recette
+
+- **Décor à cristaux clairs** : ils passent les règles « blanc » des cascades et de l'eau. Pour chaque lot concerné, déclarer dans la config `chutes_x` : les colonnes des chutes peintes, en pleine résolution. Ne garder que les chutes qui partent du bord haut, dans ces colonnes. Limiter l'eau à une boîte sous l'écume de chaque chute. Les falaises bleu sombre et les bassins bleu nuit ont des couleurs qui se recouvrent : c'est la géométrie qui tranche.
+- **Passage pavé entre des obstacles clairs** (dalles, piliers) : aucune règle de couleur n'en fait du sol. Le mesurer sur une grille de 20 px posée sur le brut et le déclarer dans `stairs`, comme un escalier. Symptôme : une sortie qui tombe au milieu de la map.
+- **Sortie en grotte** (`sortie_grotte`) : le marqueur est devant la bouche du tunnel, pas au bord nord. Les tests prennent alors la position de la config.
+- **Brut qui laisse un point de magenta pur hors du vide** : `retouche_magenta` le repeint avec le pixel voisin non magenta. Garder cette option par lot, car la règle magenta attrape aussi des fleurs violettes.
+- **Vérifier un préfixe sur les 72 branches sans rien fetcher** : `gh api repos/<repo>/git/trees/<sha>?recursive=1`, avec les SHA de `git ls-remote --heads` ; vérifier aussi `truncated`. Compter environ 2 minutes.
+- **Mutations** : le script est versionné (`source/zone_zero_v2/mutations.py <lot>`) et survit aux réinitialisations de l'espace de travail.
+

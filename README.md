@@ -1,5 +1,26 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RAF3 — Zone Zéro fleurie : fond du cratère et tunnel (28 septembre 2026)
+
+**Demande** (renvoyée telle quelle) : « pour les zone arena faut la texture sky peak et les fleur de différente couleur et les arbre pmd et les cascade garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur ». RAF1 et RAF2 couvraient déjà RAZ1 et RAZ2 ; **RAF3** fait la même chose pour **RAZ3**, qui est gardée. EAZ1, un intérieur de grotte, n'est pas retouchée.
+
+- Sorties : `renders/zone_zero_v2/RAF3/`, aperçu `apercu_route_zone_zero_fleurie_3.html`. Même build que RAF1/RAF2 (`source/zone_zero_v2/build.py raf3`).
+- **Brut généré** à partir du brut RAZ3 (layout), du décor RAF2 (style de la série) et d'une découpe Sky Peak ×2 :
+  - le lac magenta devient deux gouffres ;
+  - la chaussée de cristal devient une prairie fleurie ;
+  - les cascades tombent dans des bassins sur la terrasse haute ;
+  - le tunnel nord mène à EAZ1.
+- Le gouffre est une édition du décor, gardée seulement dans le masque magenta.
+- 13 calques ; 127 têtes de fleurs en 5 familles de couleurs ; 23 arbres plantés ; 2 cascades.
+- **Fidélité** : herbe 7,7, arbres 8,5. Les falaises sont à **42,8**, au-dessus du seuil : la couronne rocheuse est sarcelle. Elles sont signalées, non seuillées.
+- **Réglages propres au décor** :
+  - chutes limitées aux colonnes peintes (les cristaux clairs passaient la règle des cascades) ;
+  - eau limitée aux bassins sous l'écume (les falaises sombres passaient la règle de l'eau) ;
+  - éclats de cristal exclus des fleurs ;
+  - pavage entre les piliers déclaré praticable.
+- 11 tests PASS ; 15 mutations détectées (`source/zone_zero_v2/mutations.py`, désormais versionné).
+- Paquets : `RAF3_projet_pmdo_0812.zip` (1,6 Mo) et `RAF3_calques_png_8px.zip` (7,7 Mo). Pas de runtime, pas de warp.
+
 ## RAF1 et RAF2 — Zone Zéro fleurie : Sky Peak, fleurs, arbres PMD, gouffres profonds (28 septembre 2026)
 
 **Demande** : « pour les zone area faut la texture sky peak et les fleur de differente couleur et les arbre pmd et les cascade garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur ».
