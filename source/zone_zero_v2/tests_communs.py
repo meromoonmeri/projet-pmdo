@@ -226,7 +226,7 @@ def make(lot):
             tr = STACK['arbres'][0]; m = alpha(tr); px = tr[m][:, :3].astype(int)
             green = (px[:, 1] > px[:, 0] + 25) & (px[:, 1] > px[:, 2] + 30)
             self.assertGreater(green.mean(), 0.5)
-            self.assertGreaterEqual(len(M['arbres']['plantes']), 20)
+            self.assertGreaterEqual(len(M['arbres']['plantes']), CF.get('arbres_min', 20))
             self.assertEqual(len(M['arbres_source']['modeles']), 8)
             self.assertFalse((MASK['troncs'] & MASK['praticable']).any())                        # troncs bloquants
             self.assertFalse((m & MASK['praticable']).any())
@@ -283,7 +283,7 @@ def make(lot):
             self.assertTrue(all(p['ok'] for p in a['chemins_16x16'].values()))
             self.assertEqual(mk['entrance'][1], H - 16)                                               # arrivée au sud
             if CF.get('sortie_grotte'):                                                               # sortie : bouche du tunnel nord
-                self.assertLess(mk['sortie'][1], 96); self.assertLess(abs(mk['sortie'][1] - CF['sortie'][1]), 24)
+                self.assertLess(mk['sortie'][1], CF.get('sortie_y_max', 96)); self.assertLess(abs(mk['sortie'][1] - CF['sortie'][1]), 24)
             else:
                 self.assertEqual(mk['sortie'][1], 0)                                                  # sortie au bord nord
             self.assertLess(abs(mk['sortie'][0] - CF['sortie'][0]), 24)                               # sortie à l'endroit peint

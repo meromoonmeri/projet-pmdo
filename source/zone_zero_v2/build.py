@@ -62,6 +62,15 @@ CFG = {
                  edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)],
                  massifs_falaise=[(245, 170, 298, 202), (430, 277, 477, 311), (272, 400, 332, 442), (270, 445, 302, 477),
                                  (134, 143, 162, 170), (596, 148, 622, 174)]),
+    'eaf1': dict(PFX='EAF1', base='eaz1', base_raw='source/zone_zero_v1/eaz1/bruts/decor.png',
+                 NAMESPACE='entree_zone_zero_fleurie', ASSET='eaf1_entree_zone_zero_fleurie',
+                 titre='Entree Zone Zero fleurie - la geode du donjon (4:3)',
+                 decor='decor_magenta_c.png', chaine=['decor_magenta.png', 'decor_magenta_b.png', 'decor_magenta_c.png'],
+                 gouffre='decor_gouffre.png', stairs=[], entree_x=384, sortie=(525, 168), sortie_y_max=200, belvedere=(520, 300),
+                 graine=13, edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(430, 515), (570, 665)],
+                 dalles=(178, 197, 152),
+                 demande='la suite ! (apres la passe haute qualite des routes Zone Zero : faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualite les fleur avec plein de couleur des cascade de la brume etc)',
+                 lecture='suite du reseau fleuri : EAZ1 (grotte de cristal sombre, gardee) refaite en entree fleurie haute qualite, RAF3 -> EAF1 -> ATP1'),
 }
 GRASS = (128, 240, 104)
 
@@ -162,7 +171,7 @@ def composite(m):
     return a, void, dec, gf
 
 
-def classify(a, void, stairs, falls_x=None):
+def classify(a, void, stairs, falls_x=None, dalles=None):
     Hs, Ws = a.shape[:2]
     r, g, b = a.transpose(2, 0, 1); mn = a.min(2)
     stm = np.zeros((Hs, Ws), bool)
@@ -225,6 +234,8 @@ def classify(a, void, stairs, falls_x=None):
     wet_any = void | water | casc | foam
     lum = a @ [.299, .587, .114]
     path2 = np.sqrt(((a - (240, 232, 192)) ** 2).sum(2)) < 40                   # chemin beige (RAF2)
+    if dalles is not None:                                                        # EAF1 : pas japonais vert sauge
+        path2 |= np.sqrt(((a - dalles) ** 2).sum(2)) < 32
     fl = (nd.uniform_filter((grass_rule(a) | path2).astype(float), 9) > 0.55) & ~wet_any
     holes = nd.binary_fill_holes(fl) & ~fl
     hl, hn = nd.label(holes); hs = nd.sum(holes, hl, range(1, hn + 1))
@@ -416,7 +427,7 @@ def glint_frames(void, dep, seed, n_glints=34):
 def make_all(m):
     c = CFG[m]
     a, void_full, dec, gf = composite(m)
-    mk, falls = classify(a, void_full, c['stairs'], c.get('chutes_x'))
+    mk, falls = classify(a, void_full, c['stairs'], c.get('chutes_x'), c.get('dalles'))
     order = ['void', 'casc', 'foam', 'water', 'floor', 'veg', 'walls']
     ex, cols = JM.down_class(a, {k: mk[k] for k in order}, order)
     full = JM.down_full(a)
@@ -669,12 +680,12 @@ def build(m):
         with Image.open(p) as im:
             size = list(im.size)
         raw_inputs.append({'file': str(p.relative_to(R)), 'sha256': sha(p), 'size': size})
-    base_raw = R / f"source/zone_zero_v1/{c['base']}/bruts/decor_magenta.png"
+    base_raw = R / c.get('base_raw', f"source/zone_zero_v1/{c['base']}/bruts/decor_magenta.png")
     manifest = {
         'lot': c['PFX'], 'serie': 'Reseau Zone Zero V2 (routes fleuries)', 'remplace_pas': f"{c['base'].upper()} (gardee)",
-        'demande': ('pour les zone area faut la texture sky peak et les fleur de differente couleur et les arbre pmd et les cascade '
-                    'garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur etc'),
-        'lecture_agent': 'zones Area Zero = routes RAZ1 et RAZ2 (cascades et trous d abime) ; RAZ3 et EAZ1 (cristal) non touchees',
+        'demande': c.get('demande', ('pour les zone area faut la texture sky peak et les fleur de differente couleur et les arbre pmd et les cascade '
+                    'garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur etc')),
+        'lecture_agent': c.get('lecture', 'zones Area Zero = routes RAZ1 et RAZ2 (cascades et trous d abime) ; RAZ3 et EAZ1 (cristal) non touchees'),
         'format': '4:3 vaste', 'size_px': [W, H], 'grid_8px': [W // 8, H // 8],
         'references': {
             'sky_peak': {'fichier': 'source/zone_zero_v2/reference/skypeak_gif_f0.png', 'sha256': sha(REFD / 'skypeak_gif_f0.png'),
