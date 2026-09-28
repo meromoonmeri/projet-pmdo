@@ -339,7 +339,7 @@ def build():
     arena = walk & (np.mgrid[:H, :W][0] < H - 160)
     fy, fx = np.nonzero(arena)
     boss = free_near(int(fx.mean()), int(fy.mean()))
-    cle = free_near(D['cx'] - 8, CLE_BASE_Y + 2)
+    cle = free_near(D['cx'] - 8, (CLE_BASE_Y + 7) // 8 * 8)          # première case entièrement sous la pierre
     markers = {'entrance': entrance, 'boss': boss, 'cle_de_voute': cle}
     paths = {}
     for k in ('boss', 'cle_de_voute'):

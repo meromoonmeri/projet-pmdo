@@ -1,5 +1,20 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FRP1 — Fin Ruine : fosse de Sealed Ruin, troisième zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « Choisis ! » après FCF1. L'agent a poursuivi la série dans l'ordre du mod : **Ruine**, d'après la vraie fin du jeu, `Sealed_Ruin_pit_TDS.png`.
+
+- Layout : arrivée au sud entre deux rochers plats (`entrance`), arène de grands blocs gris (`boss`), **Clé de voûte étrange** dans la niche nord (`cle_de_voute`, devant la pierre). Dans le jeu, les héros la trouvent au fond de Sealed Ruin et elle se révèle être Spiritomb. Aucune sortie, aucun warp : la pierre ferme la niche (testé sur la grille de collision).
+- Rendu généré référencé : blocs sur sol magenta, clé de voûte sur magenta. Le sol seul est revenu vide deux fois avec la capture entière ; il a été généré à partir d'une découpe serrée du sol de la capture (coordonnées dans le manifeste).
+- Calques, du bas vers le haut : sol complet, ombre des parois ; aura, tourbillons ; parois, clé de voûte ; fissure, feux follets.
+- La fissure pulse en violet et une aura tramée respire au sol (6 × 10 ticks, pulsation des braises de ECN1). Trois feux follets montent de la pierre à tour de rôle (24 × 5). Les tourbillons de poussière reprennent les poses de l'entrée Ruine (ERN1), recolorées en gris (8 × 5). La scène boucle en 2 s.
+- Fidélité à la capture : sol 10.44, parois 0.75 (seuil 35).
+- Aperçu : `apercu_fin_ruine_puits_v1.html`. Rendus : `renders/fin_ruine_puits_v1/`. Source : `source/fin_ruine_puits_v1/`.
+- 10 tests PASS, 6 mutations vérifiées.
+- Paquet : `FRP1_projet_pmdo_0812.zip` (Ground 0.8.12, préfixe `FRP1`) et `FRP1_calques_png_8px.zip`.
+- Pixels générés ou dessinés par programme, aucune tuile native. Pas de runtime. Pas encore dans le mod unique.
+- Fin suivante : Givre.
+
 ## FCF1 — Fin Cratère : fosse de Dark Crater, deuxième zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « passons à la suite » après FVS1. Deuxième fin de la série, dans l'ordre du mod : **Cratère**, d'après la vraie fin du jeu, `Dark_Crater_Pit_TDS.png`.

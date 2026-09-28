@@ -979,3 +979,13 @@ Pas de runtime. Pas dans le mod unique.
 - **Lueur** : rampe décalée d'un cran vers le chaud (`accent → clair`). Avec la rampe des braises (`bande → clair`), l'emblème devenait rouge sombre à t = 0. Ne faire pulser que les jaunes et oranges (g > 110), pour garder le dessin rouge.
 - Si le générateur ne rend pas le sol seul : répéter en miroir une plage propre du décor, documenter la plage (`SOL_PATCH`) et la tester.
 
+## Fins de donjon — FRP1 (Fin Ruine), ajouts à la recette
+
+- **Salle sans liquide** : le magenta sert de sol (`r - g > 40` et `b - g > 40`, franges comprises). Le sol complet couvre toute la carte ; les parois sont le complément exact du sol.
+- **Teinte du magenta dans les parois** : une niche sombre générée en dégradé vers le magenta laisse des gris violacés. Neutraliser les parois (`min(r, b) - g > 6` → gris de même luminance) ; un test vérifie qu'il n'en reste aucun.
+- **Sol refusé par le générateur** : si la capture entière renvoie une réponse vide, donner une découpe serrée du sol de la capture (`SOL_REF_CROP`, dans `.cache/`, non versionnée) et documenter ses coordonnées dans `raw_inputs[].images`.
+- **Objet d'objectif généré à part** (clé de voûte) : largeur fixée sur la carte (`CLE_W`), palette propre de 16 couleurs (hors palette commune), fissure au seuil de couverture bas (0,18) pour rester continue. Le marqueur va sur la **première case entièrement sous l'objet** : une case à 25 % pile passe pour libre, et le collisionneur de 16 px chevauchait la pierre.
+- **« Aucune sortie »** quand du sol reste derrière l'objet : tester la connexité sur la grille de collision depuis l'`entrance`, pas la simple absence de sol.
+- **Réutilisation des tourbillons de ERN1** : `ER.cr = loadmod(ECN1)` avant d'appeler `ER.extract_poses`, puis remappage par rang de luminance sur une rampe grise.
+- Petits sprites violets sur une pierre grise : bord et cœur dans les deux tons les plus clairs, sinon ils disparaissent.
+

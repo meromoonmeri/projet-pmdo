@@ -31,7 +31,7 @@ Même jour, sur la demande de la **zone de départ** (« zone où le Pokémon se
 - L'écume et les bulles sont l'exception explicite à la règle « pas de liseré blanc ».
 - ZRV1 n'est **pas dans le mod unique**. C'est une zone, pas une entrée de la série : l'y ajouter seulement si l'utilisateur le demande.
 
-Le 28 septembre, sur « Fait des zone fin de donjon multicalque de la série entrée on passe au fin » puis « Lance toi » : **série des fins de donjon**. Premier lot **Fin Vapeur** (`renders/fin_vapeur_sommet_v1/`, préfixe `FVS1`, réf. `Steam_Cave_Peak_TDS.png`, aperçu `apercu_fin_vapeur_sommet_v1.html`, 9 tests PASS). Deuxième lot **Fin Cratère** (`renders/fin_cratere_fosse_v1/`, préfixe `FCF1`, réf. `Dark_Crater_Pit_TDS.png`, aperçu `apercu_fin_cratere_fosse_v1.html`, 9 tests PASS). Suivant : Ruine (`Sealed_Ruin_pit_TDS.png`).
+Le 28 septembre, sur « Fait des zone fin de donjon multicalque de la série entrée on passe au fin » puis « Lance toi » : **série des fins de donjon**. Premier lot **Fin Vapeur** (`renders/fin_vapeur_sommet_v1/`, préfixe `FVS1`, réf. `Steam_Cave_Peak_TDS.png`, aperçu `apercu_fin_vapeur_sommet_v1.html`, 9 tests PASS). Deuxième lot **Fin Cratère** (`renders/fin_cratere_fosse_v1/`, préfixe `FCF1`, réf. `Dark_Crater_Pit_TDS.png`, aperçu `apercu_fin_cratere_fosse_v1.html`, 9 tests PASS). Troisième lot, sur « Choisis ! » : **Fin Ruine** (`renders/fin_ruine_puits_v1/`, préfixe `FRP1`, réf. `Sealed_Ruin_pit_TDS.png`, aperçu `apercu_fin_ruine_puits_v1.html`, 10 tests PASS). Suivant : Givre.
 - Choix de l'agent, les questions étant restées sans réponse : une fin par biome, dans l'ordre du mod ; arrivée au sud, arène (boss), objectif au nord ; la vraie fin du jeu en référence.
 - Suite prévue : Cratère (`Dark_Crater_Pit_TDS.png`), puis Ruine (`Sealed_Ruin_pit_TDS.png`), etc.
 - Les derniers ajustements de ZRV2 demandés juste avant (« corrige les nuages », animer les lignes de houle peintes dans la mer fixe) sont **en attente** : l'utilisateur est passé aux fins. Le défaut des nuages n'a pas été précisé (question posée, sans réponse).
@@ -64,7 +64,7 @@ Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) 
 | `arena/01a0e017` | `46a1f159` | aucun préfixe `E__1` ; autre historique (pas de base commune), cartes glace et cristal |
 | `arena/01a0e2db` | `66afe893` | ESP1, ESP2 |
 
-Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1 et FCF1.
+Préfixes de ces six branches : EFF1, EFF2, EDP1, ECF1, ECC1, ECC2, ESJ1, TMA1-3, EWL1, ESR1, ZGE1, ZGA1, EJT1, ESP1, ESP2. **Préfixes pris, toutes branches confondues** : ceux de la liste ci-dessous, plus ceux-ci, plus EQS1, ESC1, ETC1, ECV1, EMT1, EJS1, EJS2, ZRV1, ZRV2, FVS1, FCF1 et FRP1.
 
 `git fetch` ne récupère que `main` dans ce checkout. Pour inspecter les branches, passer les refspecs `+refs/heads/arena/…:refs/remotes/origin/arena/…`. Les quelque 60 autres branches `arena/*` sont d'anciennes sessions (5 au 25 septembre), sur d'autres historiques. Il faut quand même y chercher le nom de la référence visée (`git grep -l <ref> origin/<branche>`) : c'est ainsi qu'on a trouvé l'usage de `witheringdesert.png` par `01a0d498`.
 
