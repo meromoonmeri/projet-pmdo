@@ -1105,3 +1105,13 @@ Pas de runtime. Pas dans le mod unique.
 
 - **Reprise après une réinitialisation en cours de lot** : un lot peut être poussé sans rendus (brut, build et tests seulement). Relancer `build.py`, les tests, puis écrire `package.py`, `viewer_template.html` et `README_PACK.md` (vérifier qu'il ne s'agit pas d'une copie du lot précédent), et lancer les mutations avant la doc.
 - **Mutations d'une animation de palette** : copier la phase 0 sur la phase du pic (loi cassée), mettre un ton au-dessus du plafond, copier la phase 0 du portail sur la phase 9 (déphasage).
+
+## Ruines Zarbi — RZD1, ajouts à la recette
+
+- **Trouver une référence sans nom** : les planches `source/outil_maps_pmdsky/planches/planche_<lettre>.jpg` sont versionnées ; les regarder directement, par tranches de 830 px, avant tout rendu. Puis `rom --only D28,D30` (8 s) et `git checkout` de l'index et des planches.
+- **Loi d'une map où seul un détail s'anime** (D30P34A : le vitrail) : lister les couleurs de la zone qui change, puis la séquence d'indices de chaque pixel sur les 7 images. On obtient des rampes de palette (3 × 7 tons), réutilisables telles quelles sur un autre élément (bord des failles), tons natifs compris.
+- **Tout ce qui est calculé en magenta pur dans le brut** : composantes magenta qui touchent un bord = vide ; composantes fermées d'au moins 800 px = failles (dilatées de 1, trous rebouchés, sinon les rochers y tombent) ; composantes hors magenta séparées du plus grand fragment = rochers. Le calque du vide couvre aussi les rochers, pour qu'ils puissent bouger.
+- **Fidélité par boîtes** : vérifier que chaque boîte tombe sur la bonne matière dans le brut ET dans la référence (tester qu'elle est à plus de 90 % dans le masque du sol). Une boîte de référence sur des gravillons donnait 45 ; une règle de couleur appliquée aux deux images entières est plus honnête.
+- **Sprites calculés** (Zarbi) : tracer à 4× sur une grille 18 × 18 mise à l'échelle, réduire par seuil, ombrer (contour, corps, reflet, œil, pupille). 18 px paraissent blancs et illisibles sur la carte ; 24 px conviennent.
+- **Trajectoire sortie → tour → retour** : à 12 images/s, un pas de plus de 8 px saccade. Allonger la boucle (84 pas, scène 420 ticks) plutôt que réduire l'orbite. Deux Zarbi d'une même faille tournent dans le même sens, à une demi-boucle d'écart ; sinon ils se croisent et se superposent. Tester la continuité, raccord compris, et l'entrée et la sortie dans la faille.
+- **`sed` d'un `package.py` de modèle** : remplacer aussi le nom de module en points (`source.x.y.test_build`), sinon le paquet joue les tests du lot précédent. Compter les tests affichés.

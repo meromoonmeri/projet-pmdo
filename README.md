@@ -1,5 +1,30 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RZD1 — Ruines Zarbi : déchirures dans la réalité (28 septembre 2026)
+
+**Demande** : « une zone de ruine avec des Zarbi qui sortent de déchirures / failles dans la réalité, etc », avec toutes les options recommandées et les références choisies par l'agent.
+
+- `renders/ruines_zarbi_v1/RZD1/` (préfixe `RZD1`, aperçu `apercu_ruines_zarbi.html`). Fin de zone 4:3, arrivée au sud.
+- **Références** repérées sur les planches de l'outil maps, puis rendues depuis la ROM (`rom --only D28,D30`) :
+  - `D28P44A` donne les matières de la ruine : dalles grises, terre ocre, linteaux sur piliers ;
+  - `D30P34A` donne la réalité qui se désagrège : dallage de briques fendu, colonnes brisées, rochers en lévitation.
+  - Les noms de lieu ne sont pas affirmés, seuls les codes comptent.
+  - Sealed Ruin (D20/D21) avait déjà servi à ERN1 et FRP1.
+- **Brut** : un seul rendu, à partir des deux découpes de style ×2, gardé sans édition. Le magenta pur y peint le vide autour du fragment et les cinq failles ; il est remplacé par des calques calculés.
+- **Layout** :
+  - chemin de dalles depuis le bord sud ;
+  - esplanade de briques fendue de cinq failles (`faille`) ;
+  - bandes de terre et linteaux à l'ouest et à l'est ;
+  - dais et mur de tablettes à glyphes au nord (`autel`) ;
+  - tout autour, le vide de la distorsion, où flottent 24 rochers.
+- **Loi de la ROM** relevée sur D30P34A : seul le vitrail s'anime, par une animation de palette de 3 rampes de 7 tons (rouge vif → violet sombre → retour), 7 pas de 10 ticks. Appliquée avec les 21 tons natifs :
+  - au bord des failles : rampe vive dedans, rampe moyenne au 2e rang, rampe sombre dehors, lueur plus large au pic ;
+  - aux crevasses peintes autour : elles se rallument avec un pas de retard tous les 6 px, ce qui fait courir l'énergie.
+- **Autres animations** : intérieur des failles en tourbillon (21 pas), vide qui coule avec des étoiles (7 × 30), rochers qui flottent (21 × 10), 30 débris aspirés en spirale (21 × 10).
+- **Zarbi** Z A R B I ! ? calculés (`zarbi.py`, 24 px, œil blanc) : chacun sort petit de sa faille avec un halo, en fait le tour avec son ombre, puis y rentre (84 × 5 ticks). La boucle de la scène dure 420 ticks (7 s).
+- Fidélité (seuil 35) : briques 12,1, dalles 19,6, linteaux 12,3, terre 15,2, sol complet 13,9.
+- 9 tests PASS, 8 mutations détectées. Paquets : `RZD1_projet_pmdo_0812.zip` (2,1 Mo) et `RZD1_calques_png_8px.zip` (6,8 Mo). Pas de runtime, pas de warp.
+
 ## EAZ1 — Entrée Zone Zéro : grotte de cristal, fin du réseau (28 septembre 2026)
 
 **Demande** : suite des options recommandées ; map d'entrée du donjon Zone Zéro (Pokémon Paradoxe) au bout du réseau RAZ1 → RAZ2 → RAZ3 → **EAZ1**.
