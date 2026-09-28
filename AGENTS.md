@@ -1083,3 +1083,9 @@ Pas de runtime. Pas dans le mod unique.
 - **Abîme** : un vide trop sombre avec un bord clair ressemble à un puits. Garder des tons moyens (2,3 + 1,2 (1 − p) + brume), des bancs de brume visibles et une ombre fine sous la lèvre. Tester une luminance moyenne entre 40 et 150.
 - **Matière disparue après édition** (la pelouse) : ne mesurer sa fidélité que si elle dépasse 5 % du sol. Sinon, des pixels d'ombre mal classés donnent une distance trompeuse.
 - **Marqueur annexe** (belvédère) : le choisir parmi les cases atteignables (`nd.label` des positions 2 × 2 libres), pas seulement libres.
+
+## Réseau Zone Zéro — RAZ2, ajouts à la recette
+
+- **Chutes au milieu de la carte** (par-dessus une falaise) : la détection « colonnes d'eau sur les 40 premières lignes » ne les voit pas. Prendre l'eau de chute (bleu vif B > 100 ou blanc ; les bassins sombres ont B < 100), la fermer de 7 px en vertical, garder **toutes** les courses verticales d'au moins 90 px (pas seulement la plus longue par colonne : une chute du milieu est souvent sous une chute du haut), puis étiqueter une composante par chute. Le bas vient de la composante, pas d'une boucle sur le masque fermé (la fermeture rogne la ligne 0).
+- `cascade_frames` accepte `y0` : motif calculé en coordonnées locales, donc le test `a[:h - 32] == b[32:]` se fait sur la tranche y0 → y1.
+- **Escaliers en pierre ocre** : couleur des falaises, donc bloquants et coupés du chemin. Les compter comme sol par des rectangles mesurés sur le brut, puis leur donner une palette propre de 16 couleurs, car la palette commune les verdit. Tester le rouge supérieur au vert, et le fait que couper l'escalier rende la sortie inaccessible.

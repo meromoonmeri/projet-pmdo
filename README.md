@@ -1,5 +1,23 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RAZ2 — Réseau Zone Zéro, route 2 : terrasses aux cascades (28 septembre 2026)
+
+**Demande** : « la suite !! », deuxième map du réseau Zone Zéro (RAZ1 → **RAZ2** → RAZ3 → EAZ1).
+
+- `renders/zone_zero_v1/RAZ2/` (préfixe `RAZ2`, aperçu `apercu_route_zone_zero_2.html`). Même référence que RAZ1 : P03P01A, vérifiée au pixel près.
+- **Layout** :
+  - deux terrasses de prairie séparées par une bande de falaise ocre ; l'**escalier taillé** au centre est le seul passage entre elles ;
+  - trois cascades tombent du bord haut dans les bassins de la terrasse haute, et **deux chutes passent par-dessus la falaise du milieu** ;
+  - l'abîme occupe le tiers est ; une corniche longe le vide jusqu'aux marches du bord haut (`sortie`, vers RAZ3) ;
+  - `belvedere` au bord du vide.
+- Le premier rendu laissait la prairie toucher le bord gauche. Il a été corrigé par une édition à un seul changement (bande de buissons) : écart hors zone 10,7, et 0,4 % de pixels à plus de 60.
+- `commun.py` : `cascade_frames` accepte maintenant un `y0` (chute qui part du milieu de la carte), toujours à la loi de P03P01A (96 px, 32 px par image, 3 × 10). RAZ1 est inchangée.
+- La détection des chutes marche partout, pas seulement au bord haut : eau de chute (bleu vif ou blanc ; les bassins ont B < 100), courses verticales d'au moins 90 px, une composante par chute.
+- L'escalier est en pierre ocre : il est compté comme sol par des rectangles mesurés sur le brut et reçoit sa propre palette (la palette commune le verdissait).
+- Fidélité : prairie 4,5, sol complet 6,2, falaises 6,0 (seuil 35).
+- 10 tests PASS : chutes du milieu qui passent la falaise, décalage exact de 32 px, escalier seul passage (coupé, la sortie devient inaccessible), escalier non verdi, abîme à l'est. 7 mutations détectées.
+- Paquets : `RAZ2_projet_pmdo_0812.zip` (2,4 Mo) et `RAZ2_calques_png_8px.zip` (5,6 Mo). Pas de runtime, pas de warp.
+
 ## RAZ1 — Réseau Zone Zéro, route 1 : lèvre du cratère (28 septembre 2026)
 
 **Demande** (reprise sur « la suite !! ») : un réseau de routes dans un abîme façon Zone Zéro, avec des cascades, jusqu'à la map d'entrée du donjon Zone Zéro (Pokémon Paradoxe).
