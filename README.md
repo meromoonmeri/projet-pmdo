@@ -1,5 +1,21 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## AGM3 — Arène de Groudon V3 : colonnes de magma générées (28 septembre 2026)
+
+**Demande** : « je veux que tu génères les colonnes de magma ». Les colonnes d'AGM2 étaient calculées ; en AGM3, **leurs pixels viennent du générateur d'images**. AGM1 et AGM2 sont gardées.
+
+- `renders/arene_groudon_magma_v3/` (préfixe `AGM3`, aperçu `apercu_arene_groudon_magma_v3.html`). Le reste est repris d'AGM2 sans changement : décor, magma visqueux, Ω qui pulse à même le sol, braises. Le build charge celui d'AGM2 et n'en remplace que les colonnes.
+- **Brut** : `bruts/colonne_magenta.png` (848 × 1264), généré à partir d'une découpe ×2 de la lave de `Dark_Crater_Pit_TDS.png`. On y voit une colonne organique aux flancs bombés, un cœur blanc-jaune, de la croûte, une gerbe d'éclaboussures et des gouttes, sur fond magenta.
+  - Premier essai rejeté et gardé en trace (`colonne_v0_fond_lave.png`) : colonne rectiligne sur fond de lave.
+- **Colonnes** : quatre, plus grosses qu'AGM2 (corps d'environ 58 px au fond et 88 px devant). Celles de droite sont en miroir. Elles sortent toujours par le haut de la carte.
+- **Animation** (`colonnes_generees.py`, 48 × 5 ticks) :
+  - le corps, rendu périodique, monte d'une période par boucle en deux poussées, sans jamais reculer ;
+  - la gerbe générée bouillonne par rang de luminance ;
+  - les gouttes découpées dans le brut font des vols paraboliques ;
+  - la gerbe et les gouttes restent sur le lac, jamais sur la roche.
+  - La palette des colonnes compte 32 tons, tous tirés du brut.
+- 10 tests PASS, 8 mutations détectées. Paquets : `AGM3_projet_pmdo_0812.zip` (8,5 Mo) et `AGM3_calques_png_8px.zip` (19,3 Mo). Pas de runtime, pas de warp.
+
 ## RZD1 — Ruines Zarbi : déchirures dans la réalité (28 septembre 2026)
 
 **Demande** : « une zone de ruine avec des Zarbi qui sortent de déchirures / failles dans la réalité, etc », avec toutes les options recommandées et les références choisies par l'agent.

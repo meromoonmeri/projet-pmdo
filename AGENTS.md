@@ -1115,3 +1115,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Sprites calculés** (Zarbi) : tracer à 4× sur une grille 18 × 18 mise à l'échelle, réduire par seuil, ombrer (contour, corps, reflet, œil, pupille). 18 px paraissent blancs et illisibles sur la carte ; 24 px conviennent.
 - **Trajectoire sortie → tour → retour** : à 12 images/s, un pas de plus de 8 px saccade. Allonger la boucle (84 pas, scène 420 ticks) plutôt que réduire l'orbite. Deux Zarbi d'une même faille tournent dans le même sens, à une demi-boucle d'écart ; sinon ils se croisent et se superposent. Tester la continuité, raccord compris, et l'entrée et la sortie dans la faille.
 - **`sed` d'un `package.py` de modèle** : remplacer aussi le nom de module en points (`source.x.y.test_build`), sinon le paquet joue les tests du lot précédent. Compter les tests affichés.
+
+## Arène de Groudon — AGM3, ajouts à la recette
+
+- **Élément animé généré** (colonne de magma) : un seul brut sur magenta pur, sans décor, cadré serré (« coupée par le bord haut, gerbe au pied »). Un premier essai peint sur fond de lave est inutilisable : le rejeter et le garder en trace.
+- **Lot qui ne change qu'un calque** : charger le build du lot précédent (`importlib`) et remplacer ses globales (`PFX`, `OUT`, `STAGE`, `HERE`, `CG`, `COLS`). Envelopper `GR.ground_project` pour les noms, puis corriger le manifeste après coup (chemins des bruts d'origine, bruts ajoutés, section de la loi).
+- **Défilement vertical d'un corps généré** : bande rendue périodique par fondu de 20 %, re-quantifiée dans la palette du brut et recontourée. Décalage P (u − A sin 4πu / 4π) avec A < 1 : fonction croissante, donc deux poussées sans recul. Tester le pas exact (`best_shift == −Δdécalage`) sur plusieurs phases, raccord compris.
+- **Gerbe coupée par le bord du brut** : un cadrage trop serré (x 150-700) et le bas de l'image font des rectangles de lave posés sur le lac. Prendre toute la largeur de la gerbe et, sous la bouche, ne garder qu'une ellipse à bord ondulé. Commencer la couronne au-dessus des premiers bras (ligne 780 et non 940), sinon ses bras sont coupés droit.
+- **Zone autorisée hors du lac** : les pixels du corps de la colonne déjà peints, pas un rectangle autour du corps (sinon des marches droites apparaissent).
+- **Colonnes devant et derrière** : placer les bouches dans les tronçons de lac libre (distance au bord > 12) mesurés ligne par ligne, et décaler en x celles du fond pour que celles de devant ne les cachent pas.
