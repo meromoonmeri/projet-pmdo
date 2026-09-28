@@ -1,5 +1,29 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## ECM1 + AGM1 — Entrée Cratère magma (Dark Crater V2) et arène de Groudon, magma visqueux (28 septembre 2026)
+
+**Demande** : « Je veux un entrée de map avec magma dark crater des cascade de lave / et une arène avec des colonne de lave magma qui jaillis à côté de l'arène au centre avec le symbole de groudon qui pulse sur l'arène », puis « faut que le magma de la sone bouge de manière visqueuse ». La série des fins (Bristle) est en pause.
+
+- **Module partagé** `source/magma_visqueux/` : `magma.py` (magma, cascades, colonnes) et `ground.py` (Ground 0.8.12 paramétrable). Les deux cartes bougent de la même façon.
+  - **Magma visqueux** (32 × 15 ticks, 8 s) : bruit de Worley périodique, étiré à l'horizontale comme la lave de `Dark_Crater_Pit_TDS.png`. La rampe de 11 tons est relevée sur cette lave, plus deux croûtes de ECN1.
+  - La matière dérive lentement : une période de 96 px vers le sud par boucle, soit 3 px par phase. Elle se plie (deux ondes lentes) et gonfle (bosses qui éclaircissent).
+  - Des plaques de croûte sombre voyagent avec elle. Elles fondent près des cascades et figent près des rives. Des rides s'éloignent des pieds de cascade et des évents.
+  - **Cascades** (32 × 15) : la même matière, étirée ×2,5, descend de 7,5 px par phase. La lame serpente, bordée d'une croûte qui roule.
+  - **Colonnes** (48 × 5) : jet procédural (bouche qui palpite, jaillissement, colonne, couronne, gouttes, anneau). Les évents sont décalés.
+- **ECM1 — Entrée Cratère magma** (`renders/entree_cratere_magma_v1/`, aperçu `apercu_entree_cratere_magma_v1.html`). L'entrée Cratère V1 (ECN1) reste intacte.
+  - Décor généré avec `Dark_Crater_entrance_TDS.png` en référence : mares en magenta, cascades en vert pur.
+  - Une cascade de chaque côté de la grotte nourrit une mare le long du chemin de cendre. Quatre colonnes jaillissent des mares.
+  - Derrière chaque cascade, la roche est regarnie en miroir de la falaise voisine, dans le calque non praticable.
+  - Marqueurs `entrance` et `donjon_seuil`. Fidélité : cendre 9.28 (seuil 35), magma 8.89 (seuil 12).
+- **AGM1 — Arène de Groudon** (`renders/arene_groudon_magma_v1/`, aperçu `apercu_arene_groudon_magma_v1.html`).
+  - Décor généré avec `Dark_Crater_Pit_TDS.png` en référence, lave en magenta. Dais rond au centre, gravé du **Ω de Primo-Groudon**.
+  - Les lignes du symbole pulsent du rouge au jaune vif (12 × 10), avec un halo au pic. Quatre colonnes jaillissent de part et d'autre de l'arène, à hauteur du dais, en alternance.
+  - Marqueurs `entrance`, `boss` (sur le Ω) et `heros` (devant le dais). Le dais est bloquant. Fidélité : sol 4.64, magma 9.7.
+  - Dans Explorers of Sky, Groudon se combat au sommet de Steam Cave : l'association avec Dark Crater est un choix de la demande.
+- Tests : 10 PASS par lot. Mutations : 6 détectées sur ECM1, 7 sur AGM1.
+- Paquets : `ECM1_projet_pmdo_0812.zip`, `AGM1_projet_pmdo_0812.zip`, plus les ZIP de calques. Le calque magma est lourd : 69355 et 113585 tuiles pour 32 phases.
+- Pixels générés ou calculés, aucune tuile native. Pas de runtime. Pas encore dans le mod unique.
+
 ## FGG1 — Fin Givre : Frosty Grotto, quatrième zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « Parfait lance toi ! » après FRP1. Quatrième fin de la série, dans l'ordre du mod : **Givre**.

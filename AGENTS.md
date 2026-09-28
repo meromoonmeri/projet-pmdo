@@ -997,3 +997,14 @@ Pas de runtime. Pas dans le mod unique.
 - **Objet d'objectif peint dans le décor** (cristal et monticule) : ellipse relevée à la main sur le brut, documentée dans le manifeste. Palette propre de 32 couleurs. Seules les facettes cyan pulsent ; la neige blanche reste fixe.
 - EGN1 se réutilise en réglant `EG.W, EG.H` **et** `EG.cr.W, EG.cr.H` (son `cr` est ECN1, chargé au niveau du module), puis `EG.N_FLAKES` pour garder la densité de flocons.
 
+## Magma visqueux — ECM1 et AGM1, ajouts à la recette
+
+- **Module partagé** `source/magma_visqueux/magma.py`, chargé par `loadmod`, sans globales à régler. Il reçoit les masques et renvoie des phases RGBA. `ground.py` produit le Ground 0.8.12 à partir d'une pile, de marqueurs nommés et des textes du Mod.xml.
+- **Boucle fermée avec dérive** : texture périodique (`PERIOD = (192, 96)`). Sur une boucle, la dérive vaut exactement une période ; les déformations sont des fonctions de `2π t / N`. Le test compare le changement 31 → 0 aux autres (écart < 0,1) et vérifie la direction de la dérive par le décalage vertical qui ressemble le plus.
+- **Aspect de la lave de la fosse** : cellules de Worley étirées (`ANISO = 0.6`) ; niveau selon `q = 2 f1 / (f1 + f2)` (cœur rouge rond, masse orange, fissure jaune) ; bords ondulés par un bruit périodique pris en coordonnées de matière. Avec `f2 - f1` seul, on obtient une mosaïque de Voronoï trop géométrique ; des hachures en sinus sur la croûte font sale.
+- **Cascades sur un rectangle vert** : le générateur peint la chute en bande rectangulaire. Ne pas la remplir telle quelle (on obtient un pilier). Regarnir le rectangle en miroir du décor voisin, rangée par rangée, dans le calque non praticable, puis dessiner une lame plus étroite qui serpente. Le bas de la bande posé dans la mare passe au magma, et le calque magma couvre aussi la zone de la cascade (sinon, trous au pied déchiqueté).
+- **Évents** : distance à la rive calculée sur le magma visible, avec une marge aux bords de l'image (sinon l'EDT place les évents contre le bord). Deux évents du même côté ne doivent pas être sur la même verticale : la colonne du bas traverse l'autre.
+- **Colonnes sur la lave** : contour en croûte noire (index 0), sinon la colonne se fond dans le magma clair.
+- **Symbole qui pulse** (Ω dans le décor) : pixels rouges-orangés (`r > 120`, `r > 1,6 g`, `b < 90`) dans l'ellipse du dais ; rang de luminance + pulsation symétrique sur 12 phases ; halo de 2 px sur la pierre quand la pulsation dépasse 4. Le dais a sa propre palette de 48 couleurs.
+- **Poids** : 32 phases plein cadre donnent 70 000 à 115 000 tuiles pour le calque magma (pack de 6 à 7 Mo). Ne pas monter plus haut sans raison.
+
