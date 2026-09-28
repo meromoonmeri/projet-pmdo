@@ -1100,3 +1100,8 @@ Pas de runtime. Pas dans le mod unique.
 - **Teintes téra roses** : le test « plus de magenta » doit exclure le calque des scintillements, dont la teinte (240, 170, 226) est voulue.
 - **Aperçus de travail** : la visionneuse lit mal les images sous `.cache`. Écrire les planches de contrôle hors du dépôt (`/home/user/tmp_apercus/`).
 
+
+## Réseau Zone Zéro — EAZ1, ajouts à la recette
+
+- **Reprise après une réinitialisation en cours de lot** : un lot peut être poussé sans rendus (brut, build et tests seulement). Relancer `build.py`, les tests, puis écrire `package.py`, `viewer_template.html` et `README_PACK.md` (vérifier qu'il ne s'agit pas d'une copie du lot précédent), et lancer les mutations avant la doc.
+- **Mutations d'une animation de palette** : copier la phase 0 sur la phase du pic (loi cassée), mettre un ton au-dessus du plafond, copier la phase 0 du portail sur la phase 9 (déphasage).

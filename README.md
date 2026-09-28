@@ -1,5 +1,16 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## EAZ1 — Entrée Zone Zéro : grotte de cristal, fin du réseau (28 septembre 2026)
+
+**Demande** : suite des options recommandées ; map d'entrée du donjon Zone Zéro (Pokémon Paradoxe) au bout du réseau RAZ1 → RAZ2 → RAZ3 → **EAZ1**.
+
+- `renders/zone_zero_v1/EAZ1/` (préfixe `EAZ1`, aperçu `apercu_entree_zone_zero.html`). Référence : `D17P11A`, l'entrée de la grotte de cristal, rendue depuis la ROM par l'outil maps.
+- **Layout** : on entre au sud par une brèche ; des pas japonais sinueux mènent à une **géode fendue** au nord-est, dont le cœur est le tunnel du donjon (`donjon`). À l'ouest, une corniche aux flèches de cristal, inaccessible ; à l'est, une plage lumineuse cerclée de rochers (`cercle`).
+- **Brut** : premier rendu aux couleurs trop claires et vertes, puis deux éditions de palette. La version gardée a une corrélation des contours de 0,905 avec le premier rendu ; une édition trop terne a été jetée.
+- **Loi de la ROM** relevée sur D17P11A : animation de palette des petits amas de cristal (+ 8 par canal et par niveau, plafond 231, 18 pas de 10 ticks). Le tunnel du donjon respire avec la même loi, en phase. S'y ajoutent 26 lucioles aux teintes téra et 40 scintillements. La boucle dure 180 ticks.
+- Fidélité (même extraction sur la référence et sur la scène) : sol 8,1, cristaux 17,0, parois 17,1, sol complet 12,4 (seuil 35).
+- 7 tests PASS, 7 mutations détectées. Paquets : `EAZ1_projet_pmdo_0812.zip` (1,3 Mo) et `EAZ1_calques_png_8px.zip` (5,1 Mo). Pas de runtime ; les warps du réseau restent à scripter.
+
 ## RAZ3 — Réseau Zone Zéro, route 3 : fond cristallin (28 septembre 2026)
 
 **Demande** : « je choisis toutes les options recommandées + 3 routes, choisis les textures de référence pour composer cette zone inédite », dernière route du réseau (RAZ1 → RAZ2 → **RAZ3** → EAZ1).
