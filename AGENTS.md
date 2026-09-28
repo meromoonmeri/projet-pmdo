@@ -1189,3 +1189,11 @@ Pas de runtime. Pas dans le mod unique.
 - **Belvédère** : quand le magenta ne couvre que le fond du gouffre, les parois forment une bande de paroi et le bord praticable est loin du vide. Choisir le belvédère parmi les cases libres les plus proches du vide, calculées sur les masques exportés.
 - **Commits** : une commande `python … && git commit` enchaînée par des retours à la ligne commite même si le script Python échoue. Relire `git show --stat` après chaque réinitialisation.
 
+
+## Cristaux Zone Zéro — blancs à reflets arc-en-ciel (RAF3, EAF1)
+
+- **Demande** : « blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc ». Activer `cristaux=True` dans la `CFG` : `HQ.crystal_pass` sort les cristaux du calque `falaises` et crée deux calques : `cristaux` (fixe, blanc) et `reflets` (24 × 10 ticks).
+- **Recoloration** : la base blanche se fait en tons selon la luminance d'origine, pas en aplat, pour garder les facettes. Le reflet est une teinte d'arc-en-ciel posée sur ce ton (mélange de 58 à 72 %), jamais un aplat saturé.
+- **Boucle fermée** : la bande avance de 96 px en 24 phases (période 96 px) ; la teinte vaut `((x + y) / 8 + t / 3) mod 8`, soit 8 teintes en 24 phases.
+- **Piège** : les reflets turquoise de la roche (145,197,196) passent la règle menthe. Ne garder que les composantes dont au moins 5 % des pixels ont une luminance supérieure à 205.
+- **Indices de calque** : ils se décalent quand un lot a des cristaux. `mutations.py` trouve désormais les fichiers par nom (`F('nom', t)`), et le manifeste ne liste que les animations présentes.

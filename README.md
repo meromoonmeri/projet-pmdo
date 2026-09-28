@@ -1,5 +1,23 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Cristaux Zone Zéro : blancs à reflets arc-en-ciel, RAF3 et EAF1 (29 septembre 2026)
+
+**Demande** : « je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc ». Les deux maps à cristaux du réseau fleuri, **RAF3** (piliers, couronnes) et **EAF1** (plateau, géode), ont deux calques de plus, juste au-dessus de `falaises` (19 calques au lieu de 17).
+
+- **`cristaux`** (fixe) : les cristaux menthe deviennent **blancs**, en 5 tons blanc-lavande pris sur la luminance d'origine pour garder les facettes, avec un contour indigo. Surfaces : RAF3 32,447 px, EAF1 57,437 px.
+- **`reflets`** (24 × 10 ticks, boucle fermée sur 480 ticks) :
+  - une bande **arc-en-ciel** nacrée balaie les cristaux en diagonale, de 4 px par phase ;
+  - elle porte 8 teintes : rouge, orange, jaune, vert, cyan, bleu, mauve, rose ;
+  - la teinte d'un même pixel tourne toutes les 3 phases, si bien qu'un cristal passe du rouge au mauve ;
+  - 36 éclats en étoile scintillent.
+- **Sélection** : règle de couleur menthe, puis une composante n'est gardée que si au moins 5 % de ses pixels sont des facettes très claires. Sans ce filtre, les reflets turquoise de la roche au bord des gouffres étaient pris. Les bases menthe des piliers, peintes dans le sol, sont rattachées.
+- Code : `crystal_pass` dans `source/zone_zero_v2/haute_qualite.py`, activé par `cristaux=True` dans la `CFG` du lot.
+- Contrôles :
+  - nouveau test `test_cristaux_blancs_reflets_arc_en_ciel` : base blanche peu saturée, reflets dans les cristaux, 8 teintes à chaque phase, au moins 4 teintes vues au même pixel, boucle fermée ;
+  - 13 tests PASS sur les 4 lots ;
+  - `mutations.py` trouve désormais les calques par leur nom, et compte 5 mutations cristaux de plus : 28/28 détectées pour RAF3 et EAF1, 23/23 pour RAF1.
+- Paquets PMDO 0.8.12, calques PNG et aperçus refaits pour RAF1-3 et EAF1. Pixels calculés (recoloration du rendu généré), pas des tuiles natives. Aucun test en jeu.
+
 ## EAF1 — Entrée Zone Zéro fleurie : la géode du donjon (29 septembre 2026)
 
 **Demande** : « la suite ! », après la passe haute qualité des routes. Le maillon suivant du réseau fleuri est l'entrée du donjon. **EAF1** remplace EAZ1 dans ce réseau ; EAZ1, une grotte de cristal sombre de l'ancienne série, est gardée. Le réseau devient : RAF1 → RAF2 → RAF3 → **EAF1** → ATP1.
