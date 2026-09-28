@@ -1,5 +1,26 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FWC1 — Fin Waterfall Cave : salle du joyau, septième zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « continue ! » après FJS1. La série des fins reprend dans l'ordre du mod : **Waterfall Cave** (entrées EWC1 à EWC3).
+
+- Vraie fin : `Waterfall_Cave_gem_TDS.png`. On y voit un chemin de galets bleus semé de cristaux entre deux bassins, des stalactites sur un fond bordeaux, et un joyau géant au nord. Dans le jeu, il n'y a pas de boss : pousser le joyau déclenche une vague qui emporte les héros jusqu'aux sources chaudes (Bulbapedia, Explorers of Sky, chapitre 5).
+- Layout : arrivée au sud par un chemin sombre (`entrance`), chemin de galets et cristaux (`arene`), joyau au nord (`joyau`, à son pied). Les cristaux du sol sont praticables ; le joyau bloque. Aucune autre sortie, aucun warp.
+- Rendu généré référencé, eau en magenta, en deux étapes :
+  1. décor 4:3 avec la capture : les bassins sortaient en galets (`bruts/decor_magenta.png`, gardé, non utilisé) ;
+  2. édition à un seul changement : les bassins gauche et droit passent en magenta (`bruts/decor_magenta_v2.png`).
+- Sol complet : galets seuls générés depuis une découpe propre du sol de la capture.
+- Calques, du bas vers le haut : sol complet, eau, sol, parois, cristaux, joyau, lueur du joyau, scintillements.
+- Animations :
+  - **eau** : le réseau de reflets de la capture est calculé. Ce sont des cellules de Worley arrondies (q = F1 / F2, cercles d'Apollonius) et étirées, dans 9 tons exacts de l'eau de la capture. Chaque centre de cellule tourne sur un petit cercle, donc le réseau ondule sur place sans défiler, 24 × 10. La part de traits clairs est celle de la capture (31 % au-dessus de 80 de luminance). Aucun liseré sur les rives.
+  - **joyau** : les facettes pulsent vers le rose clair, 24 × 10 ; le contour reste fixe.
+  - **cristaux** : 61 étoiles déphasées, 12 × 5.
+  - La scène boucle en 4 s.
+- Fidélité : galets 17.53, chemin sombre 20.13, sol complet 10.86 (seuil 35) ; eau 3.88 (seuil 15).
+- 9 tests PASS. 7 mutations détectées : eau figée une phase, liseré clair, défilement, joyau figé, étoiles éteintes, marqueur loin du joyau, praticable dans l'eau.
+- Aperçu : `apercu_fin_waterfall_cave_v1.html`. Paquets : `FWC1_projet_pmdo_0812.zip` (2.21 Mo) et `FWC1_calques_png_8px.zip` (4.53 Mo).
+- Pixels générés ou calculés, pas de tuiles natives. Pas de runtime. Pas dans le mod unique.
+
 ## FJS1 — Fin Jungle : fond de Southern Jungle, sixième zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « poursuis ! » après FBS1. La série des fins reprend dans l'ordre du mod : **Jungle** (après l'entrée EJN1).
