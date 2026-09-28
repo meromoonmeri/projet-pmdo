@@ -1008,3 +1008,20 @@ Pas de runtime. Pas dans le mod unique.
 - **Symbole qui pulse** (Ω dans le décor) : pixels rouges-orangés (`r > 120`, `r > 1,6 g`, `b < 90`) dans l'ellipse du dais ; rang de luminance + pulsation symétrique sur 12 phases ; halo de 2 px sur la pierre quand la pulsation dépasse 4. Le dais a sa propre palette de 48 couleurs.
 - **Poids** : 32 phases plein cadre donnent 70 000 à 115 000 tuiles pour le calque magma (pack de 6 à 7 Mo). Ne pas monter plus haut sans raison.
 
+## ZRV2 — correction (nuages raccordés, ondes), ajouts à la recette
+
+- **Raccord de bancs de nuages générés** : chercher la coupe par colonne sur les bruts, au moins à 8 px du bord de chaque brut. Le coût inclut la marche entre les deux colonnes jointes et +10 par colonne isolée. Sommets plats : seuil en px du brut, puis dôme ajouté. Tester seulement que la rangée 0 de la bande compte ≤ 24 px.
+- **Lignes figées dans une mer générée** : passe-haut par médiane verticale à partir de y ≥ 146, puis motifs sur leur propre calque. Orbite φ = 2π(2s/12 − u(cy)) ; la mer de fond est rebouchée avec son grain.
+- **Poids des phases** : les PNG RGBA plein cadre de 384 phases donnaient environ 150 Mo. `save_png` écrit en palette : clé `uint32` des couleurs, sans `np.unique(axis=0)` ni `optimize=True`, trop lents.
+
+## Aurores sur une fin de donjon — FGG2, ajouts à la recette
+
+- **« Design texture canonique de la référence adapté à notre layout »** : régénérer les rideaux de `aurorepmdsky.png` (découpe y 0–144, ×3 en plus proche voisin) sur une toile large de la taille du ciel. Ne pas coller la référence, ne pas faire de bandes génériques (les bandes de V16 ne ressemblaient pas aux rideaux).
+- **Fond de l'aurore** : pas de magenta, puisque les rideaux en contiennent. Utiliser le marine uni du ciel de la référence : le fond du brut vaut (2, 3, 67) contre (0, 0, 63). Extraction par distance au fond > 15, poussière < 30 px écartée. Les halos sombres restent cuits sur ce marine, invisible sur le calque ciel.
+- **Réduction** : BOX pondérée par le masque (prémultipliée), alpha au seuil 0,5, palette propre de 48 couleurs.
+- **Animation sans défilement ni poses déphasées** : une seule géométrie. Onde verticale des colonnes `dy = round(3 sin 2π(x/256 − t/12))`, plus rayons allumés par bande glissante (rang dans la rampe de la famille vert-cyan ou magenta).
+  - Un seuil fixe différent par colonne (±0,35) est **indispensable**. Sans lui, la bande allumée fait un rectangle aux bords verticaux nets.
+- **Ciel ouvert au nord d'un décor existant** : éditer le brut de la carte d'origine avec une clé verte pour le ciel, si le magenta est déjà pris. Dé-teinter le liseré verdâtre à moins de 4 px de la clé en échangeant G et B : on obtient le marine des contours. Le calque ciel dépasse de 2 px sous les pics.
+- **Fidélité de l'aurore** : mesurée sur l'aurore entière avant découpe (texture). La partie visible est notée à part : les franges cyan passent sous les pics, ce n'est pas un écart de texture.
+- **Test « une seule géométrie »** : recalculer la base et vérifier que chaque phase testée est exactement la base décalée colonne par colonne selon la loi du manifeste, puis découpée par le ciel. Ce test attrape aussi le défilement. Le centre horizontal de l'aurore visible bouge de quelques px à cause de la découpe : ne pas le tester.
+

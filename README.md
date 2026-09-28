@@ -1,5 +1,35 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FGG2 — Fin Givre V2 : sans cristal, aurores boréales au nord (28 septembre 2026)
+
+**Demande** : « Il faut pas de cristal stp et on aurait aimé voir les aurore boreal dans le design texture canonique de la référence adapté a notre layout ». FGG1 est gardée à côté.
+
+- **Layout de FGG1** : couloir au sud (`entrance`), arène (`boss`), deux bassins d'eau glacée. Le cristal et son monticule sont retirés : le sol et le rebord continuent.
+  - Le nord s'ouvre sur un ciel de nuit derrière une rangée de pics sombres. Le marqueur `belvedere` est au bord nord de l'arène, face aux aurores. Aucun warp.
+- **Décor** : brut de FGG1 édité par le générateur, avec `aurorepmdsky.png` en seconde image. Le ciel est en vert pur (clé), le magenta restant les bassins. Le liseré verdâtre au bord des pics est dé-teinté (G et B échangés).
+- **Aurores** : rendu généré référencé. Les rideaux de `aurorepmdsky.png` (y 0–144, ×3) sont régénérés en panorama 2048 × 512, sur le marine même du ciel de la référence, puis réduits à 768 px avec une palette propre de 48 couleurs.
+  - Un essai sur fond magenta a été écarté : le magenta des rideaux se confondait avec la clé.
+  - Calque propre, 12 phases × 10 ticks, boucle exacte. **Une seule géométrie** : onde verticale des colonnes (3 px, 256 px) qui court le long du ruban, et bande de rayons qui s'allume en glissant (rang +1/+2 dans la rampe de chaque famille de couleur, seuil décalé par colonne).
+  - Pas de défilement, pas de poses déphasées, pas de cycle de palette global. L'aurore n'est visible que dans le ciel.
+- **Ciel** (fixe, 3 couleurs relevées dans la référence, tramage 2 × 2) et **étoiles** (36, pixel (247, 255, 255) et halo de la référence, 12 × 10) sur des calques séparés.
+- Eau glacée, reflets et flocons : ceux de FGG1 (entrée Givre).
+- Fidélité : sol 2.26 (seuil 35) ; aurore entière 12.34 à la référence (seuil 30), part vert-cyan 0.58 contre 0.55. La partie visible est plus magenta (0.44), car les franges cyan passent sous les pics.
+- 13 tests PASS. 5 mutations détectées : aurore figée, qui défile, qui déborde sur le terrain, boucle ouverte, cristal de FGG1 recollé.
+- Aperçu : `apercu_fin_givre_aurore_v2.html`. Rendus : `renders/fin_givre_aurore_v2/`. Source : `source/fin_givre_aurore_v2/`.
+- Paquets : `FGG2_projet_pmdo_0812.zip` (1.78 Mo, préfixe `FGG2`) et `FGG2_calques_png_8px.zip` (5.93 Mo).
+- Pixels générés, pas de tuiles natives (sauf les reflets de Métano recolorés). Pas de runtime. Pas dans le mod unique.
+
+## ZRV2 — correction des nuages et des lignes figées de la mer (28 septembre 2026)
+
+**Demande** : « corrige les nuage et regarde la mer y'a deja des mouvement statique que tu dois animée ».
+
+- **Nuages** : trois bancs générés différents sont raccordés bout à bout sur 768 px. Aucun nuage ne revient à l'écran, les sommets sont arrondis, et aucun nuage n'est rogné. Ils défilent derrière la montagne : période 768, pas de 2 px, 16 ticks, 384 phases.
+- **Ondes** : les lignes de houle et les plaques claires peintes dans la mer ont leur propre calque (13 629 px, 137 motifs). Chacune suit l'orbite de l'eau au rythme de la houle ; la mer de fond est rebouchée avec son grain.
+- Soleil couchant remonté à (560, 44).
+- PNG de phases indexés (`save_png`) : le pack PNG passe d'environ 150 Mo à 44 Mo.
+- **18 tests PASS**. 6 mutations détectées : ondes figées, mer non rebouchée, bande de 256 px répétée, `CLOUD_PERIOD` à 256, orbite nulle, banc A non coupé.
+- Paquets : PMDO 11.51 Mo, PNG 44.25 Mo, aperçu 7.16 Mo.
+
 ## ECM1 + AGM1 — Entrée Cratère magma (Dark Crater V2) et arène de Groudon, magma visqueux (28 septembre 2026)
 
 **Demande** : « Je veux un entrée de map avec magma dark crater des cascade de lave / et une arène avec des colonne de lave magma qui jaillis à côté de l'arène au centre avec le symbole de groudon qui pulse sur l'arène », puis « faut que le magma de la sone bouge de manière visqueuse ». La série des fins (Bristle) est en pause.
