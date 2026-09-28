@@ -158,12 +158,12 @@ def pick_vents(visible, dist, plateau, dais_c):
     px = np.nonzero(plateau.any(0))[0]; left, right = px.min(), px.max()
     vents = []
     for side, x_lim in (('g', left), ('d', right)):
-        near = (xx < x_lim - 18) if side == 'g' else (xx > x_lim + 18)
-        for yc in (dais_c[1] - 70, dais_c[1] + 40):
+        for yc, gap in ((dais_c[1] - 50, 18), (dais_c[1] + 60, 56)):   # le second plus au large : colonnes non superposées
+            near = (xx < x_lim - gap) if side == 'g' else (xx > x_lim + gap)
             cand = visible & near & (dist > 18) & (np.abs(yy - yc) < 40) & (yy > 124) & (xx > 20) & (xx < W - 20)
             pts = np.argwhere(cand)
-            # au plus près de l'arène, sans coller aux pitons
-            key = np.abs(pts[:, 1] - x_lim) - 0.5 * np.minimum(dist[pts[:, 0], pts[:, 1]], 30) + 0.3 * np.abs(pts[:, 0] - yc)
+            # au plus près de la limite, sans coller aux pitons
+            key = np.abs(np.abs(pts[:, 1] - x_lim) - gap) - 0.5 * np.minimum(dist[pts[:, 0], pts[:, 1]], 30) + 0.3 * np.abs(pts[:, 0] - yc)
             y, x = pts[int(np.argmin(key))]; vents.append((int(y), int(x)))
     return [{'x': x, 'y': y, 'h': int(min(112, y - 12)), 'decalage': VENT_OFFSETS[i]} for i, (y, x) in enumerate(vents)]
 

@@ -36,3 +36,16 @@ La boucle complète de la scène dure 480 ticks (8 s). Le calque magma est lourd
 Lancez `python INSTALLER.py <dossier PMDO>`. Le script fusionne l'index des tuiles au lieu de l'écraser.
 
 **Non testé dans PMDO.** Le manifeste indique `runtime_tested: false` et `art_approved: false`.
+
+## Fichiers
+
+- `calques/` : calques fixes (`AGM1_NN_nom.png`).
+- `animation/magma`, `animation/symbole_groudon`, `animation/braises`, `animation/colonnes` : images des animations, `fNN`.
+- `poses_colonne/` : les 48 poses d'une colonne, les mêmes que dans ECM1.
+- `masques/` : lave, sol, rebord, pitons, dais, symbole.
+- `review/` : scène t000, scène animée en WebP, collisions et marqueurs, pulsation du symbole.
+- `AGM1_arene_groudon_magma_calques.ora` : les calques dans un seul fichier.
+- `manifest.json` : empreintes des bruts, fidélité (sol et magma), chronologies, évents, accès et banques.
+- `AGM1_projet_pmdo_0812.zip` : le projet PMDO. `AGM1_calques_png_8px.zip` : les calques en PNG.
+
+Source : `source/arene_groudon_magma_v1/` et `source/magma_visqueux/`. On lance `build.py`, puis `package.py`, qui joue d'abord les tests.
