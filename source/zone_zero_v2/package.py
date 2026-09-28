@@ -6,7 +6,7 @@ import base64, json, subprocess, sys, zipfile
 
 HERE = Path(__file__).resolve().parent
 R = HERE.parents[1]
-ANIM = ('brume_profonde', 'brume_haute', 'lueurs', 'eau', 'fleurs', 'cascades', 'ecume')
+ANIM = ('brume_profonde', 'brume_haute', 'lueurs', 'eau', 'herbes', 'fleurs', 'cascades', 'ecume', 'embruns', 'papillons')
 LOTS = {
     'raf1': dict(apercu='apercu_route_zone_zero_fleurie_1.html', titre='Route Zone Zéro 1 fleurie — lèvre du cratère (RAF1, 768×576)',
                  texte=("<p>Nouvelle version de <strong>RAZ1</strong> (gardée) pour le réseau de la Zone Zéro : herbe et falaises "
@@ -30,6 +30,9 @@ LOTS = {
                         "<p>On arrive au sud, on remonte le chemin, on passe le pavage entre les piliers de cristal et on atteint le tunnel nord "
                         "(<code>sortie</code>, vers EAZ1). Marqueur <code>belvedere</code> au bord du gouffre de gauche.</p>")),
 }
+HQ = ("<p><strong>Passe haute qualité</strong> : herbe Sky Peak en aplat franc (ton dominant du GIF), touffes en étoile qui se balancent "
+      "(A B A C), fleurs nettes de 7 px en <strong>huit couleurs</strong>, <strong>embruns</strong> au pied des cascades et "
+      "<strong>papillons</strong> sur des boucles fermées. Pixels calculés, pas des tuiles natives.</p>")
 NOTE = ("Le décor, le gouffre et les arbres sont des rendus générés à partir des références Sky Peak et Apple Woods, pas des tuiles natives "
         "(seules la loi et la palette de la cascade viennent de la ROM, via P03P01A). Marqueurs : jaune = <code>entrance</code>, "
         "bleu = <code>sortie</code>, rose = <code>belvedere</code>. Aucun warp : les raccords restent à scripter. Aucun test PMDO en jeu.")
@@ -76,7 +79,7 @@ def main(lot):
     data = {'size': M['size_px'], 'loop': M['scene_loop_ticks'], 'stack': stack, 'poses': [],
             'collisions': uri(O / f'review/{PFX}_collisions_marqueurs.png'), 'entry': M['access']['markers']['entrance']}
     anims = '<br>'.join(f"• <strong>{k}</strong> : {v['phases']} × {v['frame_length_ticks']} ticks" for k, v in M['animations'].items())
-    texte = L['texte'] + f"<p>Animations, toutes en boucle fermée sur {M['scene_loop_ticks']} ticks ({M['scene_loop_ticks'] // 60} s) :<br>{anims}</p>"
+    texte = L['texte'] + HQ + f"<p>Animations, toutes en boucle fermée sur {M['scene_loop_ticks']} ticks ({M['scene_loop_ticks'] // 60} s) :<br>{anims}</p>"
     page = ((HERE / 'viewer_template.html').read_text().replace('__DATA__', json.dumps(data)).replace('__TITRE__', L['titre'])
             .replace('__TEXTE__', texte).replace('__NOTE__', NOTE).replace('__PFX__', PFX))
     (R / L['apercu']).write_text(page)

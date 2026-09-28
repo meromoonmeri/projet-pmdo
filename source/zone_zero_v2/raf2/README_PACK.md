@@ -21,9 +21,9 @@ Format 4:3 : 768 × 576 px, soit 96 × 72 cases de 8 px.
 
   | Matière | Distance | Statut |
   |---|---|---|
-  | Herbe | 5,2 | seuillée |
+  | Herbe | 10,4 (aplat HQ au ton dominant du GIF) | seuillée |
   | Arbres | 8,5 | seuillée |
-  | Falaises | 20,5 | signalée |
+  | Falaises | 21,5 | signalée |
 
 - **Layout** :
   - arrivée au sud (`entrance`), sur un chemin beige ;
@@ -32,6 +32,20 @@ Format 4:3 : 768 × 576 px, soit 96 × 72 cases de 8 px.
   - trois cascades sur la terrasse haute, deux sur la basse, chacune avec son bassin ;
   - `belvedere` près du bord du gouffre, qui occupe tout l'est ;
   - aucune sortie latérale, aucun warp.
+
+## Passe haute qualité (septembre 2026)
+
+Demande : « faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualité less fleur avec plein de couleur des cascade de la brume etc ». La réduction ×0,64 rendait l'herbe floue et les fleurs baveuses. La passe est calculée (`source/zone_zero_v2/haute_qualite.py`), pas des tuiles natives ; seuls les tons viennent du GIF Sky Peak.
+
+- **Herbe** : l'herbe claire du sol devient un aplat franc au ton dominant du GIF Sky Peak (134 304 px). Seuls les pixels à moins de 40 du ton dominant du lot sont concernés, donc le chemin clair reste.
+- **Nettoyage** : 1 200 px de restes flous et 3 298 px de tiges maigres redeviennent de l'herbe.
+- **Massifs repris** : 596 px de massifs flous restés dans le sol et 1 015 px de massifs classés falaises (boîtes `massifs_falaise` de la config) sont redessinés nets et deviennent praticables.
+- **Touffes** : 51 étoiles de 6 brins qui se balancent en A B A C, comme toute la prairie du GIF.
+- **Fleurs** : 217 fleurs nettes en huit couleurs. Les massifs d'origine gardent leur couleur et d'autres massifs s'ajoutent sur l'herbe franche.
+- **Embruns** au pied des cascades, et **papillons**.
+- **Sol et buissons** : le sol est quantifié seul sur 128 couleurs, sinon les buissons ronds du sol tombaient en olive plat. Les falaises et les buissons passent à 96 couleurs.
+
+Contrôles : 12 tests, dont `test_haute_qualite`, et 23 mutations toutes détectées (`source/zone_zero_v2/mutations.py raf2`).
 
 ## Calques (du bas vers le haut)
 
@@ -43,18 +57,21 @@ Format 4:3 : 768 × 576 px, soit 96 × 72 cases de 8 px.
 | 03 | brume_haute | 24 × 10 ticks : −8 px par phase, effet de **parallaxe** |
 | 04 | lueurs | 24 × 10 ticks : 34 éclats lointains |
 | 05 | eau | 3 × 10 ticks : rides |
-| 06 | sol | fixe : herbe Sky Peak, chemins, escaliers |
+| 06 | sol | fixe : herbe Sky Peak en **aplat franc** (135,247,119, ton dominant du GIF) et chemin |
 | 07 | falaises | fixe |
-| 08 | fleurs | 4 × 12 ticks, loi Sky Peak (A B A C). 281 têtes en cinq couleurs : rouge et rose, jaune, bleu, violet et blanc |
-| 09 | buissons | fixe |
-| 10 | arbres | fixe : 51 arbres PMD |
-| 11 | cascades | 3 × 10 ticks : loi de P03P01A |
-| 12 | ecume | 3 × 10 ticks |
-| 13 | Top (vide) | à vous |
+| 08 | herbes | 4 × 12 ticks, A B A C : 51 **touffes en étoile** nettes (tons relevés sur Sky Peak) ; en B et C les brins du haut penchent de ±1 px |
+| 09 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C) : en B et C chaque fleur descend de 1 px et penche de ±1 px. 217 **fleurs nettes de 7 px** (4 pétales, reflet, cœur, ombre verte) en **huit couleurs** : corail, rouge, rose, orange, jaune, blanc, bleu, violet |
+| 10 | buissons | fixe |
+| 11 | arbres | fixe : 51 arbres PMD |
+| 12 | cascades | 3 × 10 ticks : loi de P03P01A |
+| 13 | ecume | 3 × 10 ticks |
+| 14 | embruns | 24 × 10 ticks : 201 gouttelettes partent du haut de l'écume de chaque cascade, montent de 34 px en ondulant et s'effacent (trame de Bayer) |
+| 15 | papillons | 48 × 10 ticks : 5 papillons de couleurs différentes sur des boucles fermées (Lissajous) au-dessus de la prairie ; ailes ouvertes et fermées une phase sur deux |
+| 16 | Top (vide) | à vous |
 
 La scène boucle en 480 ticks (8 s).
 
-**Collisions** : le sol, les chemins, l'escalier, les fleurs et les massifs sont praticables. On compte 5 206 cases bloquées sur 6 912.
+**Collisions** : le sol, les chemins, l'escalier, les fleurs et les massifs sont praticables. On compte 5 195 cases bloquées sur 6 912.
 
 Les reflets clairs des marches passaient la règle de l'eau, et les massifs de fleurs bleues aussi. Les deux sont maintenant exclus, et un test le vérifie.
 

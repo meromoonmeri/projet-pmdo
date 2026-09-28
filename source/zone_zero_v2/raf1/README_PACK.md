@@ -24,9 +24,9 @@ Format 4:3 : 768 × 576 px, soit 96 × 72 cases de 8 px.
 
   | Matière | Distance | Statut |
   |---|---|---|
-  | Herbe, contre Sky Peak | 9,7 | seuillée |
+  | Herbe, contre Sky Peak | 12,1 (aplat HQ au ton dominant du GIF) | seuillée |
   | Arbres, contre les cœurs de feuillage d'Apple Woods | 8,5 | seuillée |
-  | Falaises | 32,2 | signalée, non seuillée |
+  | Falaises | 32,4 | signalée, non seuillée |
 
   Le générateur a fait les falaises plus sombres que celles de Sky Peak. Elles sont signalées comme matière secondaire, selon le précédent de RAZ3.
 - **Layout** :
@@ -35,6 +35,20 @@ Format 4:3 : 768 × 576 px, soit 96 × 72 cases de 8 px.
   - `belvedere` au bord du gouffre de gauche ;
   - six cascades tombent des falaises dans des bassins ;
   - aucune sortie latérale, aucun warp.
+
+## Passe haute qualité (septembre 2026)
+
+Demande : « faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualité less fleur avec plein de couleur des cascade de la brume etc ». La réduction ×0,64 rendait l'herbe floue et les fleurs baveuses. La passe est calculée (`source/zone_zero_v2/haute_qualite.py`), pas des tuiles natives ; seuls les tons viennent du GIF Sky Peak.
+
+- **Herbe** : l'herbe claire du sol devient un aplat franc au ton dominant du GIF Sky Peak (119 252 px). Seuls les pixels à moins de 40 du ton dominant du lot sont concernés, donc le chemin clair reste.
+- **Nettoyage** : 1 367 px de restes flous et 2 368 px de tiges maigres redeviennent de l'herbe.
+- **Massifs repris** : 0 px de massifs flous restés dans le sol et 0 px de massifs classés falaises (boîtes `massifs_falaise` de la config) sont redessinés nets et deviennent praticables.
+- **Touffes** : 66 étoiles de 6 brins qui se balancent en A B A C, comme toute la prairie du GIF.
+- **Fleurs** : 141 fleurs nettes en huit couleurs. Les massifs d'origine gardent leur couleur et d'autres massifs s'ajoutent sur l'herbe franche.
+- **Embruns** au pied des cascades, et **papillons**.
+- **Sol et buissons** : le sol est quantifié seul sur 128 couleurs, sinon les buissons ronds du sol tombaient en olive plat. Les falaises et les buissons passent à 96 couleurs.
+
+Contrôles : 12 tests, dont `test_haute_qualite`, et 23 mutations toutes détectées (`source/zone_zero_v2/mutations.py raf1`).
 
 ## Calques (du bas vers le haut)
 
@@ -46,14 +60,17 @@ Format 4:3 : 768 × 576 px, soit 96 × 72 cases de 8 px.
 | 03 | brume_haute | 24 × 10 ticks : voiles clairs, −8 px par phase. Sens opposé et plus rapide : effet de **parallaxe** |
 | 04 | lueurs | 24 × 10 ticks : 34 éclats lointains, seulement là où la profondeur dépasse 0,7 |
 | 05 | eau | 3 × 10 ticks : des rides s'éloignent de l'écume |
-| 06 | sol | fixe : herbe Sky Peak et chemin |
+| 06 | sol | fixe : herbe Sky Peak en **aplat franc** (135,247,119, ton dominant du GIF) et chemin |
 | 07 | falaises | fixe |
-| 08 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C). En B et C, chaque tête descend de 1 px et penche de ±1 px. 61 têtes, en rouge et rose, jaune, bleu et blanc |
-| 09 | buissons | fixe |
-| 10 | arbres | fixe : 59 arbres PMD, avec leur ombre tramée |
-| 11 | cascades | 3 × 10 ticks : loi de P03P01A, un motif de 96 px qui descend de 32 px par image |
-| 12 | ecume | 3 × 10 ticks |
-| 13 | Top (vide) | à vous |
+| 08 | herbes | 4 × 12 ticks, A B A C : 66 **touffes en étoile** nettes (tons relevés sur Sky Peak) ; en B et C les brins du haut penchent de ±1 px |
+| 09 | fleurs | 4 × 12 ticks, loi du GIF Sky Peak (A B A C) : en B et C chaque fleur descend de 1 px et penche de ±1 px. 141 **fleurs nettes de 7 px** (4 pétales, reflet, cœur, ombre verte) en **huit couleurs** : corail, rouge, rose, orange, jaune, blanc, bleu, violet |
+| 10 | buissons | fixe |
+| 11 | arbres | fixe : 59 arbres PMD, avec leur ombre tramée |
+| 12 | cascades | 3 × 10 ticks : loi de P03P01A, un motif de 96 px qui descend de 32 px par image |
+| 13 | ecume | 3 × 10 ticks |
+| 14 | embruns | 24 × 10 ticks : 234 gouttelettes partent du haut de l'écume de chaque cascade, montent de 34 px en ondulant et s'effacent (trame de Bayer) |
+| 15 | papillons | 48 × 10 ticks : 8 papillons de couleurs différentes sur des boucles fermées (Lissajous) au-dessus de la prairie ; ailes ouvertes et fermées une phase sur deux |
+| 16 | Top (vide) | à vous |
 
 La scène boucle en 480 ticks (8 s).
 
