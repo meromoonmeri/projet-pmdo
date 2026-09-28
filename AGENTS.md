@@ -1071,3 +1071,15 @@ Pas de runtime. Pas dans le mod unique.
   - Gerbe du pied : ellipse (demi + 30, 17) dessinée **devant** le bas du corps. Sous la ligne de la bouche, la limiter à la lave visible, sinon l'évasement mord sur le rebord.
 - **Calcul par fenêtre** : ne calculer chaque colonne que dans sa fenêtre (`window()`). Le bruit plein cadre de quatre colonnes sur 48 phases fait tomber le shell (mémoire).
 - **Test de montée** : `best_shift` sur une bande axiale de 7 px, décalages de − 18 à 0. Le gagnant doit se situer entre − 15 et − 9 aux phases 0, 11, 23 et 47 (raccord).
+
+## Réseau Zone Zéro — RAZ1, ajouts à la recette
+
+- **Loi d'animation native** : `recuperer_maps.py rom --only CODE` donne le WebP animé. Comparer les images entre elles : quelles zones changent, période (image k égale à l'image 0), décalage (`np.roll` qui minimise l'écart). P03P01A : tout avance en 3 images de 10 ticks ; la cascade descend de 32 px par image, période 96.
+  - Remettre `index_rom.json` et les planches avec `git checkout` après un `--only`, qui les réécrit en partie.
+- **Cascade recalculée** : décalage en V **entier** (`np.round(8 (1 - u))`), sinon le modulo flottant casse l'égalité exacte entre la phase 2 et la phase 0. Tester `a[:h - 32] == b[32:]` pour chaque phase, raccord compris.
+- **Détection des cascades dans un brut** : colonnes d'eau (bleu ou blanc) sur plus de 75 % des 40 premières lignes, fermées de 3 px, car les stries sombres coupent sinon la colonne. Le bas est là où le blanc déborde **des deux côtés**, cherché dans la moitié basse de la chute.
+- **Palette commune et matières bleues ou ocre** : la palette 96 couleurs est dominée par les verts d'une prairie. Les falaises tournent au vert et l'eau au gris-vert. Donner une palette propre aux falaises (32), aux buissons (24) et à l'eau (16).
+- **Pelouse et buissons de même couleur** : les séparer par l'écart-type local de la luminance (fenêtre 11) : moins de 15 pour la pelouse, plus de 20 pour les buissons.
+- **Abîme** : un vide trop sombre avec un bord clair ressemble à un puits. Garder des tons moyens (2,3 + 1,2 (1 − p) + brume), des bancs de brume visibles et une ombre fine sous la lèvre. Tester une luminance moyenne entre 40 et 150.
+- **Matière disparue après édition** (la pelouse) : ne mesurer sa fidélité que si elle dépasse 5 % du sol. Sinon, des pixels d'ombre mal classés donnent une distance trompeuse.
+- **Marqueur annexe** (belvédère) : le choisir parmi les cases atteignables (`nd.label` des positions 2 × 2 libres), pas seulement libres.

@@ -1,5 +1,21 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## RAZ1 — Réseau Zone Zéro, route 1 : lèvre du cratère (28 septembre 2026)
+
+**Demande** (reprise sur « la suite !! ») : un réseau de routes dans un abîme façon Zone Zéro, avec des cascades, jusqu'à la map d'entrée du donjon Zone Zéro (Pokémon Paradoxe).
+
+- Réseau choisi par défaut, les questions de cadrage étant restées sans réponse : **RAZ1** lèvre du cratère → **RAZ2** terrasses aux cascades → **RAZ3** fond cristallin → **EAZ1** entrée (grotte de cristal). Format 4:3, arrivée au sud, sortie au nord.
+- Dossier `source/zone_zero_v1/` : `commun.py` (lois partagées), `reference/` (P03P01A et D17P34A, toutes deux vérifiées au pixel près par l'outil maps), un sous-dossier par map.
+- **RAZ1** (`renders/zone_zero_v1/RAZ1/`, préfixe `RAZ1`, aperçu `apercu_route_zone_zero_1.html`) :
+  - rendu généré à partir de P03P01A (zone des cascades) ;
+  - deux pans d'abîme séparés par une corniche qui descend au nord (`sortie`) ;
+  - six cascades dans des bassins, prairie et chemin au sud, `belvedere` au bord du vide ;
+  - une édition à un seul changement (bande de buissons) a fermé une sortie latérale : écart hors zone 12,3, 0,75 % de pixels à plus de 60.
+- **Cascades à la loi de la ROM** : mesurée sur le rendu animé de P03P01A, avec un motif de 96 px qui descend de 32 px par image, 3 × 10 ticks. Le motif « ikat » est recalculé avec les 14 tons natifs, sans pixels natifs. L'écume (bouillons) et les rides suivent aussi 3 × 10. L'abîme est calculé : brume qui ondule et éclats de cristal lointains, 24 × 10.
+- Fidélité : prairie 5,2, sol complet 4,6, falaises 11,3 (seuil 35). Le chemin d'herbe claire est un ton absent de la référence : il est signalé et n'est pas soumis au seuil.
+- 10 tests PASS, dont un décalage exact de 32 px entre images, période 96, raccord compris. 7 mutations détectées.
+- Paquets : `RAZ1_projet_pmdo_0812.zip` (2,2 Mo) et `RAZ1_calques_png_8px.zip` (5,7 Mo). Pas de runtime, pas de warp (raccord avec RAZ2 à scripter).
+
 ## AGM2 — Arène de Groudon V2 : signe à même le sol, colonnes de magma géantes (28 septembre 2026)
 
 **Demande** : « le signe doit pulser directement sur le sol de l'arene pas sur un estrade genere de nouvelle colonne de magma elle doit etre plus grande qu'on en voit pas le bout sur la map et plus impressionnante ».
@@ -45,7 +61,7 @@
   - `cherche`.
 - **Vérifié** : le préfixe `dNN` n'est **pas** le `DUNGEON_ID` (D04 = Waterfall Cave, D54 = Southern Jungle…). Seules les identifications par capture donnent un nom.
 - Versionnés : `index_rom.json`, planches contact JPEG par lettre et `planches/references_zone_zero.jpg`.
-- Le réseau de routes Zone Zéro demandé avant FOC1 n'est pas commencé (questions de cadrage restées sans réponse).
+- Le réseau de routes Zone Zéro demandé avant FOC1 est commencé depuis (RAZ1, voir plus haut).
 
 ## FWC1 — Fin Waterfall Cave : salle du joyau, septième zone de fin de donjon (28 septembre 2026)
 
