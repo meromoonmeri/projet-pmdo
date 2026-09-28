@@ -22,6 +22,13 @@ LOTS = {
                         "voiles de brume qui passent devant les parois, brume du fond tramée, éclats lointains.</p>"
                         "<p>On arrive au sud, on monte l'escalier puis le chemin de corniche jusqu'aux marches du nord-est (<code>sortie</code>). "
                         "Marqueur <code>belvedere</code> près du bord du gouffre.</p>")),
+    'raf3': dict(apercu='apercu_route_zone_zero_fleurie_3.html', titre='Route Zone Zéro 3 fleurie — fond du cratère et tunnel (RAF3, 768×576)',
+                 texte=("<p>Nouvelle version de <strong>RAZ3</strong> (gardée) : le fond du cratère devient une longue prairie "
+                        "<strong>Sky Peak</strong> fleurie (<strong>six couleurs</strong> de fleurs animées), bordée d'<strong>arbres PMD</strong>, "
+                        "entre <strong>deux gouffres</strong> profonds (dégradé vers le bleu nuit, brume du fond, voiles en parallaxe, éclats). "
+                        "Les deux <strong>cascades</strong> tombent dans des bassins sur la terrasse haute ; quelques cristaux rappellent la Zone Zéro.</p>"
+                        "<p>On arrive au sud, on remonte le chemin, on passe le pavage entre les piliers de cristal et on atteint le tunnel nord "
+                        "(<code>sortie</code>, vers EAZ1). Marqueur <code>belvedere</code> au bord du gouffre de gauche.</p>")),
 }
 NOTE = ("Le décor, le gouffre et les arbres sont des rendus générés à partir des références Sky Peak et Apple Woods, pas des tuiles natives "
         "(seules la loi et la palette de la cascade viennent de la ROM, via P03P01A). Marqueurs : jaune = <code>entrance</code>, "

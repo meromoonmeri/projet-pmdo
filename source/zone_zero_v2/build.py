@@ -55,6 +55,11 @@ CFG = {
                  decor='decor_magenta.png', chaine=['decor_magenta.png'], gouffre='decor_gouffre.png',
                  stairs=[(425, 568, 340, 452), (0, 18, 966, 1030)], entree_x=249, sortie=(639, 4), belvedere=(470, 452), graine=5,
                  edition_b=None),
+    'raf3': dict(PFX='RAF3', base='raz3', NAMESPACE='route_zone_zero_fleurie_3', ASSET='raf3_fond_fleuri',
+                 titre='Route Zone Zero 3 fleurie - fond du cratere et tunnel (4:3)',
+                 decor='decor_magenta.png', chaine=['decor_magenta.png'], gouffre='decor_gouffre.png',
+                 stairs=[(275, 338, 548, 668)], entree_x=390, sortie=(388, 64), belvedere=(236, 372), graine=9,
+                 edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)]),
 }
 GRASS = (128, 240, 104)
 
@@ -143,10 +148,16 @@ def composite(m):
     void = keep_big(magenta(dec), 3000)
     void = morph(nd.binary_dilation, morph(nd.binary_closing, void, 2), 1)
     a = dec.copy(); a[void] = gf[void]
+    if c.get('retouche_magenta'):                                                 # miettes de magenta pur hors du vide -> pixel voisin
+        pure = (dec[..., 0] > 230) & (dec[..., 1] < 40) & (dec[..., 2] > 230) & ~void
+        pure = morph(nd.binary_dilation, pure, 1) & ~void
+        if pure.any():
+            iy, ix = nd.distance_transform_edt(pure | void, return_distances=False, return_indices=True)
+            a[pure] = dec[iy[pure], ix[pure]]
     return a, void, dec, gf
 
 
-def classify(a, void, stairs):
+def classify(a, void, stairs, falls_x=None):
     Hs, Ws = a.shape[:2]
     r, g, b = a.transpose(2, 0, 1); mn = a.min(2)
     stm = np.zeros((Hs, Ws), bool)
@@ -179,6 +190,8 @@ def classify(a, void, stairs):
         y = int(rows.max()) + 1
         wide = np.minimum(wh[:, max(0, x0 - 10):x0].mean(1), wh[:, x1:x1 + 10].mean(1))
         yb = next((yy for yy in range(top + (y - top) // 2, min(Hs, y + 40)) if wide[yy] > 0.3), y)
+        if falls_x is not None and (top > 10 or not any(x0 >= fx0 and x1 <= fx1 for fx0, fx1 in falls_x)):
+            continue                                                              # cristaux clairs, pas une chute peinte
         falls.append({'x0': x0, 'x1': x1, 'y0': top, 'y_ecume': int(yb)}); casc[top:yb, x0:x1] = True
     falls.sort(key=lambda f: (f['y0'], f['x0']))
     lab, _ = nd.label(wh & ~casc); foam = np.zeros_like(casc)
@@ -188,12 +201,22 @@ def classify(a, void, stairs):
             if comp.sum() < 60000:
                 foam |= comp
     foam = morph(nd.binary_dilation, nd.binary_fill_holes(morph(nd.binary_closing, foam, 3)), 1) & ~casc
-    water = (blue | pool | white) & ~casc & ~foam
+    if falls_x is not None:                                                       # RAF3 : falaises gris-bleu -> eau = bleu sombre des bassins
+        lum0 = a @ [.299, .587, .114]
+        water = (((b > g + 12) & (b > r + 25) & (lum0 < 105)) | pool) & ~casc & ~foam & ~void
+    else:
+        water = (blue | pool | white) & ~casc & ~foam
     water = morph(nd.binary_opening, nd.binary_fill_holes(morph(nd.binary_closing, water, 3)), 2) & ~casc & ~foam & ~void
+    if falls_x is not None:                                                       # bassin = sous l'écume de chaque chute
+        box = np.zeros_like(water)
+        for f in falls:
+            box[max(0, f['y_ecume'] - 22):f['y_ecume'] + 90, max(0, f['x0'] - 75):f['x1'] + 75] = True
+        water &= box
+        water = nd.binary_fill_holes(morph(nd.binary_closing, water, 3)) & box & ~casc & ~foam & ~void
     wl_, wn_ = nd.label(water)                                                   # eau = bassins : touche une chute ou l'écume,
     near_fall = morph(nd.binary_dilation, casc | foam, 6)                          # ou >= 6000 px (pas les massifs de fleurs bleues)
     ws_ = nd.sum(water, wl_, range(1, wn_ + 1)); wt_ = nd.maximum(near_fall, wl_, range(1, wn_ + 1))
-    water = np.isin(wl_, [i + 1 for i in range(wn_) if ws_[i] >= 300 and (wt_[i] or ws_[i] >= 6000)])
+    water = np.isin(wl_, [i + 1 for i in range(wn_) if ws_[i] >= 300 and (wt_[i] or (ws_[i] >= 6000 and falls_x is None))])
     wet_any = void | water | casc | foam
     lum = a @ [.299, .587, .114]
     path2 = np.sqrt(((a - (240, 232, 192)) ** 2).sum(2)) < 40                   # chemin beige (RAF2)
@@ -215,6 +238,8 @@ def classify(a, void, stairs):
     petal = fl & ~grass_rule(a) & ~greenish & ~path2 & ~stm & (lum > 95) & ((sat > 60) | (mn > 205))
     brown = (r > g) & (g > b) & (r < 215) & (r - b > 30) & (r - b < 140)
     petal &= ~brown
+    if falls_x is not None:                                                       # RAF3 : éclats de cristal menthe, pas des fleurs
+        petal &= ~((g > r + 20) & (np.abs(b - g) < 25) & (mn > 150))
     pl, pn = nd.label(petal); ps = nd.sum(petal, pl, range(1, pn + 1))
     petal = np.isin(pl, [i + 1 for i, v in enumerate(ps) if 6 <= v <= 900])
     return dict(void=void, casc=casc, foam=foam, water=water, floor=fl, veg=veg, walls=walls, stairs=stm, petal=petal), falls
@@ -386,7 +411,7 @@ def glint_frames(void, dep, seed, n_glints=34):
 def make_all(m):
     c = CFG[m]
     a, void_full, dec, gf = composite(m)
-    mk, falls = classify(a, void_full, c['stairs'])
+    mk, falls = classify(a, void_full, c['stairs'], c.get('chutes_x'))
     order = ['void', 'casc', 'foam', 'water', 'floor', 'veg', 'walls']
     ex, cols = JM.down_class(a, {k: mk[k] for k in order}, order)
     full = JM.down_full(a)

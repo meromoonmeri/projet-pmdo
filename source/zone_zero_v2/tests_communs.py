@@ -184,7 +184,9 @@ def make(lot):
         def test_cascades_loi_native(self):
             fr = STACK['cascades']; rects = M['cascades']['rects']; pal = {tuple(c) for c in C.CASC_PAL}
             self.assertEqual((len(fr), AN['cascades']['frame_length_ticks']), (3, 10))
-            self.assertGreaterEqual(len(rects), 5)
+            self.assertGreaterEqual(len(rects), 2 if CF.get('chutes_x') else 5)
+            if CF.get('chutes_x'):                                                            # seulement les chutes peintes
+                self.assertTrue(all(c['y0'] == 0 for c in rects))
             for a in fr:
                 self.assertTrue(colors(a) <= pal)
             for c in rects:
@@ -227,7 +229,11 @@ def make(lot):
         def test_acces_sud_nord(self):
             a = M['access']; mk = a['markers']; walk = MASK['praticable']
             self.assertTrue(all(p['ok'] for p in a['chemins_16x16'].values()))
-            self.assertEqual(mk['entrance'][1], H - 16); self.assertEqual(mk['sortie'][1], 0)       # arrivée au sud, sortie au nord
+            self.assertEqual(mk['entrance'][1], H - 16)                                               # arrivée au sud
+            if CF.get('sortie_grotte'):                                                               # sortie : bouche du tunnel nord
+                self.assertLess(mk['sortie'][1], 96); self.assertLess(abs(mk['sortie'][1] - CF['sortie'][1]), 24)
+            else:
+                self.assertEqual(mk['sortie'][1], 0)                                                  # sortie au bord nord
             self.assertLess(abs(mk['sortie'][0] - CF['sortie'][0]), 24)                               # sortie à l'endroit peint
             self.assertLess(abs(mk['entrance'][0] - CF['entree_x']), 24)
             self.assertFalse((walk & (MASK['vide'] | MASK['eau'] | MASK['cascades'])).any())

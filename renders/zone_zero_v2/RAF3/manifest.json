@@ -1,0 +1,675 @@
+{
+ "lot": "RAF3",
+ "serie": "Reseau Zone Zero V2 (routes fleuries)",
+ "remplace_pas": "RAZ3 (gardee)",
+ "demande": "pour les zone area faut la texture sky peak et les fleur de differente couleur et les arbre pmd et les cascade garde les doit avoir leurs propre calque les trou faut que genere vraiment cette effet de profondeur etc",
+ "lecture_agent": "zones Area Zero = routes RAZ1 et RAZ2 (cascades et trous d abime) ; RAZ3 et EAZ1 (cristal) non touchees",
+ "format": "4:3 vaste",
+ "size_px": [
+  768,
+  576
+ ],
+ "grid_8px": [
+  96,
+  72
+ ],
+ "references": {
+  "sky_peak": {
+   "fichier": "source/zone_zero_v2/reference/skypeak_gif_f0.png",
+   "sha256": "7727ccf253623f2010c281c9aae5b70f2919a3ceac8d233dbfbf463dabdb1479",
+   "source": "2cwdrrs469f61.gif (racine), frame 0"
+  },
+  "apple_woods": {
+   "fichier": "source/zone_zero_v2/reference/Apple_Woods_entrance_TDS.png",
+   "sha256": "544c1497d0e1f99ae848409221ae0b537bac16aee5a41b6ff3fbaaa96b843c07",
+   "source": "Apple_Woods_entrance_TDS.png (racine)"
+  },
+  "decoupes": [
+   "source/zone_zero_v2/reference/skypeak_decoupe_x2.png",
+   "source/zone_zero_v2/reference/applewoods_arbres_decoupe_x2.png"
+  ],
+  "brut_v1": {
+   "fichier": "source/zone_zero_v1/raz3/bruts/decor_magenta.png",
+   "sha256": "abd43b2290fc36d34281492d774e844267bb8cb72b9485461f302e9a487e9985"
+  },
+  "cascades": "loi de P03P01A (source/zone_zero_v1/commun.py)"
+ },
+ "raw_inputs": [
+  {
+   "file": "source/zone_zero_v2/raf3/bruts/decor_magenta.png",
+   "sha256": "b8e5cb208bbf7fdd983ef078a485ada0b33a80eacc1b8d0b6cbb16ec8fef1cab",
+   "size": [
+    1200,
+    896
+   ]
+  },
+  {
+   "file": "source/zone_zero_v2/raf3/bruts/decor_gouffre.png",
+   "sha256": "dd14047f72aae0f44a9bdfca5ea2cb3ed46fafc4d171d4e4537d26dce52f29de",
+   "size": [
+    1200,
+    896
+   ]
+  }
+ ],
+ "arbres_source": {
+  "modeles": [
+   {
+    "brut": "raf1",
+    "boite_y0x0y1x1": [
+     508,
+     459,
+     632,
+     569
+    ],
+    "miroir": false
+   },
+   {
+    "brut": "raf1",
+    "boite_y0x0y1x1": [
+     508,
+     459,
+     632,
+     569
+    ],
+    "miroir": true
+   },
+   {
+    "brut": "raf1",
+    "boite_y0x0y1x1": [
+     517,
+     694,
+     621,
+     788
+    ],
+    "miroir": false
+   },
+   {
+    "brut": "raf1",
+    "boite_y0x0y1x1": [
+     517,
+     694,
+     621,
+     788
+    ],
+    "miroir": true
+   },
+   {
+    "brut": "raf1",
+    "boite_y0x0y1x1": [
+     722,
+     405,
+     823,
+     494
+    ],
+    "miroir": false
+   },
+   {
+    "brut": "raf1",
+    "boite_y0x0y1x1": [
+     722,
+     405,
+     823,
+     494
+    ],
+    "miroir": true
+   },
+   {
+    "brut": "raf2",
+    "boite_y0x0y1x1": [
+     671,
+     164,
+     812,
+     291
+    ],
+    "miroir": false
+   },
+   {
+    "brut": "raf2",
+    "boite_y0x0y1x1": [
+     671,
+     164,
+     812,
+     291
+    ],
+    "miroir": true
+   }
+  ],
+  "echelle": 0.6428571428571429,
+  "regle": "feuillage entier des bruts de decor (5000-12500 px, remplissage > 0,55, h/l 0,9-1,3, hors bords) + tronc brun",
+  "planches_rejetees": [
+   {
+    "nom": "arbres_magenta v0",
+    "feuillage_rgb": [
+     30,
+     101,
+     10
+    ],
+    "distance_apple_woods": 56,
+    "motif": "vert emeraude trop sature"
+   },
+   {
+    "nom": "arbres_magenta v1",
+    "feuillage_rgb": [
+     81,
+     80,
+     31
+    ],
+    "distance_apple_woods": 51,
+    "motif": "kaki, trop jaune et sombre"
+   }
+  ]
+ },
+ "methode": "decor = brut V1 repeint (images : brut V1, decoupe Sky Peak x2, decoupe arbres Apple Woods x2), abime en magenta ; gouffre = edition du decor, pixels pris SEULEMENT dans le masque magenta du decor (le reste de l edition, qui mangeait la prairie et le chemin, est jete) ; arbres = feuillages entiers decoupes dans les bruts de decor (pas de planche generee : les deux essais ont ete rejetes), plantes en lisiere et sur les massifs",
+ "edition_b": null,
+ "fidelite": {
+  "herbe": {
+   "ref": "skypeak_gif_f0 (y >= 120)",
+   "ref_rgb": [
+    129.8,
+    237.9,
+    114.1
+   ],
+   "rgb": [
+    128.1,
+    231.8,
+    109.7
+   ],
+   "pixels_ref": 118552,
+   "pixels": 133664,
+   "distance": 7.74
+  },
+  "falaises": {
+   "ref": "skypeak_gif_f0 (y >= 120)",
+   "ref_rgb": [
+    125.8,
+    144.9,
+    160.0
+   ],
+   "rgb": [
+    87.1,
+    136.5,
+    143.6
+   ],
+   "pixels_ref": 28590,
+   "pixels": 35185,
+   "distance": 42.82
+  },
+  "arbres": {
+   "ref": "Apple_Woods_entrance_TDS, coeurs de 4 feuillages (boites 30 x 30 verifiees a l oeil)",
+   "boites_ref_y0x0y1x1": [
+    [
+     245,
+     135,
+     275,
+     165
+    ],
+    [
+     305,
+     35,
+     335,
+     65
+    ],
+    [
+     250,
+     390,
+     280,
+     420
+    ],
+    [
+     315,
+     485,
+     345,
+     515
+    ]
+   ],
+   "ref_rgb": [
+    71.4,
+    130.1,
+    35.3
+   ],
+   "rgb": [
+    69.2,
+    130.9,
+    43.5
+   ],
+   "pixels": 26224,
+   "distance": 8.53
+  },
+  "regles": {
+   "herbe": "G > 185, G - R > 40, G - B > 70",
+   "falaises": "gris-bleu peu sature (B >= G - 6, G >= R - 4, ecart < 75, min > 40)",
+   "arbres": "feuillage des modeles (G > R + 25, G > B + 30) contre les coeurs de feuillage d Apple Woods"
+  },
+  "seuil": 35,
+  "seuille": [
+   "herbe",
+   "arbres"
+  ],
+  "signale": {
+   "falaises": "matiere secondaire, signalee et non seuillee (precedent RAZ3) : le generateur les a faites plus sombres que Sky Peak"
+  }
+ },
+ "layer_order_bottom_to_top": [
+  "calques/RAF3_00_sol_complet.png",
+  "calques/RAF3_01_abime.png",
+  "animation/brume_profonde/RAF3_02_brume_profonde_fNN.png",
+  "animation/brume_haute/RAF3_03_brume_haute_fNN.png",
+  "animation/lueurs/RAF3_04_lueurs_fNN.png",
+  "animation/eau/RAF3_05_eau_fNN.png",
+  "calques/RAF3_06_sol.png",
+  "calques/RAF3_07_falaises.png",
+  "animation/fleurs/RAF3_08_fleurs_fNN.png",
+  "calques/RAF3_09_buissons.png",
+  "calques/RAF3_10_arbres.png",
+  "animation/cascades/RAF3_11_cascades_fNN.png",
+  "animation/ecume/RAF3_12_ecume_fNN.png"
+ ],
+ "profondeur": {
+  "carte": "assombrissement lisse (gaussienne 6) du gouffre genere, normalise p5-p95, nul au bord (10 px)",
+  "brume_profonde": {
+   "phases": 24,
+   "frame_length_ticks": 20,
+   "pas_px": 4,
+   "periode_px": 96,
+   "tons": [
+    [
+     26,
+     58,
+     74
+    ],
+    [
+     38,
+     80,
+     96
+    ],
+    [
+     58,
+     104,
+     118
+    ],
+    [
+     84,
+     130,
+     142
+    ]
+   ],
+   "loi": "bruit periodique (96 px) translate de +4 px par phase ; densite = bruit + profondeur ; trame de Bayer 4 x 4 ; seulement profondeur > 0,35"
+  },
+  "brume_haute": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "pas_px": -8,
+   "periode_px": 192,
+   "tons": [
+    [
+     118,
+     150,
+     166
+    ],
+    [
+     146,
+     176,
+     190
+    ],
+    [
+     176,
+     200,
+     210
+    ]
+   ],
+   "loi": "voiles clairs, bruit periodique (192 px) translate de -8 px par phase (sens oppose, 4 fois plus vite : parallaxe)"
+  },
+  "lueurs": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "nombre": 34,
+   "loi": "eclats 1-2-3-2-1 puis repos, seulement profondeur > 0,7"
+  }
+ },
+ "fleurs": {
+  "phases": 4,
+  "frame_length_ticks": 12,
+  "tetes": 127,
+  "loi": "A B A C (GIF Sky Peak) : en B et C chaque tete descend de 1 px et penche de +-1 px"
+ },
+ "arbres": {
+  "plantes": [
+   {
+    "y": 4,
+    "x": 749,
+    "arbre": 0,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 6,
+    "x": 21,
+    "arbre": 4,
+    "taille": [
+     57,
+     65
+    ]
+   },
+   {
+    "y": 8,
+    "x": 693,
+    "arbre": 4,
+    "taille": [
+     57,
+     65
+    ]
+   },
+   {
+    "y": 9,
+    "x": 38,
+    "arbre": 2,
+    "taille": [
+     60,
+     67
+    ]
+   },
+   {
+    "y": 10,
+    "x": 70,
+    "arbre": 2,
+    "taille": [
+     60,
+     67
+    ]
+   },
+   {
+    "y": 10,
+    "x": 96,
+    "arbre": 6,
+    "taille": [
+     82,
+     91
+    ]
+   },
+   {
+    "y": 10,
+    "x": 670,
+    "arbre": 1,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 12,
+    "x": 713,
+    "arbre": 3,
+    "taille": [
+     60,
+     67
+    ]
+   },
+   {
+    "y": 26,
+    "x": 674,
+    "arbre": 1,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 27,
+    "x": 85,
+    "arbre": 3,
+    "taille": [
+     60,
+     67
+    ]
+   },
+   {
+    "y": 27,
+    "x": 732,
+    "arbre": 2,
+    "taille": [
+     60,
+     67
+    ]
+   },
+   {
+    "y": 30,
+    "x": 30,
+    "arbre": 1,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 31,
+    "x": 6,
+    "arbre": 0,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 33,
+    "x": 758,
+    "arbre": 7,
+    "taille": [
+     82,
+     91
+    ]
+   },
+   {
+    "y": 53,
+    "x": 13,
+    "arbre": 6,
+    "taille": [
+     82,
+     91
+    ]
+   },
+   {
+    "y": 53,
+    "x": 39,
+    "arbre": 5,
+    "taille": [
+     57,
+     65
+    ]
+   },
+   {
+    "y": 119,
+    "x": 287,
+    "arbre": 7,
+    "taille": [
+     82,
+     91
+    ]
+   },
+   {
+    "y": 121,
+    "x": 469,
+    "arbre": 1,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 274,
+    "x": 460,
+    "arbre": 2,
+    "taille": [
+     60,
+     67
+    ]
+   },
+   {
+    "y": 382,
+    "x": 291,
+    "arbre": 4,
+    "taille": [
+     57,
+     65
+    ]
+   },
+   {
+    "y": 405,
+    "x": 480,
+    "arbre": 7,
+    "taille": [
+     82,
+     91
+    ]
+   },
+   {
+    "y": 408,
+    "x": 461,
+    "arbre": 1,
+    "taille": [
+     71,
+     80
+    ]
+   },
+   {
+    "y": 558,
+    "x": 1,
+    "arbre": 5,
+    "taille": [
+     57,
+     65
+    ]
+   }
+  ],
+  "du_brut_pixels": 636,
+  "lisiere": "masses de buissons du brut (>= 1500 px) + bandes de 40 px aux bords gauche et droit, 34 px au bas (hors couloir d entree), 30 px en haut (hors sortie)"
+ },
+ "cascades": {
+  "phases": 3,
+  "frame_length_ticks": 10,
+  "rects": [
+   {
+    "x0": 202,
+    "x1": 241,
+    "y0": 0,
+    "y1": 122,
+    "graine": 11
+   },
+   {
+    "x0": 535,
+    "x1": 577,
+    "y0": 0,
+    "y1": 122,
+    "graine": 12
+   }
+  ],
+  "loi": "P03P01A : motif 96 px, 32 px par image"
+ },
+ "animations": {
+  "brume_profonde": {
+   "phases": 24,
+   "frame_length_ticks": 20,
+   "boucle_ticks": 480
+  },
+  "brume_haute": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 240
+  },
+  "lueurs": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 240
+  },
+  "eau": {
+   "phases": 3,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 30
+  },
+  "fleurs": {
+   "phases": 4,
+   "frame_length_ticks": 12,
+   "boucle_ticks": 48
+  },
+  "cascades": {
+   "phases": 3,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 30
+  },
+  "ecume": {
+   "phases": 3,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 30
+  }
+ },
+ "scene_loop_ticks": 480,
+ "access": {
+  "markers": {
+   "entrance": [
+    384,
+    560
+   ],
+   "sortie": [
+    384,
+    80
+   ],
+   "belvedere": [
+    232,
+    368
+   ]
+  },
+  "chemins_16x16": {
+   "sortie": {
+    "ok": true,
+    "cases_explorees": 1014
+   },
+   "belvedere": {
+    "ok": true,
+    "cases_explorees": 1014
+   }
+  },
+  "blocked_cells": 5277,
+  "total_cells": 6912,
+  "rule": "case bloquee si > 25 % hors sol praticable (masque praticable = sol, fleurs et massifs compris, + escaliers ; lisiere, vegetation, troncs et arbres exclus)"
+ },
+ "pmdo": {
+  "target": "0.8.12",
+  "asset": "raf3_fond_fleuri",
+  "namespace": "route_zone_zero_fleurie_3",
+  "tiles_per_bank": {
+   "RAF3_00_SOL": 4382,
+   "RAF3_01_ABIME": 2021,
+   "RAF3_02_BRUME": 4764,
+   "RAF3_03_BRUME": 1278,
+   "RAF3_04_LUEURS": 136,
+   "RAF3_05_EAU": 370,
+   "RAF3_06_SOL": 2780,
+   "RAF3_07_FALAISES": 2772,
+   "RAF3_08_FLEURS": 1048,
+   "RAF3_09_BUISSONS": 440,
+   "RAF3_10_ARBRES": 641,
+   "RAF3_11_CASCADES": 141,
+   "RAF3_12_ECUME": 265
+  },
+  "banks": [
+   "RAF3_00_SOL",
+   "RAF3_01_ABIME",
+   "RAF3_02_BRUME",
+   "RAF3_03_BRUME",
+   "RAF3_04_LUEURS",
+   "RAF3_05_EAU",
+   "RAF3_06_SOL",
+   "RAF3_07_FALAISES",
+   "RAF3_08_FLEURS",
+   "RAF3_09_BUISSONS",
+   "RAF3_10_ARBRES",
+   "RAF3_11_CASCADES",
+   "RAF3_12_ECUME"
+  ],
+  "runtime_tested": false,
+  "warp": "aucun (raccords a scripter)"
+ },
+ "art_approved": false
+}
