@@ -1,5 +1,28 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## ATP1 — Arène de Terapagos : cristal prismatique (28 septembre 2026)
+
+**Demande** : « Fait une zone de crystal de verre qui reflette les spectre de couleur une arene pour terragos […] avec des rune et signe qui pulse etc ».
+
+- `renders/arene_terapagos_v1/ATP1/` (préfixe `ATP1`, aperçu `apercu_arene_terapagos.html`). Map 4:3, arrivée au sud. C'est l'arène au bout du réseau Zone Zéro, après EAZ1.
+- **Références**, rendues depuis la ROM (`rom --only D17,D42`) :
+  - `D17P45A` : champ de cristaux, sol lumineux à dalles hexagonales ;
+  - `D42P42A` : arène ronde, étoile au sol, scintillements animés.
+  - Les noms de lieu ne sont pas affirmés.
+- **Brut généré** : `bruts/decor_vert.png`, à partir de deux découpes ×2, gardé sans édition. L'emblème Téracristal et les runes y sont gravés en vert pur, puis remplacés par des calques calculés. 12 runes étaient demandées ; le générateur en a peint 14, toutes gardées.
+- **Layout** :
+  - couloir de cristal au sud (`entrance`) ;
+  - sol lumineux en cœur, fermé par des amas de cristal ;
+  - emblème gravé à plat au centre, sur lequel se tient Terapagos (`boss`), entouré de 14 runes ;
+  - l'équipe s'arrête au sud de l'anneau (`heros`).
+- **Animations** (boucle de 540 ticks), toutes aux 60 tons d'un **spectre calculé** (12 teintes × 5 niveaux, tons 5 bits NDS, pas des tons de la ROM) :
+  - **emblème** : onde de lumière qui part du centre pendant que le spectre fait un tour, 36 × 5 ticks ;
+  - **runes** : elles s'allument l'une après l'autre dans le sens horaire, chacune dans sa teinte, 36 × 5 ticks ;
+  - **reflets** : deux bandes arc-en-ciel balaient les facettes claires des cristaux, 54 × 10 ticks ;
+  - **scintillements** : 44 étoiles avec les formes et la loi « éclat puis décroissance » de D42P42A, 54 × 10 ticks.
+- Fidélité (seuil 35), même règle sur D17P45A et sur la scène : sol 29,3, cristaux 23,1. Notre sol est un peu plus cyan que la référence.
+- 10 tests PASS, 11 mutations détectées. Paquets : `ATP1_projet_pmdo_0812.zip` (3,4 Mo) et `ATP1_calques_png_8px.zip` (12,1 Mo). Pas de runtime, pas de warp.
+
 ## CLR1 — Colonnes Lances : ruines du sommet dans les nuages (28 septembre 2026)
 
 **Demande** : « une map style colonne lance ruin etc avec les texture pmd ».

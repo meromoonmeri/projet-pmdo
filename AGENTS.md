@@ -1134,3 +1134,14 @@ Pas de runtime. Pas dans le mod unique.
 - **Obstacles de même ton que le sol** (colonnes, colonnes couchées, autel) : aucune règle de couleur ne les sépare des briques. Les mesurer à la main sur une grille de 20 px posée sur le brut (fût + socle ; capsule pour une colonne couchée), les écrire dans le manifeste et tester qu'ils sont bloquants.
 - **Loi de palette sur un vitrail généré aux verts nombreux** : les quantiles de luminance peuvent vider une classe (beaucoup d'égalités). Classer par rang (`argsort` stable) : tiers sombre fixe, tiers moyen rampe a, tiers clair rampe b.
 - **Noms de fichiers d'une animation de plus de 100 phases** : `fNNN`. Les tests et `package.py` lisent le motif avec `re.search(r'fN+', …)`.
+
+## Arène de Terapagos — ATP1, ajouts à la recette
+
+- **Gravures animées sur un décor généré** : faire peindre l'emblème et les runes en **vert pur (#00FF00)** dans le brut (réussi au premier essai). Segmentation : G − max(R, B) > 80 et G > 150, plus un liseré G − max(R, B) > 30 à moins de 2 px. Sous les gravures, le sol prend le pixel de sol non gravé le plus proche. Compter les runes réellement peintes (14 ici pour 12 demandées) et ne pas supposer le nombre du prompt.
+- **Sol lumineux lisse vs faces de cristal lisses** : l'écart-type local seul classe aussi des faces de cristal en sol. Prendre la plus grande composante lisse et claire, reboucher les trous, ouvrir de 6 px, puis reprendre la plus grande composante.
+- **Fidélité sans boîtes posées à la main** : une boîte de la scène peut commencer à x = −1 (round(0 · S) − CROP_X), ce qui donne une tranche vide et une distance NaN. Surtout, deux boîtes « de sol » tombent rarement sur la même matière. Appliquer **la même règle** de segmentation à la référence entière et à la scène (ici : plus grande zone lisse et claire, sans les gravures qui pulsent), et tester que la règle retombe bien sur le masque du sol (> 95 %).
+- **Couleurs hors ROM** : un spectre arc-en-ciel n'existe pas dans les références. Le calculer (HSV → tons 5 bits NDS 8k + 7), le dire dans le manifeste, le README et l'aperçu, et tester que chaque calque animé n'utilise que ces tons. Le test de liseré rosé (R − G > 45 et B − G > 35) ne s'applique alors qu'aux calques fixes, car les teintes magenta du spectre sont légitimes.
+- **Étiquettes en PNG 8 bits** : numéro × 20 déborde au-delà de 12 étiquettes (14 × 20 = 280 → 24). Choisir le facteur selon le maximum et l'asserter.
+- **Loi des scintillements ROM** : relever les périodes de *toutes* les étoiles (ici grandes 16, petites 11 ou 16), pas seulement de la première. Les ramener aux diviseurs de la boucle (18 et 9 sur 54) et le noter.
+- **Reflets en bandes qui bouclent** : deux bandes espacées de D = moitié du parcours, qui avancent de D par boucle ; la 2e sort quand la 1re arrive à sa place. Tester le masque de la phase 54 recalculé contre la phase 0.
+
