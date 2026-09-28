@@ -59,13 +59,14 @@ def cascade_column(w, h, t, seed):
 
 
 def cascade_frames(H, W, rects):
-    """rects : liste de dicts x0, x1, y1 (bas, sous l'écume), graine. Colonnes de y = 0 à y1."""
+    """rects : liste de dicts x0, x1, y1 (bas, sous l'écume), graine, et y0 facultatif (haut de la chute, 0 par défaut :
+    chute qui part du bord de la carte ; > 0 : chute qui passe une falaise au milieu de la carte). Colonnes de y0 à y1."""
     frames = []
     for t in range(CASC_PHASES):
         e = np.zeros((H, W, 4), 'uint8')
         for c in rects:
-            x0, x1, y1 = c['x0'], c['x1'], c['y1']
-            e[:y1, x0:x1, :3] = cascade_column(x1 - x0, y1, t, c['graine']); e[:y1, x0:x1, 3] = 255
+            x0, x1, y0, y1 = c['x0'], c['x1'], c.get('y0', 0), c['y1']
+            e[y0:y1, x0:x1, :3] = cascade_column(x1 - x0, y1 - y0, t, c['graine']); e[y0:y1, x0:x1, 3] = 255
         frames.append(e)
     return frames
 
