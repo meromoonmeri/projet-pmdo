@@ -115,10 +115,10 @@ def grass_mode(layer, grass_rule):
     return cols[np.argmax(cnt)]
 
 
-def flatten_grass(layer, grass_rule, mode):
+def flatten_grass(layer, grass_rule, mode, tol=40):
     """Aplat Sky Peak : règle herbe ET à moins de 40 du ton dominant du lot (le chemin clair reste)."""
     rgb = layer[..., :3].astype(int)
-    m = (layer[..., 3] == 255) & grass_rule(rgb) & (np.sqrt(((rgb - mode) ** 2).sum(2)) < 40)
+    m = (layer[..., 3] == 255) & grass_rule(rgb) & (np.sqrt(((rgb - mode) ** 2).sum(2)) < tol)
     layer[m, :3] = SKY_GRASS
     return m
 
@@ -313,13 +313,13 @@ def papillon_frames(bflies):
 
 
 # ---------------------------------------------------------------- passe complète
-def apply(D, grass_rule, seed, boxes=()):
+def apply(D, grass_rule, seed, boxes=(), tol=40):
     rng = np.random.default_rng(seed)
     L, ex = D['layers'], D['ex']
     # 1. herbe : aplat Sky Peak (sol et sol complet)
     mode = grass_mode(L['sol'], grass_rule)
-    flat_sol = flatten_grass(L['sol'], grass_rule, mode)
-    flatten_grass(L['sol_complet'], grass_rule, mode)
+    flat_sol = flatten_grass(L['sol'], grass_rule, mode, tol)
+    flatten_grass(L['sol_complet'], grass_rule, mode, tol)
     # 2. restes flous (petites taches entourées d'herbe franche ; le chemin est une grande composante : gardé)
     speck = (L['sol'][..., 3] == 255) & ~flat_sol & ~D['stairs']
     n_speck = 0
@@ -393,7 +393,7 @@ def apply(D, grass_rule, seed, boxes=()):
     papillons, trajets = papillon_frames(bflies)
     D.update(ffr=ffr, fmask=fmask, n_fleurs=len(flowers), herbes=herbes, embruns=embruns, papillons=papillons)
     cols = sorted(set(f[2] for f in flowers))
-    D['hq'] = dict(ton_dominant_lot=[int(v) for v in mode], herbe_aplatie_px=int(flat_sol.sum()), restes_flous_px=n_speck, tiges_effacees_px=n_stem,
+    D['hq'] = dict(ton_dominant_lot=[int(v) for v in mode], seuil_aplat=tol, herbe_aplatie_px=int(flat_sol.sum()), restes_flous_px=n_speck, tiges_effacees_px=n_stem,
                    massifs_flous_repris_px=int(blurry.sum()), massifs_falaises_rendus_au_sol_px=int(islands.sum()),
                    boites_massifs_falaise=[list(b) for b in boxes], familles_massifs_origine=fams_old, couleurs=cols,
                    touffes=len(tufts), gouttelettes=n_drops, papillons=bflies, trajets=trajets)

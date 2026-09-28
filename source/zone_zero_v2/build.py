@@ -66,7 +66,8 @@ CFG = {
                  NAMESPACE='entree_zone_zero_fleurie', ASSET='eaf1_entree_zone_zero_fleurie',
                  titre='Entree Zone Zero fleurie - la geode du donjon (4:3)',
                  decor='decor_magenta_c.png', chaine=['decor_magenta.png', 'decor_magenta_b.png', 'decor_magenta_c.png'],
-                 gouffre='decor_gouffre.png', stairs=[], entree_x=384, sortie=(525, 168), sortie_y_max=200, belvedere=(520, 300),
+                 gouffre='decor_gouffre.png', stairs=[], entree_x=384, sortie=(530, 196), sortie_y_max=220, belvedere=(632, 264), aplat_max=52,
+                 arbres_min=10, massifs_falaise=[(270, 400, 334, 444), (268, 444, 304, 480)],
                  graine=13, edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(430, 515), (570, 665)],
                  dalles=(178, 197, 152),
                  demande='la suite ! (apres la passe haute qualite des routes Zone Zero : faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualite les fleur avec plein de couleur des cascade de la brume etc)',
@@ -607,7 +608,7 @@ def build(m):
     for d in ['calques', 'masques', 'review'] + [f'animation/{k}' for k in anims]:
         (OUT / d).mkdir(parents=True, exist_ok=True)
     D = make_all(m); L, ex = D['layers'], D['ex']
-    D = HQ.apply(D, grass_rule, c['graine'] * 10 + 1, c.get('massifs_falaise', ()))   # passe haute qualité
+    D = HQ.apply(D, grass_rule, c['graine'] * 10 + 1, c.get('massifs_falaise', ()), c.get('aplat_max', 40))   # passe haute qualité
     masks = dict(sol=ex['floor'], vide=ex['void'], falaises=ex['walls'], vegetation=ex['veg'], eau=D['wet'], cascades=D['casc'],
                  escaliers=D['stairs'], fleurs=D['fmask'], lisiere=D['zone'], troncs=D['trunks'], arbres_brut=D['trees_raw'])
     for k, v in masks.items():
