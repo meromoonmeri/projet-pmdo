@@ -29,6 +29,14 @@ LOTS = {
                         "Les deux <strong>cascades</strong> tombent dans des bassins sur la terrasse haute ; quelques cristaux rappellent la Zone Zéro.</p>"
                         "<p>On arrive au sud, on remonte le chemin, on passe le pavage entre les piliers de cristal et on atteint le tunnel nord "
                         "(<code>sortie</code>, vers EAZ1). Marqueur <code>belvedere</code> au bord du gouffre de gauche.</p>")),
+    'eaf1': dict(apercu='apercu_entree_zone_zero_fleurie.html', titre='Entrée Zone Zéro fleurie — la géode du donjon (EAF1, 768×576)',
+                 texte=("<p>Suite du réseau fleuri : <strong>EAF1</strong> remplace, dans le réseau fleuri, l'entrée EAZ1 (grotte de cristal sombre, gardée). "
+                        "Une chaussée d'herbe <strong>Sky Peak</strong> fleurie monte entre <strong>deux gouffres</strong> profonds "
+                        "(dégradé vers le bleu nuit, brume du fond, voiles en parallaxe, éclats) vers la <strong>géode de cristal</strong> "
+                        "qui ouvre le donjon de la Zone Zéro. Deux <strong>cascades</strong> tombent de la falaise nord dans des bassins ; "
+                        "un plateau de cristaux domine l'ouest.</p>"
+                        "<p>On arrive au sud, on monte la chaussée et on atteint la bouche de la géode (<code>sortie</code>, entrée du donjon). "
+                        "Marqueur <code>belvedere</code> au bord du gouffre de droite.</p>")),
 }
 HQ = ("<p><strong>Passe haute qualité</strong> : herbe Sky Peak en aplat franc (ton dominant du GIF), touffes en étoile qui se balancent "
       "(A B A C), fleurs nettes de 7 px en <strong>huit couleurs</strong>, <strong>embruns</strong> au pied des cascades et "
