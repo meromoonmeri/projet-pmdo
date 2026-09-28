@@ -42,6 +42,7 @@ DEEP_TONES = [(26, 58, 74), (38, 80, 96), (58, 104, 118), (84, 130, 142)]       
 HIGH_TONES = [(118, 150, 166), (146, 176, 190), (176, 200, 210)]                   # voiles de brume clairs à mi-hauteur
 GLINT_TINTS = [(240, 170, 226), (150, 236, 236), (255, 255, 255), (190, 170, 255)]  # éclats téra lointains
 GLINT_SEQ = [1, 2, 3, 2, 1] + [0] * 19
+DEPTH_GRADE, DEPTH_NIGHT = 0.45, (10, 30, 44)       # dégradé statique du gouffre vers le bleu nuit
 
 CFG = {
     'raf1': dict(PFX='RAF1', base='raz1', NAMESPACE='route_zone_zero_fleurie_1', ASSET='raf1_levre_cratere_fleurie',
@@ -448,8 +449,13 @@ def make_all(m):
     layers['arbres'] = comp
     # animations
     dep = depth_map(abyss, ex['void'])
-    deep = mist_frames(ex['void'], dep, DEEP_PHASES, DEEP_STEP, 96, DEEP_TONES, 0.55, -0.55, 21, (31, 17, 11), 0.35)
-    high = mist_frames(ex['void'], dep, HIGH_PHASES, HIGH_STEP, 192, HIGH_TONES, 0.62, -0.72, 33, (46, 31, 23), 0.12)
+    # dégradé de profondeur : plus on descend, plus le gouffre généré tire vers le bleu nuit (perspective atmosphérique)
+    k = (DEPTH_GRADE * dep ** 1.2)[..., None]
+    g_ = abyss[..., :3].astype(float) * (1 - k) + np.array(DEPTH_NIGHT, float) * k
+    q = Image.fromarray(np.clip(g_, 0, 255).astype('uint8')).quantize(colors=64, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    abyss[..., :3] = np.array(q.convert('RGB')); abyss[~ex['void']] = 0; layers['abime'] = abyss
+    deep = mist_frames(ex['void'], dep, DEEP_PHASES, DEEP_STEP, 96, DEEP_TONES, 0.55, -0.32, 21, (31, 17, 11), 0.22)
+    high = mist_frames(ex['void'], dep, HIGH_PHASES, HIGH_STEP, 192, HIGH_TONES, 0.62, -0.58, 33, (46, 31, 23), 0.08)
     gfr, glints = glint_frames(ex['void'], dep, 7)
     lab2, n2 = flower_heads(layers['fleurs'])
     ffr = flower_frames(layers['fleurs'], lab2, n2)
@@ -576,6 +582,7 @@ def build(m):
     # praticable : sol, hors lisière, végétation, troncs
     walk_px = ex['floor'] & ~D['zone'] & ~ex['veg'] & ~D['trunks'] & ~(L['arbres'][..., 3] == 255) | D['stairs']
     walk_px &= ~D['zone']
+    Image.fromarray((walk_px * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_masque_praticable.png')
     blocked = BM.cell_grid(~walk_px)
     gh_, gw_ = blocked.shape
     col_bottom = [cc for cc in range(gw_ - 1) if not blocked[gh_ - 2:, cc:cc + 2].any()]
@@ -649,7 +656,8 @@ def build(m):
                                'motif': 'kaki, trop jaune et sombre'}]},
         'methode': ('decor = brut V1 repeint (images : brut V1, decoupe Sky Peak x2, decoupe arbres Apple Woods x2), abime en magenta ; '
                     'gouffre = edition du decor, pixels pris SEULEMENT dans le masque magenta du decor (le reste de l edition, qui '
-                    'mangeait la prairie et le chemin, est jete) ; arbres de la planche plantes en lisiere'),
+                    'mangeait la prairie et le chemin, est jete) ; arbres = feuillages entiers decoupes dans les bruts de decor (pas de planche '
+                    'generee : les deux essais ont ete rejetes), plantes en lisiere et sur les massifs'),
         'edition_b': c['edition_b'],
         'fidelite': fid,
         'layer_order_bottom_to_top': [files[t] for t, _, _ in stack_named],
@@ -665,9 +673,11 @@ def build(m):
         'arbres': {'plantes': D['placed'], 'du_brut_pixels': int(D['trees_raw'].sum()),
                    'lisiere': 'masses de buissons du brut (>= 1500 px) + bandes de 40 px aux bords gauche et droit, 34 px au bas (hors couloir d entree), 30 px en haut (hors sortie)'},
         'cascades': {'phases': C.CASC_PHASES, 'frame_length_ticks': C.CASC_TICKS, 'rects': D['rects'], 'loi': 'P03P01A : motif 96 px, 32 px par image'},
+        'animations': {k: {'phases': PHASES[k], 'frame_length_ticks': ANIM[k], 'boucle_ticks': PHASES[k] * ANIM[k]} for k in ANIM},
         'scene_loop_ticks': LOOP_TICKS,
         'access': {'markers': markers, 'chemins_16x16': pths, 'blocked_cells': int(blocked.sum()), 'total_cells': int(blocked.size),
-                   'rule': 'case bloquee si > 25 % hors sol praticable (lisiere, vegetation, troncs, arbres exclus)'},
+                   'rule': 'case bloquee si > 25 % hors sol praticable (masque praticable = sol, fleurs et massifs compris, + escaliers ; '
+                            'lisiere, vegetation, troncs et arbres exclus)'},
         'pmdo': {'target': '0.8.12', 'asset': c['ASSET'], 'namespace': c['NAMESPACE'], 'tiles_per_bank': counts, 'banks': sorted(counts),
                  'runtime_tested': False, 'warp': 'aucun (raccords a scripter)'},
         'art_approved': False,

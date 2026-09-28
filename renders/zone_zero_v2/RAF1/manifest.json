@@ -168,7 +168,7 @@
    }
   ]
  },
- "methode": "decor = brut V1 repeint (images : brut V1, decoupe Sky Peak x2, decoupe arbres Apple Woods x2), abime en magenta ; gouffre = edition du decor, pixels pris SEULEMENT dans le masque magenta du decor (le reste de l edition, qui mangeait la prairie et le chemin, est jete) ; arbres de la planche plantes en lisiere",
+ "methode": "decor = brut V1 repeint (images : brut V1, decoupe Sky Peak x2, decoupe arbres Apple Woods x2), abime en magenta ; gouffre = edition du decor, pixels pris SEULEMENT dans le masque magenta du decor (le reste de l edition, qui mangeait la prairie et le chemin, est jete) ; arbres = feuillages entiers decoupes dans les bruts de decor (pas de planche generee : les deux essais ont ete rejetes), plantes en lisiere et sur les massifs",
  "edition_b": "arbres et fleurs en plus (demande : buissons des coins -> arbres ; le generateur a peu change)",
  "fidelite": {
   "herbe": {
@@ -927,6 +927,43 @@
   ],
   "loi": "P03P01A : motif 96 px, 32 px par image"
  },
+ "animations": {
+  "brume_profonde": {
+   "phases": 24,
+   "frame_length_ticks": 20,
+   "boucle_ticks": 480
+  },
+  "brume_haute": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 240
+  },
+  "lueurs": {
+   "phases": 24,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 240
+  },
+  "eau": {
+   "phases": 3,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 30
+  },
+  "fleurs": {
+   "phases": 4,
+   "frame_length_ticks": 12,
+   "boucle_ticks": 48
+  },
+  "cascades": {
+   "phases": 3,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 30
+  },
+  "ecume": {
+   "phases": 3,
+   "frame_length_ticks": 10,
+   "boucle_ticks": 30
+  }
+ },
  "scene_loop_ticks": 480,
  "access": {
   "markers": {
@@ -955,7 +992,7 @@
   },
   "blocked_cells": 5235,
   "total_cells": 6912,
-  "rule": "case bloquee si > 25 % hors sol praticable (lisiere, vegetation, troncs, arbres exclus)"
+  "rule": "case bloquee si > 25 % hors sol praticable (masque praticable = sol, fleurs et massifs compris, + escaliers ; lisiere, vegetation, troncs et arbres exclus)"
  },
  "pmdo": {
   "target": "0.8.12",
@@ -963,9 +1000,9 @@
   "namespace": "route_zone_zero_fleurie_1",
   "tiles_per_bank": {
    "RAF1_00_SOL": 3599,
-   "RAF1_01_ABIME": 1005,
-   "RAF1_02_BRUME": 1291,
-   "RAF1_03_BRUME": 344,
+   "RAF1_01_ABIME": 1007,
+   "RAF1_02_BRUME": 3402,
+   "RAF1_03_BRUME": 863,
    "RAF1_04_LUEURS": 125,
    "RAF1_05_EAU": 989,
    "RAF1_06_SOL": 2539,
