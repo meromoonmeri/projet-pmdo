@@ -989,3 +989,11 @@ Pas de runtime. Pas dans le mod unique.
 - **Réutilisation des tourbillons de ERN1** : `ER.cr = loadmod(ECN1)` avant d'appeler `ER.extract_poses`, puis remappage par rang de luminance sur une rampe grise.
 - Petits sprites violets sur une pierre grise : bord et cœur dans les deux tons les plus clairs, sinon ils disparaissent.
 
+## Fins de donjon — FGG1 (Fin Givre), ajouts à la recette
+
+- **Vraie fin trop petite** : quand la salle de fin n'existe qu'en vignette (ici 120 × 90 px), la ranger dans `reference/` avec son URL, la donner au générateur pour la palette et prendre les textures d'une capture du même biome en grand format (`pmdskyicearena.png`). Mesurer la fidélité aux deux : la vignette ne sert que de garde-fou.
+- **Morphologie près du bord** : `binary_closing` et `binary_opening` traitent l'extérieur comme du vide et rongent un couloir qui touche le bas de l'image (la ligne d'arrivée devenait vide). Étendre le masque par répétition du bord avant l'opération (`morph()` de FGG1).
+- **Sol fissuré** : le critère de planéité (écart-type local) casse sur les grandes fissures. L'associer à un critère de couleur proche du sol (distance < 22), puis fermer sur 7 px.
+- **Objet d'objectif peint dans le décor** (cristal et monticule) : ellipse relevée à la main sur le brut, documentée dans le manifeste. Palette propre de 32 couleurs. Seules les facettes cyan pulsent ; la neige blanche reste fixe.
+- EGN1 se réutilise en réglant `EG.W, EG.H` **et** `EG.cr.W, EG.cr.H` (son `cr` est ECN1, chargé au niveau du module), puis `EG.N_FLAKES` pour garder la densité de flocons.
+

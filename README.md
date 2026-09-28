@@ -1,5 +1,21 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## FGG1 — Fin Givre : Frosty Grotto, quatrième zone de fin de donjon (28 septembre 2026)
+
+**Demande** : « Parfait lance toi ! » après FRP1. Quatrième fin de la série, dans l'ordre du mod : **Givre**.
+
+- Vraie fin : Articuno attend les héros à l'étage 5 de Frosty Grotto, la grotte dont l'entrée Givre (EGN1) montre la bouche au nord. Cette salle n'est disponible qu'en vignette de 120 px (`source/fin_givre_grotte_v1/reference/`, mysterydungeonwiki) : elle donne la palette. Les textures viennent de l'arène de glace de PMD Sky (`pmdskyicearena.png`).
+- Layout : arrivée au sud par le couloir de glace (`entrance`), grande arène de glace avec un bassin d'eau glacée de chaque côté (`boss`), grand cristal de glace au nord (`cristal`). Aucune sortie, aucun warp.
+- Rendu généré référencé : décor sur magenta (les bassins) ; sol seul généré à partir d'une découpe du sol de l'arène de PMD Sky.
+- Calques, du bas vers le haut : eau glacée, reflets ; sol complet, sol de glace, parois, cristal ; lueur du cristal, flocons.
+- L'eau glacée (4 × 10 ticks), les reflets de Métano recolorés (4 × 10) et les flocons générés (48 × 5, 64 émetteurs) reprennent les fonctions et les poses de l'entrée Givre. Les facettes du cristal pulsent (6 × 10). La scène boucle en 4 s.
+- Fidélité du sol : 1.5 à l'arène de PMD Sky, 31.12 à la vignette de la vraie salle (seuil 35).
+- Aperçu : `apercu_fin_givre_grotte_v1.html`. Rendus : `renders/fin_givre_grotte_v1/`. Source : `source/fin_givre_grotte_v1/`.
+- 10 tests PASS, 6 mutations vérifiées.
+- Paquet : `FGG1_projet_pmdo_0812.zip` (Ground 0.8.12, préfixe `FGG1`) et `FGG1_calques_png_8px.zip`.
+- Pixels générés, pas de tuiles natives (sauf les reflets, pixels de Métano recolorés). Pas de runtime. Pas encore dans le mod unique.
+- Fin suivante : Bristle.
+
 ## FRP1 — Fin Ruine : fosse de Sealed Ruin, troisième zone de fin de donjon (28 septembre 2026)
 
 **Demande** : « Choisis ! » après FCF1. L'agent a poursuivi la série dans l'ordre du mod : **Ruine**, d'après la vraie fin du jeu, `Sealed_Ruin_pit_TDS.png`.
