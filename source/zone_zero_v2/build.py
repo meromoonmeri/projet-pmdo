@@ -60,7 +60,8 @@ CFG = {
                  decor='decor_magenta.png', chaine=['decor_magenta.png'], gouffre='decor_gouffre.png',
                  stairs=[(275, 338, 548, 668)], entree_x=390, sortie=(388, 64), belvedere=(236, 372), graine=9,
                  edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)],
-                 massifs_falaise=[(245, 170, 298, 202), (430, 277, 477, 311), (272, 400, 332, 442), (270, 445, 302, 477)]),
+                 massifs_falaise=[(245, 170, 298, 202), (430, 277, 477, 311), (272, 400, 332, 442), (270, 445, 302, 477),
+                                 (134, 143, 162, 170), (596, 148, 622, 174)]),
 }
 GRASS = (128, 240, 104)
 
@@ -717,7 +718,7 @@ def build(m):
                                      'tons': [list(t) for t in HQ.TUFT_TONES],
                                      'loi': 'etoiles de 6 brins de 5 px, grille de 26 px en quinconce ; A B A C, brins du haut penches de +-1 px en B et C (GIF Sky Peak : toute la prairie se balance)'},
                           'embruns': {'phases': HQ.EMBRUNS_PHASES, 'frame_length_ticks': HQ.EMBRUNS_TICKS, 'gouttelettes': D['hq']['gouttelettes'],
-                                      'loi': 'au pied de chaque cascade, chaque gouttelette monte de 26 px sur la boucle, derive en sinus et s efface (trame de Bayer)'},
+                                      'loi': 'au pied de chaque cascade, chaque gouttelette part du bord haut de l ecume et monte de 34 px sur la boucle, derive en sinus et s efface (trame de Bayer)'},
                           'papillons': {'phases': HQ.PAPILLONS_PHASES, 'frame_length_ticks': HQ.PAPILLONS_TICKS, 'liste': D['hq']['papillons'],
                                         'trajets': D['hq']['trajets'],
                                         'loi': 'Lissajous fermee x = cx + ax sin(2 pi t / 48 + phi), y = cy + ay sin(4 pi t / 48 + psi) ; ailes ouvertes / fermees une phase sur deux'},

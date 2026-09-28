@@ -239,12 +239,22 @@ def tuft_frames(pts):
 
 
 # ---------------------------------------------------------------- embruns
-def embruns_frames(rects, allowed, rng):
+RISE = 34
+
+
+def foam_top(r, foam):
+    """Bord haut de l'écume au pied de la chute (sinon le bas du rectangle)."""
+    x0, x1 = max(0, r['x0'] - 20), min(W, r['x1'] + 20)
+    ys = np.nonzero(foam[r['y0']:min(H, r['y1'] + 40), x0:x1].any(1))[0]
+    return int(r['y0'] + ys.min()) if len(ys) else int(r['y1'])
+
+
+def embruns_frames(rects, foam, allowed, rng):
     drops = []
     for r in rects:
-        w = r['x1'] - r['x0']; n = max(14, w // 2)
+        w = r['x1'] - r['x0']; n = max(28, w); top = foam_top(r, foam); r['embruns_y'] = top
         for i in range(n):
-            drops.append(dict(x=float(rng.uniform(r['x0'] - 6, r['x1'] + 6)), y=float(r['y1'] - 4 + rng.uniform(-4, 6)),
+            drops.append(dict(x=float(rng.uniform(r['x0'] - 22, r['x1'] + 22)), y=float(top + rng.uniform(0, 8)),
                               off=int(rng.integers(0, EMBRUNS_PHASES)), amp=float(rng.uniform(1, 3)),
                               ph=float(rng.uniform(0, 2 * np.pi)), tone=int(rng.integers(0, 3))))
     frames = []
@@ -252,8 +262,8 @@ def embruns_frames(rects, allowed, rng):
         e = np.zeros((H, W, 4), 'uint8')
         for d in drops:
             u = ((t + d['off']) % EMBRUNS_PHASES) / EMBRUNS_PHASES                   # 0 -> 1 sur la boucle
-            y = int(round(d['y'] - 26 * u)); x = int(round(d['x'] + d['amp'] * np.sin(2 * np.pi * u + d['ph'])))
-            size = 2 if u < 0.5 else 1
+            y = int(round(d['y'] - RISE * u)); x = int(round(d['x'] + d['amp'] * np.sin(2 * np.pi * u + d['ph'])))
+            size = 2 if u < 0.7 else 1
             for yy in range(y, y + size):
                 for xx in range(x, x + size):
                     if 0 <= yy < H and 0 <= xx < W and allowed[yy, xx] and BAYER4[yy % 4, xx % 4] < 1.0 - u:
@@ -349,28 +359,41 @@ def apply(D, grass_rule, seed, boxes=()):
     walk_like = ex['floor'] & ~D['zone'] & ~D['trunks'] & ~D['stairs'] & ~arb & ~bus & ~D['wet'] & ~D['casc'] & ~ex['void']
     free = walk_like & flat_sol | (old[..., 3] == 255) & walk_like
     meadow = walk_like & flat_sol
+    meadow_c = nd.binary_closing(meadow, iterations=3) & walk_like                 # aplat refermé (petits trous de trame)
     # 5. fleurs nettes
-    extra_ok = nd.binary_erosion(meadow, iterations=6)
+    extra_ok = nd.binary_erosion(meadow_c, iterations=6) & meadow
     flowers, fams_old = plan_flowers(old, free, extra_ok, rng)
     ffr = flower_frames(flowers)
+    keep = walk_like | D['zone'] | D['trunks'] | arb | ex['veg'] | D['stairs']       # ombre et penché ne débordent pas sur les parois
+    for f in ffr:
+        f[~keep] = 0
     fmask = np.zeros((H, W), bool)
     for f in ffr:
         fmask |= f[..., 3] > 0
     under = (old[..., 3] == 255) & (L['sol'][..., 3] == 255)                          # sous les anciens massifs : herbe franche
-    L['sol'][under, :3] = SKY_GRASS
+    L['sol'][under, :3] = SKY_GRASS; flat_sol |= under
+    # tiges maigres du rendu autour des anciens massifs (vertes ou brunes, sombres, petites) -> herbe franche
+    rgb = L['sol'][..., :3].astype(int); lum = rgb @ [.299, .587, .114]
+    stem = (L['sol'][..., 3] == 255) & ~flat_sol & ~D['stairs'] & (lum < 175) & nd.binary_dilation(old[..., 3] == 255, iterations=5)
+    n_stem = 0
+    for comp in small_components(stem, 150):
+        L['sol'][comp, :3] = SKY_GRASS; n_stem += int(comp.sum())
     # 6. touffes (sur l'herbe franche, hors fleurs)
-    tuft_ok = nd.binary_erosion(meadow, iterations=7) & ~nd.binary_dilation(fmask, iterations=5)
+    tuft_ok = nd.binary_erosion(meadow_c, iterations=5) & meadow & ~nd.binary_dilation(fmask, iterations=5)
     tufts = plan_tufts(tuft_ok, rng)
     herbes = tuft_frames(tufts)
     # 7. embruns au pied des cascades
     allowed = ~ex['void'] | D['casc'] | D['wet']
-    embruns, n_drops = embruns_frames(D['rects'], allowed, rng)
+    foam_any = np.zeros((H, W), bool)
+    for f in D['ff']:
+        foam_any |= f[..., 3] > 0
+    embruns, n_drops = embruns_frames(D['rects'], foam_any | D['foam'], allowed, rng)
     # 8. papillons
-    bflies = plan_butterflies(nd.binary_erosion(meadow, iterations=24), rng)
+    bflies = plan_butterflies(nd.binary_erosion(meadow_c, iterations=24), rng)
     papillons, trajets = papillon_frames(bflies)
     D.update(ffr=ffr, fmask=fmask, n_fleurs=len(flowers), herbes=herbes, embruns=embruns, papillons=papillons)
     cols = sorted(set(f[2] for f in flowers))
-    D['hq'] = dict(ton_dominant_lot=[int(v) for v in mode], herbe_aplatie_px=int(flat_sol.sum()), restes_flous_px=n_speck,
+    D['hq'] = dict(ton_dominant_lot=[int(v) for v in mode], herbe_aplatie_px=int(flat_sol.sum()), restes_flous_px=n_speck, tiges_effacees_px=n_stem,
                    massifs_flous_repris_px=int(blurry.sum()), massifs_falaises_rendus_au_sol_px=int(islands.sum()),
                    boites_massifs_falaise=[list(b) for b in boxes], familles_massifs_origine=fams_old, couleurs=cols,
                    touffes=len(tufts), gouttelettes=n_drops, papillons=bflies, trajets=trajets)

@@ -12,7 +12,8 @@ from PIL import Image
 V2 = Path(__file__).resolve().parent
 R = V2.parents[1]
 NAMES_ATTENDUS = ['sol_complet', 'abime', 'brume_profonde', 'brume_haute', 'lueurs', 'eau', 'sol', 'falaises',
-                  'fleurs', 'buissons', 'arbres', 'cascades', 'ecume']
+                  'herbes', 'fleurs', 'buissons', 'arbres', 'cascades', 'ecume', 'embruns', 'papillons']
+SKY_GRASS = (135, 247, 119)                      # ton dominant du GIF Sky Peak (passe haute qualité)
 
 
 def load(p):
@@ -95,7 +96,9 @@ def make(lot):
             f = M['fidelite']; self.assertEqual(f['seuil'], 35); self.assertEqual(f['seuille'], ['herbe', 'arbres'])
             for k in f['seuille']:
                 self.assertLess(f[k]['distance'], 35, k)
-            self.assertLess(f['herbe']['distance'], 12)                                        # matière principale : herbe Sky Peak
+            # matière principale : herbe Sky Peak. Passe HQ = aplat au ton DOMINANT du GIF (135,247,119), qui est à 11,4 de la
+            # moyenne de la règle herbe du GIF (elle compte aussi les tons d'ombre) : seuil strict 15 (seuil documenté 35)
+            self.assertLess(f['herbe']['distance'], 15)
             self.assertIn('falaises', f['signale'])                                            # signalées, jamais cachées
             rej = M['arbres_source']['planches_rejetees']
             self.assertEqual(len(rej), 2); self.assertTrue(all(x['distance_apple_woods'] > 35 for x in rej))
@@ -166,9 +169,58 @@ def make(lot):
                 k = famille(c); cnt[k] = cnt.get(k, 0) + 1
             vives = [k for k in ('blanc', 'rouge_rose', 'jaune', 'bleu', 'violet') if cnt.get(k, 0) >= 30]
             self.assertGreaterEqual(len(vives), 3, cnt)                                        # fleurs de différentes couleurs
+            pal = M['fleurs']['palettes']; cs = colors(fr[0])
+            presentes = [k for k, v in pal.items() if tuple(v[0]) in cs]
+            self.assertGreaterEqual(len(presentes), 6, presentes)                                # plein de couleurs (HQ)
+            self.assertEqual(sorted(M['fleurs']['couleurs']), sorted(presentes))
             self.assertGreater(M['fleurs']['tetes'], 30)
             libres = MASK['fleurs'] & ~MASK['lisiere'] & ~MASK['troncs'] & ~alpha(STACK['arbres'][0]) & ~MASK['vegetation']
             self.assertGreater(libres.sum(), 500); self.assertTrue((libres <= MASK['praticable']).all())   # on marche sur les fleurs
+
+        def test_haute_qualite(self):
+            hq = M['haute_qualite']; sol = STACK['sol'][0]; so = alpha(sol)
+            flat = so & (sol[..., :3] == SKY_GRASS).all(2)
+            gr = so & B.grass_rule(sol[..., :3].astype(int))
+            self.assertGreater(flat.sum() / max(1, gr.sum()), 0.85)                              # herbe = aplat franc
+            cols_, cnt_ = np.unique(sol[so][:, :3], axis=0, return_counts=True)
+            self.assertEqual(tuple(int(v) for v in cols_[cnt_.argmax()]), SKY_GRASS)
+            walk = MASK['praticable']
+            # touffes : A B A C, seulement sur l'herbe franche praticable
+            tf = STACK['herbes']; self.assertEqual((len(tf), AN['herbes']['frame_length_ticks']), (4, 12))
+            self.assertTrue((tf[0] == tf[2]).all()); self.assertFalse((tf[0] == tf[1]).all()); self.assertFalse((tf[1] == tf[3]).all())
+            self.assertGreaterEqual(hq['herbes']['touffes'], 40)
+            for a in tf:
+                m = alpha(a); self.assertGreater(m.sum(), 400)
+                self.assertGreater((m & walk).sum() / m.sum(), 0.97)
+                self.assertGreater((m & flat).sum() / m.sum(), 0.9)
+                self.assertTrue(colors(a) <= {tuple(t) for t in hq['herbes']['tons']})
+            ch = np.zeros((H, W), bool)
+            for t in range(4):
+                ch |= (tf[t] != tf[(t + 1) % 4]).any(2)
+            self.assertGreater((ch & flat).sum() / ch.sum(), 0.9)                                # le balancement reste sur l'herbe
+            # embruns : au pied des cascades, 24 phases, bougent à chaque phase, boucle fermée
+            em = STACK['embruns']; self.assertEqual((len(em), AN['embruns']['frame_length_ticks']), (24, 10))
+            near = np.zeros((H, W), bool)
+            for c in M['cascades']['rects']:
+                near[max(0, c['y0']):c['y1'] + 24, max(0, c['x0'] - 30):c['x1'] + 30] = True
+            for t in range(24):
+                m = alpha(em[t]); self.assertGreater(m.sum(), 40); self.assertFalse((m & ~near).any())
+                self.assertTrue((em[t] != em[(t + 1) % 24]).any(), t)                           # raccord 23 -> 0 compris
+                self.assertFalse((m & MASK['vide'] & ~MASK['cascades']).any())
+            self.assertGreaterEqual(hq['embruns']['gouttelettes'], 28 * len(M['cascades']['rects']))
+            # papillons : >= 5, boucles fermées, pas <= 4 px (raccord compris), couleurs variées, dessinés sur leur trajet
+            pp = STACK['papillons']; self.assertEqual((len(pp), AN['papillons']['frame_length_ticks']), (48, 10))
+            lst, tj = hq['papillons']['liste'], hq['papillons']['trajets']
+            self.assertGreaterEqual(len(lst), 5); self.assertGreaterEqual(len({b['couleur'] for b in lst}), 5)
+            for b, path in zip(lst, tj):
+                self.assertEqual(len(path), 48)
+                for t in range(48):
+                    (x0, y0), (x1, y1) = path[t], path[(t + 1) % 48]
+                    self.assertLessEqual(max(abs(x1 - x0), abs(y1 - y0)), 4, (b, t))
+                    x, y = path[t]; self.assertTrue(alpha(pp[t])[max(0, y - 3):y + 3, max(0, x - 3):x + 4].any(), (b, t))
+            for t in range(48):
+                self.assertTrue((pp[t] != pp[(t + 1) % 48]).any())
+            self.assertFalse(any((alpha(a) & MASK['vide']).any() for a in pp))                   # au-dessus de la prairie
 
         def test_arbres_pmd(self):
             tr = STACK['arbres'][0]; m = alpha(tr); px = tr[m][:, :3].astype(int)
