@@ -313,7 +313,7 @@ def papillon_frames(bflies):
 
 
 # ---------------------------------------------------------------- passe complète
-def apply(D, grass_rule, seed, boxes=(), tol=40):
+def apply(D, grass_rule, seed, boxes=(), tol=40, cristaux=False):
     rng = np.random.default_rng(seed)
     L, ex = D['layers'], D['ex']
     # 1. herbe : aplat Sky Peak (sol et sol complet)
@@ -392,9 +392,93 @@ def apply(D, grass_rule, seed, boxes=(), tol=40):
     bflies = plan_butterflies(nd.binary_erosion(meadow_c, iterations=24), rng)
     papillons, trajets = papillon_frames(bflies)
     D.update(ffr=ffr, fmask=fmask, n_fleurs=len(flowers), herbes=herbes, embruns=embruns, papillons=papillons)
+    D['cristaux'] = D['reflets'] = D['cristaux_stats'] = None
+    if cristaux:                                                                   # 9. cristaux blancs à reflets arc-en-ciel
+        D['cristaux'], D['reflets'], D['cristaux_stats'] = crystal_pass(D, np.random.default_rng(seed + 77))
     cols = sorted(set(f[2] for f in flowers))
     D['hq'] = dict(ton_dominant_lot=[int(v) for v in mode], seuil_aplat=tol, herbe_aplatie_px=int(flat_sol.sum()), restes_flous_px=n_speck, tiges_effacees_px=n_stem,
                    massifs_flous_repris_px=int(blurry.sum()), massifs_falaises_rendus_au_sol_px=int(islands.sum()),
                    boites_massifs_falaise=[list(b) for b in boxes], familles_massifs_origine=fams_old, couleurs=cols,
                    touffes=len(tufts), gouttelettes=n_drops, papillons=bflies, trajets=trajets)
     return D
+
+
+# ---------------------------------------------------------------- cristaux Zone Zéro : base blanche, reflets arc-en-ciel
+REFLETS_PHASES, REFLETS_TICKS = 24, 10
+CRISTAL_TONS = [(150, 156, 196), (188, 194, 226), (220, 224, 244), (240, 242, 252), (255, 255, 255)]   # blanc de base (facettes)
+CRISTAL_CONTOUR = (92, 96, 140)
+ARC_EN_CIEL = [('rouge', (255, 96, 120)), ('orange', (255, 164, 88)), ('jaune', (255, 232, 104)), ('vert', (128, 232, 140)),
+               ('cyan', (104, 222, 255)), ('bleu', (122, 140, 255)), ('mauve', (192, 118, 255)), ('rose', (255, 120, 210))]
+BANDE_PERIODE, BANDE_LARGEUR, BANDE_PAS = 96, 34, 4                               # 24 phases x 4 px = 96 px : boucle fermée
+N_ECLATS = 36
+ECLAT_SEQ = [1, 2, 3, 2, 1] + [0] * 19
+
+
+def reflet_couleur(k, level):
+    """Teinte k de l'arc-en-ciel posée sur le ton de base (le blanc reste dessous : reflet nacré)."""
+    base = np.array(CRISTAL_TONS[level], float); c = np.array(ARC_EN_CIEL[k][1], float)
+    mix = 0.72 if level <= 2 else 0.58
+    return tuple(int(v) for v in np.clip(base * (1 - mix) + c * mix, 0, 255))
+
+
+def crystal_mask(fal):
+    rgb = fal[..., :3].astype(int); r, g, b = rgb.transpose(2, 0, 1)
+    lum = rgb @ [.299, .587, .114]; mn = rgb.min(2); sat = rgb.max(2) - mn; al = fal[..., 3] == 255
+    body = al & (((g - r > 45) & (g - b < 50) & (b - r > 20) & (lum > 125)) | ((mn > 200) & (sat < 70)))
+    body = nd.binary_closing(body, iterations=1) & al
+    lab, n = nd.label(body); sz = nd.sum(body, lab, range(1, n + 1))
+    body = np.isin(lab, [i + 1 for i, v in enumerate(sz) if v >= 12])
+    nb = nd.convolve(body.astype(int), np.ones((3, 3), int), mode='constant')
+    outline = al & ~body & (nb >= 3) & (lum < 125)
+    return body, outline, lum
+
+
+def crystal_pass(D, rng):
+    L = D['layers']; fal = L['falaises']
+    body, outline, lum = crystal_mask(fal)
+    level = np.digitize(lum, [150, 175, 200, 225])                                 # 0..4
+    base = np.zeros((H, W, 4), 'uint8')
+    for k, t in enumerate(CRISTAL_TONS):
+        m = body & (level == k); base[m, :3] = t; base[m, 3] = 255
+    base[outline, :3] = CRISTAL_CONTOUR; base[outline, 3] = 255
+    fal[body | outline] = 0                                                        # les cristaux quittent le calque falaises
+    yy, xx = np.mgrid[:H, :W]
+    shade = {(k, lv): reflet_couleur(k, lv) for k in range(8) for lv in range(5)}
+    # éclats : points les plus clairs, espacés de 14 px au moins
+    ys, xs = np.nonzero(body & (level == 4) & nd.binary_erosion(body, iterations=1))
+    order = rng.permutation(len(ys)); pts = []
+    for i in order:
+        y, x = int(ys[i]), int(xs[i])
+        if all((y - py) ** 2 + (x - px) ** 2 >= 14 ** 2 for py, px, _ in pts):
+            pts.append((y, x, int(rng.integers(0, REFLETS_PHASES))))
+            if len(pts) == N_ECLATS:
+                break
+    frames = []
+    for t in range(REFLETS_PHASES):
+        e = np.zeros((H, W, 4), 'uint8')
+        s = ((xx - yy) + BANDE_PAS * t) % BANDE_PERIODE
+        band = s < BANDE_LARGEUR
+        edge = (s < 4) | (s >= BANDE_LARGEUR - 4)
+        band &= ~edge | (BAYER4[yy % 4, xx % 4] < 0.5)                               # bords tramés
+        hue = (((xx + yy) // 8) + t // 3) % 8                                          # la couleur tourne : 8 teintes sur la boucle
+        on = band & body & (level >= 1)
+        for k in range(8):
+            for lv in range(1, 5):
+                m = on & (hue == k) & (level == lv)
+                e[m, :3] = shade[(k, lv)]; e[m, 3] = 255
+        halo = nd.binary_dilation(body, iterations=1)
+        for (y, x, off) in pts:
+            v = ECLAT_SEQ[(t + off) % REFLETS_PHASES]
+            if v == 0:
+                continue
+            arms = [(0, 0)] + [(d * sy, d * sx) for d in range(1, v) for sy, sx in ((0, 1), (0, -1), (1, 0), (-1, 0))]
+            for dy, dx in arms:
+                py, px = y + dy, x + dx
+                if 0 <= py < H and 0 <= px < W and halo[py, px]:
+                    e[py, px, :3] = (255, 255, 255) if (dy, dx) == (0, 0) else (232, 240, 255); e[py, px, 3] = 255
+        frames.append(e)
+    stats = dict(pixels_cristal=int(body.sum()), pixels_contour=int(outline.sum()), eclats=len(pts),
+                 tons_base=[list(t) for t in CRISTAL_TONS], contour=list(CRISTAL_CONTOUR),
+                 arc_en_ciel={k: list(c) for k, c in ARC_EN_CIEL},
+                 palette_reflets=sorted({shade[k] for k in shade} | {(255, 255, 255), (232, 240, 255)}))
+    return base, frames, stats

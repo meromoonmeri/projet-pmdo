@@ -59,7 +59,7 @@ CFG = {
                  titre='Route Zone Zero 3 fleurie - fond du cratere et tunnel (4:3)',
                  decor='decor_magenta.png', chaine=['decor_magenta.png'], gouffre='decor_gouffre.png',
                  stairs=[(275, 338, 548, 668)], entree_x=390, sortie=(388, 64), belvedere=(236, 372), graine=9,
-                 edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)],
+                 edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(300, 395), (820, 915)], cristaux=True,
                  massifs_falaise=[(245, 170, 298, 202), (430, 277, 477, 311), (272, 400, 332, 442), (270, 445, 302, 477),
                                  (134, 143, 162, 170), (596, 148, 622, 174)]),
     'eaf1': dict(PFX='EAF1', base='eaz1', base_raw='source/zone_zero_v1/eaz1/bruts/decor.png',
@@ -69,7 +69,7 @@ CFG = {
                  gouffre='decor_gouffre.png', stairs=[], entree_x=384, sortie=(530, 196), sortie_y_max=220, belvedere=(632, 264), aplat_max=52,
                  arbres_min=10, massifs_falaise=[(270, 400, 334, 444), (268, 444, 304, 480)],
                  graine=13, edition_b=None, sortie_grotte=True, retouche_magenta=True, chutes_x=[(430, 515), (570, 665)],
-                 dalles=(178, 197, 152),
+                 dalles=(178, 197, 152), cristaux=True,
                  demande='la suite ! (apres la passe haute qualite des routes Zone Zero : faut que les zone route area zero soit magnifique avec la verdure sky peak hight qualite les fleur avec plein de couleur des cascade de la brume etc)',
                  lecture='suite du reseau fleuri : EAZ1 (grotte de cristal sombre, gardee) refaite en entree fleurie haute qualite, RAF3 -> EAF1 -> ATP1'),
 }
@@ -90,10 +90,10 @@ assert (JM.W, JM.H, JM.SRC) == (W, H, SRC)
 S = JM.SCALE
 ANIM = {'brume_profonde': DEEP_TICKS, 'brume_haute': HIGH_TICKS, 'lueurs': GLINT_TICKS, 'eau': C.RIPPLE_TICKS,
         'herbes': HQ.HERBES_TICKS, 'fleurs': FLOWER_TICKS, 'cascades': C.CASC_TICKS, 'ecume': C.FOAM_TICKS,
-        'embruns': HQ.EMBRUNS_TICKS, 'papillons': HQ.PAPILLONS_TICKS}
+        'embruns': HQ.EMBRUNS_TICKS, 'papillons': HQ.PAPILLONS_TICKS, 'reflets': HQ.REFLETS_TICKS}
 PHASES = {'brume_profonde': DEEP_PHASES, 'brume_haute': HIGH_PHASES, 'lueurs': GLINT_PHASES, 'eau': C.RIPPLE_PHASES,
           'herbes': HQ.HERBES_PHASES, 'fleurs': FLOWER_PHASES, 'cascades': C.CASC_PHASES, 'ecume': C.FOAM_PHASES,
-          'embruns': HQ.EMBRUNS_PHASES, 'papillons': HQ.PAPILLONS_PHASES}
+          'embruns': HQ.EMBRUNS_PHASES, 'papillons': HQ.PAPILLONS_PHASES, 'reflets': HQ.REFLETS_PHASES}
 assert all(LOOP_TICKS % (PHASES[k] * ANIM[k]) == 0 for k in ANIM)
 assert DEEP_PHASES * DEEP_STEP == 96 and -HIGH_PHASES * HIGH_STEP == 192
 
@@ -605,10 +605,12 @@ def build(m):
     for d in ['calques', 'animation', 'masques', 'review']:
         shutil.rmtree(OUT / d, ignore_errors=True)
     anims = ['brume_profonde', 'brume_haute', 'lueurs', 'eau', 'herbes', 'fleurs', 'cascades', 'ecume', 'embruns', 'papillons']
+    if c.get('cristaux'):
+        anims.append('reflets')
     for d in ['calques', 'masques', 'review'] + [f'animation/{k}' for k in anims]:
         (OUT / d).mkdir(parents=True, exist_ok=True)
     D = make_all(m); L, ex = D['layers'], D['ex']
-    D = HQ.apply(D, grass_rule, c['graine'] * 10 + 1, c.get('massifs_falaise', ()), c.get('aplat_max', 40))   # passe haute qualité
+    D = HQ.apply(D, grass_rule, c['graine'] * 10 + 1, c.get('massifs_falaise', ()), c.get('aplat_max', 40), c.get('cristaux', False))   # passe haute qualité
     masks = dict(sol=ex['floor'], vide=ex['void'], falaises=ex['walls'], vegetation=ex['veg'], eau=D['wet'], cascades=D['casc'],
                  escaliers=D['stairs'], fleurs=D['fmask'], lisiere=D['zone'], troncs=D['trunks'], arbres_brut=D['trees_raw'])
     for k, v in masks.items():
@@ -616,7 +618,8 @@ def build(m):
     Image.fromarray((D['dep'] * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_profondeur.png')
     stack_named = [('sol_complet', [L['sol_complet']], 60), ('abime', [L['abime']], 60),
                    ('brume_profonde', D['deep'], DEEP_TICKS), ('brume_haute', D['high'], HIGH_TICKS), ('lueurs', D['gfr'], GLINT_TICKS),
-                   ('eau', D['rf'], C.RIPPLE_TICKS), ('sol', [L['sol']], 60), ('falaises', [L['falaises']], 60),
+                   ('eau', D['rf'], C.RIPPLE_TICKS), ('sol', [L['sol']], 60), ('falaises', [L['falaises']], 60)] + (
+                  [('cristaux', [D['cristaux']], 60), ('reflets', D['reflets'], HQ.REFLETS_TICKS)] if D['cristaux'] is not None else []) + [
                    ('herbes', D['herbes'], HQ.HERBES_TICKS), ('fleurs', D['ffr'], FLOWER_TICKS), ('buissons', [L['buissons']], 60),
                    ('arbres', [L['arbres']], 60), ('cascades', D['cf'], C.CASC_TICKS), ('ecume', D['ff'], C.FOAM_TICKS),
                    ('embruns', D['embruns'], HQ.EMBRUNS_TICKS), ('papillons', D['papillons'], HQ.PAPILLONS_TICKS)]
@@ -738,7 +741,15 @@ def build(m):
         'arbres': {'plantes': D['placed'], 'du_brut_pixels': int(D['trees_raw'].sum()),
                    'lisiere': 'masses de buissons du brut (>= 1500 px) + bandes de 40 px aux bords gauche et droit, 34 px au bas (hors couloir d entree), 30 px en haut (hors sortie)'},
         'cascades': {'phases': C.CASC_PHASES, 'frame_length_ticks': C.CASC_TICKS, 'rects': D['rects'], 'loi': 'P03P01A : motif 96 px, 32 px par image'},
-        'animations': {k: {'phases': PHASES[k], 'frame_length_ticks': ANIM[k], 'boucle_ticks': PHASES[k] * ANIM[k]} for k in ANIM},
+        'animations': {k: {'phases': PHASES[k], 'frame_length_ticks': ANIM[k], 'boucle_ticks': PHASES[k] * ANIM[k]} for k in ANIM
+                       if k in [t for t, _, _ in stack_named]},
+        'cristaux': None if D['cristaux'] is None else dict(D['cristaux_stats'], phases=HQ.REFLETS_PHASES, frame_length_ticks=HQ.REFLETS_TICKS,
+            demande='je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc',
+            loi=('cristaux (regle : vert menthe pale, g - r > 45, g - b < 50, lum > 125, + reflets blancs) sortis du calque falaises ; '
+                 'base blanche en 5 tons selon la luminance d origine (les facettes restent) + contour indigo ; reflets : bande diagonale '
+                 'de 34 px (periode 96 px, +4 px par phase) aux 8 teintes de l arc-en-ciel posees sur le blanc, teinte = ((x + y) / 8 + t / 3) mod 8 '
+                 '(la couleur tourne : rouge, orange, jaune, vert, cyan, bleu, mauve, rose) ; 36 eclats 1-2-3-2-1'),
+            nature='pixels calcules (recoloration des cristaux du brut genere), pas des tuiles natives'),
         'scene_loop_ticks': LOOP_TICKS,
         'access': {'markers': markers, 'chemins_16x16': pths, 'blocked_cells': int(blocked.sum()), 'total_cells': int(blocked.size),
                    'rule': 'case bloquee si > 25 % hors sol praticable (masque praticable = sol, fleurs et massifs compris, + escaliers ; '
