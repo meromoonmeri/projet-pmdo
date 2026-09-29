@@ -1208,3 +1208,13 @@ Pas de runtime. Pas dans le mod unique.
 - **Marqueurs d'une fin** : `boss` = case 2 × 2 libre la plus proche de 56 px au sud du centre de la fosse ; `objectif` = case libre la plus haute entre les pieds des deux chutes. Tests : arrivée au sud, boss au sud et objectif au nord de la fosse, objectif entre les chutes, chemins 16 × 16, bande nord bloquée, fosse et chutes bloquantes.
 - **Mutations** vérifiées : pixel hors rip dans la fosse, boss déplacé dans la fosse (manifeste), poussière vidée, chute décalée d'un pixel, calque de pierres vidé. Restaurer avec `git checkout` du dossier `renders/` après chaque essai.
 - **Réinitialisations** : commit et push dès que le build tourne (fait ici avant les tests).
+
+## Fin Star Cave — FST1, ajouts à la recette
+
+- **Préfixe** : `FST1`, car `FSC1` est déjà un repère de layout de la branche sœur `01a0eaca`. Vérifier `git ls-remote` puis `gh api compare` avant de choisir.
+- **Fin sans bouche** : copier l'entrée (ESC1) puis retirer la bouche : masque `mouth`, dilatation, dégradé d'ombre devant la bouche, calque `profondeur`, `far_mouth`, marqueur `donjon_seuil`. Les étoiles ne sont plus exclues autour de la bouche. L'ombre reste « sol assombri contre les parois ».
+- **Format du générateur** : un prompt centré sur « final boss arena » a rendu 1440 × 720 (2:1). Reformuler « WIDE LANDSCAPE 4:3, zoomed out, top-down » et toujours mesurer la taille avec PIL avant de continuer. Ne pas écrire « boss » ni « mouth » dans le prompt : le générateur peint alors une bouche sombre.
+- **Marqueurs** : `boss` = case 2 × 2 libre la plus proche du centre de gravité du sol praticable ; `objectif` = case libre la plus haute dans la colonne centrale (± 64 px), au pied de l'alcôve. Tests : boss au cœur de l'arène (distance au bord > 40 px), objectif au nord du boss, chemins 16 × 16, bords nord et flancs bloqués, aucun autre marqueur.
+- **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
+- **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
+

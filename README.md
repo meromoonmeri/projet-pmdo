@@ -1,5 +1,18 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
+
+**Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
+
+- Sorties : `renders/fin_star_cave_v1/`, aperçu `apercu_fin_star_cave_v1.html`, build `source/fin_star_cave_v1/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `starcavepmdsky.png`. Ce ne sont pas des tuiles natives.
+- **Layout** : arrivée au sud par un couloir, caverne ronde de cristal, deux amas de rochers de chaque côté, alcôve de cristal au nord. Marqueurs `entrance`, `boss` (centre), `objectif` (pied de l'alcôve) ; aucune sortie, aucun warp.
+- **Calques** : sol complet, sol, ombres, parois, blocs, reflets, étoiles, poussière d'étoile (24 × 5 ticks), plus un Top vide. Pas de calque de profondeur : la fin n'a pas de bouche sombre.
+- **Cohérence avec l'entrée** : reflets, étoiles (4 formes du rip) et planche de poussière d'ESC1 réutilisés. Le premier décor généré est sorti en 2:1 (1440 × 720) et a été écarté.
+- **Fidélité** (seuil 35) : sol 6,8, cristal 30,8 (parois 32,1 : cristaux plus cyan que le rip, limite).
+- **Contrôles** : 13 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- Fins restantes : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe **FST1** (FSC1 est pris par un repère d'une branche sœur).
+
 ## Fin Sables mouvants : arène du désert, FSM1 (29 septembre 2026)
 
 **Demande** : « Poursuis le projet », après lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et du README de l'outil maps PMD Sky. Suite de la série des fins de donjon dans l'ordre du mod : **FSM1** prolonge l'entrée EQS1 (Sables mouvants). Biome et portée choisis par l'agent, **à confirmer**.
