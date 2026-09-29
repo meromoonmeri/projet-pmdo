@@ -1,5 +1,14 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Jardin secret : FGS1 — prairie et souche dorée (29 septembre 2026)
+
+**Suite après FTH1**, sur la demande de poursuivre la série avec une « map magnifique ». Préfixe **FGS1** choisi après vérification locale; FJS1 appartient à Fin Jungle et FJS3 est pris par une branche sœur. Référence canonique `secretgarden.png` (Explorers of Sky). Sorties indépendantes : `source/fin_jardin_secret_v1/`, `renders/fin_jardin_secret_v1/`, aperçu `apercu_fin_jardin_secret_v1.html`; aucun gros artefact de main ou de branche sœur repris.
+
+- Rendu généré référencé en 4:3 (1200 × 896 brut → 768 × 576, 96 × 72 cases); entrée sud ouverte, grande prairie, souche creuse à marches sous le rayon vert, arbres ronds, fleurs, rochers et haies. Une seconde passe a ouvert l'accès sud à travers la bordure. Pas de temple, Celebi, eau, cascade, papillons ou objets hors référence.
+- 14 calques plus Top vide : sous-couche, prairie, herbe, ombres, fleurs, rochers, arbres, haies, souche, marches, profondeur, fond, rayon et lucioles. Rayon sur 22 verts RVB exacts du rip; lucioles dans cette palette. Animation composée pour FGS1, 24 phases × 5 ticks, non officielle.
+- Marqueurs `[384,544]` entrée sud, `[384,360]` boss central, `[384,160]` objectif aux marches; BFS 16 × 16 valide vers boss et objectif. Recalage décor/témoin estimé à 0 px.
+- 5 tests PASS; 16 168 tiles réparties en banques; installateur `--dry-run` : 16 fichiers proposés et 22 tilesets dans la simulation. Fidélité RVB indicative : fond 8,3, herbe médiane 24,0, rochers 12,9; **herbe claire 41,9** dépasse le seuil indicatif historique de 35. Ces mesures ne valident pas l'art. Paquets : Ground 1,07 Mo, PNG/ORA 3,00 Mo; aperçu autonome 1,49 Mo. **Aucun test dans le moteur PMDO, aucune approbation artistique.**
+
 ## Fin Mt. Thunder : FTH1 — arène au-dessus des nuages (29 septembre 2026)
 
 **Suite après FVC1** : carte de sommet d'orage, inspirée de la capture `source/references_54d3731/thunder.png` (salle de boss Mt. Thunder, Red Rescue Team/GBA). Le rendu est généré en référence, pas composé de tuiles natives. Le préfixe **FTH1** est propre à ce lot; FMT1 est déjà pris dans une branche sœur. Aucun gros dossier de rendu ou paquet d'une autre branche/main n'est copié : sortie indépendante sous `renders/fin_mt_thunder_v1/`.
@@ -43,7 +52,7 @@
 - **Cohérence avec l'entrée** : reflets, étoiles (4 formes du rip) et planche de poussière d'ESC1 réutilisés. Le premier décor généré est sorti en 2:1 (1440 × 720) et a été écarté.
 - **Fidélité** (seuil 35) : sol 6,8, cristal 30,8 (parois 32,1 : cristaux plus cyan que le rip, limite).
 - **Contrôles** : 13 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
-- Depuis cette note, FCT1 (Clairière tropicale), FVC1 (Couloir violet) et FTH1 (Mt. Thunder) ont été livrés dans leurs propres dossiers. **Fin Jardin secret reste la prochaine fin de la série.** La demande de correction FCT1 (fleurs canoniques, chemin, suppression des papillons et audit) demeure en attente. Préfixe **FST1** (FSC1 est pris par un repère d'une branche sœur).
+- Depuis cette note, les fins suivantes ont été livrées dans leurs dossiers indépendants : FST1 (Star Cave), FCT1 (Clairière tropicale), FVC1 (Couloir violet), FTH1 (Mt. Thunder) et FGS1 (Jardin secret). La demande de correction FCT1 (fleurs canoniques, chemin, suppression des papillons et audit) demeure en attente; aucun de ces lots suivants ne la remplace.
 
 ## Fin Sables mouvants : arène du désert, FSM1 (29 septembre 2026)
 
