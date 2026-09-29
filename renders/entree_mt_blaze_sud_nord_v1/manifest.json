@@ -47,7 +47,7 @@
   "raw_inputs": [
     {
       "file": "source/entree_mt_blaze_sud_nord_v1/bruts/decor.png",
-      "sha256": "0bc8bdbf611bbb68a1af1cc39416ef0c112a147c9a6b277f4c0ee74cbd169afa",
+      "sha256": "bd5d0f471fcf3d41fd1429b7b96462cdc7b1441d1afd204b574707003e1d6d40",
       "size": [
         1200,
         896
@@ -55,7 +55,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v1/bruts/sol_complet.png",
-      "sha256": "9ddfb11f6ce1b9ce1dc76d77c62351d5b960f3609fcb414c2a95edf64a0294fc",
+      "sha256": "7208d257fd4830dedc1a51e575be2f243865904f8c5fa805abe40b20b0d5cbf4",
       "size": [
         1200,
         896
@@ -89,11 +89,11 @@
           109.3
         ],
         "decor_rgb": [
-          179.0,
-          138.1,
-          110.1
+          188.2,
+          141.4,
+          107.2
         ],
-        "distance": 4.0
+        "distance": 13.7
       },
       "roche": {
         "rip_rgb": [
@@ -102,31 +102,31 @@
           103.0
         ],
         "decor_rgb": [
-          154.4,
-          113.6,
-          97.6
+          141.7,
+          97.8,
+          81.2
         ],
-        "distance": 8.9
+        "distance": 35.0
       }
     },
     "calques_finaux": {
       "sable": {
         "matiere": "sable",
         "rgb": [
-          178.3,
-          136.4,
-          108.8
+          186.8,
+          139.4,
+          105.3
         ],
-        "distance_rip": 2.5
+        "distance_rip": 12.1
       },
       "roche": {
         "matiere": "roche",
         "rgb": [
-          102.8,
-          89.4,
-          98.3
+          101.9,
+          81.4,
+          89.8
         ],
-        "distance_rip": 63.7
+        "distance_rip": 69.6
       },
       "piliers": {
         "matiere": "roche",
@@ -309,16 +309,16 @@
     ],
     "centres": [
       [
-        198,
-        182,
-        81,
-        72
+        111,
+        237,
+        42,
+        59
       ],
       [
-        570,
-        182,
-        81,
-        72
+        657,
+        243,
+        48,
+        57
       ]
     ],
     "anneau_px": 4
@@ -328,43 +328,43 @@
       {
         "famille": "A_16x24",
         "xy": [
-          592,
-          192
+          656,
+          264
         ]
       },
       {
         "famille": "A_16x24",
         "xy": [
-          216,
-          184
+          632,
+          240
         ]
       },
       {
         "famille": "B_24x16",
         "xy": [
-          176,
+          648,
           216
         ]
       },
       {
         "famille": "B_24x16",
         "xy": [
-          544,
+          104,
           232
         ]
       },
       {
         "famille": "C_16x32",
         "xy": [
-          616,
-          184
+          96,
+          264
         ]
       },
       {
         "famille": "C_16x32",
         "xy": [
-          520,
-          208
+          120,
+          264
         ]
       }
     ],
@@ -503,44 +503,29 @@
     ],
     "emetteurs": [
       [
-        113,
-        312,
+        675,
+        422,
         0
       ],
       [
-        143,
-        465,
+        628,
+        480,
         3
       ],
       [
-        644,
-        329,
+        67,
+        452,
         6
       ],
       [
-        635,
-        479,
+        150,
+        477,
         9
       ],
       [
-        543,
-        458,
+        680,
+        345,
         12
-      ],
-      [
-        617,
-        413,
-        15
-      ],
-      [
-        665,
-        257,
-        18
-      ],
-      [
-        90,
-        379,
-        21
       ]
     ],
     "phases": 24,
@@ -550,7 +535,7 @@
   "access": {
     "markers": {
       "entrance": [
-        400,
+        392,
         560
       ],
       "boss": [
@@ -559,7 +544,7 @@
       ],
       "objectif": [
         376,
-        168
+        192
       ]
     },
     "paths_16x16": {
@@ -570,9 +555,9 @@
         "ok": true
       }
     },
-    "blocked_cells": 5079,
+    "blocked_cells": 5457,
     "total_cells": 6912,
-    "walkable_cells": 1833,
+    "walkable_cells": 1455,
     "rule": "case bloquee si >25% hors sable (ombres comprises)",
     "north_closed": true
   },
@@ -581,17 +566,17 @@
     "asset": "emb1_entree_mt_blaze_sud_nord",
     "namespace": "entree_mt_blaze_sud_nord",
     "tiles_per_bank": {
-      "EMB1_00_LAVE": 1872,
-      "EMB1_01_LUEUR": 3077,
+      "EMB1_00_LAVE": 2311,
+      "EMB1_01_LUEUR": 3217,
       "EMB1_02_SCINTILLEMENTS": 52,
-      "EMB1_03_FLAMMES": 554,
-      "EMB1_04_SOL": 5221,
-      "EMB1_05_SABLE": 1658,
-      "EMB1_06_OMBRES": 755,
-      "EMB1_07_BERGE": 253,
-      "EMB1_08_ROCHE": 3299,
+      "EMB1_03_FLAMMES": 356,
+      "EMB1_04_SOL": 6116,
+      "EMB1_05_SABLE": 1243,
+      "EMB1_06_OMBRES": 520,
+      "EMB1_07_BERGE": 310,
+      "EMB1_08_ROCHE": 4787,
       "EMB1_09_PILIERS": 1,
-      "EMB1_10_PROFONDEUR": 79
+      "EMB1_10_PROFONDEUR": 113
     },
     "banks": [
       "EMB1_00_LAVE",

@@ -335,9 +335,8 @@ def build():
     pxs = np.nonzero(walk_px[H - 8])[0]; med = int(np.median(pxs)) // 8 if len(pxs) else W//16
     ecol = min((c for c in range(gw_ - 1) if not blocked[gh_ - 2:, c:c + 2].any()), key=lambda c: abs(c - med)) if med else 48
     entrance = [ecol * 8 + 8, H - 16] if 'ecol' in locals() else [384, 544]
-    # Boss : centre de la clairiere sableuse (Mt Blaze : deux vasques laterales, centre sableux)
-    # On cherche la case walkable la plus proche du centre geometrique de la clairiere (384, 300)
-    target_y, target_x = 300, 384
+    # Boss : plateforme centrale du cratere (fin) — centre du cratere a 600,360 -> 384,231 en 768
+    target_y, target_x = 230, 384
     best = None; bestd = 1e9
     for y in range(gh_):
         for x in range(gw_):
