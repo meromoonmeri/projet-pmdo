@@ -12,16 +12,16 @@ iframe{width:100%;height:640px;border:1px solid #2a3a4a;background:#081116}
 .note{border-left:3px solid #ff8c42;padding-left:10px;color:#cbd8e6}
 </style>
 <h1>Arena — Mt. Blaze refait (28→29 sept.) — magma & flammes adaptés à la géométrie</h1>
-<p class="note"><strong>Intelligence sur les détails :</strong> plus d'ellipses posées. La lave est passée en <code>détection orange→magenta</code> (EMB1 10,5% organique suivant les berges rocheuses, FMB1 32% cratère organique du volcan) — la forme du magma suit exactement les rochers et la chaussée. Les flammes (24×5) et la lueur (12×10) sont émises au centre de chaque vasque / du cratère (<code>centres</code> calculés sur le masque <em>water</em> visible), donc adaptées au layout. Pas de chemin de rocher artificiel : la chaussée de FMB1 est en <strong>sable beige craquelé</strong> (80 px, 750→350) — le seul walkable — et le bas a été élargi (750-896) pour que l'entrée ne soit pas bloquée. Textures canoniques strictes : <code>images=[Rescue_Team_-_Mt._Blaze_Entrance.png]</code> et <code>images=[images.jpg, Rescue_Team]</code> au générateur.</p>
+<p class="note"><strong>Intelligence sur les détails :</strong> plus d'ellipses posées. La lave est passée en <code>détection orange→magenta</code> (EMB1 10,5% organique suivant les berges rocheuses, FMB1 32% cratère organique du volcan) — la forme du magma suit exactement les rochers et la chaussée. Les flammes (24×5), la lueur (12×10) et les <strong>veines de lave qui pulsent dans la roche</strong> (12×10, orange→jaune) sont émises au centre de chaque vasque / du cratère et sur les fissures rocheuses (<code>centres</code> calculés sur le masque <em>water</em> visible), donc adaptées au layout. Pas de chemin de rocher artificiel : la chaussée de FMB1 est en <strong>sable beige craquelé</strong> (80 px, 750→350) — le seul walkable — et le bas a été élargi (750-896) pour que l'entrée ne soit pas bloquée. Textures canoniques strictes : <code>images=[Rescue_Team_-_Mt._Blaze_Entrance.png]</code> et <code>images=[images.jpg, Rescue_Team]</code> au générateur.</p>
 <div class="grid">
   <div class="card">
     <h2>EMB1 — Entrée Mt. Blaze (10,5% lave organique)</h2>
-    <p>2 vasques latérales organiques (pas d'ellipses), rochers gris à outlines noirs, grotte nord. Lave 4×10 (WPAL 208/64/8 etc.), lueur 12×10 orange→jaune, flammes aux berges. 19 026 tiles. <a href="apercu_entree_mt_blaze_sud_nord_v1.html" target="_blank">ouvrir seul</a></p>
+    <p>2 vasques latérales organiques (pas d'ellipses), rochers gris à outlines noirs, grotte nord. <strong>Lave séparée 4×10</strong> (WPAL 208/64/8 etc.) + <strong>veines qui pulsent 12×10</strong> dans la roche (extraites du décor, 29k px), lueur 12×10 orange→jaune, flammes aux berges. 24 638 tiles (12 calques). <a href="apercu_entree_mt_blaze_sud_nord_v1.html" target="_blank">ouvrir seul</a></p>
     <iframe src="apercu_entree_mt_blaze_sud_nord_v1.html" loading="lazy"></iframe>
   </div>
   <div class="card">
     <h2>FMB1 — Fin, cratère fermé (32% lave, plateforme 120×80)</h2>
-    <p>Cratère organique du volcan, plateforme centrale walkable (boss 384,232) reliée par chaussée sable 80 px — pas de chemin de rocher bloqué. 12 667 tiles. <a href="apercu_fin_mt_blaze_v1.html" target="_blank">ouvrir seul</a></p>
+    <p>Cratère organique 32%, plateforme centrale walkable (boss 384,232) reliée par chaussée sable 80 px — pas de chemin de rocher bloqué. <strong>Lave séparée 4×10 + veines 12×10</strong> qui pulsent dans les fissures. 14 739 tiles (12 calques). <a href="apercu_fin_mt_blaze_v1.html" target="_blank">ouvrir seul</a></p>
     <iframe src="apercu_fin_mt_blaze_v1.html" loading="lazy"></iframe>
   </div>
   <div class="card">

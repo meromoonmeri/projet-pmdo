@@ -10,7 +10,7 @@ R = HERE.parents[1]
 O = R / 'renders/fin_mt_blaze_v1'
 S = R / '.cache/fin_mt_blaze_v1/fin_mt_blaze'
 PFX = 'FMB1'
-ANIMS = ['lave', 'lueur_lave', 'scintillements_lave', 'flammes']
+ANIMS = ['lave', 'lueur_lave', 'scintillements_lave', 'veines_lave', 'flammes']
 REVIEW = ['scene_t000.png', 'scene_animee.webp', 'collisions_marqueurs.png', 'planche_poses.png']
 
 def zipdir(path, items):

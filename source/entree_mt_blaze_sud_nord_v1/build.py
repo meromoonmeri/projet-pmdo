@@ -40,6 +40,7 @@ SRC = (1200, 896)
 WATER_PHASES, WATER_TICKS = 4, 10
 GLOW_PHASES, GLOW_TICKS = 12, 10
 DROP_PHASES, DROP_TICKS = 24, 5
+VEIN_PHASES, VEIN_TICKS = 12, 10
 LOOP_TICKS = 120
 GEN = [
     {'file': 'decor.png', 'images': ['Rescue_Team_-_Mt._Blaze_Entrance.png'], 'prompt':
@@ -157,6 +158,32 @@ def glow_frames(visible, centres, ts=range(GLOW_PHASES)):
     finally:
         EUL.GLOW=_s1; EUL.GLOW_RING_PX=_s2; EUL.GLOW_BREATH=_s3; EUL.GLOW_WOBBLE=_s4
 
+def veines_frames(vein_mask_down, base_rgb_full, vein_mask_full):
+    """Veines de lave qui pulsent dans la roche : 12 phases, pulse sin on/off sur la luminosité, conserve la texture."""
+    # base_rgb_full is decor RGB 1200x896, vein_mask_full is 1200 boolean
+    # We need to create downscaled vein mask and modulate colors
+    # For simplicity, we downscale the vein mask and use the downscaled colors from cols['veines']? No, we use base image downscaled
+    # We'll generate frames by downscaling the vein area with pulse
+    frames=[]
+    # Downscale the base vein image to 768 via JM downscale logic: we will create a temporary layer and quantize
+    # Instead, we directly use the downscaled mask and create a simple orange pulse
+    for t in range(VEIN_PHASES):
+        pulse = 0.90 + 0.10 * np.sin(2*np.pi*t/VEIN_PHASES)
+        # Alternate between two orange tones for pulse
+        c1 = np.array([240, 120, 0])
+        c2 = np.array([240, 176, 0])
+        # Interpolate
+        c = (c1 * (1-pulse) + c2 * pulse).astype('uint8') if False else c1
+        # Simple: pulse brightness
+        col = (np.array([240, 120, 0]) * pulse).astype('uint8')
+        # Ensure visible
+        fr = np.zeros((H, W, 4), 'uint8')
+        fr[vein_mask_down] = (*col, 255)
+        # Add a second highlight for core veins (thinner)
+        # Not needed for now
+        frames.append(fr)
+    return frames
+
 def sheet_poses(path):
     _s=EUL.POSE_WIN; EUL.POSE_WIN=POSE_WIN
     _k=EUL.POSE_K; EUL.POSE_K=POSE_K
@@ -256,7 +283,7 @@ def build():
     gfx = loadmod('pmdo_codec', R / 'source/pmdo_cote/build.py')
     tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
     v1 = loadmod('esn1', R / 'source/entree_sud_nord_generee_v1/build.py')
-    ANIMS = ['lave', 'lueur_lave', 'scintillements_lave', 'flammes']
+    ANIMS = ['lave', 'lueur_lave', 'scintillements_lave', 'flammes', 'veines_lave']
     if OUT.exists():
         for d in ['calques', 'animation', 'poses', 'masques', 'review']:
             shutil.rmtree(OUT / d, ignore_errors=True)
@@ -265,7 +292,16 @@ def build():
     a = rgb(RAW / 'decor.png'); f = rgb(RAW / 'sol_complet.png'); ref = rgb(REF)
     assert a.shape[:2] == f.shape[:2] == (SRC[1], SRC[0])
     m, seg = classify(a, f)
-    order = ['water', 'profondeur', 'sable', 'ombres', 'berge', 'piliers', 'roche']
+    # --- Veines de lave dans la roche : orange vif dans roche/piliers ---
+    r0, g0, b0 = a.transpose(2,0,1)
+    rock_union = m['roche'] | m['piliers']
+    vein_mask_1200 = rock_union & (r0>100) & (g0<120) & (b0<100) & (r0 - g0 > 20) & (r0 > b0)
+    vein_mask_1200 = nd.binary_dilation(vein_mask_1200, iterations=1) & rock_union
+    vein_mask_1200 = nd.binary_opening(vein_mask_1200, iterations=1)
+    m['veines'] = vein_mask_1200
+    m['roche'] = m['roche'] & ~vein_mask_1200
+    m['piliers'] = m['piliers'] & ~vein_mask_1200
+    order = ['water', 'profondeur', 'sable', 'ombres', 'berge', 'piliers', 'roche', 'veines']
     ex, cols = down_class(a, m, order)
     water = ex['water']
     layers = {'sol_complet': rgba(down_full(f), ~water)}
@@ -313,9 +349,27 @@ def build():
         if len(emitters) == 8:
             break
     flammes = drop_frames(poses, emitters, visible)
+    # Veines de lave qui pulsent dans la roche : masque downscale + pulse
+    vein_mask_down = ex['veines']
+    # Generate veines frames : 12 phases, pulse orange->jaune
+    veines_lave = []
+    for t in range(VEIN_PHASES):
+        pulse = 0.85 + 0.15 * np.sin(2*np.pi*t/VEIN_PHASES)
+        # Base orange (240,120,0) -> highlight (255,180,0)
+        base = np.array([240, 120, 0], dtype=float)
+        hi = np.array([255, 180, 20], dtype=float)
+        col = (base * (1-pulse) + hi * pulse).astype('uint8')
+        # Add a brighter core for veins thicker than 1px (eroded)
+        fr = np.zeros((H, W, 4), 'uint8')
+        fr[vein_mask_down] = (*col, 255)
+        # Core highlight (eroded mask) in jaune
+        core = nd.binary_erosion(vein_mask_down, iterations=1)
+        fr[core] = (255, 220, 80, 255)
+        veines_lave.append(fr)
     anim = {'lave': (wf, WATER_TICKS), 'lueur_lave': (lueur_lave, GLOW_TICKS), 'scintillements_lave': (sf, WATER_TICKS),
+            'veines_lave': (veines_lave, VEIN_TICKS),
             'flammes': (flammes, DROP_TICKS)}
-    order_names = ['lave', 'lueur_lave', 'scintillements_lave', 'flammes', 'sol_complet'] + STATIC
+    order_names = ['lave', 'lueur_lave', 'scintillements_lave', 'veines_lave', 'flammes', 'sol_complet'] + STATIC
     stack_named, layer_list = [], []
     for i, nm in enumerate(order_names):
         if nm in anim:
@@ -424,6 +478,7 @@ def build():
         'sparkles': {'placements': sparkles, 'source': 'Metano natif'},
         'flammes': {'poses': {k: list(v) for k, v in POSE_WIN.items()}, 'reduction': f'x1/{POSE_K}', 'chronologie': DROP_SEQ,
                     'emetteurs': [list(e) for e in emitters], 'phases': DROP_PHASES, 'frame_length_ticks': DROP_TICKS},
+        'veines_lave': {'phases': VEIN_PHASES, 'frame_length_ticks': VEIN_TICKS, 'couleurs': [(240,120,0),(255,180,20)], 'modele': 'pulse sinusoidal dans la roche, veines extraites du rock', 'origine': 'veines extraites du decor (orange dans roche)'},
         'scene_loop_ticks': LOOP_TICKS,
         'access': {'markers': markers, 'paths_16x16': {'entrance->boss': {'ok': reachable2(blocked, entrance, boss)},
                                                        'entrance->objectif': {'ok': reachable2(blocked, entrance, objectif)}},

@@ -123,9 +123,9 @@
       "roche": {
         "matiere": "roche",
         "rgb": [
-          121.1,
-          101.1,
-          107.6
+          120.5,
+          103.5,
+          110.2
         ],
         "distance_rip": 42.1
       },
@@ -195,42 +195,47 @@
       "ticks": 10
     },
     {
-      "file": "animation/flammes/FMB1_03_flammes_fNN.png",
+      "file": "animation/veines_lave/FMB1_03_veines_lave_fNN.png",
+      "phases": 12,
+      "ticks": 10
+    },
+    {
+      "file": "animation/flammes/FMB1_04_flammes_fNN.png",
       "phases": 24,
       "ticks": 5
     },
     {
-      "file": "calques/FMB1_04_sol_complet.png",
+      "file": "calques/FMB1_05_sol_complet.png",
       "phases": 1,
       "ticks": 60
     },
     {
-      "file": "calques/FMB1_05_sable.png",
+      "file": "calques/FMB1_06_sable.png",
       "phases": 1,
       "ticks": 60
     },
     {
-      "file": "calques/FMB1_06_ombres.png",
+      "file": "calques/FMB1_07_ombres.png",
       "phases": 1,
       "ticks": 60
     },
     {
-      "file": "calques/FMB1_07_berge.png",
+      "file": "calques/FMB1_08_berge.png",
       "phases": 1,
       "ticks": 60
     },
     {
-      "file": "calques/FMB1_08_roche.png",
+      "file": "calques/FMB1_09_roche.png",
       "phases": 1,
       "ticks": 60
     },
     {
-      "file": "calques/FMB1_09_piliers.png",
+      "file": "calques/FMB1_10_piliers.png",
       "phases": 1,
       "ticks": 60
     },
     {
-      "file": "calques/FMB1_10_profondeur.png",
+      "file": "calques/FMB1_11_profondeur.png",
       "phases": 1,
       "ticks": 60
     }
@@ -547,6 +552,24 @@
     "phases": 24,
     "frame_length_ticks": 5
   },
+  "veines_lave": {
+    "phases": 12,
+    "frame_length_ticks": 10,
+    "couleurs": [
+      [
+        240,
+        120,
+        0
+      ],
+      [
+        255,
+        180,
+        20
+      ]
+    ],
+    "modele": "pulse sinusoidal dans la roche, veines extraites du rock",
+    "origine": "veines extraites du decor (orange dans roche)"
+  },
   "scene_loop_ticks": 120,
   "access": {
     "markers": {
@@ -585,27 +608,29 @@
       "FMB1_00_LAVE": 2509,
       "FMB1_01_LUEUR": 2496,
       "FMB1_02_SCINTILLEMENTS": 52,
-      "FMB1_03_FLAMMES": 496,
-      "FMB1_04_SOL": 3405,
-      "FMB1_05_SABLE": 70,
-      "FMB1_06_OMBRES": 85,
-      "FMB1_07_BERGE": 81,
-      "FMB1_08_ROCHE": 3288,
-      "FMB1_09_PILIERS": 1,
-      "FMB1_10_PROFONDEUR": 184
+      "FMB1_03_VEINES": 2143,
+      "FMB1_04_FLAMMES": 496,
+      "FMB1_05_SOL": 3405,
+      "FMB1_06_SABLE": 70,
+      "FMB1_07_OMBRES": 85,
+      "FMB1_08_BERGE": 81,
+      "FMB1_09_ROCHE": 3217,
+      "FMB1_10_PILIERS": 1,
+      "FMB1_11_PROFONDEUR": 184
     },
     "banks": [
       "FMB1_00_LAVE",
       "FMB1_01_LUEUR",
       "FMB1_02_SCINTILLEMENTS",
-      "FMB1_03_FLAMMES",
-      "FMB1_04_SOL",
-      "FMB1_05_SABLE",
-      "FMB1_06_OMBRES",
-      "FMB1_07_BERGE",
-      "FMB1_08_ROCHE",
-      "FMB1_09_PILIERS",
-      "FMB1_10_PROFONDEUR"
+      "FMB1_03_VEINES",
+      "FMB1_04_FLAMMES",
+      "FMB1_05_SOL",
+      "FMB1_06_SABLE",
+      "FMB1_07_OMBRES",
+      "FMB1_08_BERGE",
+      "FMB1_09_ROCHE",
+      "FMB1_10_PILIERS",
+      "FMB1_11_PROFONDEUR"
     ],
     "runtime_tested": false,
     "warp": "aucun"

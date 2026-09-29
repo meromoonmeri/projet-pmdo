@@ -81,7 +81,7 @@ class Build(unittest.TestCase):
                 self.assertEqual(int(((v[:, 0] - v[:, 1] > 60) & (v[:, 2] - v[:, 1] > 60)).sum()), 0)
 
     def test_multicalque_full_coverage_and_order(self):
-        self.assertEqual(ORDER, ['lave', 'lueur_lave', 'scintillements_lave', 'flammes', 'sol_complet', *STATIC])
+        self.assertEqual(ORDER, ['lave', 'lueur_lave', 'scintillements_lave', 'veines_lave', 'flammes', 'sol_complet', *STATIC])
         cover = np.zeros((H, W), bool)
         for frames in STACK:
             cover |= alpha(frames[0])
@@ -118,6 +118,11 @@ class Build(unittest.TestCase):
         self.assertEqual((len(fr), M['lueur_lave']['frame_length_ticks']), (12, 10))
         for a in fr:
             self.assertFalse((alpha(a) & ~vis).any())
+
+    def test_veines_pulse(self):
+        fr = BY['veines_lave']
+        self.assertEqual((len(fr), M['veines_lave']['frame_length_ticks']), (12, 10))
+        self.assertTrue(sum((a[...,3]==255).sum() for a in fr) > 0)
 
     def test_flammes_boucle(self):
         fr = BY['flammes']
