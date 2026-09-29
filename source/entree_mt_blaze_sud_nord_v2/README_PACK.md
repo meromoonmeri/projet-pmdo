@@ -9,15 +9,19 @@ Projet d’édition 4:3 (768 × 576 px, 96 × 72 cases). Le layout est reconstru
 
 C’est une base graphique d’édition, pas une aventure jouable : aucun warp, Pokémon ou événement n’est ajouté.
 
+L’illustration 4:3 de base (`decor_ref_layout_imagegen.png`) a été générée avec le générateur d’images, puis recolorée par matériau et reconstruite en calques séparés. Ce n’est pas un rip de ROM.
+
 ## Sources de matière
 
 Dans `EMB2_calques_png_8px.zip/sources/` :
 
-- `layout_magenta.png` : le placement de lave est encodé par le magenta pur `#FF00FF`; la clé est testée par égalité exacte RGB, sans seuil ni tolérance.
-- `lave_texture_rgba.png` : texture lave isolée par l’alpha exact du key magenta.
-- `veines_roche_rgba.png` : fissures rocheuses extraites sur un alpha séparé.
+- `decor_ref_layout_imagegen.png` : illustration 4:3 produite par le générateur d’images.
+- `decor_ref_layout.png` : base palette-corrigée servant à l’extraction des couches.
+- `layout_magenta.png` : placement lave en magenta pur `#FF00FF`, testé par égalité RGB exacte.
+- `lave_texture_rgba.png` : texture de lave isolée par l’alpha exact du key magenta.
+- `veines_roche_rgba.png` : fissures rocheuses séparées sur leur propre alpha.
 
-Les images sources font 1200 × 896 px ; l’alpha est binaire et le RGB des pixels transparents vaut zéro. La vignette HTML permet d’inspecter ces trois sources.
+Les images sources font 1200 × 896 px ; les deux textures RGBA ont un alpha binaire et un RGB nul hors des zones opaques. La vignette HTML permet d’inspecter chacune des cinq sources.
 
 ## Calques (bas → haut)
 

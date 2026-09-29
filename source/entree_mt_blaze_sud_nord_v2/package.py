@@ -19,6 +19,8 @@ PFX = 'EMB2'
 NAMESPACE = 'entree_mt_blaze_sud_nord_v2'
 ANIMS = ('lave', 'veines_roche')
 SOURCE_ASSETS = {
+    'imagegen': HERE / 'bruts/decor_ref_layout_imagegen.png',
+    'decor': HERE / 'bruts/decor_ref_layout.png',
     'layout': HERE / 'bruts/layout_magenta.png',
     'lave': HERE / 'bruts/lave_texture_rgba.png',
     'veines_roche': HERE / 'bruts/veines_roche_rgba.png',
@@ -85,6 +87,8 @@ def main():
                 'uri': data_uri(path),
                 'size': image_size(path),
                 'label': {
+                    'imagegen': 'Illustration de base — générée avec le générateur d’images',
+                    'decor': 'Base de travail — palette corrigée par matériau',
                     'layout': 'Layout source — placement lave en magenta pur #FF00FF',
                     'lave': 'Texture lave RGBA — alpha défini par le key magenta exact',
                     'veines_roche': 'Texture veines rocheuses RGBA — isolée de la lave et du sentier',

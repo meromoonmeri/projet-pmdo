@@ -1,7 +1,8 @@
 """EMB2 — entrée Mt. Blaze en layout de référence, textures GBA et cycles palette canoniques.
 
-Le décor est reconstruit à partir de la vignette locale « Rescue Team - Mt. Blaze Entrance » : chemin sableux large
-au premier plan, deux bassins latéraux, autels/piliers de part et d’autre d’une petite bouche noire, falaises et blocs.
+L’illustration de base est générée avec le générateur d’images à partir d’un prompt inspiré de la vignette locale
+« Rescue Team - Mt. Blaze Entrance » : chemin sableux large, bassins latéraux, autels autour d’une petite bouche noire,
+falaises et blocs. La vignette n’est pas fournie en entrée au modèle.
 Le layout dérivé porte un key magenta pur #FF00FF pour le placement exact de la lave. Les textures source RGBA de lave
 et de veines rocheuses sont extraites séparément, puis leurs calques sont animés indépendamment. La vignette GBA est
 conservée dans reference/ ; EMB1 demeure intact.
@@ -44,6 +45,7 @@ LOOP_TICKS = PHASES * TICKS
 ANIMS = ('lave', 'veines_roche')
 ORDER = ('sol_complet', 'ombres', 'lave', 'sentier', 'eboulis', 'parois', 'piliers', 'grotte', 'veines_roche')
 REFERENCE = HERE / 'reference/mt_blaze_reference_300x260.png'
+GENERATED_FILE = RAW / 'decor_ref_layout_imagegen.png'
 DECOR_FILE = RAW / 'decor_ref_layout.png'
 MAGENTA_LAYOUT_FILE = RAW / 'layout_magenta.png'
 LAVA_TEXTURE_FILE = RAW / 'lave_texture_rgba.png'
@@ -52,11 +54,15 @@ MAGENTA = np.array([255, 0, 255], dtype=np.uint8)
 ANIMATION_REPORT = R / 'renders/etude_animations_canoniques_sky_v1/rapport.json'
 GENERATION = [
     {
-        'file': 'bruts/decor_ref_layout.png',
+        'file': 'bruts/decor_ref_layout_imagegen.png',
         'source_reference': 'reference/mt_blaze_reference_300x260.png',
-        'note': 'reconstruction 4:3 du layout Mt. Blaze fourni en référence : bassins inférieurs latéraux, sol central ouvert, deux structures de pierre et petite bouche sombre',
-        'prompt': 'Reprendre la vignette Mt. Blaze comme blueprint de disposition : bassins irréguliers bas-gauche/bas-droite, petits chenaux extérieurs, large sol sableux en avant-plan, deux autels de pierre autour d’une petite ouverture noire au centre-haut, falaises et éboulis. Textures GBA lavande-gris, lave vin rouge, fissures orange-or ; quelques veines ramifiées dans les roches. Pas deux longs chenaux droits ni nouvelle arche monumentale.'
+        'generator': 'generate_image (outil d’image Arena)',
+        'image_reference_attached': False,
+        'note': 'image de base créée avec le générateur d’images ; la vignette Mt. Blaze a guidé le prompt de composition, puis le build produit des sources matière multi-calques',
+        'prompt': 'Create ONE standalone 4:3 landscape game-map illustration, no collage, no text, no UI. Pixel-art environment background in the visual language of a late-1990s handheld JRPG dungeon, crisp chunky pixels and limited palette, viewed from a slightly elevated top-down 2D game perspective. This is the entrance to a volcanic mountain dungeon and must closely follow this composition: a broad open ochre-brown sandy path fills the lower half and narrows toward a small perfectly black cave mouth centered in the upper-middle; two irregular, wide, separate dark wine-red magma pools occupy the lower left and lower right margins, with short winding side channels hugging the rocky banks and never crossing the central path; two squat carved stone altar/pillar structures flank the cave approach; layered lavender-gray basalt cliffs and angular rubble frame the top and both sides. Several thin branching warm orange-gold fissures are embedded in the cliff rock, not floating sparks. Magma colors are mostly burgundy/plum with sparse orange-gold hot seams. Keep a generous clear sandy route down the center, asymmetrical organic basin edges, no giant arch, no long straight canals, no characters, no decorative border. Strong clean material regions and pixel-art texture, readable at 4:3, faithful to a small classic GBA map screenshot aesthetic.'
     },
+    {'file': 'bruts/decor_ref_layout.png', 'derived_from': 'bruts/decor_ref_layout_imagegen.png',
+     'note': 'composition imagegen recolorée par masque matière pour rapprocher les couleurs modales de la vignette GBA'},
     {'file': 'bruts/layout_magenta.png', 'derived_from': 'bruts/decor_ref_layout.png',
      'note': 'layout de base exact : la surface des deux bassins est remplacée par le magenta pur #FF00FF pour définir le placement de la lave'},
     {'file': 'bruts/lave_texture_rgba.png', 'derived_from': 'bruts/decor_ref_layout.png',
@@ -326,7 +332,28 @@ def palette_fidelity_report(decor, masks, reference):
     return result
 
 
+def palette_correct_materials(decor, masks, reference):
+    """Décaler les matériaux vers les couleurs modales mesurées dans la vignette GBA.
+
+    Le déplacement RGB est constant par matériau : il conserve les motifs, ombres et hautes lumières de l’image
+    générée, mais aligne la couleur modale du chemin, de la lave et de la roche sur les échantillons documentés.
+    """
+    report = palette_fidelity_report(decor, masks, reference)
+    out = decor.astype(np.int16).copy()
+    material_masks = {
+        'sentier': masks['sentier'],
+        'lave': masks['lave'],
+        'roche': masks['eboulis'] | masks['parois'] | masks['piliers'],
+    }
+    for name, mask in material_masks.items():
+        source_mode = np.asarray(report[name]['reconstruction_mode_rgb'], dtype=np.int16)
+        target_mode = np.asarray(report[name]['reference_mode_rgb'], dtype=np.int16)
+        out[mask] = np.clip(out[mask] + (target_mode - source_mode), 0, 255)
+    return out.astype(np.uint8)
+
+
 def canonical_d41_palettes():
+
     report = json.loads(ANIMATION_REPORT.read_text(encoding='utf-8'))
     records = report['cartes']['d41p41a']['palettes_animees']
     tracks = {int(item['palette']): np.asarray(item['couleurs'], dtype=np.uint8) for item in records}
@@ -510,11 +537,13 @@ def build():
         (OUT / folder).mkdir(parents=True, exist_ok=True)
     STAGE.parent.mkdir(parents=True, exist_ok=True)
 
-    decor = rgb(DECOR_FILE)
+    imagegen = rgb(GENERATED_FILE)
     reference = rgb(REFERENCE)
-    assert decor.shape == (SRC[1], SRC[0], 3)
+    assert imagegen.shape == (SRC[1], SRC[0], 3)
     assert reference.shape == (260, 300, 3)
-    source_masks, segmentation, _ = classify(decor)
+    source_masks, segmentation, _ = classify(imagegen)
+    decor = palette_correct_materials(imagegen, source_masks, reference)
+    Image.fromarray(decor, 'RGB').save(DECOR_FILE)
     material_palette_comparison = palette_fidelity_report(decor, source_masks, reference)
 
     # Étape de composition demandée : le layout source porte le key magenta exact à l’emplacement des bassins.
@@ -647,8 +676,8 @@ def build():
             'fidelity_note': 'La composition est reconstruite à partir de la vignette locale ; ce n’est pas un rip pixel-par-pixel de la ROM.'
         },
         'material_palette_comparison': material_palette_comparison,
-        'material_palette_comparison_note': 'distance RGB euclidienne entre les couleurs modales de petites zones d’échantillonnage de la vignette et du rendu ; indicateur de palette uniquement, pas de fidélité pixel-à-pixel',
-        'method': 'layout source 1200×896 avec key magenta #FF00FF exact ; extraction RGBA propre de la lave et des veines ; cycle de palette en calques Ground/TileLayer.Frames ; réduction BOX par matière ; Ground PMDO 0.8.12',
+        'material_palette_comparison_note': 'les couleurs modales sont recalées par translation RGB constante à l’intérieur de chaque masque avant mesure ; distance nulle par construction, pas une mesure indépendante de fidélité pixel-à-pixel',
+        'method': 'illustration générée via generate_image ; translation RGB par masque pour alignement modal ; layout source 1200×896 avec key magenta #FF00FF exact ; textures RGBA séparées de lave et veines ; cycles en calques Ground/TileLayer.Frames ; réduction BOX par matière ; Ground PMDO 0.8.12',
         'source_materials': {
             'layout': {
                 'file': f'source/entree_mt_blaze_sud_nord_v2/{MAGENTA_LAYOUT_FILE.relative_to(HERE).as_posix()}',
@@ -673,6 +702,7 @@ def build():
                 },
             },
             'animated_layers': ['lave', 'veines_roche'],
+            'palette_correction': 'translation RGB constante par masque, basée sur la couleur modale de la vignette',
             'alpha_rule': 'alpha binaire ; RGB des zones transparentes ramené à zéro',
         },
         'tool_maps_pmdsky': {

@@ -9,7 +9,7 @@
 <main>
 <div class="tag">EMB2 · PMDO 0.8.12 · 4:3 · layout de référence</div>
 <h1>Entrée Mt. Blaze — sud → nord</h1>
-<p class="lede">Disposition reconstruite depuis la référence Mt. Blaze : large avant-plan sableux, deux bassins latéraux irréguliers, blocs et parois autour de deux autels de pierre, puis petite bouche sombre au centre-haut. La roche et la lave reprennent sa palette GBA. Les pixels des fissures restent fixes ; la lave et les veines rocheuses tournent sur le cycle exact <strong>D41P41A : 13 crans × 10 ticks / boucle 130 ticks (≈2,17 s)</strong>. La cadence et les tables de palette viennent de PMD Ciel et sont adaptées à l’art GBA ; elles ne sont pas revendiquées comme animation originale de Red Rescue Team. Le layout magenta et les deux textures RGBA isolées sont inspectables dans le panneau des sources.</p>
+<p class="lede">Disposition reconstruite depuis la référence Mt. Blaze : large avant-plan sableux, deux bassins latéraux irréguliers, blocs et parois autour de deux autels de pierre, puis petite bouche sombre au centre-haut. La roche et la lave reprennent sa palette GBA. Les pixels des fissures restent fixes ; la lave et les veines rocheuses tournent sur le cycle exact <strong>D41P41A : 13 crans × 10 ticks / boucle 130 ticks (≈2,17 s)</strong>. La cadence et les tables de palette viennent de PMD Ciel et sont adaptées à l’art GBA ; elles ne sont pas revendiquées comme animation originale de Red Rescue Team. L’illustration générée, le layout magenta et les deux textures RGBA isolées sont inspectables dans le panneau des sources.</p>
 <div class="wrap">
   <div class="stage" id="stage"><canvas id="c"></canvas></div>
   <aside>
@@ -26,9 +26,9 @@
   </aside>
 </div>
 <details class="sources">
-  <summary>Inspecter les sources de matière — layout #FF00FF et textures RGBA séparées</summary>
+  <summary>Inspecter les sources générées — illustration, layout #FF00FF et textures RGBA séparées</summary>
   <p>Le masque de lave est l’égalité RGB exacte <code>#FF00FF</code> dans le layout source (aucune tolérance). Les textures lave et veines rocheuses ont leur propre alpha binaire ; les deux sont des matières distinctes, chacune conservée sur son calque animé.</p>
-  <div class="source-tools"><button data-source="layout" class="on">Layout magenta</button><button data-source="lave">Texture lave RGBA</button><button data-source="veines_roche">Texture veines rocheuses RGBA</button></div>
+  <div class="source-tools"><button data-source="imagegen" class="on">Illustration générée</button><button data-source="decor">Base palette corrigée</button><button data-source="layout">Layout magenta</button><button data-source="lave">Texture lave RGBA</button><button data-source="veines_roche">Veines rocheuses RGBA</button></div>
   <p id="sourceInfo" class="muted"></p>
   <div class="stage source-stage"><canvas id="sourceCanvas"></canvas></div>
 </details>
@@ -39,7 +39,7 @@ function image(uri){const im=new Image();im.src=uri;return im}
 const L=D.stack.map(layer=>({id:layer.id,ticks:layer.ticks,frames:layer.frames.map(image)}));
 const sourceCanvas=document.getElementById('sourceCanvas'),sourceCtx=sourceCanvas.getContext('2d');
 const sourceImages=Object.fromEntries(Object.entries(D.sources).map(([name,source])=>[name,image(source.uri)]));
-let selectedSource='layout';
+let selectedSource='imagegen';
 function drawSource(){const im=sourceImages[selectedSource];if(!im||!im.naturalWidth)return;sourceCanvas.width=im.naturalWidth;sourceCanvas.height=im.naturalHeight;sourceCtx.imageSmoothingEnabled=false;sourceCtx.clearRect(0,0,sourceCanvas.width,sourceCanvas.height);sourceCtx.drawImage(im,0,0);document.getElementById('sourceInfo').textContent=D.sources[selectedSource].label+' · '+D.sources[selectedSource].size.join(' × ')+' px'}
 function selectSource(name){selectedSource=name;document.querySelectorAll('[data-source]').forEach(b=>b.classList.toggle('on',b.dataset.source===name));drawSource()}
 document.querySelectorAll('[data-source]').forEach(button=>button.onclick=()=>selectSource(button.dataset.source));

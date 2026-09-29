@@ -7,9 +7,9 @@ Cette V2 répond à la correction de layout : elle ne reprend pas la composition
 ## Référence et limites
 
 - Copie locale consultable : `reference/mt_blaze_reference_300x260.png` (300 × 260 px), retrouvée sur [Mystery Dungeon Wiki — Mt. Blaze](https://mysterydungeonwiki.com/wiki/Rescue_Team:Mt._Blaze). L’URL de l’image originale et les empreintes sont enregistrées dans `renders/entree_mt_blaze_sud_nord_v2/manifest.json`.
-- `bruts/decor_ref_layout.png` est une reconstruction illustrée 4:3 générée depuis cette vignette, avec sa disposition comme blueprint. Ce n’est ni un rip pixel-par-pixel de la ROM ni une carte originale certifiée.
-- Les textures visent les matériaux visibles dans cette référence : basalte lavande-gris, lave vin-rouge et sol sableux. Les masques de matière sont indépendants et restent éditables.
-- Contrôle indicatif des couleurs modales (RGB euclidien sur des zones échantillonnées, pas une comparaison pixel-à-pixel) : roche **9,38**, lave **4,90**, sentier **7,55** unités par rapport à la vignette. Les valeurs et masques d’échantillonnage sont dans le manifeste.
+- `bruts/decor_ref_layout_imagegen.png` est l’illustration 4:3 effectivement produite par le générateur d’images à partir du prompt de composition inspiré de la vignette ; l’image de référence n’a pas été jointe au générateur. Ce n’est ni un rip pixel-par-pixel de la ROM ni une carte originale certifiée.
+- `bruts/decor_ref_layout.png` est la copie de travail recolorée par matériau pour aligner les couleurs modales sur la vignette ; elle conserve l’illustration et ses textures générées. Les masques et les calques sont ensuite extraits séparément.
+- Recalage par translation RGB uniforme dans chaque masque, sur les couleurs modales échantillonnées : sentier `(175,135,111)`, lave `(103,47,63)`, roche `(167,159,167)`. Distance modale finale **0,00** par construction ; cela n’est pas une comparaison pixel-à-pixel indépendante.
 - Le README de `source/outil_maps_pmdsky/` a été consulté. Il concerne les maps/BG d’Explorers of Sky et ne fournit pas Mt. Blaze GBA ; il n’est pas utilisé comme source graphique de la composition.
 
 ## Correction EMB2 — layout magenta et textures séparées
@@ -17,7 +17,7 @@ Cette V2 répond à la correction de layout : elle ne reprend pas la composition
 - `bruts/layout_magenta.png` est le layout source de placement : les pixels de lave sont codés en **magenta pur `#FF00FF`**. Le masque est défini par égalité RGB exacte (aucune tolérance) et son nombre de pixels est vérifié.
 - `bruts/lave_texture_rgba.png` extrait uniquement la texture des zones marquées par ce key. `bruts/veines_roche_rgba.png` isole séparément les fissures chaudes dans la roche. Les deux sources sont en 1200 × 896, alpha binaire, RGB transparent noir ; leurs calques EMB2 restent disjoints.
 - Dans le Ground et l’ORA, `lave` et `veines_roche` sont des calques animés indépendants, chacun avec 13 frames × 10 ticks. La vignette autonome permet désormais d’inspecter le layout magenta et ces deux textures source sous « Inspecter les sources de matière ».
-- Les trois fichiers sont inclus dans `EMB2_calques_png_8px.zip` sous `sources/` et leurs empreintes, modes et dimensions figurent dans `manifest.json`.
+- Les cinq sources (image générée, base palette-corrigée, layout magenta, lave RGBA et veines RGBA) sont incluses dans `EMB2_calques_png_8px.zip/sources/`; leurs empreintes, modes et dimensions figurent dans `manifest.json`.
 
 ## Animation canonique utilisée
 
