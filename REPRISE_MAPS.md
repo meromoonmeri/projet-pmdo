@@ -1,6 +1,14 @@
 # Reprise des maps — 29 septembre 2026
 
-## État actuel — FGS1 terminé
+## État actuel — FUL1 terminé (poursuite sans clonage de main)
+
+Reprise sur `arena/01a0eecd-projet-pmdo` à partir de `4430d522` (« Plan spriter ressource »), **sans clonage de `main`** comme demandé. Méthode « textures canoniques = rendu généré référencé » conservée, avec README, outil maps et protocole de validation (génération → segmentation pleine résolution → réduction par classe → calques → Ground 0.8.12 → tests → package → aperçu). L'outil `source/outil_maps_pmdsky` reste la référence pour identifier les BG (ROM `pret/pmd-sky` épinglée, `dNN` ≠ `DUNGEON_ID`).
+
+**FUL1 — Fin Underground Lake** (`source/fin_underground_lake_v1/`, `renders/fin_underground_lake_v1/`, `apercu_fin_underground_lake_v1.html`, préfixe **FUL1**, réf. `Underground_Lake_shore_TDS.png`) bouche le trou laissé entre FWC1 et FSM1 : EUL1 existait en entrée, FUL1 manquait en fin (pris sur sœurs `01a0ea8f`/`01a0eaca` non fusionnées). Rendu généré référencé 4:3 (1200×896 → 768×576, 96×72 cases), arène fermée au nord, lac en magenta, chaussée sèche jusqu'à la grotte, piliers et stalagmites; planche de gouttes réutilisée d'EUL1 (aucune nouvelle génération). 11 calques + Top : eau 4×10, lueur 12×10 (9 couleurs exactes du rip), scintillements Metano natifs 4×10, gouttes 24×5, sol complet, sable, ombres, berge, roche, piliers, profondeur. Marqueurs `entrance` [392,560], `boss` [384,200], `objectif` [376,96]; BFS 16×16 PASS; bande nord bloquée. **8 tests PASS**, 16 604 tiles, fidélité brute sable 9,9 / roche 1,2, finale sable 3,9 / roche 5,6 / piliers 15,2. Paquets 1,67 Mo (Ground) et 4,82 Mo (PNG/ORA), aperçu 2,56 Mo. Aucun test moteur, pas d'art approuvé.
+
+Prochaines étapes proposées : **FMF1 — Fin Mystifying Forest** (prolonge EMF1, `Mystifying_Forest_entrance_TDS.png`, mare façon Métano, feuilles et lucioles), puis **correction FCT1** (fleurs canoniques animées, chemin, retrait papillons, audit) restée en attente depuis la livraison FCT1.
+
+## État précédent — FGS1 terminé
 
 La demande la plus récente : pousser, puis continuer la série avec **Fin Jardin secret**. Le lot **FGS1** est terminé dans `source/fin_jardin_secret_v1/` et `renders/fin_jardin_secret_v1/`, aperçu `apercu_fin_jardin_secret_v1.html`; référence canonique `secretgarden.png`, sans artefacts de main/branches sœurs copiés. Rendu généré référencé (pas tuiles natives), 768 × 576, 14 calques + Top vide; souche/rayon nord, grande prairie et entrée sud réparée. Marqueurs entrée `[384,544]`, boss `[384,360]`, objectif `[384,160]`; BFS 16 × 16 passe vers les deux cibles. Recalage décor/témoin estimé à 0 px. **5 tests PASS**; l'installateur `--dry-run` propose 16 fichiers et fusionne 22 tilesets dans la simulation. Aucune validation runtime PMDO ni artistique. Distance herbe claire 41,9 (au-dessus du seuil indicatif 35) explicitement conservée dans l'audit; fond 8,3, herbe 24,0, rochers 12,9. Prochaine correction utilisateur en attente : FCT1 (fleurs canoniques, chemin, retrait papillons, audit).
 

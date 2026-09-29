@@ -1224,3 +1224,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
 - **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
 
+## Fin Underground Lake — FUL1, ajouts à la recette (poursuite sans clonage de main)
+
+- **Reprise sur `01a0eecd` sans clonage de `main`** : la consigne « inutile de cloner main, on va simplement poursuivre » a été suivie. Lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et `source/outil_maps_pmdsky/README.md`; relevé des branches par `git ls-remote` + `gh api compare` (sans fetch). FUL1 était déjà pris sur sœurs `01a0ea8f`/`01a0eaca`, mais aucun fichier n'a été repris : bruts copiés d'EUL1 (même sha), nouveau préfixe **FUL1**, sortie indépendante `renders/fin_underground_lake_v1/`.
+- **Fin fermée** : copier EUL1 puis adapter : markers `entrance`/`boss`/`objectif` (pas de `donjon_seuil`), nord bloqué, pas de warp, pas de sortie. `boss` = case 2×2 la plus proche 48 px au sud du centre d'eau; `objectif` = case la plus haute devant la grotte (même heuristique que le threshold d'EUL1). Tests : `entrance` au sud, `objectif` au nord du `boss`, BFS 16×16, `north_closed`.
+- **Eau et lueur identiques à EUL1** : `lake_water`, `glow_frames`, `sheet_poses`, `drop_frames` et couleurs exactes du rip chargés par `loadmod('eul_build')`; un test compare les couleurs d'eau à l'ensemble des 69 couleurs du rip et vérifie l'absence de liseré clair. La lueur n'est dessinée que sur `visible` (eau hors terre).
+- **Planche réutilisée** : `gouttes_ronds_poses.png` d'EUL1, même fenêtres et réduction `POSE_K=8`; le manifeste le documente et le prompt l'explique; le test `test_raw_hashes` tolère ce cas (pas d'assertion `endswith('decor_magenta.png')`).
+- **Manifeste** : champ `gouttes.frame_length_ticks` ajouté (24×5), sinon `KeyError`; prompts >100 chars vérifiés. Paquets 1,67 Mo (Ground) et 4,82 Mo (PNG/ORA), aperçu 2,56 Mo; 8 tests PASS, 0 translucide.
+- **Leçon** : un lot qui ne change que les marqueurs et la fermeture nord peut réutiliser 100 % des lois d'animation de l'entrée; ne pas régénérer une planche déjà parfaite.
+

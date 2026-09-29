@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Underground Lake : FUL1 — lac souterrain et chaussée jusqu'à la grotte (29 septembre 2026)
+
+**Reprise sur la branche `arena/01a0eecd-projet-pmdo` sans clonage de `main`**, comme demandé : poursuite directe avec la méthode « textures canoniques = rendu généré référencé », README et outils. **FUL1** bouche le trou de la série : après Waterfall Cave (FWC1) venait le lac souterrain, jusqu'ici seulement en entrée (EUL1) et déjà pris en FUL1 sur des branches sœurs non fusionnées — ce lot est indépendant, aucun artefact de `main` ou de sœur repris. Référence canonique `Underground_Lake_shore_TDS.png` (Explorers of Sky).
+
+- Sorties : `source/fin_underground_lake_v1/`, `renders/fin_underground_lake_v1/`, aperçu `apercu_fin_underground_lake_v1.html`; bruts `decor.png` / `sol_complet.png` / `gouttes_ronds_poses.png` (planche réutilisée d'EUL1 sans nouvelle génération).
+- Rendu généré référencé en 4:3 (1200 × 896 brut → 768 × 576, 96 × 72 cases); arrivée au sud par un chemin de sable, plage, lac souterrain avec chaussée sèche jusqu'à une grotte sombre au nord, piliers et stalagmites dans l'eau, parois en bosses. L'arène est **fermée** au nord (parois derrière la grotte, pas de sortie).
+- 11 calques + Top vide : eau du lac (4 × 10 ticks, structure rivière Métano aux couleurs exactes du rip sans liseré clair), lueur turquoise qui respire (12 × 10, 9 couleurs exactes du rip), scintillements Métano natifs (4 × 10), gouttes et ronds (24 × 5, 8 émetteurs), sol complet, sable, ombres, berge, parois, piliers, profondeur.
+- Marqueurs `entrance` [392,560] sud, `boss` [384,200] sur la chaussée au sud du lac, `objectif` [376,96] devant la grotte; BFS 16 × 16 valide vers boss et objectif; bande nord bloquée.
+- 8 tests PASS; 16 604 tiles; fidélité brute sable 9,9 / roche 1,2 (seuil 35); fidélité finale sable 3,9 / roche 5,6 / piliers 15,2. Paquets : Ground 1,67 Mo, PNG/ORA 4,82 Mo; aperçu autonome 2,56 Mo. **Aucun test moteur PMDO, aucune approbation artistique. Pixels générés, pas tuiles natives.**
+
 ## Fin Jardin secret : FGS1 — prairie et souche dorée (29 septembre 2026)
 
 **Suite après FTH1**, sur la demande de poursuivre la série avec une « map magnifique ». Préfixe **FGS1** choisi après vérification locale; FJS1 appartient à Fin Jungle et FJS3 est pris par une branche sœur. Référence canonique `secretgarden.png` (Explorers of Sky). Sorties indépendantes : `source/fin_jardin_secret_v1/`, `renders/fin_jardin_secret_v1/`, aperçu `apercu_fin_jardin_secret_v1.html`; aucun gros artefact de main ou de branche sœur repris.
