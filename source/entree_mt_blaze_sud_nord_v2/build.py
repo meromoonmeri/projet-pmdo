@@ -1,8 +1,8 @@
 """EMB2 — entrée Mt. Blaze en layout de référence, textures GBA et cycles palette canoniques.
 
-L’illustration de base est générée avec le générateur d’images à partir d’un prompt inspiré de la vignette locale
-« Rescue Team - Mt. Blaze Entrance » : chemin sableux large, bassins latéraux, autels autour d’une petite bouche noire,
-falaises et blocs. La vignette n’est pas fournie en entrée au modèle.
+L’illustration de base est générée avec le générateur d’images en fournissant la vignette canonique locale
+« Rescue Team - Mt. Blaze Entrance » comme référence visuelle stricte : entrée au centre-haut, deux piliers, chemin sableux,
+bassins latéraux, falaises et blocs. Les textures et calques restent séparés en aval.
 Le layout dérivé porte un key magenta pur #FF00FF pour le placement exact de la lave. Les textures source RGBA de lave
 et de veines rocheuses sont extraites séparément, puis leurs calques sont animés indépendamment. La vignette GBA est
 conservée dans reference/ ; EMB1 demeure intact.
@@ -57,9 +57,9 @@ GENERATION = [
         'file': 'bruts/decor_ref_layout_imagegen.png',
         'source_reference': 'reference/mt_blaze_reference_300x260.png',
         'generator': 'generate_image (outil d’image Arena)',
-        'image_reference_attached': False,
-        'note': 'image de base créée avec le générateur d’images ; la vignette Mt. Blaze a guidé le prompt de composition, puis le build produit des sources matière multi-calques',
-        'prompt': 'Create ONE standalone 4:3 landscape game-map illustration, no collage, no text, no UI. Pixel-art environment background in the visual language of a late-1990s handheld JRPG dungeon, crisp chunky pixels and limited palette, viewed from a slightly elevated top-down 2D game perspective. This is the entrance to a volcanic mountain dungeon and must closely follow this composition: a broad open ochre-brown sandy path fills the lower half and narrows toward a small perfectly black cave mouth centered in the upper-middle; two irregular, wide, separate dark wine-red magma pools occupy the lower left and lower right margins, with short winding side channels hugging the rocky banks and never crossing the central path; two squat carved stone altar/pillar structures flank the cave approach; layered lavender-gray basalt cliffs and angular rubble frame the top and both sides. Several thin branching warm orange-gold fissures are embedded in the cliff rock, not floating sparks. Magma colors are mostly burgundy/plum with sparse orange-gold hot seams. Keep a generous clear sandy route down the center, asymmetrical organic basin edges, no giant arch, no long straight canals, no characters, no decorative border. Strong clean material regions and pixel-art texture, readable at 4:3, faithful to a small classic GBA map screenshot aesthetic.'
+        'image_reference_attached': True,
+        'note': 'image de base créée avec le générateur d’images en attachant la vignette canonique Mt. Blaze comme référence stricte ; le build extrait ensuite les matières en calques séparés',
+        'prompt': 'Faithfully redraw and expand the attached canonical Pokémon Mystery Dungeon: Red Rescue Team GBA Mt. Blaze entrance screenshot into a clean, wide 4:3 landscape pixel-art map background. Treat the attached image as a strict image reference, not loose inspiration: preserve its unmistakable composition and relative landmarks—small dark cave mouth centered near the top, two squat stepped stone pillars immediately left and right of the entrance, a wide open tan path taking up the lower middle, irregular dark burgundy lava pools hugging both side edges, short curved magma channels and orange lava seams, lavender-gray boulders and cliff walls framing both sides. Keep the same low-resolution 16-bit GBA pixel-art texture and canonical palette. Only extend the side scenery naturally to fit the wider 4:3 map; do not redesign the architecture, do not add a huge gate or arch, do not add a central stone wall, do not move the pools into the path. No characters, no text, no UI, no border, no grid.'
     },
     {'file': 'bruts/decor_ref_layout.png', 'derived_from': 'bruts/decor_ref_layout_imagegen.png',
      'note': 'composition imagegen recolorée par masque matière pour rapprocher les couleurs modales de la vignette GBA'},

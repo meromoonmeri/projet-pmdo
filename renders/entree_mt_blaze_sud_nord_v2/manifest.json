@@ -39,7 +39,7 @@
       ],
       "rgb_euclidean_distance": 0.0,
       "reference_sample_pixels": 4235,
-      "reconstruction_sample_pixels": 161852
+      "reconstruction_sample_pixels": 163285
     },
     "lave": {
       "reference_mode_rgb": [
@@ -54,7 +54,7 @@
       ],
       "rgb_euclidean_distance": 0.0,
       "reference_sample_pixels": 14544,
-      "reconstruction_sample_pixels": 163904
+      "reconstruction_sample_pixels": 239205
     },
     "roche": {
       "reference_mode_rgb": [
@@ -69,7 +69,7 @@
       ],
       "rgb_euclidean_distance": 0.0,
       "reference_sample_pixels": 20646,
-      "reconstruction_sample_pixels": 734954
+      "reconstruction_sample_pixels": 649495
     }
   },
   "material_palette_comparison_note": "les couleurs modales sont recalées par translation RGB constante à l’intérieur de chaque masque avant mesure ; distance nulle par construction, pas une mesure indépendante de fidélité pixel-à-pixel",
@@ -87,14 +87,14 @@
         0,
         255
       ],
-      "lava_placement_pixels": 163904,
+      "lava_placement_pixels": 239205,
       "mask_rule": "RGB == [255,0,255] exact, sans tolérance"
     },
     "textures": {
       "lave": {
         "file": "source/entree_mt_blaze_sud_nord_v2/bruts/lave_texture_rgba.png",
         "mode": "RGBA",
-        "opaque_pixels": 163904,
+        "opaque_pixels": 239205,
         "alpha_source": "key exact #FF00FF du layout_magenta.png",
         "transparent_rgb": [
           0,
@@ -105,7 +105,7 @@
       "veines_roche": {
         "file": "source/entree_mt_blaze_sud_nord_v2/bruts/veines_roche_rgba.png",
         "mode": "RGBA",
-        "opaque_pixels": 8322,
+        "opaque_pixels": 8206,
         "alpha_source": "masque de veines rocheuses isolé, hors lave et sentier",
         "transparent_rgb": [
           0,
@@ -132,9 +132,9 @@
       "file": "bruts/decor_ref_layout_imagegen.png",
       "source_reference": "reference/mt_blaze_reference_300x260.png",
       "generator": "generate_image (outil d’image Arena)",
-      "image_reference_attached": false,
-      "note": "image de base créée avec le générateur d’images ; la vignette Mt. Blaze a guidé le prompt de composition, puis le build produit des sources matière multi-calques",
-      "prompt": "Create ONE standalone 4:3 landscape game-map illustration, no collage, no text, no UI. Pixel-art environment background in the visual language of a late-1990s handheld JRPG dungeon, crisp chunky pixels and limited palette, viewed from a slightly elevated top-down 2D game perspective. This is the entrance to a volcanic mountain dungeon and must closely follow this composition: a broad open ochre-brown sandy path fills the lower half and narrows toward a small perfectly black cave mouth centered in the upper-middle; two irregular, wide, separate dark wine-red magma pools occupy the lower left and lower right margins, with short winding side channels hugging the rocky banks and never crossing the central path; two squat carved stone altar/pillar structures flank the cave approach; layered lavender-gray basalt cliffs and angular rubble frame the top and both sides. Several thin branching warm orange-gold fissures are embedded in the cliff rock, not floating sparks. Magma colors are mostly burgundy/plum with sparse orange-gold hot seams. Keep a generous clear sandy route down the center, asymmetrical organic basin edges, no giant arch, no long straight canals, no characters, no decorative border. Strong clean material regions and pixel-art texture, readable at 4:3, faithful to a small classic GBA map screenshot aesthetic."
+      "image_reference_attached": true,
+      "note": "image de base créée avec le générateur d’images en attachant la vignette canonique Mt. Blaze comme référence stricte ; le build extrait ensuite les matières en calques séparés",
+      "prompt": "Faithfully redraw and expand the attached canonical Pokémon Mystery Dungeon: Red Rescue Team GBA Mt. Blaze entrance screenshot into a clean, wide 4:3 landscape pixel-art map background. Treat the attached image as a strict image reference, not loose inspiration: preserve its unmistakable composition and relative landmarks—small dark cave mouth centered near the top, two squat stepped stone pillars immediately left and right of the entrance, a wide open tan path taking up the lower middle, irregular dark burgundy lava pools hugging both side edges, short curved magma channels and orange lava seams, lavender-gray boulders and cliff walls framing both sides. Keep the same low-resolution 16-bit GBA pixel-art texture and canonical palette. Only extend the side scenery naturally to fit the wider 4:3 map; do not redesign the architecture, do not add a huge gate or arch, do not add a central stone wall, do not move the pools into the path. No characters, no text, no UI, no border, no grid."
     },
     {
       "file": "bruts/decor_ref_layout.png",
@@ -160,7 +160,7 @@
   "raw_inputs": [
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor_ref_layout_imagegen.png",
-      "sha256": "c4bc1ca6338588845ba424fb5e91f6aa3a6bfccdd958a1b92fb5ff36de52d668",
+      "sha256": "ac14e5f3978f73cac73d641479ba1786a5112d535d468b0be676b9a5037f1ba3",
       "size": [
         1200,
         896
@@ -169,7 +169,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor_ref_layout.png",
-      "sha256": "540119b68c2c881c3932067b053ec05cdac4157ef276c3697c2de2bfc968a831",
+      "sha256": "60fa7ed23bf432e74a942db1903c4d890add1442ee3963fbbd9152641f124530",
       "size": [
         1200,
         896
@@ -178,7 +178,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/layout_magenta.png",
-      "sha256": "b876a2a7b284730a97bd43211a6efb0df4ed2c8aff5b967a71f65f2ea2c6a906",
+      "sha256": "1b2ecd3e04b68f664ac5d95fe2d1726f321ed84865e148c4a94fcd74e49f7259",
       "size": [
         1200,
         896
@@ -187,7 +187,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/lave_texture_rgba.png",
-      "sha256": "046302ac0b6a46cef78343ef581857fcb50204279b09c8e129f67f305eb3e32a",
+      "sha256": "880bd8a5869512beaf4f4bb39d1e237b41f48eb76560c91c7033dc5122663a2c",
       "size": [
         1200,
         896
@@ -196,7 +196,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/veines_roche_rgba.png",
-      "sha256": "aa3be0dcc715dd6707c98568f423e59ea67948f942bec908e2a81f8050e1e45d",
+      "sha256": "f3d4f8fe76ab7c08fcb52faa0a83a98321a677d8500dd96cdbdfa70955c5398e",
       "size": [
         1200,
         896
@@ -228,43 +228,43 @@
     },
     "bassins_lave_majeurs": [
       {
-        "label": 23,
-        "pixels": 81721,
+        "label": 15,
+        "pixels": 112260,
         "bbox_xyxy": [
-          2,
-          460,
-          519,
-          837
-        ],
-        "centroid_x": 159.24234896782957
-      },
-      {
-        "label": 25,
-        "pixels": 75506,
-        "bbox_xyxy": [
-          821,
-          470,
-          1197,
+          53,
+          177,
+          488,
           893
         ],
-        "centroid_x": 1063.7780441289433
+        "centroid_x": 263.74389809371104
+      },
+      {
+        "label": 13,
+        "pixels": 113332,
+        "bbox_xyxy": [
+          711,
+          176,
+          1145,
+          893
+        ],
+        "centroid_x": 933.8988370451417
       }
     ],
     "composantes_lave_finales": 2,
     "deux_aires_lave_max_px": [
-      85974,
-      77930
+      120368,
+      118837
     ],
-    "composantes_veines": 105,
-    "pixels_veines_brut": 8322,
+    "composantes_veines": 12,
+    "pixels_veines_brut": 8206,
     "aire_masques_px": {
-      "lave": 163904,
-      "sentier": 161852,
-      "eboulis": 213106,
-      "parois": 449055,
-      "piliers": 72793,
-      "grotte": 6168,
-      "veines_roche": 8322
+      "lave": 239205,
+      "sentier": 163285,
+      "eboulis": 257692,
+      "parois": 306158,
+      "piliers": 85645,
+      "grotte": 15009,
+      "veines_roche": 8206
     }
   },
   "normalization": {
@@ -347,7 +347,7 @@
     "tracks": {
       "lave": {
         "palette": 10,
-        "dynamic_pixels": 13898,
+        "dynamic_pixels": 17578,
         "palette_indices_used": [
           2,
           4,
@@ -359,12 +359,13 @@
       },
       "veines_roche": {
         "palette": 11,
-        "dynamic_pixels": 2783,
+        "dynamic_pixels": 3117,
         "palette_indices_used": [
           4,
           5,
           6,
           7,
+          8,
           9
         ]
       }
@@ -375,13 +376,13 @@
     "note": "Cycle PMD Ciel adapté aux matériaux GBA de la référence Mt. Blaze ; l’animation originale RRT n’est pas revendiquée."
   },
   "segmentation_masks_px_768x576": {
-    "lave": 67868,
-    "sentier": 67338,
-    "eboulis": 89455,
-    "parois": 183172,
-    "piliers": 29400,
-    "grotte": 2352,
-    "veines_roche": 2783
+    "lave": 99528,
+    "sentier": 67291,
+    "eboulis": 106089,
+    "parois": 125093,
+    "piliers": 35158,
+    "grotte": 6092,
+    "veines_roche": 3117
   },
   "access": {
     "entry_px": [
@@ -390,13 +391,13 @@
     ],
     "threshold_px": [
       384,
-      296
+      328
     ],
     "path_found_16x16": true,
-    "cells_explored": 813,
-    "blocked_cells": 5959,
+    "cells_explored": 910,
+    "blocked_cells": 5895,
     "total_cells": 6912,
-    "walkable_cells": 953,
+    "walkable_cells": 1017,
     "rule": "case bloquée si plus de 25 % des pixels sont hors du masque de sentier praticable",
     "warp": "aucun"
   },
@@ -405,40 +406,40 @@
     "asset": "emb2_entree_mt_blaze",
     "namespace": "entree_mt_blaze_sud_nord_v2",
     "tiles_per_bank": {
-      "EMB2_00_SOL_COMPLET_00": 1296,
-      "EMB2_01_OMBRES_00": 679,
-      "EMB2_02_LAVE_00": 2557,
-      "EMB2_02_LAVE_01": 2695,
-      "EMB2_02_LAVE_02": 2995,
-      "EMB2_02_LAVE_03": 1240,
-      "EMB2_03_SENTIER_00": 1293,
-      "EMB2_04_EBOULIS_00": 1663,
-      "EMB2_05_PAROIS_00": 4161,
-      "EMB2_06_PILIERS_00": 644,
-      "EMB2_07_GROTTE_00": 77,
-      "EMB2_08_VEINES_ROCHE_00": 681,
-      "EMB2_08_VEINES_ROCHE_01": 793,
-      "EMB2_08_VEINES_ROCHE_02": 1042,
-      "EMB2_08_VEINES_ROCHE_03": 265
+      "EMB2_00_SOL_COMPLET_00": 1163,
+      "EMB2_01_OMBRES_00": 370,
+      "EMB2_02_LAVE_00": 2895,
+      "EMB2_02_LAVE_01": 3575,
+      "EMB2_02_LAVE_02": 4294,
+      "EMB2_02_LAVE_03": 1817,
+      "EMB2_03_SENTIER_00": 1154,
+      "EMB2_04_EBOULIS_00": 1818,
+      "EMB2_05_PAROIS_00": 2505,
+      "EMB2_06_PILIERS_00": 679,
+      "EMB2_07_GROTTE_00": 139,
+      "EMB2_08_VEINES_ROCHE_00": 442,
+      "EMB2_08_VEINES_ROCHE_01": 472,
+      "EMB2_08_VEINES_ROCHE_02": 596,
+      "EMB2_08_VEINES_ROCHE_03": 158
     },
     "sheet_height_px": {
-      "EMB2_00_SOL_COMPLET_00": 328,
-      "EMB2_01_OMBRES_00": 176,
-      "EMB2_02_LAVE_00": 640,
-      "EMB2_02_LAVE_01": 680,
-      "EMB2_02_LAVE_02": 752,
-      "EMB2_02_LAVE_03": 312,
-      "EMB2_03_SENTIER_00": 328,
-      "EMB2_04_EBOULIS_00": 416,
-      "EMB2_05_PAROIS_00": 1048,
-      "EMB2_06_PILIERS_00": 168,
-      "EMB2_07_GROTTE_00": 24,
-      "EMB2_08_VEINES_ROCHE_00": 176,
-      "EMB2_08_VEINES_ROCHE_01": 200,
-      "EMB2_08_VEINES_ROCHE_02": 264,
-      "EMB2_08_VEINES_ROCHE_03": 72
+      "EMB2_00_SOL_COMPLET_00": 296,
+      "EMB2_01_OMBRES_00": 96,
+      "EMB2_02_LAVE_00": 728,
+      "EMB2_02_LAVE_01": 896,
+      "EMB2_02_LAVE_02": 1080,
+      "EMB2_02_LAVE_03": 456,
+      "EMB2_03_SENTIER_00": 296,
+      "EMB2_04_EBOULIS_00": 456,
+      "EMB2_05_PAROIS_00": 632,
+      "EMB2_06_PILIERS_00": 176,
+      "EMB2_07_GROTTE_00": 40,
+      "EMB2_08_VEINES_ROCHE_00": 112,
+      "EMB2_08_VEINES_ROCHE_01": 120,
+      "EMB2_08_VEINES_ROCHE_02": 152,
+      "EMB2_08_VEINES_ROCHE_03": 40
     },
-    "max_sheet_height_px": 1048,
+    "max_sheet_height_px": 1080,
     "banks": [
       "EMB2_00_SOL_COMPLET_00",
       "EMB2_01_OMBRES_00",

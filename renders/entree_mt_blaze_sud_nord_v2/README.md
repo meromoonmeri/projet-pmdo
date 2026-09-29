@@ -9,7 +9,7 @@ Projet d’édition 4:3 (768 × 576 px, 96 × 72 cases). Le layout est reconstru
 
 C’est une base graphique d’édition, pas une aventure jouable : aucun warp, Pokémon ou événement n’est ajouté.
 
-L’illustration 4:3 de base (`decor_ref_layout_imagegen.png`) a été générée avec le générateur d’images, puis recolorée par matériau et reconstruite en calques séparés. Ce n’est pas un rip de ROM.
+L’illustration 4:3 de base (`decor_ref_layout_imagegen.png`) a été redessinée avec le générateur d’images en joignant la vignette canonique Mt. Blaze comme référence stricte ; elle a ensuite été recolorée par matériau et reconstruite en calques séparés. Ce n’est pas un rip pixel-par-pixel de la ROM.
 
 ## Sources de matière
 

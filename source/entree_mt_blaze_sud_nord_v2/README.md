@@ -7,7 +7,7 @@ Cette V2 répond à la correction de layout : elle ne reprend pas la composition
 ## Référence et limites
 
 - Copie locale consultable : `reference/mt_blaze_reference_300x260.png` (300 × 260 px), retrouvée sur [Mystery Dungeon Wiki — Mt. Blaze](https://mysterydungeonwiki.com/wiki/Rescue_Team:Mt._Blaze). L’URL de l’image originale et les empreintes sont enregistrées dans `renders/entree_mt_blaze_sud_nord_v2/manifest.json`.
-- `bruts/decor_ref_layout_imagegen.png` est l’illustration 4:3 effectivement produite par le générateur d’images à partir du prompt de composition inspiré de la vignette ; l’image de référence n’a pas été jointe au générateur. Ce n’est ni un rip pixel-par-pixel de la ROM ni une carte originale certifiée.
+- `bruts/decor_ref_layout_imagegen.png` est l’illustration 4:3 produite avec le générateur d’images en joignant `reference/mt_blaze_reference_300x260.png` comme référence stricte afin de préserver les repères canoniques. C’est un redessin guidé par l’image, pas un rip pixel-par-pixel de la ROM.
 - `bruts/decor_ref_layout.png` est la copie de travail recolorée par matériau pour aligner les couleurs modales sur la vignette ; elle conserve l’illustration et ses textures générées. Les masques et les calques sont ensuite extraits séparément.
 - Recalage par translation RGB uniforme dans chaque masque, sur les couleurs modales échantillonnées : sentier `(175,135,111)`, lave `(103,47,63)`, roche `(167,159,167)`. Distance modale finale **0,00** par construction ; cela n’est pas une comparaison pixel-à-pixel indépendante.
 - Le README de `source/outil_maps_pmdsky/` a été consulté. Il concerne les maps/BG d’Explorers of Sky et ne fournit pas Mt. Blaze GBA ; il n’est pas utilisé comme source graphique de la composition.

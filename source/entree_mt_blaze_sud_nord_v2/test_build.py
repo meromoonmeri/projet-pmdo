@@ -88,7 +88,7 @@ class Build(unittest.TestCase):
         self.assertTrue((R / M['reference_da']['local_file']).is_file())
         self.assertEqual(M['generation'][0]['file'], 'bruts/decor_ref_layout_imagegen.png')
         self.assertIn('generate_image', M['generation'][0]['generator'])
-        self.assertFalse(M['generation'][0]['image_reference_attached'])
+        self.assertTrue(M['generation'][0]['image_reference_attached'])
         self.assertIn('Mt. Blaze Entrance', M['reference_da']['title'])
         self.assertFalse(M['art_approved'])
         self.assertFalse(M['pmdo']['runtime_tested'])
