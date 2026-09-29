@@ -1,4 +1,4 @@
-"""Tests dédiés — Entrée Sables mouvants sud -> nord V1 (FSM1, 4:3 vaste).
+"""Tests dédiés — Fin Sables mouvants (FSM1, 4:3 vaste).
 .venv/bin/python -m unittest source.fin_sables_mouvants_v1.test_build -v
 Contrôles d'images, de formats, de palettes, de fidélité au rip, de cadence et de grille : PAS un test du moteur PMDO.
 """
@@ -15,7 +15,7 @@ S = R / '.cache/fin_sables_mouvants_v1/fin_sables_mouvants'
 M = json.loads((O / 'manifest.json').read_text())
 W, H = M['size_px']
 NAMES = [Path(L['file']).name.replace('_fNN', '') for L in M['layers']]
-STATIC = ('sable', 'ombres', 'bord_fosse', 'roche', 'pierres', 'profondeur')
+STATIC = ('sable', 'ombres', 'bord_fosse', 'roche', 'pierres')
 REF = R / 'witheringdesert.png'
 
 
@@ -38,7 +38,7 @@ STACK = [expand(L) for L in M['layers']]
 BY = {re.sub(r'^FSM1_\d\d_', '', Path(n).stem): fr for n, fr in zip(NAMES, STACK)}
 ORDER = list(BY)
 MASK = {k: np.array(Image.open(O / f'masques/FSM1_masque_{k}.png')) > 0
-        for k in ('fosse', 'chutes', 'profondeur', 'sable', 'ombres', 'bord_fosse')}
+        for k in ('fosse', 'chutes', 'sable', 'ombres', 'bord_fosse')}
 B = loadmod('fsm1_build', HERE / 'build.py')
 
 
@@ -76,7 +76,8 @@ class Build(unittest.TestCase):
         self.assertTrue(all(x['images'] and len(x['prompt']) > 100 for x in g))
         self.assertIn(REF.name, g[0]['images']); self.assertIn(REF.name, g[2]['images'])     # rip en référence
         self.assertTrue(g[1]['images'][0].endswith('bruts/decor_magenta.png'))                 # sol : édité du décor
-        self.assertIn('choisi par l agent', M['biome'])
+        self.assertIn('choisis par l agent', M['biome'])
+        self.assertEqual(M['type'], 'fin de donjon')
         self.assertFalse(M['art_approved']); self.assertFalse(M['pmdo']['runtime_tested'])
 
     def test_sol_complet_recale_sur_le_decor(self):
@@ -96,17 +97,15 @@ class Build(unittest.TestCase):
         for name, frames in BY.items():
             for a in frames:
                 self.assertEqual(a.shape[:2], (H, W))
-                if name != 'rayons':
-                    self.assertTrue(set(np.unique(a[..., 3])) <= {0, 255}, name)
+                self.assertTrue(set(np.unique(a[..., 3])) <= {0, 255}, name)
                 v = a[a[..., 3] > 0].astype(int)
                 self.assertEqual(int(((v[:, 0] - v[:, 1] > 60) & (v[:, 2] - v[:, 1] > 60)).sum()), 0)   # ni magenta ni frange
 
     def test_multicalque_full_coverage_and_order(self):
-        self.assertEqual(ORDER, ['fosse', 'sol_complet', *STATIC, 'chutes', 'poussiere', 'rayons'])
+        self.assertEqual(ORDER, ['fosse', 'sol_complet', *STATIC, 'chutes', 'poussiere'])
         cover = np.zeros((H, W), bool)
         for k in ORDER:
-            if k != 'rayons':
-                cover |= alpha(BY[k][0])
+            cover |= alpha(BY[k][0])
         self.assertTrue(cover.all())
         fixed = [alpha(BY[k][0]) for k in STATIC] + [MASK['chutes']]        # calques fixes et chutes exclusifs
         self.assertEqual(int(np.sum(fixed, 0).max()), 1)
@@ -118,11 +117,9 @@ class Build(unittest.TestCase):
         pg = M['normalization']['palettes']
         self.assertLessEqual(len(colors([BY[k][0] for k in pg['terrain']['calques']])), 96)
         self.assertLessEqual(len(colors([BY['roche'][0], BY['pierres'][0]])), 64)
-        self.assertLessEqual(len(colors(BY['profondeur'])), 12)
         lum = lambda k: BY[k][0][alpha(BY[k][0])][:, :3].astype(float) @ [.299, .587, .114]
         sb = BY['sable'][0][alpha(BY['sable'][0])][:, :3].astype(float).mean(0)
         self.assertGreater(sb[0], sb[2] + 100)                             # sable jaune vif
-        self.assertLess(float(np.median(lum('profondeur'))), 50)           # entrée sombre
         self.assertLess(lum('ombres').mean(), lum('sable').mean() - 8)     # ombres plus sombres que le sable
         self.assertLess(lum('bord_fosse').mean(), lum('sable').mean() - 8) # lèvre de la fosse plus sombre
         ro = nd.distance_transform_edt(~(alpha(BY['roche'][0]) | alpha(BY['pierres'][0]) | alpha(BY['bord_fosse'][0])))
@@ -212,22 +209,20 @@ class Build(unittest.TestCase):
         for x, y, _ in swirls:
             self.assertGreater(float(dp[y, x]), 40)
 
-    def test_rayons_overlay_boucle_et_bouche_libre(self):
-        Rr = M['rayons']; fr = BY['rayons']
-        self.assertEqual((len(fr), Rr['frame_length_ticks']), (12, 10))
-        self.assertEqual(colors(fr), {tuple(Rr['couleur'])}); self.assertIn(tuple(Rr['couleur']), rip_colors())
-        levels = set(np.unique(np.concatenate([a[..., 3].ravel() for a in fr])).tolist())
-        self.assertTrue(levels <= set(range(0, Rr['alpha_max'] + 1, Rr['palier_alpha'])), levels)
-        self.assertEqual(max(levels), Rr['alpha_max'])
-        for t in (0, 7):
-            self.assertTrue((B.ray_frames(ts=[t])[0] == fr[t]).all(), t)
-        self.assertTrue((B.ray_frames(ts=[12])[0] == fr[0]).all())          # 12 = 0
-        mouth = nd.binary_dilation(MASK['profondeur'], iterations=4)
-        for a in fr:
-            self.assertFalse((a[..., 3] > 0)[mouth].any())                  # pas de lumière sur l'entrée sombre
-            self.assertFalse((a[int(Rr['fondu_fraction_h'] * H):, :, 3] > 0).any())   # fondu avant le sud
-        d = steps(fr)
-        self.assertTrue(min(d) > 0 and d[11] <= 1.1 * max(d[:11]), d)
+    def test_pas_de_rayons_ni_alpha_intermediaire(self):
+        self.assertNotIn('rayons', BY)                                      # arène fermée, sans ciel
+        self.assertIn('aucun', M['rayons'])
+        for frames in STACK:
+            for a in frames:
+                self.assertTrue(set(np.unique(a[..., 3])) <= {0, 255})
+
+    def test_coherence_avec_entree_eqs1(self):
+        E = loadmod('eqs1_build_ref', R / 'source/entree_sables_mouvants_sud_nord_v1/build.py')
+        self.assertEqual(B.PIT_SEQ, E.PIT_SEQ); self.assertEqual(B.FALL_PAIRS, E.FALL_PAIRS)   # mêmes couleurs du rip
+        self.assertEqual((B.FALL_BASE, B.FALL_STEP, B.FALL_PERIOD), (E.FALL_BASE, E.FALL_STEP, E.FALL_PERIOD))
+        self.assertEqual((B.POSE_WIN, B.PUFF_SEQ, B.SWIRL_SEQ), (E.POSE_WIN, E.PUFF_SEQ, E.SWIRL_SEQ))
+        self.assertEqual((R / 'source/fin_sables_mouvants_v1/bruts/poussiere_poses.png').read_bytes(),
+                         (R / 'source/entree_sables_mouvants_sud_nord_v1/bruts/poussiere_poses.png').read_bytes())
 
     def test_ora_and_scene(self):
         with zipfile.ZipFile(O / 'FSM1_fin_sables_mouvants_calques.ora') as z:
@@ -242,19 +237,29 @@ class Build(unittest.TestCase):
             self.assertEqual(M['scene_loop_ticks'] % (L['phases'] * L['ticks']) if L['phases'] > 1 else 0, 0)
 
     def test_access(self):
-        a = M['access']; self.assertTrue(a['path_found_16x16'])
-        ex, ey = a['entry_px']; tx, ty = a['threshold_px']
-        self.assertGreater(ey, H - 64); self.assertLess(ty, H // 3)
-        self.assertTrue(walk()[ey:ey + 16, ex:ex + 16].mean() > 0.5)        # arrivée sur le sable
-        dp = nd.distance_transform_edt(~MASK['profondeur'])
-        self.assertLess(float(dp[ty:ty + 16, tx:tx + 16].min()), 24)          # seuil au pied de l'entrée sombre
+        a = M['access']; self.assertTrue(a['path_found_16x16'] and a['path_to_boss'] and a['path_to_objective'])
+        ex, ey = a['entry_px']; bx, by = a['boss_px']; ox, oy = a['objective_px']
+        self.assertGreater(ey, H - 64); self.assertLess(oy, H // 3)           # arrivée au sud, objectif au nord
+        self.assertGreater(by, MASK['fosse'].nonzero()[0].max())               # boss au sud de la fosse
+        self.assertLess(oy, MASK['fosse'].nonzero()[0].min())                  # objectif au nord de la fosse
+        for x, y in (a['entry_px'], a['boss_px'], a['objective_px']):
+            self.assertTrue(walk()[y:y + 16, x:x + 16].mean() > 0.9)           # les trois marqueurs sur le sable
+        fx = [p[0] for p in M['chutes']['pieds']]
+        self.assertTrue(min(fx) < ox < max(fx))                               # objectif entre les deux chutes
         self.assertEqual(a['walkable_cells'] + a['blocked_cells'], (W // 8) * (H // 8))
         self.assertGreater(a['walkable_cells'], 1500)
         doc = json.loads((S / f"Data/Ground/{M['pmdo']['asset']}.rsground").read_text())
         blocked = np.array([[c['Tags'] for c in col] for col in doc['Object']['obstacles']]).T.astype(bool)
-        for k in ('fosse', 'chutes', 'profondeur'):                         # fosse, chutes, bouche : cases bloquées
+        for k in ('fosse', 'chutes'):                                          # fosse et chutes : cases bloquées
             cells = MASK[k].reshape(H // 8, 8, W // 8, 8).mean((1, 3)) > 0.5
             self.assertTrue(blocked[cells].all(), k)
+        self.assertTrue(blocked[:4].all())                                     # la bande nord est une paroi
+        # Aucun contournement par la fosse : elle est vraiment bloquante, et la couronne de sable l'entoure.
+        v1 = loadmod('esn1_ref', R / 'source/entree_sud_nord_generee_v1/build.py')
+        ring = nd.binary_dilation(MASK['fosse'], iterations=20) & ~MASK['fosse']
+        self.assertGreater(float((walk() & ring).sum() / ring.sum()), 0.6)     # bord praticable autour de la fosse
+        for (x, y) in (a['boss_px'], a['objective_px']):
+            ok, _ = v1.reachable(blocked, (ey // 8, ex // 8), (y // 8, x // 8)); self.assertTrue(ok)
 
     def test_prefix_and_namespace_unique(self):
         for p in (R / 'source').glob('*/build.py'):
@@ -281,11 +286,9 @@ class Build(unittest.TestCase):
                             f = track['Frames'][t % len(track['Frames'])]
                             out[y*8:y*8+8, x*8:x*8+8] = np.array(nr.straight(banks[f['Sheet']][f['TexLoc']['X'], f['TexLoc']['Y']]))
                 exp = frames[t]
-                if 'rayons' in L['file']:                                   # alpha intermédiaire : prémultiplié à l'écriture
-                    exp = np.array(nr.straight(gfx.premult(Image.fromarray(exp))))
                 self.assertTrue((out == exp).all(), (li, t))
         self.assertEqual(sum(w['Tags'] for c in o['obstacles'] for w in c), M['access']['blocked_cells'])
-        self.assertEqual({m['EntName'] for m in o['Entities'][0]['Markers']}, {'entrance', 'donjon_seuil'})
+        self.assertEqual({m['EntName'] for m in o['Entities'][0]['Markers']}, {'entrance', 'boss', 'objectif'})
         tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
         self.assertEqual(set(tools.read_index(S / 'Content/Tile/index.idx')), set(M['pmdo']['banks']))
 
