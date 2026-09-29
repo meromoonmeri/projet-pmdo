@@ -1,0 +1,661 @@
+{
+  "lot": "fin_clairiere_tropicale_v1",
+  "prefix": "FCT1",
+  "biome": "Clairière tropicale, prolongement de l entrée ETC1; choix agent à confirmer",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "method": "Textures canoniques = rendu généré référencé sur le rip PMD Sky de Clairière tropicale. Le témoin magenta sert uniquement à segmenter; ce ne sont ni des pixels natifs ni des tuiles canoniques.",
+  "reference": {
+    "file": "large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png",
+    "sha256": "e9145e2170d872d1329c5737a4d96d454546bdf888042dd4f0bfbfeda7a2e2a5",
+    "related_entry": "ETC1"
+  },
+  "generation": [
+    {
+      "file": "decor.png",
+      "images": [
+        "large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png"
+      ],
+      "prompt": "Carte 4:3 de fin de donjon tropicale référencée sur la capture PMD Sky: arène centrale dégagée en herbe, chemin de dalles canoniques et mer à bandes bleues uniquement au sud; végétation/palmiers/fleurs dans les mêmes textures et palette. Aucun fruit, autel, cascade, rivière ni eau derrière la carte."
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "decor.png"
+      ],
+      "prompt": "Édition alignée du décor, sous-couche complète herbe/sable; objets et mer retirés."
+    },
+    {
+      "file": "objets_magenta.png",
+      "images": [
+        "decor.png"
+      ],
+      "prompt": "Édition du même layout, sol herbeux ouvert remplacé par magenta pur, mer sud, dalles et végétation gardées; témoin de segmentation uniquement."
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/fin_clairiere_tropicale_v1/bruts/decor.png",
+      "sha256": "05b999ccfd5b39da965fe4f01a76bd6ebfc114930488db38acf679919a0d67e0",
+      "size": [
+        1200,
+        896
+      ],
+      "references": [
+        "large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png"
+      ],
+      "purpose": "décor complet référencé"
+    },
+    {
+      "file": "source/fin_clairiere_tropicale_v1/bruts/sol_complet.png",
+      "sha256": "98c501e1776c1312915ff3f54bd20587e35f34fc07c96d74effeb852604c6e0e",
+      "size": [
+        1200,
+        896
+      ],
+      "references": [
+        "source/fin_clairiere_tropicale_v1/bruts/decor.png"
+      ],
+      "purpose": "témoin terrain complet édité depuis le décor"
+    },
+    {
+      "file": "source/fin_clairiere_tropicale_v1/bruts/objets_magenta.png",
+      "sha256": "0ea96baa23f7bea47ae82902acef56bdc1fe54112c40ae37288770b833b16eeb",
+      "size": [
+        1200,
+        896
+      ],
+      "references": [
+        "source/fin_clairiere_tropicale_v1/bruts/decor.png"
+      ],
+      "purpose": "témoin de segmentation magenta; jamais exporté comme texture"
+    }
+  ],
+  "segmentation": {
+    "ground_px": 376882,
+    "object_px": 698318,
+    "magenta_witness_px": 376882,
+    "classes": {
+      "herbe": 376882,
+      "sable": 30834,
+      "eau": 87417,
+      "jungle": 496960,
+      "fleurs": 30822,
+      "rochers": 338,
+      "canopee": 51947
+    },
+    "unclassified_ground_px": 0
+  },
+  "fidelity_rgb": {
+    "herbe": {
+      "rip_rgb": [
+        182.6,
+        213.5,
+        96.7
+      ],
+      "decor_rgb": [
+        183.3,
+        215.7,
+        91.5
+      ],
+      "distance": 5.6
+    },
+    "jungle": {
+      "rip_rgb": [
+        103.8,
+        138.7,
+        50.7
+      ],
+      "decor_rgb": [
+        104.0,
+        139.2,
+        48.8
+      ],
+      "distance": 2.0
+    },
+    "dalles": {
+      "rip_rgb": [
+        239.6,
+        209.1,
+        147.1
+      ],
+      "decor_rgb": [
+        238.6,
+        211.3,
+        143.5
+      ],
+      "distance": 4.3
+    }
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "target": [
+      768,
+      576
+    ],
+    "method": "moyenne pondérée par classe BOX, gagnant de poids maximal; couleurs quantifiées par groupes terrain/objets"
+  },
+  "layers": [
+    {
+      "name": "sol_complet",
+      "file": "calques/FCT1_00_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "mer_base",
+      "file": "calques/FCT1_01_mer_base.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "herbe",
+      "file": "calques/FCT1_02_herbe.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "sable",
+      "file": "calques/FCT1_03_sable.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "ombres",
+      "file": "calques/FCT1_04_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "jungle",
+      "file": "calques/FCT1_05_jungle.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "rochers",
+      "file": "calques/FCT1_06_rochers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "fleurs",
+      "file": "calques/FCT1_07_fleurs.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "canopee",
+      "file": "calques/FCT1_08_canopee.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "mer",
+      "file": "animation/mer/FCT1_09_mer_fNN.png",
+      "phases": 24,
+      "ticks": 5
+    },
+    {
+      "name": "papillons",
+      "file": "animation/papillons/FCT1_10_papillons_fNN.png",
+      "phases": 24,
+      "ticks": 5
+    }
+  ],
+  "animations": {
+    "mer": {
+      "phases": 24,
+      "ticks_per_phase": 5,
+      "palette_sampled_from_render": [
+        [
+          15,
+          95,
+          199
+        ],
+        [
+          15,
+          103,
+          199
+        ],
+        [
+          31,
+          119,
+          207
+        ],
+        [
+          47,
+          127,
+          207
+        ],
+        [
+          63,
+          143,
+          215
+        ],
+        [
+          71,
+          151,
+          215
+        ],
+        [
+          119,
+          183,
+          231
+        ],
+        [
+          167,
+          207,
+          239
+        ],
+        [
+          215,
+          231,
+          247
+        ]
+      ],
+      "origin": "pixels/profil de vagues repris sans resampling depuis le calque ETC1, lui-même construit avec les couleurs et la crête du rip; cadence et déroulement non officiels"
+    },
+    "butterflies": {
+      "phases": 24,
+      "ticks_per_phase": 5,
+      "tracks_px": [
+        [
+          [
+            235,
+            330
+          ],
+          [
+            568,
+            331
+          ],
+          [
+            358,
+            259
+          ]
+        ],
+        [
+          [
+            251,
+            347
+          ],
+          [
+            559,
+            327
+          ],
+          [
+            351,
+            256
+          ]
+        ],
+        [
+          [
+            266,
+            359
+          ],
+          [
+            548,
+            331
+          ],
+          [
+            347,
+            247
+          ]
+        ],
+        [
+          [
+            279,
+            364
+          ],
+          [
+            534,
+            341
+          ],
+          [
+            345,
+            235
+          ]
+        ],
+        [
+          [
+            289,
+            359
+          ],
+          [
+            520,
+            355
+          ],
+          [
+            347,
+            223
+          ]
+        ],
+        [
+          [
+            295,
+            347
+          ],
+          [
+            506,
+            369
+          ],
+          [
+            351,
+            214
+          ]
+        ],
+        [
+          [
+            297,
+            330
+          ],
+          [
+            492,
+            379
+          ],
+          [
+            358,
+            211
+          ]
+        ],
+        [
+          [
+            295,
+            313
+          ],
+          [
+            481,
+            383
+          ],
+          [
+            368,
+            214
+          ]
+        ],
+        [
+          [
+            289,
+            301
+          ],
+          [
+            472,
+            379
+          ],
+          [
+            378,
+            223
+          ]
+        ],
+        [
+          [
+            279,
+            296
+          ],
+          [
+            467,
+            369
+          ],
+          [
+            390,
+            235
+          ]
+        ],
+        [
+          [
+            266,
+            301
+          ],
+          [
+            465,
+            355
+          ],
+          [
+            402,
+            247
+          ]
+        ],
+        [
+          [
+            251,
+            313
+          ],
+          [
+            467,
+            341
+          ],
+          [
+            412,
+            256
+          ]
+        ],
+        [
+          [
+            235,
+            330
+          ],
+          [
+            472,
+            331
+          ],
+          [
+            422,
+            259
+          ]
+        ],
+        [
+          [
+            219,
+            347
+          ],
+          [
+            481,
+            327
+          ],
+          [
+            429,
+            256
+          ]
+        ],
+        [
+          [
+            204,
+            359
+          ],
+          [
+            492,
+            331
+          ],
+          [
+            433,
+            247
+          ]
+        ],
+        [
+          [
+            191,
+            364
+          ],
+          [
+            506,
+            341
+          ],
+          [
+            435,
+            235
+          ]
+        ],
+        [
+          [
+            181,
+            359
+          ],
+          [
+            520,
+            355
+          ],
+          [
+            433,
+            223
+          ]
+        ],
+        [
+          [
+            175,
+            347
+          ],
+          [
+            534,
+            369
+          ],
+          [
+            429,
+            214
+          ]
+        ],
+        [
+          [
+            173,
+            330
+          ],
+          [
+            548,
+            379
+          ],
+          [
+            422,
+            211
+          ]
+        ],
+        [
+          [
+            175,
+            313
+          ],
+          [
+            559,
+            383
+          ],
+          [
+            412,
+            214
+          ]
+        ],
+        [
+          [
+            181,
+            301
+          ],
+          [
+            568,
+            379
+          ],
+          [
+            402,
+            223
+          ]
+        ],
+        [
+          [
+            191,
+            296
+          ],
+          [
+            573,
+            369
+          ],
+          [
+            390,
+            235
+          ]
+        ],
+        [
+          [
+            204,
+            301
+          ],
+          [
+            575,
+            355
+          ],
+          [
+            378,
+            247
+          ]
+        ],
+        [
+          [
+            219,
+            313
+          ],
+          [
+            573,
+            341
+          ],
+          [
+            368,
+            256
+          ]
+        ]
+      ],
+      "origin": "poses magenta générées et déjà découpées pour ETC1, réutilisées sans modification; trajectoires composées pour FCT1"
+    }
+  },
+  "scene_loop_ticks": 120,
+  "access": {
+    "markers": {
+      "entrance": [
+        384,
+        544
+      ],
+      "boss": [
+        384,
+        360
+      ],
+      "objectif": [
+        384,
+        144
+      ]
+    },
+    "path_16x16": {
+      "boss": {
+        "ok": true,
+        "explored": 313
+      },
+      "objectif": {
+        "ok": true,
+        "explored": 1332
+      }
+    },
+    "blocked_cells": 4351,
+    "total_cells": 6912,
+    "rule": "case bloquée si >25% non praticable; herbe/sable/ombres praticables",
+    "warp": "aucun"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "fct1_fin_clairiere_tropicale",
+    "namespace": "fin_clairiere_tropicale",
+    "tiles_per_bank": {
+      "FCT1_00_SOL_COMPLET": 6840,
+      "FCT1_01_MER_BASE": 105,
+      "FCT1_02_HERBE": 2824,
+      "FCT1_03_SABLE": 448,
+      "FCT1_04_OMBRES": 443,
+      "FCT1_05_JUNGLE": 3840,
+      "FCT1_06_ROCHERS": 27,
+      "FCT1_07_FLEURS": 714,
+      "FCT1_08_CANOPEE": 507,
+      "FCT1_09_MER": 2350,
+      "FCT1_10_PAPILLONS": 242
+    },
+    "runtime_tested": false
+  },
+  "art_approved": false
+}

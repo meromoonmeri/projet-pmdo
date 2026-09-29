@@ -1,0 +1,260 @@
+{
+  "lot": "fin_couloir_violet_v1",
+  "prefix": "FVC1",
+  "biome": "Couloir rocheux violet, continuation d ECV1; choix de l agent à confirmer",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "method": "rendu généré référencé sur la capture canonique ECV1. Le magenta ne sert que de masque; ce ne sont pas des tuiles natives.",
+  "reference": {
+    "file": "large.S05P03A.png.301f7a1eadda348357be0801e81faa2a.png",
+    "sha256": "a4b168b07ecd76b154a79a6ea434bc67b8d1d6f6ad7a82ff0711a79a5cedbd94",
+    "related_entry": "ECV1"
+  },
+  "generation": [
+    {
+      "file": "decor.png",
+      "images": [
+        "large.S05P03A.png.301f7a1eadda348357be0801e81faa2a.png"
+      ],
+      "prompt": "Fin de donjon violette, couloir sud ouvrant sur une arène centrale, murs et sol selon la palette/matière de la capture; sans objets étrangers."
+    },
+    {
+      "file": "objets_magenta.png",
+      "images": [
+        "decor.png"
+      ],
+      "prompt": "Édition de masque magenta du sol uniquement; rochers gardés; guide non exporté."
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "decor.png"
+      ],
+      "prompt": "Sous-couche programmatique répétée à partir de pixels valides du sol généré; cachée sous les calques visibles."
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/fin_couloir_violet_v1/bruts/decor.png",
+      "sha256": "69a955a67674eb33a2836b0c33335e83e126a05c5d9e60d0dd15dbb3850caa5a",
+      "size": [
+        1200,
+        896
+      ],
+      "references": [
+        "large.S05P03A.png.301f7a1eadda348357be0801e81faa2a.png"
+      ],
+      "purpose": "décor complet généré référencé"
+    },
+    {
+      "file": "source/fin_couloir_violet_v1/bruts/objets_magenta.png",
+      "sha256": "e128f76b2b01fdbf1f47cfb4c48c2c8c4931221616d765c8e84b87d96d8cb7fc",
+      "size": [
+        1200,
+        896
+      ],
+      "references": [
+        "decor.png"
+      ],
+      "purpose": "témoin de masque seulement; magenta jamais exporté"
+    },
+    {
+      "file": "source/fin_couloir_violet_v1/bruts/sol_complet.png",
+      "sha256": "dc443ec3fd119884a76b4b0eb2ceafc8fe54b1f36bddbf49024ae85f810e71ef",
+      "size": [
+        1200,
+        896
+      ],
+      "references": [
+        "decor.png"
+      ],
+      "purpose": "underpainting répétée depuis une zone propre de sol du décor; masquée en jeu"
+    }
+  ],
+  "segmentation": {
+    "magenta_floor_px": 499192,
+    "void_px": 21,
+    "pebble_px": 7104,
+    "wall_px": 568883,
+    "pebble_components": 41
+  },
+  "fidelity": {
+    "method": "distance euclidienne entre moyenne RVB du ROI du sol ECV1 et moyenne du sol segmenté généré; échantillonnage indicatif, non pixel-perfect",
+    "rip_floor_rgb": [
+      76.5,
+      68.3,
+      104.9
+    ],
+    "decor_floor_rgb": [
+      90.4,
+      76.7,
+      110.3
+    ],
+    "distance": 17.1
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "size": [
+      768,
+      576
+    ],
+    "method": "réduction BOX par classes; quantification groupée 96 couleurs"
+  },
+  "layers": [
+    {
+      "name": "sol_complet",
+      "file": "calques/FVC1_00_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "sol",
+      "file": "calques/FVC1_01_sol.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "ombres",
+      "file": "calques/FVC1_02_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "gravillons",
+      "file": "calques/FVC1_03_gravillons.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "parois",
+      "file": "calques/FVC1_04_parois.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "vide",
+      "file": "calques/FVC1_05_vide.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "eboulis",
+      "file": "animation/eboulis/FVC1_06_eboulis_fNN.png",
+      "phases": 24,
+      "ticks": 5
+    }
+  ],
+  "animations": {
+    "eboulis": {
+      "phases": 24,
+      "ticks": 5,
+      "emitters": [
+        [
+          139,
+          414,
+          12,
+          0,
+          "petit"
+        ],
+        [
+          692,
+          156,
+          -12,
+          5,
+          "moyen"
+        ],
+        [
+          98,
+          409,
+          12,
+          10,
+          "gros"
+        ],
+        [
+          688,
+          317,
+          -12,
+          15,
+          "petit"
+        ],
+        [
+          136,
+          100,
+          12,
+          20,
+          "moyen"
+        ],
+        [
+          76,
+          170,
+          12,
+          1,
+          "gros"
+        ],
+        [
+          281,
+          435,
+          12,
+          6,
+          "petit"
+        ]
+      ],
+      "pose_origin": "poses ECV1 de gravillons provenant de la capture, pixels/tailles conservés",
+      "motion": "chutes calculées pour FVC1, non officielle"
+    }
+  },
+  "access": {
+    "markers": {
+      "entrance": [
+        384,
+        544
+      ],
+      "boss": [
+        384,
+        320
+      ],
+      "objectif": [
+        384,
+        96
+      ]
+    },
+    "path_16x16": {
+      "boss": {
+        "ok": true,
+        "explored": 283
+      },
+      "objectif": {
+        "ok": true,
+        "explored": 1758
+      }
+    },
+    "blocked_cells": 3721,
+    "total_cells": 6912,
+    "walkable_cells": 209557,
+    "no_warp": true
+  },
+  "scene_loop_ticks": 120,
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "fvc1_fin_couloir_violet",
+    "namespace": "fin_couloir_violet",
+    "tiles_per_bank": {
+      "FVC1_00_SOL_COMPLET": 6913,
+      "FVC1_01_SOL": 3247,
+      "FVC1_02_OMBRES": 851,
+      "FVC1_03_GRAVILLONS": 151,
+      "FVC1_04_PAROIS": 3855,
+      "FVC1_05_VIDE": 3,
+      "FVC1_06_EBOULIS": 174
+    },
+    "runtime_tested": false
+  },
+  "art_approved": false
+}

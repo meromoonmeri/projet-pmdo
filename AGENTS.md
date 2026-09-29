@@ -1,5 +1,11 @@
 # Méthode de production approuvée — zones Métano
 
+## Correction utilisateur du 29 septembre 2026 — fidélité du contenu au biome
+
+Le générateur ne doit pas inventer d'éléments hors sujet sous prétexte que l'image est référencée. Pour la fin tropicale, l'utilisateur a explicitement rejeté la pomme/sanctuaire et la rivière-cascade en arrière-plan : aucun de ces éléments n'existe dans la capture PMD canonique `large.S01P03A…png`. Le rendu corrigé garde sa flore, ses palmiers, ses dalles et sa texture de clairière; l'eau n'apparaît qu'en bandes au bord sud, comme dans la référence. L'essai rejeté reste traçable aux entrées de génération/historique, mais il ne doit pas être décrit comme livrable. Avant toute nouvelle génération référencée : vérifier les objets, les matières, les couleurs et la position des liquides directement contre la capture; dire explicitement ce qui est exclu. Un score moyen de palette ne suffit pas à valider le contenu ni la direction artistique.
+
+Dans les lots « textures canoniques », cela signifie toujours **rendu généré référencé**, sauf demande explicite de pixels natifs. Ne pas présenter les rendus générés comme des textures/tuiles canoniques exactes. Le témoin magenta sert à la segmentation et ne doit jamais être exporté comme texture visible.
+
 ## Correction utilisateur du 13 septembre 2026 — nouvelles entrées indépendantes
 
 Pour les nouvelles entrées de donjon indépendantes, l’utilisateur autorise expressément des **textures inventées dans la DA PMD**, via le générateur, avec de nombreux layouts et biomes. La contrainte des falaises/structures Métano exactes ne s’applique que lorsqu’il demande d’étendre Métano. Ne pas réimposer cette contrainte aux nouvelles entrées. Consulter les Ground PMD Sky comme références et publier des PNG visibles avec leurs chemins GitHub.
