@@ -1,41 +1,39 @@
-# Fin Mt. Blaze (4:3) — projet PMDO 0.8.12
+# Fin Mt. Blaze (FMB1) — projet PMDO 0.8.12
 
-Ce dossier est un projet d'édition autonome, `fin_mt_blaze`. Il contient le Ground `emb1_fin_mt_blaze` au **format 4:3 vaste** : 768 × 576 px, soit 96 × 72 cases de 8 px (`TexSize=1`), environ 2,4 × 2,4 écrans PMDO.
+Ce dossier est un projet d'édition autonome, `fin_mt_blaze`. Il contient le Ground `fmb1_fin_mt_blaze` au **format 4:3 vaste** : 768 × 576 px, soit 96 × 72 cases de 8 px.
 
-C'est la arène du cratère du volcan, prolonge l'entrée EMB1. Rendu généré référencé avec les textures canoniques, cratère de lave en magenta, plateforme centrale.
+C'est l'arène du cratère du volcan, prolonge l'entrée EMB1. Rendu généré référencé avec `images.jpg` + `Rescue_Team_-_Mt._Blaze_Entrance.png` (cratère central en magenta, plateforme centrale, chaussée).
 
-## Installer
+## Méthode
 
-- **Projet séparé** : copier `fin_mt_blaze` dans `PMDO/MODS/`, activer le mod, puis ouvrir le Ground.
-- **Dans un mod existant** : lancer `python INSTALLER.py /chemin/PMDO/MODS/mon_mod --dry-run`, puis relancer la même commande sans `--dry-run`.
+- **Décor** : rendu généré référencé (lave en magenta, 1200×896)
+- **Sol complet** : édité depuis le décor (sable seul)
+- **Base** : segmentation + down_class 8px, palette commune
+- **Lave** : magma visqueux procédural (Worley 24px, période 192×96, dérive sud, pliage/gonflement/croûte), rampe Mt Blaze 13 tons, 32×15 — palette cycling, cohérent au rip
+- **Veines** : fissures dans la roche, 32×15 palette cycling
+
+Boucle 480 ticks = 8 s. Aucun warp.
 
 ## Calques (bas → haut)
 
 | # | Calque | Animation |
 |---|---|---|
-| 00 | Lave (3 teintes lave exactes du rip : 208/64/8, 240/120/0, 240/176/0 ; onde Métano) | 4 × 10 ticks |
-| 01 | Lueur de lave (9 anneaux orange→jaune qui respirent) | 12 × 10 ticks |
-| 02 | Scintillements de braises sur lave | 4 × 10 ticks |
-| 03 | Flammes et impacts (poses générées sur lave) | 24 × 5 ticks |
-| 04 | Sol complet (sable) | fixe |
-| 05 | Sable praticable | fixe |
-| 06 | Ombres au pied des parois | fixe |
-| 07 | Berge de lave | fixe |
-| 08 | Parois rocheuses grises | fixe |
-| 09 | Rochers et piliers | fixe |
-| 10 | Profondeur (bouche sombre) | fixe |
-| 11 | Vide, `Layer=4` (Top) | — |
-
-La scène boucle en 120 ticks (2 s). Arène fermée au nord, cratère central avec plateforme du boss.
+| 00 | Lave visqueuse (cratère) | 32 × 15 |
+| 01 | Sol complet | fixe |
+| 02 | Sable | fixe |
+| 03 | Ombres | fixe |
+| 04 | Berge | fixe |
+| 05 | Parois | fixe |
+| 06 | Rochers/piliers | fixe |
+| 07 | Profondeur | fixe |
+| 08 | Veines | 32 × 15 |
+| 09 | Vide Top | — |
 
 ## Marqueurs et collisions
 
-- **Marqueurs** : `entrance` au sud, sur le sable ; `boss` au centre du cratère, sur la plateforme ; `objectif` devant la grotte au nord, sur sable sec. **Aucune sortie, aucun warp, pas de `donjon_seuil`.**
-- **Collisions** : seul le sable (ombres comprises) est praticable. Le lave, la berge, les parois, les piliers et la bouche sont bloqués ; la bande nord est une paroi. Des chemins libres de 16 × 16 px de l'arrivée au boss et à l'objectif ont été vérifiés sur la grille. **À contrôler en jeu.**
+- **Marqueurs** : `entrance` au sud, `boss` sur la plateforme centrale du cratère (384,232), `objectif` à côté (376,224). Chemins 16×16 vérifiés.
+- **Collisions** : seul le sable praticable ; cratère, berge, parois bloqués. Causeway de 80px relie le sud au centre, plateforme 120×80 walkable.
 
 ## Limites
 
-- **Terrain, eau et lueur** : dessins générés à partir de la capture `Rescue_Team_-_Mt._Blaze_Entrance.png`. Ce ne sont pas des tuiles natives.
-- **Animations** : lave façon rivière Métano, lueur de lave et flammes sont créés par nous, aux couleurs exactes du rip. Ce ne sont pas des animations officielles.
-- **Boss** : aucun boss n'est nommé ni placé ; `boss` est seulement un marqueur d'emplacement.
-- **Tests** : aucun test fait dans PMDO.
+- Générés à partir des rips, pas de tuiles natives ; lave/veines procédurales palette cycling cohérentes à la texture du rip.

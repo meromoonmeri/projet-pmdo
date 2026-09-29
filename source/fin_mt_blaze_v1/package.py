@@ -1,5 +1,5 @@
 """Tests -> ZIP projet PMDO + ZIP calques PNG -> aperçu autonome racine.
-.venv/bin/python source/fin_underground_lake_v1/package.py   (après build.py)
+.venv/bin/python source/fin_mt_blaze_v1/package.py   (après build.py)
 """
 from pathlib import Path
 import base64, json, re, subprocess, sys, zipfile
@@ -10,8 +10,8 @@ R = HERE.parents[1]
 O = R / 'renders/fin_mt_blaze_v1'
 S = R / '.cache/fin_mt_blaze_v1/fin_mt_blaze'
 PFX = 'FMB1'
-ANIMS = ['lave', 'lueur_lave', 'scintillements_lave', 'veines_lave', 'flammes']
-REVIEW = ['scene_t000.png', 'scene_animee.webp', 'collisions_marqueurs.png', 'planche_poses.png']
+ANIMS = ['lave','veines']
+REVIEW = ['scene_t000.png', 'scene_animee.webp', 'collisions_marqueurs.png']
 
 def zipdir(path, items):
     with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
@@ -26,7 +26,6 @@ def main():
     items = [(p, 'calques/' + p.name) for p in sorted((O / 'calques').glob('*.png'))]
     for sub in ANIMS:
         items += [(p, f'animation/{sub}/' + p.name) for p in sorted((O / 'animation' / sub).glob('*.png'))]
-    items += [(p, 'poses/' + p.name) for p in sorted((O / 'poses').glob('*.png'))]
     items += [(p, 'masques/' + p.name) for p in sorted((O / 'masques').glob('*.png'))]
     items += [(O / f'{PFX}_fin_mt_blaze_calques.ora', f'{PFX}_fin_mt_blaze_calques.ora'),
               (O / 'manifest.json', 'manifest.json'), (O / 'README.md', 'README.md')]
@@ -36,16 +35,10 @@ def main():
         return 'data:image/png;base64,' + base64.b64encode(Path(p).read_bytes()).decode()
     stack = []
     for L in M['layers']:
-        name = re.sub(rf'^{PFX}_\d\d_', '', Path(L['file']).stem.replace('_fNN', ''))
+        name = re.sub(rf'^{PFX}_\\d\\d_', '', Path(L['file']).stem.replace('_fNN', ''))
         frames = [O / L['file']] if L['phases'] == 1 else [O / L['file'].replace('fNN', f'f{t:02d}') for t in range(L['phases'])]
         stack.append({'id': name, 'ticks': L['ticks'], 'frames': [uri(p) for p in frames]})
-    poses = []
-    for kind in M['flammes']['poses']:
-        p = O / f'poses/{PFX}_{kind}.png'; 
-        if p.exists():
-            w, h = Image.open(p).size
-            poses.append({'id': kind, 'uri': uri(p), 'w': w, 'h': h})
-    data = {'size': M['size_px'], 'loop': M['scene_loop_ticks'], 'stack': stack, 'surface': 'rgb(45,25,20)', 'poses': poses,
+    data = {'size': M['size_px'], 'loop': M['scene_loop_ticks'], 'stack': stack, 'surface': 'rgb(120,40,20)', 'poses': [],
             'collisions': uri(O / f'review/{PFX}_collisions_marqueurs.png'),
             'entry': M['access']['markers']['entrance']}
     page = (HERE / 'viewer_template.html').read_text().replace('__DATA__', json.dumps(data))

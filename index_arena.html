@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arena — Mt. Blaze refait (géométrie intelligente)</title>
+<title>Arena — Mt. Blaze repris (méthode propre multicalque)</title>
 <style>
 body{font:15px/1.5 system-ui,sans-serif;background:#0f1418;color:#e0e8ef;margin:0;padding:24px}
 h1{margin:0 0 6px} a{color:#ff8c42}
@@ -11,24 +11,23 @@ h1{margin:0 0 6px} a{color:#ff8c42}
 iframe{width:100%;height:640px;border:1px solid #2a3a4a;background:#081116}
 .note{border-left:3px solid #ff8c42;padding-left:10px;color:#cbd8e6}
 </style>
-<h1>Arena — Mt. Blaze refait (28→29 sept.) — magma & flammes adaptés à la géométrie</h1>
-<p class="note"><strong>Intelligence sur les détails :</strong> plus d'ellipses posées. La lave est passée en <code>détection orange→magenta</code> (EMB1 10,5% organique suivant les berges rocheuses, FMB1 32% cratère organique du volcan) — la forme du magma suit exactement les rochers et la chaussée. Les flammes (24×5), la lueur (12×10) et les <strong>veines de lave qui pulsent dans la roche</strong> (12×10, orange→jaune) sont émises au centre de chaque vasque / du cratère et sur les fissures rocheuses (<code>centres</code> calculés sur le masque <em>water</em> visible), donc adaptées au layout. Pas de chemin de rocher artificiel : la chaussée de FMB1 est en <strong>sable beige craquelé</strong> (80 px, 750→350) — le seul walkable — et le bas a été élargi (750-896) pour que l'entrée ne soit pas bloquée. Textures canoniques strictes : <code>images=[Rescue_Team_-_Mt._Blaze_Entrance.png]</code> et <code>images=[images.jpg, Rescue_Team]</code> au générateur.</p>
+<h1>Arena — Mt. Blaze repris 29 sept. (méthode propre multicalque)</h1>
+<p class="note"><strong>Reprise complète demandée :</strong> suppression de la texture greffée (Underground Lake / pulsation sinusoïdale). Maintenant <strong>base</strong> (sable/roche/ombres/berge/piliers/profondeur) générée référencée depuis <code>Rescue_Team_-_Mt._Blaze_Entrance.png</code> puis <strong>lave</strong> et <strong>veines</strong> générées <strong>procédurales, cohérentes à la texture du rip</strong> — <strong>palette cycling frame par frame</strong>. Lave = magma visqueux (Worley périodique 24px, période 192×96, dérive plein sud 1 période/boucle, pliage, gonflement, croûte), rampe Mt Blaze 13 tons (croûte 3 + lave 10, 55/18/12→255/255/90), <strong>32 phases ×15 ticks = 480 ticks = 8 s</strong>. Veines = fissures orange dans la roche (extraction + Worley fin 18px), même rampe, 32×15 palette cycling (distance + bruit + heave). Layout EMB1 (2 vasques organiques 10,5%, grotte nord) et FMB1 (cratère 32% + plateforme 120×80 + chaussée sable 80px) conservés, mais tout le pipeline lave/veines refait. 768×576 (1200×896), marcateurs & BFS 16×16 OK.</p>
 <div class="grid">
   <div class="card">
     <h2>EMB1 — Entrée Mt. Blaze (10,5% lave organique)</h2>
-    <p>2 vasques latérales organiques (pas d'ellipses), rochers gris à outlines noirs, grotte nord. <strong>Lave séparée 4×10</strong> (WPAL 208/64/8 etc.) + <strong>veines qui pulsent 12×10</strong> dans la roche (extraites du décor, 29k px), lueur 12×10 orange→jaune, flammes aux berges. 24 638 tiles (12 calques). <a href="apercu_entree_mt_blaze_sud_nord_v1.html" target="_blank">ouvrir seul</a></p>
+    <p>2 vasques latérales organiques, grotte nord. <strong>Lave visqueuse 32×15</strong> (Worley, palette Mt Blaze, dérive sud, croûte qui flotte) + <strong>veines 32×15</strong> palette cycling dans la roche (13 629 px, distance+Worley+heave). 9 calques (lave→base→veines). Boucle 480 ticks. <a href="apercu_entree_mt_blaze_sud_nord_v1.html" target="_blank">ouvrir seul</a></p>
     <iframe src="apercu_entree_mt_blaze_sud_nord_v1.html" loading="lazy"></iframe>
   </div>
   <div class="card">
     <h2>FMB1 — Fin, cratère fermé (32% lave, plateforme 120×80)</h2>
-    <p>Cratère organique 32%, plateforme centrale walkable (boss 384,232) reliée par chaussée sable 80 px — pas de chemin de rocher bloqué. <strong>Lave séparée 4×10 + veines 12×10</strong> qui pulsent dans les fissures. 14 739 tiles (12 calques). <a href="apercu_fin_mt_blaze_v1.html" target="_blank">ouvrir seul</a></p>
+    <p>Cratère organique 32%, plateforme centrale walkable (boss 384,232) + chaussée sable 80px. <strong>Lave 32×15 + veines 32×15</strong> procédurales, palette cycling. 9 calques, boucle 480 ticks. <a href="apercu_fin_mt_blaze_v1.html" target="_blank">ouvrir seul</a></p>
     <iframe src="apercu_fin_mt_blaze_v1.html" loading="lazy"></iframe>
   </div>
   <div class="card">
-    <h2>FUL1 — Fin Underground Lake (témoin méthode)</h2>
-    <p>Lac, lueur turquoise, gouttes — même pipeline multicalque.</p>
-    <p><a href="apercu_fin_underground_lake_v1.html" target="_blank">ouvrir seul</a></p>
-    <iframe src="apercu_fin_underground_lake_v1.html" loading="lazy"></iframe>
+    <h2>Référence méthode (ECM1 — magma visqueux)</h2>
+    <p>Module partagé <code>source/magma_visqueux/magma.py</code> (RIP_RAMP Dark_Crater adapté, Worley périodique, 32×15) réutilisé pour Mt Blaze avec rampe orange Mt Blaze. <a href="apercu_entree_cratere_magma_v1.html" target="_blank">ECM1</a> · <code>Dark_Crater_Pit_TDS / entrance</code></p>
+    <iframe src="apercu_entree_cratere_magma_v1.html" loading="lazy"></iframe>
   </div>
 </div>
-<p style="margin-top:16px;color:#7a8d9e">Renders : <code>renders/entree_mt_blaze_sud_nord_v1/</code> (1,37+3,53 Mo) · <code>renders/fin_mt_blaze_v1/</code> (0,84+1,96 Mo) — Ground PMDO 0.8.12. Contrôles : <code>.venv/bin/python -m unittest source.entree_mt_blaze_sud_nord_v1.test_build source.fin_mt_blaze_v1.test_build</code> → 16 tests PASS. Pas de test moteur.</p>
+<p style="margin-top:16px;color:#7a8d9e">Renders : <code>renders/entree_mt_blaze_sud_nord_v1/</code> · <code>renders/fin_mt_blaze_v1/</code> — Ground PMDO 0.8.12. Contrôles : <code>.venv/bin/python -m unittest source.entree_mt_blaze_sud_nord_v1.test_build source.fin_mt_blaze_v1.test_build</code> → 14 tests PASS. Lave & veines : pixels calculés, aucune tuile native greffée.</p>

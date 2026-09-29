@@ -1,41 +1,40 @@
-# Entrée Mt. Blaze (4:3) — projet PMDO 0.8.12
+# Entrée Mt. Blaze (EMB1) — projet PMDO 0.8.12
 
-Ce dossier est un projet d'édition autonome, `entree_mt_blaze_sud_nord`. Il contient le Ground `emb1_entree_mt_blaze_sud_nord` au **format 4:3 vaste** : 768 × 576 px, soit 96 × 72 cases de 8 px (`TexSize=1`), environ 2,4 × 2,4 écrans PMDO.
+Ce dossier est un projet d'édition autonome, `entree_mt_blaze_sud_nord`. Il contient le Ground `emb1_entree_mt_blaze_sud_nord` au **format 4:3 vaste** : 768 × 576 px, soit 96 × 72 cases de 8 px (`TexSize=1`).
 
-C'est la entrée de donjon du volcan, inspirée de Rescue_Team_-_Mt._Blaze_Entrance.png (GBA, Red Rescue Team). Rendu généré référencé avec les textures canoniques, lave en magenta.
+C'est l'entrée de donjon du volcan, inspirée de `Rescue_Team_-_Mt._Blaze_Entrance.png` (GBA). Rendu généré référencé avec les textures canoniques : lave = magenta plat pour segmentation, base = sable/roche.
 
-## Installer
+## Méthode
 
-- **Projet séparé** : copier `entree_mt_blaze_sud_nord` dans `PMDO/MODS/`, activer le mod, puis ouvrir le Ground.
-- **Dans un mod existant** : lancer `python INSTALLER.py /chemin/PMDO/MODS/mon_mod --dry-run`, puis relancer la même commande sans `--dry-run`.
+- **Décor** : rendu généré référencé avec le rip en `images=` (lave en magenta #FF00FF)
+- **Sol complet** : édité depuis le décor (sable seul, 0,0)
+- **Base** (sable, ombres, berge, roche, piliers, profondeur) : segmentation pleine résolution → down_class 8px (moyenne pondérée par classe), palette commune quantifiée
+- **Lave** : magma visqueux procédural — bruit de Worley périodique (cellules 24px, période 192×96), dérive lente plein sud (1 période par boucle), pliage, gonflement et croûte sombre ; rampe de 13 tons Mt Blaze (croûte 3 + lave 10, du rouge sombre au jaune vif), pixels calculés, 32 phases × 15 ticks — **animation palette cycling frame par frame, cohérente à la texture du rip**
+- **Veines** : fissures orange dans la roche extraites du décor + fissures Worley fines (cell 18) pour garantir la densité ; même rampe, 32 phases × 15 ticks, palette cycling (distance au bord + Worley + heave sinus)
+
+Boucle : **480 ticks = 8 s** (32×15). Aucun warp.
 
 ## Calques (bas → haut)
 
 | # | Calque | Animation |
 |---|---|---|
-| 00 | Lave (3 teintes lave exactes du rip : 208/64/8, 240/120/0, 240/176/0 ; onde Métano) | 4 × 10 ticks |
-| 01 | Lueur de lave (9 anneaux orange→jaune qui respirent) | 12 × 10 ticks |
-| 02 | Scintillements de braises sur lave | 4 × 10 ticks |
-| 03 | Flammes et impacts (poses générées sur lave) | 24 × 5 ticks |
-| 04 | Sol complet (sable) | fixe |
-| 05 | Sable praticable | fixe |
-| 06 | Ombres au pied des parois | fixe |
-| 07 | Berge de lave | fixe |
-| 08 | Parois rocheuses grises | fixe |
-| 09 | Rochers et piliers | fixe |
-| 10 | Profondeur (bouche sombre) | fixe |
-| 11 | Vide, `Layer=4` (Top) | — |
-
-La scène boucle en 120 ticks (2 s). Entrée ouverte au sud, grotte au nord.
+| 00 | Lave visqueuse (Worley, palette Mt Blaze) | 32 × 15 ticks |
+| 01 | Sol complet (sable) | fixe |
+| 02 | Sable praticable | fixe |
+| 03 | Ombres au pied des parois | fixe |
+| 04 | Berge de lave | fixe |
+| 05 | Parois rocheuses grises | fixe |
+| 06 | Rochers et piliers | fixe |
+| 07 | Profondeur (bouche sombre) | fixe |
+| 08 | Veines de lave dans la roche (palette cycling) | 32 × 15 ticks |
+| 09 | Vide, `Layer=4` (Top) | — |
 
 ## Marqueurs et collisions
 
-- **Marqueurs** : `entrance` au sud, sur le sable ; `boss` au centre de la clairière ; `objectif` devant la grotte au nord, sur sable sec. **Aucune sortie, aucun warp, pas de `donjon_seuil`.**
-- **Collisions** : seul le sable (ombres comprises) est praticable. Le lave, la berge, les parois, les piliers et la bouche sont bloqués ; la bande nord est une paroi. Des chemins libres de 16 × 16 px de l'arrivée au boss et à l'objectif ont été vérifiés sur la grille. **À contrôler en jeu.**
+- **Marqueurs** : `entrance` au sud, `boss` au centre de la clairière, `objectif` devant la grotte au nord. Aucun warp.
+- **Collisions** : seul le sable (ombres comprises) est praticable ; lave, berge, parois, piliers et bouche sont bloqués. Chemins 16×16 vérifiés entrance→boss et entrance→objectif.
 
 ## Limites
 
-- **Terrain, eau et lueur** : dessins générés à partir de la capture `Rescue_Team_-_Mt._Blaze_Entrance.png`. Ce ne sont pas des tuiles natives.
-- **Animations** : lave façon rivière Métano, lueur de lave et flammes sont créés par nous, aux couleurs exactes du rip. Ce ne sont pas des animations officielles.
-- **Boss** : aucun boss n'est nommé ni placé ; `boss` est seulement un marqueur d'emplacement.
-- **Tests** : aucun test fait dans PMDO.
+- Terrain et lave : dessins générés à partir du rip ; ce ne sont pas des tuiles natives.
+- Lave et veines : modules `source/magma_visqueux/magma.py` adapté palette Mt Blaze ; textures procédurales cohérentes au rip, animées par palette cycling + dérive visqueuse.

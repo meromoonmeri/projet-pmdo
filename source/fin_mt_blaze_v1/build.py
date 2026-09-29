@@ -1,23 +1,13 @@
-"""Fin Mt. Blaze (FMB1) — arène du cratère du volcan, format 4:3 vaste (768 x 576), format 4:3 vaste (768 x 576), format 4:3 vaste (768 x 576 px, 96 x 72 cases).
+"""Fin Mt. Blaze (FMB1) — arène du cratère, 4:3 vaste (768 x 576), format 4:3 vaste (768 x 576 px, 96 x 72 cases).
 
-Demande : « poursuite du projet » (29 septembre, après FGS1). Suite de la
-série des fins de donjon : fin du biome Mt. Blaze (Red Rescue Team).
-Référence `Rescue_Team_-_Mt._Blaze_Entrance.png` (PMD Explorers). Biome et portée
-choisis par l'agent, à confirmer. Méthode « textures canoniques » = rendu
-généré RÉFÉRENCÉ (rip passé au générateur en images=) :
-- decor.png : arène ronde fermée par des parois, lave au centre avec
-  chaussée jusqu'à une grotte au nord, piliers et stalagmites, eau en magenta ;
-- sol_complet.png : édité depuis le décor (sable seul, parois conservées),
-  recalé (0, 0) ;
-- lave_flammes_poses.png : planche de l'entrée FMB1, copiée sans nouvelle génération.
-Calques : sol complet, eau du lac, lueur_lave, scintillements_lave, sable, ombres, berge,
-parois, piliers, profondeur, flammes.
-Animations, chacune sur son calque, boucles fermées, avec les fonctions et couleurs
-EXACTES du rip de l'entrée FMB1 (chargées par loadmod) :
-- lave façon rivière Métano 4 x 10, lueur_lave 12 x 10, scintillements_lave 4 x 10, flammes 24 x 5.
-Scène : PPCM(40,120,120)=120 ticks = 2 s.
-Marqueurs : `entrance` (sud), `boss` (centre du cratère sur la plateforme),
-`objectif` (pied du mur nord, sur sable sec devant le cratère). Arène fermée au nord, aucun warp.
+Méthode propre multicalque référencée :
+- decor.png : rendu généré RÉFÉRENCÉ avec images.jpg + Rescue_Team_-_Mt._Blaze_Entrance.png en images= (lave = magenta plat #FF00FF, cratère circulaire)
+- sol_complet.png : édité depuis le décor (sable seul)
+- base (sable, ombres, berge, roche, piliers, profondeur) : segmentation pleine rés. + down_class 8px
+- lave : magma visqueux procédural (Worley, 32×15) palette Mt Blaze, palette cycling, cohérent au rip
+- veines : fissures dans la roche, palette cycling 32×15
+Boucle 480 ticks = 8 s. Aucun warp.
+
 Lancer : .venv/bin/python source/fin_mt_blaze_v1/build.py
 """
 from pathlib import Path
@@ -37,11 +27,13 @@ ASSET = 'fmb1_fin_mt_blaze'
 PFX = 'FMB1'
 W, H = 768, 576
 SRC = (1200, 896)
-WATER_PHASES, WATER_TICKS = 4, 10
-GLOW_PHASES, GLOW_TICKS = 12, 10
-DROP_PHASES, DROP_TICKS = 24, 5
-VEIN_PHASES, VEIN_TICKS = 12, 10
-LOOP_TICKS = 120
+
+MTB_CRUST = [(55, 18, 12), (95, 28, 16), (145, 45, 22)]
+MTB_RAMP = [(165, 65, 30), (185, 95, 25), (205, 125, 22), (218, 140, 18), (232, 155, 12),
+            (240, 170, 0), (240, 188, 12), (250, 210, 30), (255, 230, 60), (255, 255, 90)]
+MTB_PAL = MTB_CRUST + MTB_RAMP
+MTB_PAL_NP = np.array(MTB_PAL, 'uint8')
+
 GEN = [
     {'file': 'decor.png', 'images': ['images.jpg', 'Rescue_Team_-_Mt._Blaze_Entrance.png'], 'prompt':
      'Use EXACTLY the same textures, palette and pixel-art style as the reference images (the volcano peak exterior with purple sky and the GBA Mt. Blaze Entrance): same beige cracked ground, same grey boulders, same orange-red lava. Make a NEW, larger top-down map, WIDE LANDSCAPE 4:3, zoomed out. Layout: a closed circular crater arena surrounded by grey cliffs, the player arrives at the SOUTH on beige sand; the center and NORTH are a vast LAVA CRATER (entire lava surface flat pure magenta #FF00FF, no gradient), with a small safe rock platform in the middle for the boss, and rock causeways. Grey boulders in lava, dark walls around. No characters, no text, no UI, no border.',
@@ -49,50 +41,73 @@ GEN = [
     {'file': 'sol_complet.png', 'images': ['source/fin_mt_blaze_v1/bruts/decor.png'], 'prompt':
      'Same image, same framing and pixel-art style, but only beige cracked sandy ground everywhere, replacing all lava (magenta), grey rocks and dark walls with the same beige cracked sand texture, keeping the exact sand palette, no magenta remaining.',
      'essais': 'edite depuis decor (magenta->sable, rochers sous calque roche)'},
-    {'file': 'lave_flammes_poses.png', 'images': ['65097.png'], 'prompt':
-     'Use EXACTLY the same palette as the reference lava sheet: same orange lava, yellow flame center. Create a sprite sheet on flat pure magenta #FF00FF background with 8 lava bubbles, 16 tall flames (24x64) and 6 ember dots. No grid, crisp pixel art.',
-     'essais': 'copie de la planche EMB1 (meme palette, meme fenetres), 1024x1024'},
 ]
-# Couleurs EXACTES du rip (69 couleurs)
-WPAL = {'surface': (208, 64, 8), 'bande': (240, 120, 0), 'accent': (240, 176, 0)}
-GLOW = [(139, 0, 0), (180, 40, 0), (208, 64, 8), (216, 72, 16), (240, 88, 0), (240, 120, 0), (240, 144, 0),
-        (240, 160, 0), (232, 192, 0)]
-GLOW_RING_PX = 4
-GLOW_BREATH, GLOW_WOBBLE = 0.04, 0.02
-POSE_K = 8
-POSE_COV = 0.3
-POSE_WIN = {'goutte': (96, 86, 96), 'goutte_etiree': (125, 603, 96), 'impact': (130, 874, 128),
-            'eclaboussure': (412, 138, 176), 'rond_0': (608, 156, 32), 'rond_1': (608, 495, 64),
-            'rond_2': (607, 847, 144), 'rond_3': (869, 156, 192), 'rond_4': (865, 495, 272), 'rond_5': (863, 847, 288)}
-DROP_SEQ = ([('flamme', -16), ('flamme', -12), ('flamme', -8), ('flamme_etiree', -4), ('impact', 0), ('eclaboussure', 0),
-             ('rond_0', 0), ('rond_1', 0), ('rond_1', 0), ('rond_2', 0), ('rond_2', 0), ('rond_3', 0), ('rond_3', 0),
-             ('rond_4', 0), ('rond_4', 0), ('rond_5', 0), ('rond_5', 0)] + [None] * 7)
-assert len(DROP_SEQ) == DROP_PHASES
 
 def loadmod(name, path):
     sp = importlib.util.spec_from_file_location(name, path)
     m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); return m
 
-EUL = loadmod('fmb1_build', R / 'source/entree_underground_lake_sud_nord_v1/build.py')
-V2 = loadmod('ewc2_build', R / 'source/entree_waterfall_cave_sud_nord_v2/build.py')
-V1 = V2.V1
-JM, BM = V1.JM, V1.BM
+JM = loadmod('ejn1_outils', R / 'source/entree_jungle_sud_nord_v1/build.py')
+BM = JM.BM
+MG = loadmod('magma_visqueux', R / 'source/magma_visqueux/magma.py')
+GR = loadmod('magma_ground', R / 'source/magma_visqueux/ground.py')
 assert (JM.W, JM.H, JM.SRC) == (W, H, SRC)
-keep_large, place, cell_grid, close_ = V1.keep_large, V1.place, V1.cell_grid, V1.close_
-down_class, down_full, rgba, resize_plane, quantize_group = V1.down_class, V1.down_full, V1.rgba, V1.resize_plane, V1.quantize_group
-PALETTE_GROUPS = {'terrain': (['sol_complet', 'sable', 'ombres', 'berge'], 96),
-                  'roche': (['roche', 'piliers'], 64), 'profondeur': (['profondeur'], 12)}
-STATIC = ['sable', 'ombres', 'berge', 'roche', 'piliers', 'profondeur']
-
-def open_(m, it):
-    p = it + 1
-    return nd.binary_opening(np.pad(m, p, mode='edge'), iterations=it)[p:-p, p:-p]
+MG.PAL = MTB_PAL
+MG.PAL_NP = MTB_PAL_NP
+MG.RIP_RAMP = MTB_RAMP
+MG.CROUTE = MTB_CRUST
+MG.N_RIP0 = len(MTB_CRUST)
+S = JM.SCALE
+LOOP_TICKS = 480
 
 def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
-
 def rgb(p):
     return np.array(Image.open(p).convert('RGB')).astype(int)
+def morph(fn, m, it):
+    p = it + 2
+    return fn(np.pad(m, p, mode='edge'), iterations=it)[p:-p, p:-p]
+def keep_large(mask, minimum):
+    lab, n = nd.label(mask)
+    if n == 0:
+        return mask
+    return np.isin(lab, 1 + np.flatnonzero(nd.sum(mask, lab, range(1, n + 1)) >= minimum))
+
+def classify(a, f):
+    r, g, b = a.transpose(2, 0, 1); lum = a @ [.299, .587, .114]
+    hh, ww = lum.shape; yy, xx = np.mgrid[:hh, :ww]
+    water = nd.binary_dilation((r - g > 60) & (b - g > 60), iterations=2)
+    # pour FMB1 le cratère est central, pas de grotte nord : on cherche cavité sombre si présente, sinon vide
+    dark = (lum < 48) & (yy < 260) & (xx > 450) & (xx < 750)
+    def close_(m,it):
+        return JM.close_(m,it) if hasattr(JM,'close_') else morph(nd.binary_closing,m,it)
+    lab, n = nd.label(close_(dark, 2)); sizes = nd.sum(dark, lab, range(1, n + 1)) if n else []
+    box = np.zeros_like(dark); box[40:160, 540:660] = True
+    cand = [i + 1 for i in range(n) if (lab[box] == i + 1).any()] if n else []
+    if cand:
+        opening = nd.binary_fill_holes(lab == max(cand, key=lambda i: sizes[i - 1]))
+    else:
+        opening = np.zeros_like(dark, dtype=bool)
+    sandish = (r > 130) & (r - b > 25) & (lum > 110) & (lum < 170) & ~water & ~opening
+    def open_(m,it):
+        p=it+1
+        return nd.binary_opening(np.pad(m,p,mode='edge'), iterations=it)[p:-p,p:-p]
+    sand = keep_large(open_(morph(nd.binary_closing,sandish,2),1),15000)
+    holes = nd.binary_fill_holes(sand) & ~sand; hl, _ = nd.label(holes)
+    hs = nd.sum(holes, hl, range(1, hl.max() + 1)) if hl.max() else []
+    sand = (sand | np.isin(hl, [i + 1 for i, v in enumerate(hs) if v < 800])) & ~water & ~opening
+    rockish = ~sand & ~water & ~opening
+    Ls = nd.uniform_filter(lum, 5); dr = nd.distance_transform_edt(~rockish)
+    shade = sand & (dr <= 16) & (Ls < 165)
+    shade = keep_large(morph(nd.binary_closing, shade,1), 40) & sand
+    dw = nd.distance_transform_edt(~water); ds = nd.distance_transform_edt(~sand)
+    berge = rockish & (dw <= 14) & (ds <= 14)
+    diff = nd.uniform_filter(np.abs(a - f).mean(2), 5)
+    rest = rockish & ~berge
+    pil = rest & (diff > 15) & ~nd.binary_dilation(opening, iterations=40)
+    pil = nd.binary_fill_holes(keep_large(open_(morph(nd.binary_closing,pil,2),1), 120)) & rest
+    roche = rest & ~pil
+    return dict(water=water, profondeur=opening, sable=sand & ~shade, ombres=shade, berge=berge, piliers=pil, roche=roche), {'ecart_parois': round(float(diff[roche].mean()),2) if roche.any() else 0, 'ecart_piliers': round(float(diff[pil].mean()),2) if pil.any() else 0}
 
 def materials(a):
     r, g, b = a.transpose(2, 0, 1); lum = a @ [.299, .587, .114]; sat = a.max(2) - a.min(2)
@@ -105,373 +120,167 @@ def fidelity(decor, ref):
     fr, fd = materials(ref), materials(decor); out = {}
     for k in fr:
         mr, md = ref[fr[k]].mean(0), decor[fd[k]].mean(0)
-        out[k] = {'rip_rgb': [round(float(v), 1) for v in mr], 'decor_rgb': [round(float(v), 1) for v in md],
-                  'distance': round(float(np.linalg.norm(mr - md)), 1)}
+        out[k] = {'rip_rgb': [round(float(v),1) for v in mr], 'decor_rgb': [round(float(v),1) for v in md], 'distance': round(float(np.linalg.norm(mr-md)),1)}
     return out
 
-def classify(a, f):
-    # Adapte EUL pour Mt Blaze : sable beige craquele plus sombre (lum~125-145) vs sable jaune pale d'Underground Lake (lum>140)
-    # On garde meme structure (water=magenta, opening sombre, sable, ombres, berge, piliers, roche) mais seuils assouplis.
-    r, g, b = a.transpose(2, 0, 1); lum = a @ [.299, .587, .114]
-    hh, ww = lum.shape; yy, xx = np.mgrid[:hh, :ww]
-    water = nd.binary_dilation((r - g > 60) & (b - g > 60), iterations=2)
-    dark = (lum < 48) & (yy < 260) & (xx > 450) & (xx < 750)
-    lab, n = nd.label(close_(dark, 2)); sizes = nd.sum(dark, lab, range(1, n + 1)) if n else []
-    box = np.zeros_like(dark); box[40:160, 540:660] = True
-    cand = [i + 1 for i in range(n) if (lab[box] == i + 1).any()] if n else []
-    if cand:
-        opening = nd.binary_fill_holes(lab == max(cand, key=lambda i: sizes[i - 1]))
-    else:
-        opening = np.zeros_like(dark, dtype=bool)
-    # Sable Mt Blaze : beige craquele, r 150-210, r-b 30-70, lum 110-160 (plus sombre que lac)
-    sandish = (r > 130) & (r - b > 25) & (lum > 110) & (lum < 170) & ~water & ~opening
-    sand = keep_large(open_(close_(sandish, 2), 1), 15000)
-    holes = nd.binary_fill_holes(sand) & ~sand; hl, _ = nd.label(holes)
-    hs = nd.sum(holes, hl, range(1, hl.max() + 1)) if hl.max() else []
-    sand = (sand | np.isin(hl, [i + 1 for i, v in enumerate(hs) if v < 800])) & ~water & ~opening
-    rockish = ~sand & ~water & ~opening
-    Ls = nd.uniform_filter(lum, 5); dr = nd.distance_transform_edt(~rockish)
-    shade = sand & (dr <= 16) & (Ls < 165)
-    shade = keep_large(close_(shade, 1), 40) & sand
-    dw = nd.distance_transform_edt(~water); ds = nd.distance_transform_edt(~sand)
-    berge = rockish & (dw <= 14) & (ds <= 14)
-    diff = nd.uniform_filter(np.abs(a - f).mean(2), 5)
-    rest = rockish & ~berge
-    pil = rest & (diff > 15) & ~nd.binary_dilation(opening, iterations=40)
-    pil = nd.binary_fill_holes(keep_large(open_(close_(pil, 2), 1), 120)) & rest
-    roche = rest & ~pil
-    return dict(water=water, profondeur=opening, sable=sand & ~shade, ombres=shade, berge=berge, piliers=pil, roche=roche), {'ecart_parois': round(float(diff[roche].mean()),2) if roche.any() else 0, 'ecart_piliers': round(float(diff[pil].mean()),2) if pil.any() else 0}
+def vein_mask_from_rock(a, rock_union):
+    r,g,b = a.transpose(2,0,1)
+    m = rock_union & (r>100) & (g<120) & (b<100) & (r - g > 20) & (r > b)
+    m = nd.binary_dilation(m, iterations=1) & rock_union
+    m = nd.binary_opening(m, iterations=1)
+    if m.sum() < 0.005 * rock_union.sum():
+        H0,W0 = a.shape[:2]
+        yy, xx = np.mgrid[:H0,:W0].astype(float)
+        try:
+            f1,f2,_ = MG.worley(xx*0.7, yy*0.7, P=(192,96), cell=14, seed=11)
+            q = 2*f1/(f1+f2+1e-9)
+            fiss = (q > 0.82) & rock_union
+            m = m | fiss
+        except Exception:
+            pass
+    return m
 
-def lake_water(water, visible):
-    _save=EUL.WPAL
-    EUL.WPAL=WPAL
+def vein_frames(vein_mask_down, H, W, phases=32):
+    if not vein_mask_down.any():
+        return [np.zeros((H,W,4),'uint8') for _ in range(phases)]
+    dist = nd.distance_transform_edt(vein_mask_down)
+    yy,xx = np.mgrid[:H,:W].astype(float)
     try:
-        return EUL.lake_water(water, visible)
-    finally:
-        EUL.WPAL=_save
-
-def glow_frames(visible, centres, ts=range(GLOW_PHASES)):
-    _s1=EUL.GLOW; _s2=EUL.GLOW_RING_PX; _s3=EUL.GLOW_BREATH; _s4=EUL.GLOW_WOBBLE
-    EUL.GLOW=GLOW; EUL.GLOW_RING_PX=GLOW_RING_PX; EUL.GLOW_BREATH=GLOW_BREATH; EUL.GLOW_WOBBLE=GLOW_WOBBLE
-    try:
-        return EUL.glow_frames(visible, centres, ts)
-    finally:
-        EUL.GLOW=_s1; EUL.GLOW_RING_PX=_s2; EUL.GLOW_BREATH=_s3; EUL.GLOW_WOBBLE=_s4
-
-def veines_frames(vein_mask_down, base_rgb_full, vein_mask_full):
-    """Veines de lave qui pulsent dans la roche : 12 phases"""
+        f1,f2,_ = MG.worley(xx*1.0, yy*1.0, P=MG.PERIOD, cell=18, seed=11)
+        q = 2*f1/(f1+f2+1e-9)
+        mod = (q*1.5).astype(float)
+    except Exception:
+        mod = np.zeros((H,W))
+    base = np.clip(dist*1.2 + mod, 0, 6)
     frames=[]
-    for t in range(VEIN_PHASES):
-        pulse = 0.90 + 0.10 * __import__('numpy').sin(2*__import__('numpy').pi*t/VEIN_PHASES)
-        fr = __import__('numpy').zeros((H, W, 4), 'uint8')
-        fr[vein_mask_down] = (240,120,0,255)
-        frames.append(fr)
+    for t in range(phases):
+        shift = t
+        lvl = base + shift*0.35 + 0.6*np.sin(2*np.pi*t/phases + mod*2)
+        idx = np.clip(np.rint(lvl + 3).astype(int), 3, 12)
+        idx = np.where(dist>1.5, np.minimum(idx+1,12), idx)
+        a = np.zeros((H,W,4),'uint8')
+        a[..., :3] = MTB_PAL_NP[idx]
+        a[..., 3] = 255
+        a[~vein_mask_down] = 0
+        frames.append(a)
     return frames
-
-def sheet_poses(path):
-    _s=EUL.POSE_WIN; EUL.POSE_WIN=POSE_WIN
-    _k=EUL.POSE_K; EUL.POSE_K=POSE_K
-    try:
-        return EUL.sheet_poses(path)
-    finally:
-        EUL.POSE_WIN=_s; EUL.POSE_K=_k
-
-def reduce_pose(src, bg, cy, cx, win, k, pal, cov_min):
-    return EUL.reduce_pose(src, bg, cy, cx, win, k, pal, cov_min)
-
-def paste(frame, spr, cx, cy, clip=None):
-    return EUL.paste(frame, spr, cx, cy, clip)
-
-def drop_frames(poses, emitters, visible, ts=range(DROP_PHASES)):
-    return EUL.drop_frames(poses, emitters, visible, ts)
-
-def write_ora(path, layers):
-    import xml.etree.ElementTree as ET
-    root = ET.Element('image', w=str(W), h=str(H), name='Entrée Mt. Blaze 4:3 (FMB1)')
-    stack = ET.SubElement(root, 'stack'); comp = Image.new('RGBA', (W, H))
-    with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED) as z:
-        z.writestr('mimetype', 'image/openraster', compress_type=zipfile.ZIP_STORED)
-        items = list(layers.items())
-        for i, (name, a) in reversed(list(enumerate(items))):
-            fn = f'data/layer{i:02d}.png'
-            ET.SubElement(stack, 'layer', name=name, src=fn, x='0', y='0', opacity='1.0', visibility='visible',
-                          **{'composite-op': 'svg:src-over'})
-            b = io.BytesIO(); Image.fromarray(a).save(b, format='PNG'); z.writestr(fn, b.getvalue())
-        for _, a in items:
-            comp.alpha_composite(Image.fromarray(a))
-        b = io.BytesIO(); comp.save(b, format='PNG'); z.writestr('mergedimage.png', b.getvalue())
-        th = comp.copy(); th.thumbnail((256, 256)); b = io.BytesIO(); th.save(b, format='PNG')
-        z.writestr('Thumbnails/thumbnail.png', b.getvalue())
-        z.writestr('stack.xml', ET.tostring(root, encoding='utf-8', xml_declaration=True))
-
-def ground_project(stack, blocked, markers, gfx, tools):
-    if STAGE.exists():
-        shutil.rmtree(STAGE)
-    (STAGE/'Content/Tile').mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(R / 'mod_metano_expeditions_pmdo_0812.zip') as z:
-        tpl = json.loads(z.read('metano_expeditions/Data/Ground/v50812_01_crete_sillage_jour.rsground'))
-    o = tpl['Object']; gw, gh = W // 8, H // 8; layers, banks = [], []
-    for i, (title, frames, ticks) in enumerate(stack):
-        bank = gfx.TileBank(f'{PFX}_{i:02d}_{title.split()[0].upper()}')
-        bank.ids[bytes(256)] = (0, 0); bank.data[(0, 0)] = bytes(256)
-        def cell(x, y, frames=frames, bank=bank):
-            fs = []
-            for a in frames:
-                f = bank.add(Image.fromarray(a[y*8:y*8+8, x*8:x*8+8]), x, y)
-                fs.append(f if f else {'Sheet': bank.name, 'TexLoc': {'X': 0, 'Y': 0}})
-            if all(f['TexLoc'] == {'X': 0, 'Y': 0} for f in fs):
-                return []
-            return [fs[0]] if all(f == fs[0] for f in fs) else fs
-        layers.append(gfx.layer(f'{i:02d} {title}', gw, gh, cell, ticks)); banks.append(bank)
-    layers.append(gfx.layer(f'{len(layers):02d} Top vide', gw, gh, draw=4))
-    for bank in banks:
-        bank.write(STAGE / f'Content/Tile/{bank.name}.tile')
-    o.update(Name={'DefaultText': 'FMB1 - Fin Mt. Blaze (4:3)', 'LocalTexts': {}}, AssetName=ASSET,
-             Released=False, TexSize=1, Music='',
-             EdgeView=1, ViewCenter=None, ViewOffset={'X': 0, 'Y': 0},
-             ActiveChar=None, Status={}, Layers=layers,
-             Background={'$type': 'RogueEssence.Dungeon.LayeredBG, RogueEssence', 'Layers': []},
-             Comment='PMDO 0.8.12. Rendu genere reference sur Underground_Lake_shore_TDS. Lave facon Metano aux couleurs exactes du rip, lueur_lave, scintillements_lave, flammes. Aucun warp. Art/runtime a confirmer.')
-    o['obstacles'] = [[{'Bounds': {'X': x*8, 'Y': y*8, 'Width': 8, 'Height': 8}, 'Tags': int(blocked[y, x])}
-                       for y in range(gh)] for x in range(gw)]
-    mk = lambda n, p: {'EntName': n, 'Direction': 4, 'EntEnabled': True, 'triggerType': 0,
-                       'Collider': {'X': p[0], 'Y': p[1], 'Width': 16, 'Height': 16}}
-    o['Entities'] = [{'Name': 'Marqueurs de la fin', 'Visible': True, 'MapChars': [], 'GroundObjects': [], 'Spawners': [],
-                      'Markers': [mk(n, p) for n, p in markers.items()]}]
-    o['Decorations'] = [{'Name': 'Decors', 'Layer': 2, 'Visible': True, 'Anims': []}]
-    tpl['Version'] = '0.8.12.0'
-    gfx.save(STAGE / f'Data/Ground/{ASSET}.rsground', json.dumps(tpl, ensure_ascii=False, separators=(',', ':')).encode())
-    gfx.save(STAGE / f'Data/Script/{NAMESPACE}/ground/{ASSET}/init.lua',
-             f'-- {ASSET} : fin, aucun warp.\nlocal {ASSET} = {{}}\nreturn {ASSET}\n'.encode())
-    nodes = {}
-    for p in sorted((STAGE / 'Content/Tile').glob('*.tile')):
-        with p.open('rb') as f:
-            nodes[p.stem] = tools.read_node(f)
-    (STAGE / 'Content/Tile/index.idx').write_bytes(tools.encode_index(nodes))
-    ident = uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/meromoonmeri/projet-pmdo/' + NAMESPACE)
-    (STAGE / 'Mod.xml').write_text(f'''<?xml version="1.0" encoding="utf-8"?>
-<Header><Name>Fin Mt. Blaze FMB1</Name><Author>meromoonmeri</Author><Description>Arene du lave en 4:3, rendu genere reference.</Description><Namespace>{NAMESPACE}</Namespace><UUID>{ident}</UUID><Version>1.0.0.0</Version><GameVersion>0.8.12.0</GameVersion><ModType>Quest</ModType><Relationships /></Header>
-''')
-    script = (R / 'source/pmdo_cote/INSTALLER.py').read_text()
-    needle = '            relative = src.relative_to(source)\n'
-    assert needle in script
-    script = script.replace(needle, needle + "            if relative.as_posix() == 'Content/Tile/index.idx':\n                continue\n")
-    (STAGE / 'INSTALLER.py').write_text(script)
-    shutil.copyfile(HERE / 'README_PACK.md', STAGE / 'README.md')
-    return {b.name: len(b.data) for b in banks}
-
-def glow_centres(water):
-    return EUL.glow_centres(water)
 
 def build():
     gfx = loadmod('pmdo_codec', R / 'source/pmdo_cote/build.py')
     tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
     v1 = loadmod('esn1', R / 'source/entree_sud_nord_generee_v1/build.py')
-    ANIMS = ['lave', 'lueur_lave', 'scintillements_lave', 'flammes', 'veines_lave']
     if OUT.exists():
-        for d in ['calques', 'animation', 'poses', 'masques', 'review']:
-            shutil.rmtree(OUT / d, ignore_errors=True)
-    for d in ['calques', 'poses', 'masques', 'review'] + [f'animation/{x}' for x in ANIMS]:
-        (OUT / d).mkdir(parents=True, exist_ok=True)
-    a = rgb(RAW / 'decor.png'); f = rgb(RAW / 'sol_complet.png'); ref = rgb(REF)
-    assert a.shape[:2] == f.shape[:2] == (SRC[1], SRC[0])
-    m, seg = classify(a, f)
-    # --- Veines de lave dans la roche ---
-    r0, g0, b0 = a.transpose(2,0,1)
+        for d in ['calques','animation','poses','masques','review']:
+            shutil.rmtree(OUT/d, ignore_errors=True)
+    for d in ['calques','poses','masques','review','animation/lave','animation/veines']:
+        (OUT/d).mkdir(parents=True, exist_ok=True)
+    a = rgb(RAW/'decor.png'); f = rgb(RAW/'sol_complet.png'); ref = rgb(REF)
+    assert a.shape[:2]==f.shape[:2]==(SRC[1],SRC[0])
+    m, seg = classify(a,f)
     rock_union = m['roche'] | m['piliers']
-    vein_mask_1200 = rock_union & (r0>100) & (g0<120) & (b0<100) & (r0 - g0 > 20) & (r0 > b0)
-    vein_mask_1200 = nd.binary_dilation(vein_mask_1200, iterations=1) & rock_union
-    vein_mask_1200 = nd.binary_opening(vein_mask_1200, iterations=1)
+    vein_mask_1200 = vein_mask_from_rock(a, rock_union)
     m['veines'] = vein_mask_1200
     m['roche'] = m['roche'] & ~vein_mask_1200
     m['piliers'] = m['piliers'] & ~vein_mask_1200
-    order = ['water', 'profondeur', 'sable', 'ombres', 'berge', 'piliers', 'roche', 'veines']
+    order = ['water','profondeur','sable','ombres','berge','piliers','roche','veines']
+    down_class, down_full, rgba = JM.down_class, JM.down_full, JM.rgba
     ex, cols = down_class(a, m, order)
     water = ex['water']
+    STATIC = ['sable','ombres','berge','roche','piliers','profondeur']
     layers = {'sol_complet': rgba(down_full(f), ~water)}
     for k in STATIC:
         layers[k] = rgba(cols[k], ex[k])
-    q = {}
-    for keys, n in PALETTE_GROUPS.values():
-        q.update(quantize_group({k: layers[k] for k in keys}, n))
-    layers = q
-    for k, v in ex.items():
-        Image.fromarray((v * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_masque_{k}.png')
-    land = np.zeros((H, W), bool)
+    layers = BM.quantize_layers(layers)
+    for k,v in ex.items():
+        Image.fromarray((v*255).astype('uint8')).save(OUT/'masques'/f'{PFX}_masque_{k}.png')
+    land = np.zeros((H,W), bool)
     for k in STATIC:
-        land |= layers[k][..., 3] == 255
+        land |= layers[k][...,3]==255
     visible = water & ~land
-    wf, dist = lake_water(water, visible)
-    centres = glow_centres(water)
-    lueur_lave = glow_frames(visible, centres)
-    glow_any = np.zeros((H, W), bool); glow_core = np.ones((H, W), bool)
-    for fr in lueur_lave:
-        glow_any |= fr[..., 3] == 255
-        glow_core &= (fr[..., :3] == GLOW[0]).all(-1) & (fr[..., 3] == 255)
-    free = visible & (dist > 4) & nd.binary_erosion(glow_core, iterations=2)
-    fams = BM.sparkle_families(); taken = np.zeros((H, W), bool)
-    sf = [np.zeros((H, W, 4), 'uint8') for _ in range(WATER_PHASES)]; sparkles = []
-    for fi, (name, frames) in enumerate(fams.items()):
-        hh, ww = frames[0].shape[:2]
-        for (y, x) in place(free, (hh, ww), 2, 71 + fi, taken, core=8):
-            sparkles.append({'famille': name, 'xy': [x, y]})
-            for t in range(WATER_PHASES):
-                mm = frames[t][..., 3] > 0; sf[t][y:y+hh, x:x+ww][mm] = frames[t][mm]
-    for arr in sf:
-        arr[~visible] = 0
-    poses, pose_pal = sheet_poses(RAW / 'lave_flammes_poses.png')
-    for name, p in poses.items():
-        Image.fromarray(p).save(OUT / 'poses' / f'{PFX}_{name}.png')
-    fall_ok = visible & (dist > 6)
-    ok = visible & (dist > 20) & ~nd.binary_dilation(glow_any, iterations=10) & ~taken
-    for s in range(1, 19):
-        ok &= np.roll(fall_ok, s, axis=0)
-    cand = np.argwhere(ok); emitters, used = [], []
-    for y, x in cand[np.random.default_rng(12).permutation(len(cand))]:
-        if all(abs(x - ux) > 56 or abs(y - uy) > 56 for uy, ux in used):
-            used.append((y, x)); emitters.append((int(x), int(y), (len(emitters) * 3) % DROP_PHASES))
-        if len(emitters) == 8:
-            break
-    flammes = drop_frames(poses, emitters, visible)
+    mf, dist, midx = MG.magma_phases(ex['water'], visible & ex['water'], feet=(), drift=(0,1), seed=5, crust=0.12, phases=32)
     vein_mask_down = ex['veines']
-    veines_lave = []
-    for t in range(VEIN_PHASES):
-        pulse = 0.85 + 0.15 * __import__('numpy').sin(2*__import__('numpy').pi*t/VEIN_PHASES)
-        base = __import__('numpy').array([240, 120, 0], dtype=float)
-        hi = __import__('numpy').array([255, 180, 20], dtype=float)
-        col = (base * (1-pulse) + hi * pulse).astype('uint8')
-        fr = __import__('numpy').zeros((H, W, 4), 'uint8')
-        fr[vein_mask_down] = (*col, 255)
-        core = nd.binary_erosion(vein_mask_down, iterations=1)
-        fr[core] = (255, 220, 80, 255)
-        veines_lave.append(fr)
-    anim = {'lave': (wf, WATER_TICKS), 'lueur_lave': (lueur_lave, GLOW_TICKS), 'scintillements_lave': (sf, WATER_TICKS),
-            'veines_lave': (veines_lave, VEIN_TICKS),
-            'flammes': (flammes, DROP_TICKS)}
-    order_names = ['lave', 'lueur_lave', 'scintillements_lave', 'veines_lave', 'flammes', 'sol_complet'] + STATIC
-    stack_named, layer_list = [], []
-    for i, nm in enumerate(order_names):
-        if nm in anim:
-            frames, ticks = anim[nm]
-            for t, fr in enumerate(frames):
-                Image.fromarray(fr).save(OUT / 'animation' / nm / f'{PFX}_{i:02d}_{nm}_f{t:02d}.png')
-            layer_list.append({'file': f'animation/{nm}/{PFX}_{i:02d}_{nm}_fNN.png', 'phases': len(frames), 'ticks': ticks})
+    vf = vein_frames(vein_mask_down, H, W, phases=32)
+    stack_named = [('lave', mf, 15), ('sol_complet', [layers['sol_complet']], 60), ('sable', [layers['sable']],60), ('ombres', [layers['ombres']],60), ('berge', [layers['berge']],60), ('roche', [layers['roche']],60), ('piliers', [layers['piliers']],60), ('profondeur', [layers['profondeur']],60), ('veines', vf, 15)]
+    for i,(nm,frames,ticks) in enumerate(stack_named):
+        if len(frames)==1:
+            Image.fromarray(frames[0]).save(OUT/f'calques/{PFX}_{i:02d}_{nm}.png')
         else:
-            frames, ticks = [layers[nm]], 60
-            Image.fromarray(layers[nm]).save(OUT / 'calques' / f'{PFX}_{i:02d}_{nm}.png')
-            layer_list.append({'file': f'calques/{PFX}_{i:02d}_{nm}.png', 'phases': 1, 'ticks': 60})
-        stack_named.append((nm, frames, ticks))
-    # Collisions : sable (ombres comprises) praticable ; lac, berge, parois, piliers et bouche bloqués. Fin fermee.
-    walk_px = (layers['sable'][..., 3] == 255) | (layers['ombres'][..., 3] == 255)
-    blocked = cell_grid(~walk_px); gh_, gw_ = blocked.shape
-    # Entrance au sud, au centre
-    pxs = np.nonzero(walk_px[H - 8])[0]; med = int(np.median(pxs)) // 8 if len(pxs) else W//16
-    ecol = min((c for c in range(gw_ - 1) if not blocked[gh_ - 2:, c:c + 2].any()), key=lambda c: abs(c - med)) if med else 48
-    entrance = [ecol * 8 + 8, H - 16] if 'ecol' in locals() else [384, 544]
-    # Boss : plateforme centrale du cratere (fin) — centre du cratere a 600,360 -> 384,231 en 768
-    target_y, target_x = 230, 384
-    best = None; bestd = 1e9
+            for t,fr in enumerate(frames):
+                d = OUT/f'animation/{nm}'
+                d.mkdir(parents=True, exist_ok=True)
+                Image.fromarray(fr).save(d/f'{PFX}_{i:02d}_{nm}_f{t:02d}.png')
+    # collisions
+    walk_px = (layers['sable'][...,3]==255) | (layers['ombres'][...,3]==255)
+    blocked = BM.cell_grid(~walk_px); gh_,gw_ = blocked.shape
+    # Entrance sud
+    pxs = np.nonzero(walk_px[H-8])[0]; med = int(np.median(pxs))//8 if len(pxs) else W//16
+    ecol = min((c for c in range(gw_-1) if not blocked[gh_-2:, c:c+2].any()), key=lambda c: abs(c-med)) if med else 48
+    entrance = [ecol*8+8, H-16]
+    # Boss : centre du cratère (plateforme centrale)
+    # On cherche la plateforme "piliers" ou "roche" au centre ? Pour FMB1, le cratère a une petite plateforme centrale (isolée)
+    # On utilise le centre géométrique 384,288 et cherche 2x2 walkable le plus proche
+    # Mais pour FMB1 la plateforme est plus au nord (232) ; on cherche d'abord autour de 384,232 comme validé
+    target_boss = (232, 384)  # y,x
+    best=None; bestd=1e9
     for y in range(gh_):
         for x in range(gw_):
             if not blocked[y:y+2, x:x+2].any():
-                d = (y*8 - target_y)**2 + (x*8 - target_x)**2
-                if d < bestd:
-                    bestd, best = d, [x*8, y*8]
-    boss = best if best else [384, 320]
-    # Objectif : pied de la grotte au nord, sur sable sec devant la bouche (similaire a EUL threshold mais fin)
-    py, px_ = np.nonzero(walk_px); top_y = int(py.min()) if len(py) else 0; tx = int(np.median(px_[py < top_y + 8])) if len(py) else 384
-    objectif = [tx // 8 * 8 - 8, top_y // 8 * 8]
-    # ajuster objectif pour etre walkable 2x2
-    try:
-        while blocked[objectif[1] // 8:objectif[1] // 8 + 2, objectif[0] // 8:objectif[0] // 8 + 2].any():
-            objectif[1] += 8
-            if objectif[1] > H - 16: break
-    except: pass
-    markers = {'entrance': entrance, 'boss': boss, 'objectif': objectif}
-    # verif chemins 16x16
-    def reachable2(b, src, dst):
-        return v1.reachable(b, (src[1]//8, src[0]//8), (dst[1]//8, dst[0]//8))[0]
+                d=(y*8-target_boss[0])**2 + (x*8-target_boss[1])**2
+                if d<bestd:
+                    bestd,best=d,[x*8,y*8]
+    boss = best if best else [384,232]
+    # Objectif : même plateforme légèrement décalé (comme validé [376,224])
+    # On cherche walkable près de boss mais pas exactement même case
+    objectif = [boss[0]-8, boss[1]-8]
+    if blocked[objectif[1]//8:objectif[1]//8+2, objectif[0]//8:objectif[0]//8+2].any():
+        objectif = boss[:]
+    markers={'entrance':entrance,'boss':boss,'objectif':objectif}
+    def reachable2(b,src,dst):
+        return v1.reachable(b,(src[1]//8,src[0]//8),(dst[1]//8,dst[0]//8))[0]
     assert reachable2(blocked, entrance, boss), 'chemin entrance->boss bloque'
     assert reachable2(blocked, entrance, objectif), 'chemin entrance->objectif bloque'
-    # S'assurer que le nord est bien bloque (pas de sortie)
-    assert not walk_px[0:8, :].any() or blocked[0, :].all() or True  # fin fermee : bande nord bloque
     def scene(tick):
-        im = Image.new('RGBA', (W, H))
-        for _, frames, ticks in stack_named:
-            im.alpha_composite(Image.fromarray(frames[(tick // ticks) % len(frames)]))
+        im=Image.new('RGBA',(W,H))
+        for _,frames,ticks in stack_named:
+            im.alpha_composite(Image.fromarray(frames[(tick//ticks)%len(frames)]))
         return im
-    step = 5
-    scenes = [scene(t) for t in range(0, LOOP_TICKS, step)]
-    scenes[0].save(OUT / 'review' / f'{PFX}_scene_t000.png')
-    scenes[0].save(OUT / 'review' / f'{PFX}_scene_animee.webp', save_all=True, append_images=scenes[1:],
-                   duration=round(step * 1000 / 60), loop=0, lossless=True)
-    col = scenes[0].copy(); ov = Image.new('RGBA', (W, H), (0, 0, 0, 0)); dr = ImageDraw.Draw(ov)
-    for y, x in zip(*np.nonzero(blocked)):
-        dr.rectangle([x*8, y*8, x*8+7, y*8+7], fill=(220, 40, 40, 90))
-    for (qx, qy), c in ((entrance, (255, 230, 40, 255)), (boss, (255, 40, 230, 255)), (objectif, (60, 220, 255, 255))):
-        dr.rectangle([qx, qy, qx + 15, qy + 15], outline=c, width=2)
-    col.alpha_composite(ov); col.save(OUT / 'review' / f'{PFX}_collisions_marqueurs.png')
-    names = list(POSE_WIN); cw = 36 * 4 + 8
-    sheet = Image.new('RGBA', (len(names) * cw + 8, cw + 8), (*WPAL['surface'], 255))
-    for i, nm in enumerate(names):
-        im = Image.fromarray(poses[nm]); im = im.resize((im.width * 4, im.height * 4), Image.Resampling.NEAREST)
-        sheet.alpha_composite(im, (8 + i * cw + (cw - 8 - im.width) // 2, 8 + (cw - 8 - im.height) // 2))
-    sheet.save(OUT / 'review' / f'{PFX}_planche_poses.png')
-    write_ora(OUT / f'{PFX}_fin_mt_blaze_calques.ora',
-              {f'{i:02d}_{t}' + ('_f00' if len(fr) > 1 else ''): fr[0] for i, (t, fr, _) in enumerate(stack_named)})
-    counts = ground_project([(t.replace('_', ' ') + (f' {len(fr)} phases' if len(fr) > 1 else ''), fr, tk)
-                             for t, fr, tk in stack_named], blocked, markers, gfx, tools)
-    fid = fidelity(a, ref)
-    final_fid = {}
-    for k, nm in (('sable', 'sable'), ('roche', 'roche'), ('roche', 'piliers')):
-        lay = layers[nm]; px = lay[lay[..., 3] == 255][:, :3].astype(float)
-        sel = materials(px.reshape(-1, 1, 3))[k][:, 0]
-        px = px[sel] if sel.sum() > 50 else px
-        final_fid[nm] = {'matiere': k, 'rgb': [round(float(v), 1) for v in px.mean(0)],
-                         'distance_rip': round(float(np.linalg.norm(px.mean(0) - np.array(fid[k]['rip_rgb']))), 1)}
-    manifest = {
-        'lot': 'fin_mt_blaze_v1', 'prefix': PFX, 'format': '4:3 vaste', 'size_px': [W, H],
-        'grid_8px': [W // 8, H // 8], 'base': 'FMB1 (entree Mt. Blaze) ; aucun emprunt branches soeurs',
-        'biome': 'Mt. Blaze (lave), prolonge FMB1, fin fermee',
-        'method': 'textures canoniques = rendu genere REFERENCE : rip passe au generateur ; decor complet sur magenta (lac = magenta), sol complet edite depuis le decor, planche flammes/ronds sur magenta',
-        'reference_da': {'file': REF.name, 'sha256': sha(REF), 'titre': 'Rive du lave (Mt. Blaze, PMD Explorers)'},
-        'generation': GEN,
-        'raw_inputs': [{'file': f'source/fin_mt_blaze_v1/bruts/{g["file"]}', 'sha256': sha(RAW / g['file']),
-                        'size': list(Image.open(RAW / g['file']).size)} for g in GEN],
-        'sol_complet': {'recalage_px': [0, 0], 'ecart_moyen_parois': 3.81, 'ecart_decale_1px': 7.09,
-                        'note': 'le generateur a garde les parois (sous le calque parois) ; lac, piliers, stalagmites et bouche remplaces par du sable'},
-        'fidelite_rip': {'methode': 'moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne',
-                         'brut': fid, 'calques_finaux': final_fid,
-                         'eau_et_lueur_lave': 'couleurs EXACTES du rip (sous-ensemble des 69 couleurs du rip)'},
-        'normalization': {'scale': JM.SCALE, 'scaled': [JM.SCALED_W, H], 'crop_x': [JM.CROP_X, JM.SCALED_W - W - JM.CROP_X],
-                          'methode': 'moyenne ponderee par classe (BOX), attribution exclusive par poids maximal',
-                          'palettes': {g: {'calques': k, 'couleurs': n} for g, (k, n) in PALETTE_GROUPS.items()}},
-        'segmentation': 'eau = magenta et frange violette dilates 2 px ; entree sombre = lum <48 reliee au haut-centre ; sable = jaune clair grande composante ; ombres = sable a <=16 px des parois ; berge = ni sable ni eau a <=14 px de l eau et du sable ; piliers = roche ou sol complet differe (ecart >20)',
-        'layers': layer_list,
-        'lava': {'phases': WATER_PHASES, 'frame_length_ticks': WATER_TICKS, 'couleurs': {k: list(v) for k, v in WPAL.items()},
-                  'modele': 'structure riviere Metano (bande, frange, accent, aplat, onde), couleurs exactes du rip sans liseré',
-                  'origine': 'pixels recalcules'},
-        'lueur_lave': {'phases': GLOW_PHASES, 'frame_length_ticks': GLOW_TICKS, 'couleurs': [list(c) for c in GLOW],
-                  'centres': [list(c) for c in centres], 'anneau_px': GLOW_RING_PX},
-        'sparkles': {'placements': sparkles, 'source': 'Metano natif'},
-        'flammes': {'poses': {k: list(v) for k, v in POSE_WIN.items()}, 'reduction': f'x1/{POSE_K}', 'chronologie': DROP_SEQ,
-                    'emetteurs': [list(e) for e in emitters], 'phases': DROP_PHASES, 'frame_length_ticks': DROP_TICKS},
-        'veines_lave': {'phases': VEIN_PHASES, 'frame_length_ticks': VEIN_TICKS, 'couleurs': [(240,120,0),(255,180,20)], 'modele': 'pulse sinusoidal dans la roche, veines extraites du rock', 'origine': 'veines extraites du decor (orange dans roche)'},
-        'scene_loop_ticks': LOOP_TICKS,
-        'access': {'markers': markers, 'paths_16x16': {'entrance->boss': {'ok': reachable2(blocked, entrance, boss)},
-                                                       'entrance->objectif': {'ok': reachable2(blocked, entrance, objectif)}},
-                   'blocked_cells': int(blocked.sum()), 'total_cells': int(blocked.size), 'walkable_cells': int((~blocked).sum()),
-                   'rule': 'case bloquee si >25% hors sable (ombres comprises)', 'north_closed': True},
-        'pmdo': {'target': '0.8.12', 'asset': ASSET, 'namespace': NAMESPACE, 'tiles_per_bank': counts, 'banks': list(counts),
-                 'runtime_tested': False, 'warp': 'aucun'},
-        'art_approved': False,
-    }
-    (OUT / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
-    shutil.copyfile(OUT / 'manifest.json', STAGE / 'manifest.json')
-    print(json.dumps({'sparkles': len(sparkles), 'markers': markers, 'blocked': int(blocked.sum()),
-                      'walkable': int((~blocked).sum()), 'emitters': len(emitters), 'centres': centres,
-                      'fidelite': {k: v['distance'] for k, v in fid.items()},
-                      'final': {k: v['distance_rip'] for k, v in final_fid.items()}, 'tiles': sum(counts.values())}, indent=1))
+    scenes=[scene(t) for t in range(0,LOOP_TICKS,5)]
+    scenes[0].save(OUT/'review'/f'{PFX}_scene_t000.png')
+    scenes[0].save(OUT/'review'/f'{PFX}_scene_animee.webp', save_all=True, append_images=scenes[1:], duration=round(5*1000/60), loop=0, lossless=True)
+    col=scenes[0].copy(); ov=Image.new('RGBA',(W,H),(0,0,0,0)); dr=ImageDraw.Draw(ov)
+    for y,x in zip(*np.nonzero(blocked)):
+        dr.rectangle([x*8,y*8,x*8+7,y*8+7], fill=(220,40,40,90))
+    for (qx,qy),c in ((entrance,(255,230,40,255)),(boss,(255,40,230,255)),(objectif,(60,220,255,255))):
+        dr.rectangle([qx,qy,qx+15,qy+15], outline=c, width=2)
+    col.alpha_composite(ov); col.save(OUT/'review'/f'{PFX}_collisions_marqueurs.png')
+    import xml.etree.ElementTree as ET
+    root=ET.Element('image', w=str(W),h=str(H), name='Fin Mt. Blaze 4:3 (FMB1)')
+    stack=ET.SubElement(root,'stack'); comp=Image.new('RGBA',(W,H))
+    with zipfile.ZipFile(OUT/f'{PFX}_fin_mt_blaze_calques.ora','w', zipfile.ZIP_DEFLATED) as z:
+        z.writestr('mimetype','image/openraster', compress_type=zipfile.ZIP_STORED)
+        items=list(enumerate(stack_named))
+        for i,(nm,frames,_) in reversed(items):
+            fn=f'data/layer{i:02d}.png'
+            ET.SubElement(stack,'layer', name=nm, src=fn, x='0',y='0', opacity='1.0', visibility='visible', **{'composite-op':'svg:src-over'})
+            b=io.BytesIO(); Image.fromarray(frames[0]).save(b,format='PNG'); z.writestr(fn,b.getvalue())
+        for _,frames,_ in stack_named:
+            comp.alpha_composite(Image.fromarray(frames[0]))
+        b=io.BytesIO(); comp.save(b,format='PNG'); z.writestr('mergedimage.png',b.getvalue())
+        th=comp.copy(); th.thumbnail((256,256)); b=io.BytesIO(); th.save(b,format='PNG'); z.writestr('Thumbnails/thumbnail.png',b.getvalue())
+        z.writestr('stack.xml', ET.tostring(root, encoding='utf-8', xml_declaration=True))
+    counts=GR.ground_project([(t.replace('_',' ')+(f' {len(fr)} phases' if len(fr)>1 else ''), fr, tk) for t,fr,tk in stack_named], blocked, markers, gfx, tools, stage=STAGE, pfx=PFX, asset=ASSET, namespace=NAMESPACE, here=HERE, W=W, H=H, name='Fin Mt. Blaze - Cratere 4:3 (FMB1)', comment='PMDO 0.8.12. Arene Mt. Blaze generee reference ; cratere de lave visqueuse, veines palette cycling. Aucun warp.', mod_name='Fin Mt. Blaze (FMB1) 4:3', mod_desc="Projet d'édition : fin Mt. Blaze 4:3, cratere de lave visqueuse et veines.")
+    fid=fidelity(a,ref)
+    layer_list=[]
+    for i,(nm,frames,ticks) in enumerate(stack_named):
+        if len(frames)>1:
+            layer_list.append({'file':f'animation/{nm}/{PFX}_{i:02d}_{nm}_fNN.png','phases':len(frames),'ticks':ticks})
+        else:
+            layer_list.append({'file':f'calques/{PFX}_{i:02d}_{nm}.png','phases':1,'ticks':60})
+    manifest={'lot':'fin_mt_blaze_v1','prefix':PFX,'format':'4:3 vaste','size_px':[W,H],'grid_8px':[W//8,H//8],'biome':'Mt. Blaze (cratere)','method':'rendu genere reference : decor magenta+vert ; base quantifiee ; lave visqueuse Worley palette Mt Blaze + veines palette cycling','reference_da':{'file':REF.name,'sha256':sha(REF)},'generation':GEN,'raw_inputs':[{'file':f'source/fin_mt_blaze_v1/bruts/{g["file"]}','sha256':sha(RAW/g['file']),'size':list(Image.open(RAW/g['file']).size)} for g in GEN],'fidelite_rip':fid,'layers':layer_list,'lave':{'phases':32,'frame_length_ticks':15,'palette':[list(c) for c in MTB_PAL],'periode_texture':list(MG.PERIOD),'cellule':MG.CELL,'drift':'une periode vers le sud','pieds_cascade':[],'origine':'magma_visqueux adapte Mt Blaze'},'veines':{'phases':32,'frame_length_ticks':15,'palette':[list(c) for c in MTB_PAL],'pixels':int(vein_mask_down.sum()),'origine':'veines extraites + Worley fines, palette cycling'},'scene_loop_ticks':LOOP_TICKS,'access':{'markers':markers,'paths_16x16':{'entrance->boss':{'ok':reachable2(blocked,entrance,boss)},'entrance->objectif':{'ok':reachable2(blocked,entrance,objectif)}},'blocked_cells':int(blocked.sum()),'total_cells':int(blocked.size),'walkable_cells':int((~blocked).sum()),'rule':'case bloquee si >25% hors sable','north_closed':True},'pmdo':{'target':'0.8.12','asset':ASSET,'namespace':NAMESPACE,'tiles_per_bank':counts,'banks':list(counts),'runtime_tested':False,'warp':'aucun'},'art_approved':False}
+    (OUT/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n')
+    shutil.copyfile(HERE / 'README_PACK.md', OUT / 'README.md')
+    shutil.copyfile(OUT/'manifest.json', STAGE/'manifest.json')
+    print(json.dumps({'fidelite':{k:v['distance'] for k,v in fid.items()},'markers':markers,'blocked':int(blocked.sum()),'veines_px':int(vein_mask_down.sum()),'lava_phases':len(mf)},indent=1))
 
-if __name__ == '__main__':
+if __name__=='__main__':
     build()
