@@ -2,8 +2,9 @@
 
 Le décor est reconstruit à partir de la vignette locale « Rescue Team - Mt. Blaze Entrance » : chemin sableux large
 au premier plan, deux bassins latéraux, autels/piliers de part et d’autre d’une petite bouche noire, falaises et blocs.
-Les calques proviennent du rendu illustré, puis sont segmentés par matière. La vignette GBA est conservée dans
-reference/ ; EMB1 demeure intact.
+Le layout dérivé porte un key magenta pur #FF00FF pour le placement exact de la lave. Les textures source RGBA de lave
+et de veines rocheuses sont extraites séparément, puis leurs calques sont animés indépendamment. La vignette GBA est
+conservée dans reference/ ; EMB1 demeure intact.
 
 La lave garde ses pixels fixes. Ses accents, ainsi que les veines dans les roches, reprennent le cycle de palette
 D41P41A étudié pour Pokémon Mystery Dungeon: Explorers of Sky : 13 crans × 10 ticks = 130 ticks. C’est une adaptation
@@ -44,13 +45,25 @@ ANIMS = ('lave', 'veines_roche')
 ORDER = ('sol_complet', 'ombres', 'lave', 'sentier', 'eboulis', 'parois', 'piliers', 'grotte', 'veines_roche')
 REFERENCE = HERE / 'reference/mt_blaze_reference_300x260.png'
 DECOR_FILE = RAW / 'decor_ref_layout.png'
+MAGENTA_LAYOUT_FILE = RAW / 'layout_magenta.png'
+LAVA_TEXTURE_FILE = RAW / 'lave_texture_rgba.png'
+VEIN_TEXTURE_FILE = RAW / 'veines_roche_rgba.png'
+MAGENTA = np.array([255, 0, 255], dtype=np.uint8)
 ANIMATION_REPORT = R / 'renders/etude_animations_canoniques_sky_v1/rapport.json'
-GENERATION = [{
-    'file': 'bruts/decor_ref_layout.png',
-    'source_reference': 'reference/mt_blaze_reference_300x260.png',
-    'note': 'reconstruction 4:3 du layout Mt. Blaze fourni en référence : bassins inférieurs latéraux, sol central ouvert, deux structures de pierre et petite bouche sombre',
-    'prompt': 'Reprendre la vignette Mt. Blaze comme blueprint de disposition : bassins irréguliers bas-gauche/bas-droite, petits chenaux extérieurs, large sol sableux en avant-plan, deux autels de pierre autour d’une petite ouverture noire au centre-haut, falaises et éboulis. Textures GBA lavande-gris, lave vin rouge, fissures orange-or ; quelques veines ramifiées dans les roches. Pas deux longs chenaux droits ni nouvelle arche monumentale.'
-}]
+GENERATION = [
+    {
+        'file': 'bruts/decor_ref_layout.png',
+        'source_reference': 'reference/mt_blaze_reference_300x260.png',
+        'note': 'reconstruction 4:3 du layout Mt. Blaze fourni en référence : bassins inférieurs latéraux, sol central ouvert, deux structures de pierre et petite bouche sombre',
+        'prompt': 'Reprendre la vignette Mt. Blaze comme blueprint de disposition : bassins irréguliers bas-gauche/bas-droite, petits chenaux extérieurs, large sol sableux en avant-plan, deux autels de pierre autour d’une petite ouverture noire au centre-haut, falaises et éboulis. Textures GBA lavande-gris, lave vin rouge, fissures orange-or ; quelques veines ramifiées dans les roches. Pas deux longs chenaux droits ni nouvelle arche monumentale.'
+    },
+    {'file': 'bruts/layout_magenta.png', 'derived_from': 'bruts/decor_ref_layout.png',
+     'note': 'layout de base exact : la surface des deux bassins est remplacée par le magenta pur #FF00FF pour définir le placement de la lave'},
+    {'file': 'bruts/lave_texture_rgba.png', 'derived_from': 'bruts/decor_ref_layout.png',
+     'note': 'source matière dédiée et transparente ; seuls les pixels des bassins magenta restent opaques'},
+    {'file': 'bruts/veines_roche_rgba.png', 'derived_from': 'bruts/decor_ref_layout.png',
+     'note': 'texture overlay propre ; seules les veines dans la roche restent opaques'}
+]
 
 
 def loadmod(name, path):
@@ -72,6 +85,16 @@ def rgb(path):
 
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def raw_rgba(source, mask):
+    """Image RGBA source plein format, transparente et noire hors du masque de matière."""
+    mask = np.asarray(mask, dtype=bool)
+    source = np.asarray(source, dtype=np.uint8)
+    out = np.zeros((*mask.shape, 4), dtype=np.uint8)
+    out[mask, :3] = source[mask]
+    out[..., 3] = mask.astype(np.uint8) * 255
+    return out
 
 
 def largest_component(mask):
@@ -493,8 +516,27 @@ def build():
     assert reference.shape == (260, 300, 3)
     source_masks, segmentation, _ = classify(decor)
     material_palette_comparison = palette_fidelity_report(decor, source_masks, reference)
+
+    # Étape de composition demandée : le layout source porte le key magenta exact à l’emplacement des bassins.
+    layout_magenta = decor.copy()
+    layout_magenta[source_masks['lave']] = MAGENTA
+    Image.fromarray(layout_magenta, 'RGB').save(MAGENTA_LAYOUT_FILE)
+    magenta_mask = np.all(layout_magenta == MAGENTA, axis=-1)
+    assert np.array_equal(magenta_mask, source_masks['lave']), 'magenta key must equal the full-resolution lava placement'
+    source_masks['lave'] = magenta_mask
+
+    # Sources matière propres, sans pixels étrangers dans leur alpha ; les veines restent sur un calque indépendant.
+    lava_texture = raw_rgba(decor, magenta_mask)
+    vein_texture = raw_rgba(decor, source_masks['veines_roche'])
+    Image.fromarray(lava_texture, 'RGBA').save(LAVA_TEXTURE_FILE)
+    Image.fromarray(vein_texture, 'RGBA').save(VEIN_TEXTURE_FILE)
+
     names = list(source_masks)
     ex, colors = down_class(decor, source_masks, names)
+    _, lava_colors = down_class(lava_texture[..., :3], {'lave': magenta_mask}, ['lave'])
+    colors['lave'] = lava_colors['lave']
+    _, vein_colors = down_class(vein_texture[..., :3], {'veines_roche': source_masks['veines_roche']}, ['veines_roche'])
+    colors['veines_roche'] = vein_colors['veines_roche']
 
     # Le fond de travail reste de la terre sableuse de la référence ; les calques matières couvrent ensuite le décor.
     ground_base = np.empty_like(decor)
@@ -580,11 +622,11 @@ def build():
     tile_counts = make_ground_project(stack_named, blocked, entry_px, threshold_px, gfx, tools)
 
     raw_records = []
-    for relative in ('bruts/decor_ref_layout.png', 'reference/mt_blaze_reference_300x260.png'):
+    for relative in [item['file'] for item in GENERATION] + ['reference/mt_blaze_reference_300x260.png']:
         raw_path = HERE / relative
         with Image.open(raw_path) as source_image:
             raw_records.append({'file': f'source/entree_mt_blaze_sud_nord_v2/{relative}',
-                                'sha256': sha(raw_path), 'size': list(source_image.size)})
+                                'sha256': sha(raw_path), 'size': list(source_image.size), 'mode': source_image.mode})
     report_hash = sha(ANIMATION_REPORT)
     manifest = {
         'lot': 'entree_mt_blaze_sud_nord_v2',
@@ -606,7 +648,33 @@ def build():
         },
         'material_palette_comparison': material_palette_comparison,
         'material_palette_comparison_note': 'distance RGB euclidienne entre les couleurs modales de petites zones d’échantillonnage de la vignette et du rendu ; indicateur de palette uniquement, pas de fidélité pixel-à-pixel',
-        'method': 'reconstruction guidée par la référence, segmentation par matière à 1200×896, réduction BOX pondérée par masque, calques PNG transparents et Ground PMDO 0.8.12',
+        'method': 'layout source 1200×896 avec key magenta #FF00FF exact ; extraction RGBA propre de la lave et des veines ; cycle de palette en calques Ground/TileLayer.Frames ; réduction BOX par matière ; Ground PMDO 0.8.12',
+        'source_materials': {
+            'layout': {
+                'file': f'source/entree_mt_blaze_sud_nord_v2/{MAGENTA_LAYOUT_FILE.relative_to(HERE).as_posix()}',
+                'size_px': [SRC[0], SRC[1]],
+                'lava_key_hex': '#FF00FF',
+                'lava_key_rgb': [255, 0, 255],
+                'lava_placement_pixels': int(magenta_mask.sum()),
+                'mask_rule': 'RGB == [255,0,255] exact, sans tolérance',
+            },
+            'textures': {
+                'lave': {
+                    'file': f'source/entree_mt_blaze_sud_nord_v2/{LAVA_TEXTURE_FILE.relative_to(HERE).as_posix()}',
+                    'mode': 'RGBA', 'opaque_pixels': int((lava_texture[..., 3] == 255).sum()),
+                    'alpha_source': 'key exact #FF00FF du layout_magenta.png',
+                    'transparent_rgb': [0, 0, 0],
+                },
+                'veines_roche': {
+                    'file': f'source/entree_mt_blaze_sud_nord_v2/{VEIN_TEXTURE_FILE.relative_to(HERE).as_posix()}',
+                    'mode': 'RGBA', 'opaque_pixels': int((vein_texture[..., 3] == 255).sum()),
+                    'alpha_source': 'masque de veines rocheuses isolé, hors lave et sentier',
+                    'transparent_rgb': [0, 0, 0],
+                },
+            },
+            'animated_layers': ['lave', 'veines_roche'],
+            'alpha_rule': 'alpha binaire ; RGB des zones transparentes ramené à zéro',
+        },
         'tool_maps_pmdsky': {
             'readme_consulted': 'source/outil_maps_pmdsky/README.md',
             'scope': 'récupération des maps/BG Pokémon Mystery Dungeon: Explorers of Sky',

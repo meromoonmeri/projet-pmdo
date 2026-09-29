@@ -1,4 +1,4 @@
-"""Contrôles de layout, calques, cycle D41P41A, accessibilité et Ground PMDO (pas un test en jeu)."""
+"""Contrôles du key magenta, des textures RGBA, des calques, des cycles et du Ground PMDO (pas un test en jeu)."""
 from pathlib import Path
 import hashlib
 import importlib.util
@@ -83,6 +83,7 @@ class Build(unittest.TestCase):
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), record['sha256'])
             with Image.open(path) as image:
                 self.assertEqual(list(image.size), record['size'])
+                self.assertEqual(image.mode, record['mode'])
         self.assertEqual(M['reference_da']['local_size_px'], [300, 260])
         self.assertTrue((R / M['reference_da']['local_file']).is_file())
         self.assertIn('Mt. Blaze Entrance', M['reference_da']['title'])
@@ -93,6 +94,39 @@ class Build(unittest.TestCase):
         self.assertFalse(M['tool_maps_pmdsky']['used_as_source_for_gba_layout'])
         self.assertEqual(M['animation']['palette_report_sha256'],
                          hashlib.sha256(REPORT.read_bytes()).hexdigest())
+
+    def test_exact_magenta_layout_and_clean_separate_rgba_sources(self):
+        source_materials = M['source_materials']
+        layout_record = source_materials['layout']
+        self.assertEqual(layout_record['lava_key_hex'], '#FF00FF')
+        self.assertEqual(layout_record['lava_key_rgb'], [255, 0, 255])
+        self.assertEqual(layout_record['mask_rule'], 'RGB == [255,0,255] exact, sans tolérance')
+
+        layout_path = R / layout_record['file']
+        decor = np.asarray(Image.open(B.DECOR_FILE).convert('RGB'))
+        layout = np.asarray(Image.open(layout_path).convert('RGB'))
+        self.assertEqual(layout.shape, (896, 1200, 3))
+        self.assertEqual(layout_record['size_px'], [1200, 896])
+        key = np.all(layout == np.array([255, 0, 255], dtype=np.uint8), axis=-1)
+        source_masks, _, _ = B.classify(decor)
+        self.assertTrue(np.array_equal(key, source_masks['lave']), 'exact magenta key must define the entire lava placement')
+        self.assertEqual(int(key.sum()), layout_record['lava_placement_pixels'])
+        self.assertTrue(np.array_equal(layout[~key], decor[~key]), 'only the lava placement is keyed in the source layout')
+
+        for name, expected_mask in (('lave', key), ('veines_roche', source_masks['veines_roche'])):
+            texture_record = source_materials['textures'][name]
+            texture_path = R / texture_record['file']
+            with Image.open(texture_path) as image:
+                self.assertEqual(image.mode, 'RGBA')
+                self.assertEqual(image.size, (1200, 896))
+                texture = np.asarray(image)
+            alpha_mask = texture[..., 3] == 255
+            self.assertTrue(np.array_equal(alpha_mask, expected_mask), f'{name}: source alpha is not its exact isolated mask')
+            self.assertTrue(np.isin(texture[..., 3], (0, 255)).all(), f'{name}: alpha must be binary')
+            self.assertTrue((texture[..., :3][~alpha_mask] == 0).all(), f'{name}: transparent RGB must be clean black')
+            self.assertTrue(np.array_equal(texture[..., :3][alpha_mask], decor[alpha_mask]), f'{name}: source texture pixels changed')
+            self.assertEqual(int(alpha_mask.sum()), texture_record['opaque_pixels'])
+        self.assertFalse((key & source_masks['veines_roche']).any(), 'lava and rock veins must be independent source materials')
 
     def test_dimensions_layer_names_and_binary_alpha(self):
         self.assertEqual((W, H), (768, 576))
@@ -203,6 +237,15 @@ class Build(unittest.TestCase):
                          {'entrance', 'donjon_seuil'})
         self.assertEqual(len(obj['obstacles']), 96)
         self.assertEqual(len(obj['obstacles'][0]), 72)
+        native_layers = {layer['Name']: layer for layer in obj['Layers']}
+        for native_name in ('02 lave', '08 veines roche'):
+            animated_cells = [animation
+                              for column in native_layers[native_name]['Tiles']
+                              for tile in column
+                              for animation in tile['Layers'] if animation.get('Frames')]
+            self.assertTrue(animated_cells, f'{native_name}: no animated cells in the Ground project')
+            self.assertEqual({len(animation['Frames']) for animation in animated_cells}, {13})
+            self.assertEqual({animation['FrameLength'] for animation in animated_cells}, {10})
         self.assertLessEqual(M['pmdo']['max_sheet_height_px'], 2048)
         self.assertEqual(set(M['pmdo']['banks']), set(M['pmdo']['tiles_per_bank']))
         self.assertTrue((STAGE / 'Mod.xml').is_file())

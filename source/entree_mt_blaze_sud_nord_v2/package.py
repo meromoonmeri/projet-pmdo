@@ -18,6 +18,11 @@ STAGE = R / '.cache/entree_mt_blaze_sud_nord_v2/entree_mt_blaze_sud_nord'
 PFX = 'EMB2'
 NAMESPACE = 'entree_mt_blaze_sud_nord_v2'
 ANIMS = ('lave', 'veines_roche')
+SOURCE_ASSETS = {
+    'layout': HERE / 'bruts/layout_magenta.png',
+    'lave': HERE / 'bruts/lave_texture_rgba.png',
+    'veines_roche': HERE / 'bruts/veines_roche_rgba.png',
+}
 REVIEW = ('scene_t000.png', 'scene_animee.webp', 'collisions_marqueurs.png')
 
 
@@ -29,6 +34,11 @@ def zip_items(path, items):
 
 def data_uri(path):
     return 'data:image/png;base64,' + base64.b64encode(Path(path).read_bytes()).decode('ascii')
+
+
+def image_size(path):
+    with Image.open(path) as image:
+        return list(image.size)
 
 
 def main():
@@ -44,6 +54,7 @@ def main():
         layer_items += [(path, f'animation/{anim}/' + path.name)
                         for path in sorted((OUT / 'animation' / anim).glob('*.png'))]
     layer_items += [(path, 'masques/' + path.name) for path in sorted((OUT / 'masques').glob('*.png'))]
+    layer_items += [(path, f'sources/{path.name}') for path in SOURCE_ASSETS.values()]
     layer_items.append((HERE / 'reference/mt_blaze_reference_300x260.png',
                         'reference/mt_blaze_reference_300x260.png'))
     layer_items += [(OUT / f'{PFX}_entree_mt_blaze_calques.ora', f'{PFX}_entree_mt_blaze_calques.ora'),
@@ -69,10 +80,29 @@ def main():
         'collisions': data_uri(OUT / 'review' / f'{PFX}_collisions_marqueurs.png'),
         'entry': manifest['access']['entry_px'],
         'threshold': manifest['access']['threshold_px'],
+        'sources': {
+            name: {
+                'uri': data_uri(path),
+                'size': image_size(path),
+                'label': {
+                    'layout': 'Layout source — placement lave en magenta pur #FF00FF',
+                    'lave': 'Texture lave RGBA — alpha défini par le key magenta exact',
+                    'veines_roche': 'Texture veines rocheuses RGBA — isolée de la lave et du sentier',
+                }[name],
+            }
+            for name, path in SOURCE_ASSETS.items()
+        },
     }
     page = (HERE / 'viewer_template.html').read_text(encoding='utf-8').replace('__DATA__', json.dumps(data, ensure_ascii=False))
     preview = R / 'apercu_entree_mt_blaze_sud_nord_v2.html'
     preview.write_text(page, encoding='utf-8')
+
+    with zipfile.ZipFile(layers_zip) as archive:
+        for source in SOURCE_ASSETS.values():
+            archive_name = f'sources/{source.name}'
+            assert archive.read(archive_name) == source.read_bytes(), f'missing or altered package source {archive_name}'
+    for source in SOURCE_ASSETS.values():
+        assert data_uri(source) in page, f'preview does not embed source {source.name}'
     for path in (project_zip, layers_zip, preview):
         print(f'{path.relative_to(R)}  {path.stat().st_size / 1_000_000:.2f} Mo')
 

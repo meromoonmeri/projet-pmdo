@@ -73,7 +73,53 @@
     }
   },
   "material_palette_comparison_note": "distance RGB euclidienne entre les couleurs modales de petites zones d’échantillonnage de la vignette et du rendu ; indicateur de palette uniquement, pas de fidélité pixel-à-pixel",
-  "method": "reconstruction guidée par la référence, segmentation par matière à 1200×896, réduction BOX pondérée par masque, calques PNG transparents et Ground PMDO 0.8.12",
+  "method": "layout source 1200×896 avec key magenta #FF00FF exact ; extraction RGBA propre de la lave et des veines ; cycle de palette en calques Ground/TileLayer.Frames ; réduction BOX par matière ; Ground PMDO 0.8.12",
+  "source_materials": {
+    "layout": {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/layout_magenta.png",
+      "size_px": [
+        1200,
+        896
+      ],
+      "lava_key_hex": "#FF00FF",
+      "lava_key_rgb": [
+        255,
+        0,
+        255
+      ],
+      "lava_placement_pixels": 152396,
+      "mask_rule": "RGB == [255,0,255] exact, sans tolérance"
+    },
+    "textures": {
+      "lave": {
+        "file": "source/entree_mt_blaze_sud_nord_v2/bruts/lave_texture_rgba.png",
+        "mode": "RGBA",
+        "opaque_pixels": 152396,
+        "alpha_source": "key exact #FF00FF du layout_magenta.png",
+        "transparent_rgb": [
+          0,
+          0,
+          0
+        ]
+      },
+      "veines_roche": {
+        "file": "source/entree_mt_blaze_sud_nord_v2/bruts/veines_roche_rgba.png",
+        "mode": "RGBA",
+        "opaque_pixels": 16198,
+        "alpha_source": "masque de veines rocheuses isolé, hors lave et sentier",
+        "transparent_rgb": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "animated_layers": [
+      "lave",
+      "veines_roche"
+    ],
+    "alpha_rule": "alpha binaire ; RGB des zones transparentes ramené à zéro"
+  },
   "tool_maps_pmdsky": {
     "readme_consulted": "source/outil_maps_pmdsky/README.md",
     "scope": "récupération des maps/BG Pokémon Mystery Dungeon: Explorers of Sky",
@@ -86,6 +132,21 @@
       "source_reference": "reference/mt_blaze_reference_300x260.png",
       "note": "reconstruction 4:3 du layout Mt. Blaze fourni en référence : bassins inférieurs latéraux, sol central ouvert, deux structures de pierre et petite bouche sombre",
       "prompt": "Reprendre la vignette Mt. Blaze comme blueprint de disposition : bassins irréguliers bas-gauche/bas-droite, petits chenaux extérieurs, large sol sableux en avant-plan, deux autels de pierre autour d’une petite ouverture noire au centre-haut, falaises et éboulis. Textures GBA lavande-gris, lave vin rouge, fissures orange-or ; quelques veines ramifiées dans les roches. Pas deux longs chenaux droits ni nouvelle arche monumentale."
+    },
+    {
+      "file": "bruts/layout_magenta.png",
+      "derived_from": "bruts/decor_ref_layout.png",
+      "note": "layout de base exact : la surface des deux bassins est remplacée par le magenta pur #FF00FF pour définir le placement de la lave"
+    },
+    {
+      "file": "bruts/lave_texture_rgba.png",
+      "derived_from": "bruts/decor_ref_layout.png",
+      "note": "source matière dédiée et transparente ; seuls les pixels des bassins magenta restent opaques"
+    },
+    {
+      "file": "bruts/veines_roche_rgba.png",
+      "derived_from": "bruts/decor_ref_layout.png",
+      "note": "texture overlay propre ; seules les veines dans la roche restent opaques"
     }
   ],
   "raw_inputs": [
@@ -95,7 +156,35 @@
       "size": [
         1200,
         896
-      ]
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/layout_magenta.png",
+      "sha256": "c2dbe724d01a093239eea6cfb318c14c498cbeeb6082794bbf8e51b5f656b769",
+      "size": [
+        1200,
+        896
+      ],
+      "mode": "RGB"
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/lave_texture_rgba.png",
+      "sha256": "f037a794736ef314134e485a546bb97b9bc120870478c3cba015c6994c33f4da",
+      "size": [
+        1200,
+        896
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/veines_roche_rgba.png",
+      "sha256": "ab4959bc50db3a483c052b36e43828d6daa05bdaf1a02277328472fc83c9eb60",
+      "size": [
+        1200,
+        896
+      ],
+      "mode": "RGBA"
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/reference/mt_blaze_reference_300x260.png",
@@ -103,7 +192,8 @@
       "size": [
         300,
         260
-      ]
+      ],
+      "mode": "RGB"
     }
   ],
   "segmentation": {

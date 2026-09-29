@@ -12,6 +12,13 @@ Cette V2 répond à la correction de layout : elle ne reprend pas la composition
 - Contrôle indicatif des couleurs modales (RGB euclidien sur des zones échantillonnées, pas une comparaison pixel-à-pixel) : roche **9,38**, lave **4,90**, sentier **7,55** unités par rapport à la vignette. Les valeurs et masques d’échantillonnage sont dans le manifeste.
 - Le README de `source/outil_maps_pmdsky/` a été consulté. Il concerne les maps/BG d’Explorers of Sky et ne fournit pas Mt. Blaze GBA ; il n’est pas utilisé comme source graphique de la composition.
 
+## Correction EMB2 — layout magenta et textures séparées
+
+- `bruts/layout_magenta.png` est le layout source de placement : les pixels de lave sont codés en **magenta pur `#FF00FF`**. Le masque est défini par égalité RGB exacte (aucune tolérance) et son nombre de pixels est vérifié.
+- `bruts/lave_texture_rgba.png` extrait uniquement la texture des zones marquées par ce key. `bruts/veines_roche_rgba.png` isole séparément les fissures chaudes dans la roche. Les deux sources sont en 1200 × 896, alpha binaire, RGB transparent noir ; leurs calques EMB2 restent disjoints.
+- Dans le Ground et l’ORA, `lave` et `veines_roche` sont des calques animés indépendants, chacun avec 13 frames × 10 ticks. La vignette autonome permet désormais d’inspecter le layout magenta et ces deux textures source sous « Inspecter les sources de matière ».
+- Les trois fichiers sont inclus dans `EMB2_calques_png_8px.zip` sous `sources/` et leurs empreintes, modes et dimensions figurent dans `manifest.json`.
+
 ## Animation canonique utilisée
 
 L’étude locale `renders/etude_animations_canoniques_sky_v1/` établit pour la carte **D41P41A** une rotation exacte des palettes magma **10 et 11** : **13 crans, 10 ticks par cran, boucle de 130 ticks**. EMB2 garde fixes les positions des pixels et applique ces deux pistes aux accents de lave et aux veines rocheuses.

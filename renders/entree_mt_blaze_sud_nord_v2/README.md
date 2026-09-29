@@ -9,6 +9,16 @@ Projet d’édition 4:3 (768 × 576 px, 96 × 72 cases). Le layout est reconstru
 
 C’est une base graphique d’édition, pas une aventure jouable : aucun warp, Pokémon ou événement n’est ajouté.
 
+## Sources de matière
+
+Dans `EMB2_calques_png_8px.zip/sources/` :
+
+- `layout_magenta.png` : le placement de lave est encodé par le magenta pur `#FF00FF`; la clé est testée par égalité exacte RGB, sans seuil ni tolérance.
+- `lave_texture_rgba.png` : texture lave isolée par l’alpha exact du key magenta.
+- `veines_roche_rgba.png` : fissures rocheuses extraites sur un alpha séparé.
+
+Les images sources font 1200 × 896 px ; l’alpha est binaire et le RGB des pixels transparents vaut zéro. La vignette HTML permet d’inspecter ces trois sources.
+
 ## Calques (bas → haut)
 
 `sol_complet` · `ombres` · `lave` · `sentier` · `eboulis` · `parois` · `piliers` · `grotte` · `veines_roche` · `Top`.
