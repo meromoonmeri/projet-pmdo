@@ -532,8 +532,9 @@ def build():
         'raw_inputs': [{'file': f'source/fin_sables_mouvants_v1/bruts/{g["file"]}', 'sha256': sha(RAW / g['file']),
                         'size': list(Image.open(RAW / g['file']).size)} for g in GEN],
         'sol_complet': {'recalage_px': [0, 0], **recalage(a, f),
-                        'note': 'stries ocre et tas de sable au pied des chutes gardes ; zones pales sous les roches '
-                                '(cachees par le calque roches)'},
+                        'note': 'stries ocre gardees (pas d aplat) ; les plaques claires du sol ne suivent pas exactement celles '
+                                'du decor (ecart moyen 4,2 sur le sable) : ce calque n est visible que sous la fosse '
+                                'animee, les roches et les chutes, tout le sable praticable vient du decor'},
         'segmentation_mesures': seg,
         'fidelite_rip': {'methode': 'moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne',
                          'brut': fid, 'calques_finaux': final_fid,

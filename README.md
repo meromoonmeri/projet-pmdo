@@ -1,5 +1,18 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Sables mouvants : arène du désert, FSM1 (29 septembre 2026)
+
+**Demande** : « Poursuis le projet », après lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et du README de l'outil maps PMD Sky. Suite de la série des fins de donjon dans l'ordre du mod : **FSM1** prolonge l'entrée EQS1 (Sables mouvants). Biome et portée choisis par l'agent, **à confirmer**.
+
+- Sorties : `renders/fin_sables_mouvants_v1/`, aperçu `apercu_fin_sables_mouvants_v1.html`, build `source/fin_sables_mouvants_v1/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `witheringdesert.png` (Furnace Desert). Ce ne sont pas des tuiles natives.
+- **Layout** : arrivée au sud, arène ronde fermée par des falaises, grande fosse de sable mouvant au centre, couronne de sable autour, deux chutes de sable et une estrade de pierre au nord. Marqueurs `entrance`, `boss`, `objectif` ; aucune sortie, aucun warp.
+- **Calques** : fosse (12 × 10), sol complet, sable, ombres, bord de la fosse, roches, pierres, chutes (24 × 5), poussière et tourbillons (24 × 5), plus un Top vide. Pas de rayons : l'arène n'a pas de ciel.
+- **Cohérence avec l'entrée** : fosse, chutes et poussière reprennent les fonctions, les couleurs exactes du rip et la planche de poussière d'EQS1 (un test compare les constantes et les octets de la planche).
+- **Fidélité** (seuil 35) : sable 19,9, roche 22,9.
+- **Contrôles** : 15 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- **Branches sœurs** (non fusionnées, rien repris) : `arena/01a0ea8f` a déjà une Fin Underground Lake (FUL1) et une arène de Terapagos fleurie (ATF1) ; `arena/01a0eaca` a FUL1 (autre version), FMF1/FMF2 (Mystifying Forest), six repères de fins (FCV1, FJS3, FMT1, FQS1, FSC1, FTC1) et BZF1. FSM1 est donc un préfixe distinct de FQS1.
+
 ## Cristaux Zone Zéro : blancs à reflets arc-en-ciel, RAF3 et EAF1 (29 septembre 2026)
 
 **Demande** : « je veux que les cristal et des reflet et que ce soit comme area zero blanc de base a reflet arc en ciel qui change de couleur rouge mauve etc ». Les deux maps à cristaux du réseau fleuri, **RAF3** (piliers, couronnes) et **EAF1** (plateau, géode), ont deux calques de plus, juste au-dessus de `falaises` (19 calques au lieu de 17).

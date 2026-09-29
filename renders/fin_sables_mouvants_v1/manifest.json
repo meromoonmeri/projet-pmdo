@@ -78,7 +78,7 @@
     ],
     "ecart_moyen_sable": 4.21,
     "ecart_decale_1px": 4.44,
-    "note": "stries ocre et tas de sable au pied des chutes gardes ; zones pales sous les roches (cachees par le calque roches)"
+    "note": "stries ocre gardees (pas d aplat) ; les plaques claires du sol ne suivent pas exactement celles du decor (ecart moyen 4,2 sur le sable) : ce calque n est visible que sous la fosse animee, les roches et les chutes, tout le sable praticable vient du decor"
   },
   "segmentation_mesures": {
     "pierres": 5,

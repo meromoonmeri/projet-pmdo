@@ -2,7 +2,7 @@
 <html lang="fr">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Entrée Sables mouvants · sud → nord · 4:3</title>
+<title>Fin Sables mouvants · arène du désert · 4:3</title>
 <style>
 body{background:#2a2112;color:#e4e6f2;font:15px/1.55 system-ui,sans-serif;margin:0;padding:24px}
 main{max-width:1180px;margin:auto}
@@ -21,8 +21,8 @@ button.on{background:#e7c77f}
 code{color:#cfe4ee}
 </style>
 <main>
-<h1>Entrée Sables mouvants — format 4:3 vaste (768×576)</h1>
-<p>Rendu généré <strong>référencé sur la capture du désert aux sables mouvants</strong> (<code>witheringdesert.png</code> = Furnace Desert, zone amie de PMD Rescue Team). Biome choisi par l'agent pour la suite de la série. Le générateur a reçu la capture en référence et a produit le décor complet en 4:3, la <strong>fosse de sable mouvant</strong> et les <strong>deux chutes de sable</strong> peintes en magenta. Le sol complet (édité depuis le décor) et une planche de poussière et de tourbillons sur magenta ont été générés à part. Le tout a ensuite été découpé en <strong>12 calques</strong> (plus un calque Top vide dans le Ground). La <strong>fosse</strong> aspire : lignes de 1 px aux <strong>couleurs exactes de la capture</strong>, lobes qui tournent, anneaux qui s'enfoncent vers le centre (12 phases de 10 ticks). Les <strong>chutes</strong> défilent en chevrons aux couleurs exactes (24 phases de 5 ticks). Des <strong>bouffées de poussière</strong> naissent au pied des chutes et des <strong>tourbillons de grains</strong> dérivent au vent (24 × 5 ticks). Des <strong>rayons de soleil</strong> en overlay translucide respirent (12 × 10 ticks). L'arrivée est au sud ; le sable mène à l'entrée sombre au nord, entre les deux chutes, où se trouve le seuil du donjon. La fosse reste à l'écart du chemin.</p>
+<h1>Fin Sables mouvants — format 4:3 vaste (768×576)</h1>
+<p>Zone de fin de donjon du désert, dans la suite de l'entrée Sables mouvants (EQS1). Rendu généré <strong>référencé sur la capture du désert aux sables mouvants</strong> (<code>witheringdesert.png</code> = Furnace Desert, zone amie de PMD Rescue Team). Biome et portée choisis par l'agent, à confirmer. Le générateur a reçu la capture en référence et a produit l'arène complète en 4:3 : la <strong>grande fosse de sable mouvant</strong> centrale et les <strong>deux chutes de sable</strong> sont peintes en magenta. Le sol complet est édité depuis le décor ; la planche de poussière et de tourbillons est celle de l'entrée. Le tout est découpé en <strong>11 calques</strong> (plus un calque Top vide dans le Ground). La <strong>fosse</strong> aspire : lignes de 1 px aux <strong>couleurs exactes de la capture</strong>, lobes qui tournent, anneaux qui s'enfoncent (12 phases de 10 ticks). Les <strong>chutes</strong> défilent en chevrons aux couleurs exactes (24 phases de 5 ticks). Des <strong>bouffées de poussière</strong> naissent au pied des chutes et des <strong>tourbillons de grains</strong> dérivent au vent (24 × 5 ticks). Pas de rayons : l'arène est fermée par des falaises. L'arrivée est au sud ; le boss se tient sur le sable au sud de la fosse, qu'on contourne pour atteindre l'objectif au pied de l'estrade, entre les deux chutes. Aucune sortie.</p>
 <div class="wrap">
   <div class="stage" id="stage"><canvas id="c"></canvas></div>
   <aside>
@@ -36,7 +36,7 @@ code{color:#cfe4ee}
     <fieldset><legend>Calques (bas → haut)</legend><div id="layers"></div><button id="solo">Tout afficher</button></fieldset>
     <fieldset><legend>Poses générées (×4) : bouffées, tourbillons</legend><div id="poses" style="display:flex;flex-wrap:wrap;gap:6px"></div></fieldset>
     <fieldset><legend>Export</legend><button id="png">PNG de la vue actuelle (1×)</button></fieldset>
-    <p class="note">Le terrain, la poussière et les tourbillons sont générés à partir de la capture. Le mouvement de la fosse, le défilement des chutes, la chronologie de la poussière et la respiration des rayons sont créés par nous : ce ne sont pas des animations officielles. La fosse et les chutes n'utilisent que des couleurs de la capture ; les rayons sont le seul calque translucide (couleur de la capture, alpha par paliers mesuré sur elle). Marqueurs : jaune = <code>entrance</code>, cyan = <code>donjon_seuil</code>. Aucun test fait dans PMDO.</p>
+    <p class="note">Le terrain, la poussière et les tourbillons sont générés à partir de la capture. Le mouvement de la fosse, le défilement des chutes, la chronologie de la poussière sont créés par nous : ce ne sont pas des animations officielles. La fosse et les chutes n'utilisent que des couleurs de la capture ; aucun calque n'est translucide. Marqueurs : jaune = <code>entrance</code>, magenta = <code>boss</code>, cyan = <code>objectif</code>. Aucun test fait dans PMDO.</p>
   </aside>
 </div>
 </main>

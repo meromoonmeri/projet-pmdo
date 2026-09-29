@@ -11,7 +11,7 @@ R = HERE.parents[1]
 O = R / 'renders/fin_sables_mouvants_v1'
 S = R / '.cache/fin_sables_mouvants_v1/fin_sables_mouvants'
 PFX = 'FSM1'
-ANIMS = ['fosse', 'chutes', 'poussiere', 'rayons']
+ANIMS = ['fosse', 'chutes', 'poussiere']
 REVIEW = ['scene_t000.png', 'scene_animee.webp', 'collisions_marqueurs.png', 'planche_poses.png']
 
 
@@ -49,7 +49,7 @@ def main():
         poses.append({'id': kind, 'uri': uri(p), 'w': w, 'h': h})
     data = {'size': M['size_px'], 'loop': M['scene_loop_ticks'], 'stack': stack, 'surface': 'rgb(160,120,60)', 'poses': poses,
             'collisions': uri(O / f'review/{PFX}_collisions_marqueurs.png'),
-            'entry': M['access']['entry_px'], 'threshold': M['access']['threshold_px']}
+            'entry': M['access']['entry_px'], 'boss': M['access']['boss_px'], 'objectif': M['access']['objective_px']}
     page = (HERE / 'viewer_template.html').read_text().replace('__DATA__', json.dumps(data))
     (R / 'apercu_fin_sables_mouvants_v1.html').write_text(page)
     for p in [O / f'{PFX}_projet_pmdo_0812.zip', O / f'{PFX}_calques_png_8px.zip', R / 'apercu_fin_sables_mouvants_v1.html']:

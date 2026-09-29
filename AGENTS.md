@@ -1197,3 +1197,14 @@ Pas de runtime. Pas dans le mod unique.
 - **Boucle fermée** : la bande avance de 96 px en 24 phases (période 96 px) ; la teinte vaut `((x + y) / 8 + t / 3) mod 8`, soit 8 teintes en 24 phases.
 - **Piège** : les reflets turquoise de la roche (145,197,196) passent la règle menthe. Ne garder que les composantes dont au moins 5 % des pixels ont une luminance supérieure à 205.
 - **Indices de calque** : ils se décalent quand un lot a des cristaux. `mutations.py` trouve désormais les fichiers par nom (`F('nom', t)`), et le manifeste ne liste que les animations présentes.
+
+## Fin Sables mouvants — FSM1, ajouts à la recette
+
+- **Reprise** : lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et `source/outil_maps_pmdsky/README.md`, puis relevé des branches (`git ls-remote --heads`, puis `gh api repos/<repo>/compare/<base>...<branche>` : commits et fichiers d'une branche sœur sans rien fetcher, une seconde par branche). Deux branches récentes avaient déjà FUL1, FMF1/2, ATF1 et des repères de fins ; FSM1 a donc été choisie parmi les fins restantes, avec un préfixe libre.
+- **Fin construite depuis l'entrée** : copier le lot d'entrée (`build.py`, tests, `package.py`, viewer, README), puis adapter. Les lois d'animation restent identiques ; un test compare `PIT_SEQ`, `FALL_PAIRS`, `FALL_STEP`, `POSE_WIN` et les octets de la planche de poussière à ceux de l'entrée.
+- **Planche de poses** : réutiliser celle de l'entrée sans la régénérer (une génération économisée) ; le manifeste et le prompt le disent.
+- **Prompt d'arène** : « arène ronde fermée par des falaises, fosse au centre avec une couronne de sable, deux chutes et une estrade au nord, magenta pur pour la fosse et les chutes » a donné un décor utilisable du premier coup. Le sol complet, avec « keep the ochre strokes », a gardé les stries dès le premier essai (leçon d'EQS1 appliquée). Ses plaques claires ne suivent pas celles du décor : l'écart est mesuré (4,2) et le calque n'est visible que sous les objets.
+- **Sans ciel, pas de rayons** : ne pas reprendre le calque `rayons` d'une entrée dans une salle fermée ; un test vérifie qu'aucun calque n'est translucide.
+- **Marqueurs d'une fin** : `boss` = case 2 × 2 libre la plus proche de 56 px au sud du centre de la fosse ; `objectif` = case libre la plus haute entre les pieds des deux chutes. Tests : arrivée au sud, boss au sud et objectif au nord de la fosse, objectif entre les chutes, chemins 16 × 16, bande nord bloquée, fosse et chutes bloquantes.
+- **Mutations** vérifiées : pixel hors rip dans la fosse, boss déplacé dans la fosse (manifeste), poussière vidée, chute décalée d'un pixel, calque de pierres vidé. Restaurer avec `git checkout` du dossier `renders/` après chaque essai.
+- **Réinitialisations** : commit et push dès que le build tourne (fait ici avant les tests).
