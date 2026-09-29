@@ -1,0 +1,614 @@
+{
+  "lot": "fin_mt_blaze_v1",
+  "prefix": "FMB1",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "FMB1 (entree Mt. Blaze) ; aucun emprunt branches soeurs",
+  "biome": "Mt. Blaze (lave), prolonge FMB1, fin fermee",
+  "method": "textures canoniques = rendu genere REFERENCE : rip passe au generateur ; decor complet sur magenta (lac = magenta), sol complet edite depuis le decor, planche flammes/ronds sur magenta",
+  "reference_da": {
+    "file": "Rescue_Team_-_Mt._Blaze_Entrance.png",
+    "sha256": "f11f2e5aa85b7b08ef727e40b0908dda3f0821fadd627622a736db0f5eede268",
+    "titre": "Rive du lave (Mt. Blaze, PMD Explorers)"
+  },
+  "generation": [
+    {
+      "file": "decor.png",
+      "images": [
+        "images.jpg",
+        "Rescue_Team_-_Mt._Blaze_Entrance.png"
+      ],
+      "prompt": "Use EXACTLY the same textures, palette and pixel-art style as the reference images (the volcano peak exterior with purple sky and the GBA Mt. Blaze Entrance): same beige cracked ground, same grey boulders, same orange-red lava. Make a NEW, larger top-down map, WIDE LANDSCAPE 4:3, zoomed out. Layout: a closed circular crater arena surrounded by grey cliffs, the player arrives at the SOUTH on beige sand; the center and NORTH are a vast LAVA CRATER (entire lava surface flat pure magenta #FF00FF, no gradient), with a small safe rock platform in the middle for the boss, and rock causeways. Grey boulders in lava, dark walls around. No characters, no text, no UI, no border.",
+      "essais": "genere reference volcan exterieur + GBA, cratere central 20% magenta, 1200x896"
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "source/fin_mt_blaze_v1/bruts/decor.png"
+      ],
+      "prompt": "Same image, same framing and pixel-art style, but only beige cracked sandy ground everywhere, replacing all lava (magenta), grey rocks and dark walls with the same beige cracked sand texture, keeping the exact sand palette, no magenta remaining.",
+      "essais": "edite depuis decor (magenta->sable, rochers sous calque roche)"
+    },
+    {
+      "file": "lave_flammes_poses.png",
+      "images": [
+        "65097.png"
+      ],
+      "prompt": "Use EXACTLY the same palette as the reference lava sheet: same orange lava, yellow flame center. Create a sprite sheet on flat pure magenta #FF00FF background with 8 lava bubbles, 16 tall flames (24x64) and 6 ember dots. No grid, crisp pixel art.",
+      "essais": "copie de la planche EMB1 (meme palette, meme fenetres), 1024x1024"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/fin_mt_blaze_v1/bruts/decor.png",
+      "sha256": "26ca8b16f60ec7f8ed3b57bb54ede6ad5ce186b5fd15a323b7656b25065d7edf",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_mt_blaze_v1/bruts/sol_complet.png",
+      "sha256": "074b19340c007284c06c5bfc5d7753101b255a91658a5cd30bfff68d4b583a76",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_mt_blaze_v1/bruts/lave_flammes_poses.png",
+      "sha256": "0786b952aac9e58d3f77c4e8f75420c91618fb016ed844b044eab5a38bdeb0ae",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  ],
+  "sol_complet": {
+    "recalage_px": [
+      0,
+      0
+    ],
+    "ecart_moyen_parois": 3.81,
+    "ecart_decale_1px": 7.09,
+    "note": "le generateur a garde les parois (sous le calque parois) ; lac, piliers, stalagmites et bouche remplaces par du sable"
+  },
+  "fidelite_rip": {
+    "methode": "moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne",
+    "brut": {
+      "sable": {
+        "rip_rgb": [
+          175.9,
+          135.8,
+          109.3
+        ],
+        "decor_rgb": [
+          173.0,
+          132.8,
+          109.8
+        ],
+        "distance": 4.2
+      },
+      "roche": {
+        "rip_rgb": [
+          159.0,
+          119.0,
+          103.0
+        ],
+        "decor_rgb": [
+          152.6,
+          116.9,
+          101.1
+        ],
+        "distance": 7.0
+      }
+    },
+    "calques_finaux": {
+      "sable": {
+        "matiere": "sable",
+        "rgb": [
+          173.0,
+          132.1,
+          108.2
+        ],
+        "distance_rip": 4.8
+      },
+      "roche": {
+        "matiere": "roche",
+        "rgb": [
+          90.7,
+          78.6,
+          86.1
+        ],
+        "distance_rip": 81.1
+      },
+      "piliers": {
+        "matiere": "roche",
+        "rgb": [
+          NaN,
+          NaN,
+          NaN
+        ],
+        "distance_rip": NaN
+      }
+    },
+    "eau_et_lueur_lave": "couleurs EXACTES du rip (sous-ensemble des 69 couleurs du rip)"
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "methode": "moyenne ponderee par classe (BOX), attribution exclusive par poids maximal",
+    "palettes": {
+      "terrain": {
+        "calques": [
+          "sol_complet",
+          "sable",
+          "ombres",
+          "berge"
+        ],
+        "couleurs": 96
+      },
+      "roche": {
+        "calques": [
+          "roche",
+          "piliers"
+        ],
+        "couleurs": 64
+      },
+      "profondeur": {
+        "calques": [
+          "profondeur"
+        ],
+        "couleurs": 12
+      }
+    }
+  },
+  "segmentation": "eau = magenta et frange violette dilates 2 px ; entree sombre = lum <48 reliee au haut-centre ; sable = jaune clair grande composante ; ombres = sable a <=16 px des parois ; berge = ni sable ni eau a <=14 px de l eau et du sable ; piliers = roche ou sol complet differe (ecart >20)",
+  "layers": [
+    {
+      "file": "animation/lave/FMB1_00_lave_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/lueur_lave/FMB1_01_lueur_lave_fNN.png",
+      "phases": 12,
+      "ticks": 10
+    },
+    {
+      "file": "animation/scintillements_lave/FMB1_02_scintillements_lave_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/flammes/FMB1_03_flammes_fNN.png",
+      "phases": 24,
+      "ticks": 5
+    },
+    {
+      "file": "calques/FMB1_04_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMB1_05_sable.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMB1_06_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMB1_07_berge.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMB1_08_roche.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMB1_09_piliers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMB1_10_profondeur.png",
+      "phases": 1,
+      "ticks": 60
+    }
+  ],
+  "lava": {
+    "phases": 4,
+    "frame_length_ticks": 10,
+    "couleurs": {
+      "surface": [
+        208,
+        64,
+        8
+      ],
+      "bande": [
+        240,
+        120,
+        0
+      ],
+      "accent": [
+        240,
+        176,
+        0
+      ]
+    },
+    "modele": "structure riviere Metano (bande, frange, accent, aplat, onde), couleurs exactes du rip sans liseré",
+    "origine": "pixels recalcules"
+  },
+  "lueur_lave": {
+    "phases": 12,
+    "frame_length_ticks": 10,
+    "couleurs": [
+      [
+        139,
+        0,
+        0
+      ],
+      [
+        180,
+        40,
+        0
+      ],
+      [
+        208,
+        64,
+        8
+      ],
+      [
+        216,
+        72,
+        16
+      ],
+      [
+        240,
+        88,
+        0
+      ],
+      [
+        240,
+        120,
+        0
+      ],
+      [
+        240,
+        144,
+        0
+      ],
+      [
+        240,
+        160,
+        0
+      ],
+      [
+        232,
+        192,
+        0
+      ]
+    ],
+    "centres": [
+      [
+        384,
+        142,
+        179,
+        81
+      ],
+      [
+        395,
+        362,
+        1,
+        2
+      ]
+    ],
+    "anneau_px": 4
+  },
+  "sparkles": {
+    "placements": [
+      {
+        "famille": "A_16x24",
+        "xy": [
+          440,
+          152
+        ]
+      },
+      {
+        "famille": "A_16x24",
+        "xy": [
+          224,
+          144
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          472,
+          136
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          472,
+          160
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          392,
+          112
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          360,
+          96
+        ]
+      }
+    ],
+    "source": "Metano natif"
+  },
+  "flammes": {
+    "poses": {
+      "goutte": [
+        96,
+        86,
+        96
+      ],
+      "goutte_etiree": [
+        125,
+        603,
+        96
+      ],
+      "impact": [
+        130,
+        874,
+        128
+      ],
+      "eclaboussure": [
+        412,
+        138,
+        176
+      ],
+      "rond_0": [
+        608,
+        156,
+        32
+      ],
+      "rond_1": [
+        608,
+        495,
+        64
+      ],
+      "rond_2": [
+        607,
+        847,
+        144
+      ],
+      "rond_3": [
+        869,
+        156,
+        192
+      ],
+      "rond_4": [
+        865,
+        495,
+        272
+      ],
+      "rond_5": [
+        863,
+        847,
+        288
+      ]
+    },
+    "reduction": "x1/8",
+    "chronologie": [
+      [
+        "flamme",
+        -16
+      ],
+      [
+        "flamme",
+        -12
+      ],
+      [
+        "flamme",
+        -8
+      ],
+      [
+        "flamme_etiree",
+        -4
+      ],
+      [
+        "impact",
+        0
+      ],
+      [
+        "eclaboussure",
+        0
+      ],
+      [
+        "rond_0",
+        0
+      ],
+      [
+        "rond_1",
+        0
+      ],
+      [
+        "rond_1",
+        0
+      ],
+      [
+        "rond_2",
+        0
+      ],
+      [
+        "rond_2",
+        0
+      ],
+      [
+        "rond_3",
+        0
+      ],
+      [
+        "rond_3",
+        0
+      ],
+      [
+        "rond_4",
+        0
+      ],
+      [
+        "rond_4",
+        0
+      ],
+      [
+        "rond_5",
+        0
+      ],
+      [
+        "rond_5",
+        0
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "emetteurs": [
+      [
+        544,
+        457,
+        0
+      ],
+      [
+        524,
+        312,
+        3
+      ],
+      [
+        280,
+        305,
+        6
+      ],
+      [
+        199,
+        447,
+        9
+      ],
+      [
+        617,
+        267,
+        12
+      ],
+      [
+        602,
+        208,
+        15
+      ],
+      [
+        134,
+        307,
+        18
+      ],
+      [
+        519,
+        246,
+        21
+      ]
+    ],
+    "phases": 24,
+    "frame_length_ticks": 5
+  },
+  "scene_loop_ticks": 120,
+  "access": {
+    "markers": {
+      "entrance": [
+        392,
+        560
+      ],
+      "boss": [
+        384,
+        448
+      ],
+      "objectif": [
+        376,
+        448
+      ]
+    },
+    "paths_16x16": {
+      "entrance->boss": {
+        "ok": true
+      },
+      "entrance->objectif": {
+        "ok": true
+      }
+    },
+    "blocked_cells": 6533,
+    "total_cells": 6912,
+    "walkable_cells": 379,
+    "rule": "case bloquee si >25% hors sable (ombres comprises)",
+    "north_closed": true
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "fmb1_fin_mt_blaze",
+    "namespace": "fin_mt_blaze",
+    "tiles_per_bank": {
+      "FMB1_00_LAVE": 2306,
+      "FMB1_01_LUEUR": 2438,
+      "FMB1_02_SCINTILLEMENTS": 52,
+      "FMB1_03_FLAMMES": 494,
+      "FMB1_04_SOL": 3748,
+      "FMB1_05_SABLE": 276,
+      "FMB1_06_OMBRES": 155,
+      "FMB1_07_BERGE": 46,
+      "FMB1_08_ROCHE": 3408,
+      "FMB1_09_PILIERS": 1,
+      "FMB1_10_PROFONDEUR": 21
+    },
+    "banks": [
+      "FMB1_00_LAVE",
+      "FMB1_01_LUEUR",
+      "FMB1_02_SCINTILLEMENTS",
+      "FMB1_03_FLAMMES",
+      "FMB1_04_SOL",
+      "FMB1_05_SABLE",
+      "FMB1_06_OMBRES",
+      "FMB1_07_BERGE",
+      "FMB1_08_ROCHE",
+      "FMB1_09_PILIERS",
+      "FMB1_10_PROFONDEUR"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}

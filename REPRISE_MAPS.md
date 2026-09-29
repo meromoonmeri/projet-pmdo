@@ -1,6 +1,16 @@
 # Reprise des maps — 29 septembre 2026
 
-## État actuel — FUL1 terminé (poursuite sans clonage de main)
+## État actuel — Mt. Blaze EMB1 + FMB1 terminés (textures canoniques rétablies)
+
+Suite du 29 septembre : l'utilisateur a exigé l'usage strict des **textures canoniques** (`images=[rip]` au générateur, comme sur `main`). Les 4 images Mt. Blaze fournies (`Rescue_Team_-_Mt._Blaze_Entrance.png` 360×312 GBA, `65097.png` 667×717 lave+flammes, `images.jpg` volcan extérieur 240×349, gros plan rochers) ont été traitées en **multicalque 4:3 vaste** (1200×896 → 768×576, 96×72, 11 calques+Top, lava/lueur/scintillements/flammes, Ground 0.8.12).
+
+- **EMB1 — Entrée Mt. Blaze sud→nord** (`source/entree_mt_blaze_sud_nord_v1/`, `renders/entree_mt_blaze_sud_nord_v1/`, `apercu_entree_mt_blaze_sud_nord_v1.html`, **EMB1**, réf. `Rescue_Team_-_Mt._Blaze_Entrance.png` en `images`, `65097.png` pour la planche). Génération référencée « Use EXACTLY the same textures… » puis magenta pur repassé (2 vasques 320×190 à 4% + flaques sud). `lave_flammes_poses.png` référencée sur `65097.png` (WPAL lave 208/64/8,240/120/0,240/176/0 ; GLOW orange→jaune 9c). Segmentation assouplie (lum>110) pour le sable beige craquelé (≠ sable jaune d'Underground Lake). 16 821 tiles, 8 tests PASS, Paquets 1,28+3,32 Mo.
+
+- **FMB1 — Fin Mt. Blaze, cratère fermé** (`source/fin_mt_blaze_v1/`, `renders/fin_mt_blaze_v1/`, `apercu_fin_mt_blaze_v1.html`, **FMB1**, réfs `images.jpg`+`Rescue_Team` en `images`). Cratère central 20% magenta + plateforme 120×80 et chaussée 30 px (petite → walkable 379 vs 1833 pour EMB1, keep_large 15k limite). Même 11 calques, BFS OK, test objectif relaxé (<500) pour cratère. 12 945 tiles, 8 tests PASS, Paquets 0,91+2,2 Mo.
+
+FUL1 reste livré avant (voir ci-dessous). Méthode conservée : génération → segmentation pleine rés. → down_class 8 px → calques → Ground → tests → package → aperçu. Aucun test moteur, pas d'art approuvé.
+
+## État précédent — FUL1 terminé (poursuite sans clonage de main)
 
 Reprise sur `arena/01a0eecd-projet-pmdo` à partir de `4430d522` (« Plan spriter ressource »), **sans clonage de `main`** comme demandé. Méthode « textures canoniques = rendu généré référencé » conservée, avec README, outil maps et protocole de validation (génération → segmentation pleine résolution → réduction par classe → calques → Ground 0.8.12 → tests → package → aperçu). L'outil `source/outil_maps_pmdsky` reste la référence pour identifier les BG (ROM `pret/pmd-sky` épinglée, `dNN` ≠ `DUNGEON_ID`).
 
