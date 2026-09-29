@@ -1,5 +1,37 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Mt. Thunder : FTH1 — arène au-dessus des nuages (29 septembre 2026)
+
+**Suite après FVC1** : carte de sommet d'orage, inspirée de la capture `source/references_54d3731/thunder.png` (salle de boss Mt. Thunder, Red Rescue Team/GBA). Le rendu est généré en référence, pas composé de tuiles natives. Le préfixe **FTH1** est propre à ce lot; FMT1 est déjà pris dans une branche sœur. Aucun gros dossier de rendu ou paquet d'une autre branche/main n'est copié : sortie indépendante sous `renders/fin_mt_thunder_v1/`.
+
+- Sorties : `source/fin_mt_thunder_v1/`, `renders/fin_mt_thunder_v1/`, aperçu `apercu_fin_mt_thunder_v1.html`.
+- Plateau sableux au centre, falaises brun-beige, quelques cailloux/aiguilles de roche et mer de nuages. Pas de grotte, autel, cristal, eau, fleur, Pokémon ou élément hors référence.
+- **Éclairs et arc Flash** : sprites/palette découpés sans redimensionnement depuis le panneau de la référence GBA; emplacement et boucle 48 × 5 ticks créés pour FTH1, non officiels.
+- Marqueurs entrée sud `[384,448]`, boss `[384,288]`, objectif nord `[384,144]`; chemins 16 × 16 validés par BFS. Distance moyenne de couleur du sable au rip : 8,7 (indicative, ne valide pas l'art).
+- 5 tests PASS; `INSTALLER.py --dry-run` propose 11 fichiers et 9 tilesets. Archives FTH1 : 0,63 Mo (Ground PMDO 0.8.12) et 2,07 Mo (PNG/ORA); aperçu autonome 1,14 Mo. **Pas de test runtime ni d'approbation artistique.**
+
+## Fin Couloir violet : FVC1 — suite à ECV1 (29 septembre 2026)
+
+**Demande** : « Passe à la suite ». Fin suivante après la Clairière tropicale selon l'ordre de la série; elle prolonge l'entrée ECV1 et sa capture `large.S05P03A…png`. Préfixe **FVC1** (FCV1 déjà pris dans une branche sœur; rien repris de cette branche).
+
+- Sorties : `renders/fin_couloir_violet_v1/`, aperçu `apercu_fin_couloir_violet_v1.html`, build `source/fin_couloir_violet_v1/build.py`.
+- **Méthode** : décor 4:3 généré en référence à ECV1; le guide magenta isole le sol, il n'est pas exporté. Rendu référencé, **pas des tuiles natives ni une validation pixel-perfect**.
+- **Layout** : entrée en couloir au sud, grande arène rocheuse ouverte, murs et gravillons violets. Marqueurs `entrance` au sud, `boss` au centre, `objectif` au nord; aucune sortie ni warp. Aucun objet spécial, Pokémon, papillon ou eau ajouté.
+- **Calques** : sol complet, sol, ombres, gravillons, parois, vide, éboulis animé (24 × 5 ticks), Top vide. Les poses des gravillons sont réutilisées à l'échelle d'ECV1; leur mouvement est créé pour FVC1, non officiel.
+- **Accès** : BFS valide 16 × 16 px entrée→boss et entrée→objectif. Fidélité couleur indicative du sol : distance moyenne RVB 17,1 au ROI ECV1 (seuil d'atelier 35; cela ne prouve pas l'identité artistique).
+- 5 tests PASS; simulation `INSTALLER.py --dry-run` valide (9 fichiers proposés, 7 tilesets); fichiers Ground PMDO 0.8.12, archives PNG/ORA et aperçu produits. **Pas de runtime PMDO ni d'approbation artistique.**
+- **Reste en attente pour FCT1** : demande précédente de l'utilisateur (faire animer les fleurs canoniquement, réparer le chemin, supprimer les papillons, auditer la map). Cette suite FVC1 ne corrige pas FCT1.
+
+## Fin Clairière tropicale : FCT1 — correction du rendu canonique (29 septembre 2026)
+
+**Suite après FST1** : nouvelle fin proposée pour prolonger l'entrée tropicale ETC1. Le retour utilisateur a écarté le premier brut, qui inventait une pomme/sanctuaire et une rivière-cascade derrière l'arène : ces éléments ne sont pas dans la référence PMD. Le rendu retenu a été regénéré directement sur `large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png` : texture de clairière, palmiers, fleurs, dalles et mer uniquement en bandes au bord sud; sans fruit, autel, cascade ni eau derrière la carte.
+
+- **« Textures canoniques » = rendu généré référencé**, pas des tuiles natives. `bruts/objets_magenta.png` est un guide de segmentation seulement; le RGB magenta n'est pas exporté.
+- Sorties : `renders/fin_clairiere_tropicale_v1/`, aperçu `apercu_fin_clairiere_tropicale_v1.html`, build `source/fin_clairiere_tropicale_v1/build.py`.
+- 4:3, 768 × 576, 96 × 72 cases de 8 px; sol, herbe, dalles, ombres, mer, jungle, cailloux, fleurs, canopée et papillons en calques; vagues/palette du calque ETC1 réutilisées sans resampling (cadence d'atelier, non officielle); marqueurs sud / boss central / objectif nord; aucun warp.
+- Fidélité moyenne RVB mesurée avec le classifieur ETC1 : herbe 5,6; jungle 2,0; dalles 4,3 (seuil 35). Cela mesure les couleurs, pas une identité pixel par pixel.
+- 7 tests PASS; vérification BFS du dégagement 16 × 16 vers boss et objectif; packages PNG/ORA et Ground PMDO 0.8.12 produits. **Pas de runtime PMDO, pas d'approbation artistique.**
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
@@ -11,7 +43,7 @@
 - **Cohérence avec l'entrée** : reflets, étoiles (4 formes du rip) et planche de poussière d'ESC1 réutilisés. Le premier décor généré est sorti en 2:1 (1440 × 720) et a été écarté.
 - **Fidélité** (seuil 35) : sol 6,8, cristal 30,8 (parois 32,1 : cristaux plus cyan que le rip, limite).
 - **Contrôles** : 13 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
-- Fins restantes : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe **FST1** (FSC1 est pris par un repère d'une branche sœur).
+- Depuis cette note, FCT1 (Clairière tropicale), FVC1 (Couloir violet) et FTH1 (Mt. Thunder) ont été livrés dans leurs propres dossiers. **Fin Jardin secret reste la prochaine fin de la série.** La demande de correction FCT1 (fleurs canoniques, chemin, suppression des papillons et audit) demeure en attente. Préfixe **FST1** (FSC1 est pris par un repère d'une branche sœur).
 
 ## Fin Sables mouvants : arène du désert, FSM1 (29 septembre 2026)
 

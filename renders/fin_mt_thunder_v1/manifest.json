@@ -1,0 +1,298 @@
+{
+  "lot": "fin_mt_thunder_v1",
+  "prefix": "FTH1",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "biome": "sommet de Mt. Thunder au-dessus d une mer de nuages; suite FVC1, référence GBA/RRT; composition choisie par agent, à confirmer",
+  "method": "rendu généré référencé sur thunder.png; rendu non natif. Guide magenta interne, jamais exporté. Éclairs/Flash extraits du panneau source exacts; timing et placement nouveaux.",
+  "reference": {
+    "scene": "source/references_54d3731/thunder.png",
+    "sha256": "cad2c88720bf94ae458febd5500ece817d48717b004c912539ca3ee4d745abf3",
+    "sprite_sheet": "Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png",
+    "sha256_sprite_sheet": "6f1dc6a9a907fff7e3e8f57ea3a97a3e0a5de36312ce7939d7834f6d407da416",
+    "sprite_boxes": {
+      "1": [
+        372,
+        443,
+        121,
+        129
+      ],
+      "2": [
+        372,
+        436,
+        169,
+        185
+      ],
+      "3": [
+        372,
+        498,
+        219,
+        243
+      ],
+      "4": [
+        372,
+        475,
+        284,
+        307
+      ]
+    },
+    "flash_box": [
+      393,
+      401,
+      15,
+      55
+    ]
+  },
+  "raw_inputs": [
+    {
+      "file": "source/fin_mt_thunder_v1/bruts/decor.png",
+      "sha256": "c64659c69a09c091127e23958c143d9bcc028d899ecdcfe6b93da1ecf3f2294c",
+      "size": [
+        1200,
+        896
+      ],
+      "reference": "source/references_54d3731/thunder.png"
+    },
+    {
+      "file": "source/fin_mt_thunder_v1/bruts/objets_magenta.png",
+      "sha256": "24794ab163dac76b5fa03caac0a3f2890bd92c136cb25e755b1ca090d2bd7875",
+      "size": [
+        1200,
+        896
+      ],
+      "reference": "source/fin_mt_thunder_v1/bruts/decor.png"
+    },
+    {
+      "file": "source/fin_mt_thunder_v1/bruts/fond_complet.png",
+      "sha256": "e060ac79b898627f82fac1dc7e28afabe6f90d6c030973033776c789db7e83b2",
+      "size": [
+        1200,
+        896
+      ],
+      "reference": "source/fin_mt_thunder_v1/bruts/decor.png"
+    }
+  ],
+  "segmentation": {
+    "floor_px": 373415,
+    "magenta_px": 371158,
+    "pebble_px": 4615,
+    "wall_px": 79335,
+    "cloud_back_px": 438387,
+    "cloud_front_px": 179448,
+    "pebble_components": 17
+  },
+  "underpainting_rgb": [
+    58,
+    51,
+    59
+  ],
+  "fidelity": {
+    "method": "distance euclidienne des moyennes RGB de sable dans rip scene et surface générée, indicative, seuil atelier 35, non pixel-perfect",
+    "rip_sand_rgb": [
+      231.3,
+      222.2,
+      156.5
+    ],
+    "generated_sand_rgb": [
+      231.8,
+      220.1,
+      148.1
+    ],
+    "distance": 8.7
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "output": [
+      768,
+      576
+    ],
+    "method": "BOX pondéré par classes puis quantification par famille"
+  },
+  "layers": [
+    {
+      "name": "fond_complet",
+      "file": "calques/FTH1_00_fond_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "nuages_arriere",
+      "file": "calques/FTH1_01_nuages_arriere.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "parois",
+      "file": "calques/FTH1_02_parois.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "sol",
+      "file": "calques/FTH1_03_sol.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "ombres",
+      "file": "calques/FTH1_04_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "pierres",
+      "file": "calques/FTH1_05_pierres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "lueurs",
+      "file": "animation/lueurs/FTH1_06_lueurs_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    },
+    {
+      "name": "eclairs",
+      "file": "animation/eclairs/FTH1_07_eclairs_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    },
+    {
+      "name": "nuages_avant",
+      "file": "calques/FTH1_08_nuages_avant.png",
+      "phases": 1,
+      "ticks": 60
+    }
+  ],
+  "animation": {
+    "phases": 48,
+    "ticks": 5,
+    "loop_ticks": 240,
+    "strikes": [
+      [
+        1,
+        false,
+        20,
+        55,
+        0
+      ],
+      [
+        3,
+        true,
+        704,
+        105,
+        8
+      ],
+      [
+        2,
+        false,
+        42,
+        235,
+        16
+      ],
+      [
+        4,
+        true,
+        704,
+        315,
+        24
+      ],
+      [
+        3,
+        false,
+        18,
+        390,
+        32
+      ],
+      [
+        2,
+        true,
+        710,
+        10,
+        40
+      ]
+    ],
+    "bolt_colors": {
+      "normal": [
+        [
+          240,
+          240,
+          128
+        ],
+        [
+          240,
+          240,
+          0
+        ]
+      ],
+      "fading": [
+        [
+          184,
+          176,
+          120
+        ],
+        [
+          160,
+          152,
+          32
+        ]
+      ]
+    },
+    "timing": "2 phases Normal, 2 Fading, puis silence; cadence composée, pas officielle"
+  },
+  "access": {
+    "markers": {
+      "entrance": [
+        384,
+        448
+      ],
+      "boss": [
+        384,
+        288
+      ],
+      "objectif": [
+        384,
+        144
+      ]
+    },
+    "paths_16x16": {
+      "boss": {
+        "ok": true,
+        "explored": 553
+      },
+      "objectif": {
+        "ok": true,
+        "explored": 1442
+      }
+    },
+    "blocked_cells": 4538,
+    "total_cells": 6912,
+    "walkable_cells": 156580,
+    "no_warp": true
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "fth1_fin_mt_thunder",
+    "namespace": "fin_mt_thunder",
+    "tiles_per_bank": {
+      "FTH1_00_FOND_COMPLET": 2,
+      "FTH1_01_NUAGES_ARRIERE": 2698,
+      "FTH1_02_PAROIS": 791,
+      "FTH1_03_SOL": 2551,
+      "FTH1_04_OMBRES": 859,
+      "FTH1_05_PIERRES": 98,
+      "FTH1_06_LUEURS": 83,
+      "FTH1_07_ECLAIRS": 235,
+      "FTH1_08_NUAGES_AVANT": 1150
+    },
+    "runtime_tested": false
+  },
+  "art_approved": false
+}
