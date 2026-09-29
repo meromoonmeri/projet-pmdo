@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrée Mt. Blaze · layout GBA · 4:3</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{background:#17151b;color:#f0e9e3;font:15px/1.55 system-ui,sans-serif;margin:0;padding:24px}main{max-width:1320px;margin:auto}h1{font-size:clamp(24px,3vw,34px);line-height:1.15;margin:0 0 8px;letter-spacing:-.03em}p{color:#c6bbc0;max-width:86ch}.lede{margin:0 0 22px}.wrap{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}.stage{position:relative;background:#201920;overflow:auto;max-height:84vh;border:1px solid #59424a;border-radius:10px;box-shadow:0 16px 50px #08070b88}canvas{display:block;image-rendering:pixelated}aside{flex:1;min-width:280px;max-width:420px}fieldset{border:1px solid #59424a;border-radius:9px;margin:0 0 13px;padding:10px 14px;background:#211c23}legend{color:#ffab54;padding:0 7px;font-weight:700}label{display:block;padding:3px 0;cursor:pointer}button{background:#efdfd2;color:#30232a;border:0;border-radius:6px;padding:8px 12px;margin:2px 4px 2px 0;cursor:pointer;font-weight:650}button:hover{background:#ffb560}button.on{background:#ffb560}.note{border-left:3px solid #f28a3a;padding-left:12px;font-size:14px}code{color:#ffc781}.tag{display:inline-block;color:#ffb560;border:1px solid #6d493e;border-radius:999px;padding:2px 9px;margin:0 0 10px;font-size:12px;letter-spacing:.04em}.muted{color:#a99da5}
+</style>
+<main>
+<div class="tag">EMB2 · PMDO 0.8.12 · 4:3 · layout de référence</div>
+<h1>Entrée Mt. Blaze — sud → nord</h1>
+<p class="lede">Disposition reconstruite depuis la référence Mt. Blaze : large avant-plan sableux, deux bassins latéraux irréguliers, blocs et parois autour de deux autels de pierre, puis petite bouche sombre au centre-haut. La roche et la lave reprennent sa palette GBA. Les pixels des fissures restent fixes ; la lave et les veines rocheuses tournent sur le cycle exact <strong>D41P41A : 13 crans × 10 ticks / boucle 130 ticks (≈2,17 s)</strong>. La cadence et les tables de palette viennent de PMD Ciel et sont adaptées à l’art GBA ; elles ne sont pas revendiquées comme animation originale de Red Rescue Team.</p>
+<div class="wrap">
+  <div class="stage" id="stage"><canvas id="c"></canvas></div>
+  <aside>
+    <fieldset><legend>Lecture de la scène</legend><button id="play">Pause</button><button id="step">+10 ticks</button><div id="phase" class="muted"></div></fieldset>
+    <fieldset><legend>Affichage</legend><button data-zoom="1" class="on">1×</button><button data-zoom="2">2×</button><button data-zoom="3">3×</button>
+      <label><input type="checkbox" id="grid"> Grille des cases 8 px</label>
+      <label><input type="checkbox" id="coll"> Collisions et marqueurs</label>
+      <label><input type="checkbox" id="view"> Cadre caméra PMDO 320 × 240 à l'entrée</label>
+    </fieldset>
+    <fieldset><legend>Calques (bas → haut)</legend><div id="layers"></div><button id="solo">Tout afficher</button></fieldset>
+    <fieldset><legend>Export</legend><button id="png">Télécharger le PNG de la vue actuelle</button></fieldset>
+    <p class="note">Marqueurs : <code>entrance</code> (jaune) dans l’avant-plan sableux, <code>donjon_seuil</code> (cyan) devant la bouche. Les cellules rouges sont bloquées. La marche 16 × 16 entre les deux est testée par BFS ; collisions, occlusion et rendu restent à valider en PMDO.</p>
+    <p class="muted">La référence visuelle est Mt. Blaze de Red Rescue Team. L’animation reprend exactement les pistes de palette 10 et 11 de D41P41A (Explorers of Sky) : adaptation inter-jeu, pas capture de l’animation originale GBA.</p>
+  </aside>
+</div>
+</main>
+<script>
+const D=__DATA__;const [W,H]=D.size;const c=document.getElementById('c'),ctx=c.getContext('2d');
+function image(uri){const im=new Image();im.src=uri;return im}
+const L=D.stack.map(layer=>({id:layer.id,ticks:layer.ticks,frames:layer.frames.map(image)}));
+const collision=image(D.collisions),checks={},layerBox=document.getElementById('layers');
+L.forEach(layer=>{const label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=true;check.onchange=draw;checks[layer.id]=check;label.append(check,' '+layer.id+(layer.frames.length>1?' ('+layer.frames.length+' × '+layer.ticks+' ticks)':''));layerBox.append(label)});
+D.poses.forEach(p=>{const im=image(p.uri);im.width=p.w*4;im.height=p.h*4;im.title=p.id;im.style.cssText='image-rendering:pixelated;background:#30232a;border:1px solid #654849;border-radius:3px';document.getElementById('poses').append(im)});
+let zoom=1,tick=0,playing=true,last=performance.now();const STEP=10,MS=STEP*1000/60;
+function render(target){target.clearRect(0,0,W,H);L.forEach(layer=>{if(checks[layer.id].checked)target.drawImage(layer.frames[Math.floor(tick/layer.ticks)%layer.frames.length],0,0)});if(document.getElementById('coll').checked)target.drawImage(collision,0,0)}
+function draw(){c.width=W*zoom;c.height=H*zoom;ctx.imageSmoothingEnabled=false;ctx.save();ctx.scale(zoom,zoom);render(ctx);ctx.restore();
+ if(document.getElementById('grid').checked){ctx.strokeStyle='rgba(255,236,210,.20)';ctx.lineWidth=1;ctx.beginPath();for(let x=0;x<=W;x+=8){ctx.moveTo(x*zoom+.5,0);ctx.lineTo(x*zoom+.5,H*zoom)}for(let y=0;y<=H;y+=8){ctx.moveTo(0,y*zoom+.5);ctx.lineTo(W*zoom,y*zoom+.5)}ctx.stroke()}
+ if(document.getElementById('view').checked){const x=Math.min(Math.max(D.entry[0]+8-160,0),W-320),y=Math.min(Math.max(D.entry[1]+8-120,0),H-240);ctx.strokeStyle='#ffe046';ctx.lineWidth=2;ctx.strokeRect(x*zoom,y*zoom,320*zoom,240*zoom)}
+ document.getElementById('phase').textContent='tick '+tick+' / '+D.loop+' · boucle de '+D.seconds.toFixed(2)+' s';}
+function advance(){tick=(tick+STEP)%D.loop;draw()}
+function loop(now){if(playing&&now-last>=MS){last=now;advance()}requestAnimationFrame(loop)}
+document.getElementById('play').onclick=e=>{playing=!playing;e.target.textContent=playing?'Pause':'Lecture'};
+document.getElementById('step').onclick=advance;
+document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{zoom=+b.dataset.zoom;document.querySelectorAll('[data-zoom]').forEach(x=>x.classList.toggle('on',x===b));draw()});
+['grid','coll','view'].forEach(id=>document.getElementById(id).onchange=draw);
+document.getElementById('solo').onclick=()=>{Object.values(checks).forEach(ch=>ch.checked=true);draw()};
+document.getElementById('png').onclick=()=>{const out=document.createElement('canvas');out.width=W;out.height=H;render(out.getContext('2d'));const a=document.createElement('a');a.download='EMB2_vue_tick'+String(tick).padStart(3,'0')+'.png';a.href=out.toDataURL('image/png');a.click()};
+Promise.all([...L.flatMap(layer=>layer.frames),collision].map(im=>im.decode())).then(()=>{draw();requestAnimationFrame(loop)});
+</script>
+</html>

@@ -1,0 +1,307 @@
+{
+  "lot": "entree_mt_blaze_sud_nord_v1",
+  "prefix": "EMB1",
+  "format": "4:3 vaste",
+  "type": "entrée de donjon",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "branche arena/01a0ef03-projet-pmdo, parent local 6cca4a09 ; aucune récupération d’une branche sœur, aucun clonage supplémentaire de main",
+  "reference_da": {
+    "title": "Mt. Blaze Entrance — Pokémon Mystery Dungeon: Red Rescue Team (GBA)",
+    "files_user_supplied": [
+      "Rescue_Team_-_Mt._Blaze_Entrance.png",
+      "221081.png"
+    ],
+    "used_as": "référence visuelle de composition, palette volcanique et architecture de l’entrée",
+    "local_copies": false,
+    "metric": null,
+    "metric_note": "Les pièces jointes ne sont pas présentes dans le checkout ; aucune distance pixel/RGB n’est revendiquée."
+  },
+  "method": "rendu généré multicalque 4:3 : décor magenta, terre intégrale et retouche lave ; masques exclusifs, normalisation 4:3 à 8 px, calques PMDO 0.8.12",
+  "tool_maps_pmdsky": {
+    "readme_consulted": "source/outil_maps_pmdsky/README.md",
+    "scope": "outil de récupération des maps et BG de Pokémon Mystery Dungeon: Explorers of Sky",
+    "use_for_this_map": false,
+    "reason": "Mt. Blaze est ici une référence Red Rescue Team GBA, hors du périmètre de cet outil ; index_rom.json ne contient aucune entrée Mt. Blaze."
+  },
+  "generation": [
+    {
+      "file": "decor.png",
+      "images": [],
+      "prompt": "Create a NEW, wide landscape 4:3 top-down pixel-art environment map for a classic Game Boy Advance Pokémon Mystery Dungeon dungeon entrance. Use the exact composition described: Mt. Blaze entrance, a broad worn warm-brown trail comes from the SOUTH edge at the bottom-center and leads straight north into a deep black cavern doorway centered near the TOP. The doorway is framed by a dramatic hanging basalt arch with thick vertical stone fangs and two monumental pale-grey stepped rock pillars, one on each side. Jagged dark slate cliffs fill both side edges, built from layered chunky angular stones with muted mauve-grey highlights. On both sides of the trail, vivid pools and curling streams of deep crimson-red lava sit in inset channels, their edges glowing orange and tiny yellow-hot cracks, small ember sparks. The middle path remains clear and passable, dusty terracotta earth with subtle pixel cracks and scattered small dark pebbles. Composition should feel mysterious, epic and readable, richly detailed yet clean, like lovingly hand-drawn 16-bit/GBA pixel art with crisp clusters, controlled limited palette, no blur, no 3D, no gradients, no characters, no text, no border, no interface. Keep the upper central cave mouth clearly open and very dark. Make lava channels on left and right distinct, not covering the central trail. IMPORTANT: for later animation compositing, fill every intended lava pool and channel with perfectly flat pure magenta #FF00FF, and do not draw any red/orange/yellow lava, glow, embers or reflections anywhere; all non-lava environment details should remain fully rendered in muted GBA pixel art.",
+      "note": "décor 4:3 généré depuis la description visuelle des références utilisateur ; elles n’étaient pas montées comme fichiers dans le checkout"
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "decor.png"
+      ],
+      "prompt": "Create an even, ground-only texture sheet that will sit below a pixel-art Mt. Blaze entrance map. Full 4:3 landscape canvas, top-down, crisp GBA-era pixel art. Match the smooth warm terracotta-brown dirt path in the reference map (burnt sienna and dusty peach). The color should be nearly uniform with only very subtle single-pixel grain and a few faint, thin natural hairline cracks spaced far apart. NO checkerboard, NO crosshatching, NO tiled pattern, NO mottled islands, NO dark patches, NO pebbles, NO objects, NO shadows, NO gradients. Every pixel is the same walkable earth material edge-to-edge. Keep the texture calm, flat, and consistent with the center path.",
+      "note": "généré comme texture intégrale de terre volcanique, palette assortie au décor"
+    },
+    {
+      "file": "lave_texture.png",
+      "images": [
+        "decor.png"
+      ],
+      "prompt": "Edit the provided pixel-art map. Replace ONLY the perfectly flat bright-magenta areas with beautiful molten lava, preserving their exact shapes and positions. Keep every path, stone, wall, pillar, cave, shadow, outline and pixel outside those magenta regions unchanged. Inside the magenta channels, create GBA-era Pokémon Mystery Dungeon pixel-art lava: a deep burgundy-red base, irregular dark wine-red cooled crust islands, flowing curved scarlet and vermilion currents, thin glowing orange seams, a few tiny gold-hot fissures and pinprick sparks contained entirely inside the pools. Use crisp clustered pixels, the same scale and limited palette as the surrounding environment. Absolutely no glow or red pixels outside the original magenta shapes; do not change the path or rocks; no text or interface.",
+      "note": "édition générée ; seuls les pixels correspondant aux deux masques magenta du décor sont conservés"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v1/bruts/decor.png",
+      "sha256": "6a0e2e252a9efef4b7bf344f8311f85ce145fd51440592105cd831ec8a8720e5",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v1/bruts/sol_complet.png",
+      "sha256": "62d3fb75acb5eaefd0759a9947a38082170b086578de06d45ed7541ee956cb0e",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v1/bruts/lave_texture.png",
+      "sha256": "b91f7da06a4e0b719515e265dfff59b379ee6dfbacef42a0ce7cdcc23ad55f62",
+      "size": [
+        1200,
+        896
+      ]
+    }
+  ],
+  "segmentation": {
+    "dimensions_brut": [
+      1200,
+      896
+    ],
+    "pixels_magenta_tolerant": 132237,
+    "composantes_lave_retenues": [
+      {
+        "pixels": 67472,
+        "bbox_xyxy": [
+          188,
+          347,
+          411,
+          895
+        ]
+      },
+      {
+        "pixels": 64597,
+        "bbox_xyxy": [
+          788,
+          347,
+          1011,
+          895
+        ]
+      }
+    ],
+    "pixels_magenta_ecartes": 168,
+    "composantes_eboulis": 18,
+    "aire_masques_px": {
+      "lave": 132069,
+      "sentier": 225412,
+      "eboulis": 9428,
+      "parois": 634254,
+      "piliers": 29711,
+      "grotte": 44326
+    },
+    "pixels_magenta_repeints": 168
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "method": "moyenne pondérée BOX par masque de matière, attribution exclusive au masque le plus couvrant",
+    "terrain_palette_colors": 48,
+    "rock_palette_colors": 112
+  },
+  "layers": [
+    {
+      "name": "sol_complet",
+      "file": "calques/EMB1_00_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "ombres",
+      "file": "calques/EMB1_01_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "lave",
+      "file": "animation/lave/EMB1_02_lave_fNN.png",
+      "phases": 24,
+      "ticks": 10
+    },
+    {
+      "name": "sentier",
+      "file": "calques/EMB1_03_sentier.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "eboulis",
+      "file": "calques/EMB1_04_eboulis.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "parois",
+      "file": "calques/EMB1_05_parois.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "piliers",
+      "file": "calques/EMB1_06_piliers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "grotte",
+      "file": "calques/EMB1_07_grotte.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "lueurs",
+      "file": "animation/lueurs/EMB1_08_lueurs_fNN.png",
+      "phases": 24,
+      "ticks": 10
+    },
+    {
+      "name": "braises",
+      "file": "animation/braises/EMB1_09_braises_fNN.png",
+      "phases": 24,
+      "ticks": 10
+    }
+  ],
+  "animation": {
+    "loop_ticks": 240,
+    "frame_length_ticks": 10,
+    "phases": 24,
+    "layers": {
+      "lave": "pulsation chromatique orientée le long des chenaux, sur la texture générée ; boucle fermée",
+      "lueurs": "scintillement des fissures chaudes sur la lave, boucle fermée",
+      "braises": "sprites pixel-art procéduraux remontant des deux bassins, boucle fermée"
+    },
+    "official_animation": false
+  },
+  "segmentation_masques_px_768x576": {
+    "lave": 54916,
+    "sentier": 93394,
+    "eboulis": 3779,
+    "parois": 260363,
+    "piliers": 11873,
+    "grotte": 18043
+  },
+  "access": {
+    "entry_px": [
+      384,
+      560
+    ],
+    "threshold_px": [
+      384,
+      152
+    ],
+    "path_found_16x16": true,
+    "cells_explored": 1250,
+    "blocked_cells": 5498,
+    "total_cells": 6912,
+    "walkable_cells": 1414,
+    "rule": "case bloquée si plus de 25 % des pixels sont hors du masque de sentier praticable",
+    "warp": "aucun"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "emb1_entree_mt_blaze",
+    "namespace": "entree_mt_blaze_sud_nord",
+    "tiles_per_bank": {
+      "EMB1_00_SOL_COMPLET_00": 1690,
+      "EMB1_01_OMBRES_00": 367,
+      "EMB1_02_LAVE_00": 3124,
+      "EMB1_02_LAVE_01": 3134,
+      "EMB1_02_LAVE_02": 3127,
+      "EMB1_02_LAVE_03": 3137,
+      "EMB1_02_LAVE_04": 3151,
+      "EMB1_02_LAVE_05": 3134,
+      "EMB1_03_SENTIER_00": 1170,
+      "EMB1_04_EBOULIS_00": 140,
+      "EMB1_05_PAROIS_00": 4353,
+      "EMB1_06_PILIERS_00": 280,
+      "EMB1_07_GROTTE_00": 252,
+      "EMB1_08_LUEURS_00": 1403,
+      "EMB1_08_LUEURS_01": 1446,
+      "EMB1_08_LUEURS_02": 1457,
+      "EMB1_08_LUEURS_03": 1434,
+      "EMB1_08_LUEURS_04": 1383,
+      "EMB1_08_LUEURS_05": 1401,
+      "EMB1_09_BRAISES_00": 265
+    },
+    "sheet_height_px": {
+      "EMB1_00_SOL_COMPLET_00": 424,
+      "EMB1_01_OMBRES_00": 96,
+      "EMB1_02_LAVE_00": 784,
+      "EMB1_02_LAVE_01": 784,
+      "EMB1_02_LAVE_02": 784,
+      "EMB1_02_LAVE_03": 792,
+      "EMB1_02_LAVE_04": 792,
+      "EMB1_02_LAVE_05": 784,
+      "EMB1_03_SENTIER_00": 296,
+      "EMB1_04_EBOULIS_00": 40,
+      "EMB1_05_PAROIS_00": 1096,
+      "EMB1_06_PILIERS_00": 72,
+      "EMB1_07_GROTTE_00": 64,
+      "EMB1_08_LUEURS_00": 352,
+      "EMB1_08_LUEURS_01": 368,
+      "EMB1_08_LUEURS_02": 368,
+      "EMB1_08_LUEURS_03": 360,
+      "EMB1_08_LUEURS_04": 352,
+      "EMB1_08_LUEURS_05": 352,
+      "EMB1_09_BRAISES_00": 72
+    },
+    "max_sheet_height_px": 1096,
+    "banks": [
+      "EMB1_00_SOL_COMPLET_00",
+      "EMB1_01_OMBRES_00",
+      "EMB1_02_LAVE_00",
+      "EMB1_02_LAVE_01",
+      "EMB1_02_LAVE_02",
+      "EMB1_02_LAVE_03",
+      "EMB1_02_LAVE_04",
+      "EMB1_02_LAVE_05",
+      "EMB1_03_SENTIER_00",
+      "EMB1_04_EBOULIS_00",
+      "EMB1_05_PAROIS_00",
+      "EMB1_06_PILIERS_00",
+      "EMB1_07_GROTTE_00",
+      "EMB1_08_LUEURS_00",
+      "EMB1_08_LUEURS_01",
+      "EMB1_08_LUEURS_02",
+      "EMB1_08_LUEURS_03",
+      "EMB1_08_LUEURS_04",
+      "EMB1_08_LUEURS_05",
+      "EMB1_09_BRAISES_00"
+    ],
+    "runtime_tested": false
+  },
+  "art_approved": false
+}

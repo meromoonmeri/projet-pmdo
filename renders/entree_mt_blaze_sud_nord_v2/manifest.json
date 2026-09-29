@@ -1,0 +1,355 @@
+{
+  "lot": "entree_mt_blaze_sud_nord_v2",
+  "prefix": "EMB2",
+  "format": "4:3 vaste",
+  "type": "entrée de donjon — layout proche de la référence GBA",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "branche arena/01a0ef03-projet-pmdo ; EMB1 conservé séparément",
+  "reference_da": {
+    "title": "Rescue Team - Mt. Blaze Entrance — Pokémon Mystery Dungeon: Red Rescue Team (GBA)",
+    "page_url": "https://mysterydungeonwiki.com/wiki/Rescue_Team:Mt._Blaze",
+    "original_image_url": "https://mysterydungeonwiki.com/images/1/12/Rescue_Team_-_Mt._Blaze_Entrance.png",
+    "local_file": "source/entree_mt_blaze_sud_nord_v2/reference/mt_blaze_reference_300x260.png",
+    "local_size_px": [
+      300,
+      260
+    ],
+    "sha256": "858e4c53f53392ba933025d9f095e48a022febd00a09d4854a9f6c07d5405c43",
+    "used_as": "blueprint de disposition et source visuelle des textures roche, sable et magma",
+    "fidelity_note": "La composition est reconstruite à partir de la vignette locale ; ce n’est pas un rip pixel-par-pixel de la ROM."
+  },
+  "material_palette_comparison": {
+    "sentier": {
+      "reference_mode_rgb": [
+        175,
+        135,
+        111
+      ],
+      "reconstruction_mode_rgb": [
+        171,
+        131,
+        106
+      ],
+      "rgb_euclidean_distance": 7.55,
+      "reference_sample_pixels": 4235,
+      "reconstruction_sample_pixels": 248235
+    },
+    "lave": {
+      "reference_mode_rgb": [
+        103,
+        47,
+        63
+      ],
+      "reconstruction_mode_rgb": [
+        99,
+        45,
+        61
+      ],
+      "rgb_euclidean_distance": 4.9,
+      "reference_sample_pixels": 14544,
+      "reconstruction_sample_pixels": 152396
+    },
+    "roche": {
+      "reference_mode_rgb": [
+        167,
+        159,
+        167
+      ],
+      "reconstruction_mode_rgb": [
+        163,
+        153,
+        161
+      ],
+      "rgb_euclidean_distance": 9.38,
+      "reference_sample_pixels": 20646,
+      "reconstruction_sample_pixels": 640383
+    }
+  },
+  "material_palette_comparison_note": "distance RGB euclidienne entre les couleurs modales de petites zones d’échantillonnage de la vignette et du rendu ; indicateur de palette uniquement, pas de fidélité pixel-à-pixel",
+  "method": "reconstruction guidée par la référence, segmentation par matière à 1200×896, réduction BOX pondérée par masque, calques PNG transparents et Ground PMDO 0.8.12",
+  "tool_maps_pmdsky": {
+    "readme_consulted": "source/outil_maps_pmdsky/README.md",
+    "scope": "récupération des maps/BG Pokémon Mystery Dungeon: Explorers of Sky",
+    "used_as_source_for_gba_layout": false,
+    "reason": "Le décor visuel cible est Mt. Blaze de Red Rescue Team GBA ; ne pas présenter un rip de PMD Ciel comme texture GBA."
+  },
+  "generation": [
+    {
+      "file": "bruts/decor_ref_layout.png",
+      "source_reference": "reference/mt_blaze_reference_300x260.png",
+      "note": "reconstruction 4:3 du layout Mt. Blaze fourni en référence : bassins inférieurs latéraux, sol central ouvert, deux structures de pierre et petite bouche sombre",
+      "prompt": "Reprendre la vignette Mt. Blaze comme blueprint de disposition : bassins irréguliers bas-gauche/bas-droite, petits chenaux extérieurs, large sol sableux en avant-plan, deux autels de pierre autour d’une petite ouverture noire au centre-haut, falaises et éboulis. Textures GBA lavande-gris, lave vin rouge, fissures orange-or ; quelques veines ramifiées dans les roches. Pas deux longs chenaux droits ni nouvelle arche monumentale."
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor_ref_layout.png",
+      "sha256": "99bc439d5030ed0f8c93fa9e5faa59db99f5b54ad76f40c27c6c983f8c952c68",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/reference/mt_blaze_reference_300x260.png",
+      "sha256": "858e4c53f53392ba933025d9f095e48a022febd00a09d4854a9f6c07d5405c43",
+      "size": [
+        300,
+        260
+      ]
+    }
+  ],
+  "segmentation": {
+    "dimensions_brut": [
+      1200,
+      896
+    ],
+    "seuil_chemin_sable": {
+      "r_min": 125,
+      "g_min": 85,
+      "g_max": 174,
+      "b_min": 65,
+      "r_moins_g": 18,
+      "g_moins_b": 5
+    },
+    "bassins_lave_majeurs": [
+      {
+        "label": 6,
+        "pixels": 70501,
+        "bbox_xyxy": [
+          54,
+          156,
+          453,
+          717
+        ],
+        "centroid_x": 270.78645692968894
+      },
+      {
+        "label": 4,
+        "pixels": 70277,
+        "bbox_xyxy": [
+          747,
+          151,
+          1145,
+          715
+        ],
+        "centroid_x": 928.2968823370377
+      }
+    ],
+    "composantes_lave_finales": 2,
+    "deux_aires_lave_max_px": [
+      76229,
+      76167
+    ],
+    "composantes_veines": 22,
+    "pixels_veines_brut": 16198,
+    "aire_masques_px": {
+      "lave": 152396,
+      "sentier": 248235,
+      "eboulis": 214267,
+      "parois": 334553,
+      "piliers": 91563,
+      "grotte": 17988,
+      "veines_roche": 16198
+    }
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "method": "moyenne pondérée BOX par masque de matière, attribution exclusive au masque majoritaire",
+    "terrain_palette_colors": 48,
+    "rock_palette_colors": 112
+  },
+  "layers": [
+    {
+      "name": "sol_complet",
+      "file": "calques/EMB2_00_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "ombres",
+      "file": "calques/EMB2_01_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "lave",
+      "file": "animation/lave/EMB2_02_lave_fNN.png",
+      "phases": 13,
+      "ticks": 10
+    },
+    {
+      "name": "sentier",
+      "file": "calques/EMB2_03_sentier.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "eboulis",
+      "file": "calques/EMB2_04_eboulis.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "parois",
+      "file": "calques/EMB2_05_parois.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "piliers",
+      "file": "calques/EMB2_06_piliers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "grotte",
+      "file": "calques/EMB2_07_grotte.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "name": "veines_roche",
+      "file": "animation/veines_roche/EMB2_08_veines_roche_fNN.png",
+      "phases": 13,
+      "ticks": 10
+    }
+  ],
+  "animation": {
+    "loop_ticks": 130,
+    "frame_length_ticks": 10,
+    "phases": 13,
+    "palette_source": "D41P41A — Pokémon Mystery Dungeon: Explorers of Sky",
+    "palette_report": "renders/etude_animations_canoniques_sky_v1/rapport.json",
+    "palette_report_sha256": "ab555a343f4c196a1de9446bd66c0226433e7d42af68cafdbc32fdf4422acf89",
+    "tracks": {
+      "lave": {
+        "palette": 10,
+        "dynamic_pixels": 13172,
+        "palette_indices_used": [
+          2,
+          5,
+          11,
+          12,
+          13
+        ]
+      },
+      "veines_roche": {
+        "palette": 11,
+        "dynamic_pixels": 6061,
+        "palette_indices_used": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      }
+    },
+    "mechanic": "positions des pixels fixes ; rotation exacte des 13 crans de palette source, 10 ticks chacun",
+    "canonical_cadence_and_palette": true,
+    "native_to_red_rescue_team": false,
+    "note": "Cycle PMD Ciel adapté aux matériaux GBA de la référence Mt. Blaze ; l’animation originale RRT n’est pas revendiquée."
+  },
+  "segmentation_masks_px_768x576": {
+    "lave": 63690,
+    "sentier": 102512,
+    "eboulis": 88359,
+    "parois": 136747,
+    "piliers": 37682,
+    "grotte": 7317,
+    "veines_roche": 6061
+  },
+  "access": {
+    "entry_px": [
+      384,
+      560
+    ],
+    "threshold_px": [
+      384,
+      320
+    ],
+    "path_found_16x16": true,
+    "cells_explored": 1433,
+    "blocked_cells": 5341,
+    "total_cells": 6912,
+    "walkable_cells": 1571,
+    "rule": "case bloquée si plus de 25 % des pixels sont hors du masque de sentier praticable",
+    "warp": "aucun"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "emb2_entree_mt_blaze",
+    "namespace": "entree_mt_blaze_sud_nord_v2",
+    "tiles_per_bank": {
+      "EMB2_00_SOL_COMPLET_00": 1738,
+      "EMB2_01_OMBRES_00": 425,
+      "EMB2_02_LAVE_00": 2098,
+      "EMB2_02_LAVE_01": 2674,
+      "EMB2_02_LAVE_02": 3270,
+      "EMB2_02_LAVE_03": 1260,
+      "EMB2_03_SENTIER_00": 1734,
+      "EMB2_04_EBOULIS_00": 1659,
+      "EMB2_05_PAROIS_00": 2728,
+      "EMB2_06_PILIERS_00": 715,
+      "EMB2_07_GROTTE_00": 155,
+      "EMB2_08_VEINES_ROCHE_00": 852,
+      "EMB2_08_VEINES_ROCHE_01": 946,
+      "EMB2_08_VEINES_ROCHE_02": 1204,
+      "EMB2_08_VEINES_ROCHE_03": 316
+    },
+    "sheet_height_px": {
+      "EMB2_00_SOL_COMPLET_00": 440,
+      "EMB2_01_OMBRES_00": 112,
+      "EMB2_02_LAVE_00": 528,
+      "EMB2_02_LAVE_01": 672,
+      "EMB2_02_LAVE_02": 824,
+      "EMB2_02_LAVE_03": 320,
+      "EMB2_03_SENTIER_00": 440,
+      "EMB2_04_EBOULIS_00": 416,
+      "EMB2_05_PAROIS_00": 688,
+      "EMB2_06_PILIERS_00": 184,
+      "EMB2_07_GROTTE_00": 40,
+      "EMB2_08_VEINES_ROCHE_00": 216,
+      "EMB2_08_VEINES_ROCHE_01": 240,
+      "EMB2_08_VEINES_ROCHE_02": 304,
+      "EMB2_08_VEINES_ROCHE_03": 80
+    },
+    "max_sheet_height_px": 824,
+    "banks": [
+      "EMB2_00_SOL_COMPLET_00",
+      "EMB2_01_OMBRES_00",
+      "EMB2_02_LAVE_00",
+      "EMB2_02_LAVE_01",
+      "EMB2_02_LAVE_02",
+      "EMB2_02_LAVE_03",
+      "EMB2_03_SENTIER_00",
+      "EMB2_04_EBOULIS_00",
+      "EMB2_05_PAROIS_00",
+      "EMB2_06_PILIERS_00",
+      "EMB2_07_GROTTE_00",
+      "EMB2_08_VEINES_ROCHE_00",
+      "EMB2_08_VEINES_ROCHE_01",
+      "EMB2_08_VEINES_ROCHE_02",
+      "EMB2_08_VEINES_ROCHE_03"
+    ],
+    "runtime_tested": false
+  },
+  "art_approved": false
+}

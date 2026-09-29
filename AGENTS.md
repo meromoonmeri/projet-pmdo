@@ -1218,3 +1218,21 @@ Pas de runtime. Pas dans le mod unique.
 - **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
 - **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
 
+## Entrée Mt. Blaze — EMB1, ajout à la recette (29 septembre 2026)
+
+- **Poursuite locale** : l'utilisateur demande explicitement de continuer sur la branche de session et de ne pas recloner `main`. Rester sur `arena/01a0ef03-projet-pmdo`, sans rebase, fetch de branches sœurs ni copie depuis d'autres têtes.
+- **Référence d'une autre version du jeu** : les captures jointes montrent Mt. Blaze de Red Rescue Team (GBA). Une vignette web 300 × 260 a ensuite été récupérée dans `source/entree_mt_blaze_sud_nord_v2/reference/`. Le README de `source/outil_maps_pmdsky/` est consulté ; l'outil couvre Explorers of Sky, donc ne pas prétendre qu'il fournit le rip GBA. Les distances RGB EMB2 ne sont qu'un contrôle des couleurs modales, pas une comparaison pixel-à-pixel.
+- **Map créée** : `source/entree_mt_blaze_sud_nord_v1/` et `renders/entree_mt_blaze_sud_nord_v1/`, 4:3 (768 × 576), arrivée sud → bouche de grotte nord, chemin central, deux canaux magenta remplacés par la lave. 10 calques dont lave, fissures et braises sur 24 × 10 ticks ; Ground PMDO 0.8.12, aperçu autonome. Pas de runtime test.
+- **Magenta approximatif** : le générateur a rendu le #FF00FF attendu près de (253,0,248). Segmenter avec tolérance, garder seulement les deux grandes composantes (> 5 000 px), repeindre le petit parasite sur une roche ; tester l'absence de magenta dans chaque calque final.
+- **Boucles animées** : texture de lave et étincelles issues de matières séparées ; toutes les lois sont périodiques sur `PHASES` et testées explicitement avec les phases 0 et 24. Sprites de braise procéduraux, positions et graines déterministes.
+- **TileBanks animés trop hauts** : `TileBank` range les tuiles par 32 colonnes. EMB1 répartit lave et lueurs par groupes de 4 phases, pour limiter la hauteur native à 1 096 px. Une banque unique par couche dépassait 4 000 px ; tester `max_sheet_height_px` dans le manifeste.
+- **Accès** : marqueurs sur des empreintes 2 × 2 cases libres ; BFS du personnage 16 × 16 depuis le bord sud jusqu'à la case libre la plus au nord du sentier. La partition statique utilise `down_class` pour éviter les couleurs mélangées aux bords.
+
+## Entrée Mt. Blaze — EMB2 après correction de layout (30 septembre 2026)
+
+- **Correction utilisateur** : le layout doit être très proche de la référence ; ne pas simplement recolorer ou reprendre la composition plus éloignée d'EMB1. EMB1 est conservé.
+- **Source locale** : vignette « Rescue Team - Mt. Blaze Entrance » de 300 × 260, dans `source/entree_mt_blaze_sud_nord_v2/reference/`. Le rendu 4:3 suit ses bassins latéraux bas, son avant-plan sableux ouvert, ses deux structures de pierre et sa petite bouche centrale. Ce n'est pas un rip pixel-par-pixel.
+- **Matériaux** : couleurs modales de la vignette suivies explicitement : sentier RGB (175,135,111) → (171,131,106), lave (103,47,63) → (99,45,61), roche (167,159,167) → (163,153,161). Les écarts euclidiens sont des contrôles de palette, pas de fidélité pixel.
+- **Animation** : utiliser la rotation exacte des palettes magma 10 et 11 de D41P41A (rapport `renders/etude_animations_canoniques_sky_v1/rapport.json`), 13 phases × 10 ticks = 130 ticks. Palette 10 sur la lave et palette 11 sur les veines rocheuses ; garder les positions fixes et l'ordre des crans. C'est une adaptation du cycle PMD Explorers of Sky aux textures GBA, jamais une affirmation sur l'animation native de Red Rescue Team.
+- **Sorties/tests** : `source/entree_mt_blaze_sud_nord_v2/`, `renders/entree_mt_blaze_sud_nord_v2/`, aperçu `apercu_entree_mt_blaze_sud_nord_v2.html`. 9 calques graphiques (+ Top), 8 tests unitaires, compilation PMDO 0.8.12 ; runtime PMDO non testé, validation artistique non approuvée.
+

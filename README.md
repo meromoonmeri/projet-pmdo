@@ -1,5 +1,19 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Mt. Blaze : layout rapproché de la référence, EMB2 (30 septembre 2026)
+
+**Correction demandée** : le layout doit être très similaire à la référence GBA ; ne pas reprendre la composition plus éloignée d’EMB1. Le travail reste sur `arena/01a0ef03-projet-pmdo`, sans recloner, rebaser ni récupérer de branches sœurs. EMB1 est conservé.
+
+- **Référence** : vignette locale « Rescue Team - Mt. Blaze Entrance » de 300 × 260 px, depuis [Mystery Dungeon Wiki](https://mysterydungeonwiki.com/wiki/Rescue_Team:Mt._Blaze). EMB2 reprend son grand avant-plan sableux, ses bassins latéraux irréguliers, ses structures de pierre, sa petite bouche sombre et ses falaises. Reconstruction illustrée, pas rip pixel-par-pixel.
+- **Sorties** : `renders/entree_mt_blaze_sud_nord_v2/`, aperçu `apercu_entree_mt_blaze_sud_nord_v2.html`, source `source/entree_mt_blaze_sud_nord_v2/`.
+- **Format / calques** : 768 × 576 px, grille 96 × 72 cases ; `sol_complet`, `ombres`, `lave`, `sentier`, `eboulis`, `parois`, `piliers`, `grotte`, `veines_roche` (+ `Top` vide dans PMDO).
+- **Palette matériaux** : comparaison modale indicative avec la vignette : sentier 7,55, lave 4,90, roche 9,38 unités RGB euclidiennes. Ce sont des contrôles de couleur, pas une mesure de fidélité pixel.
+- **Animation** : tables et cadence exactes des palettes magma 10/11 de D41P41A, 13 crans × 10 ticks = 130 ticks (≈2,17 s), pixels fixes. Cycle PMD Explorers of Sky adapté à l’art GBA ; l’animation native de Red Rescue Team n’est pas revendiquée.
+- **Accès/tests** : marqueur `entrance` au sud, `donjon_seuil` devant la bouche ; 1 571 cases praticables, trajet 16 × 16 vérifié par BFS. Build PMDO 0.8.12 ; 8 tests PASS. Runtime en jeu non testé, `art_approved: false`, `runtime_tested: false`.
+- Paquets : `EMB2_projet_pmdo_0812.zip`, `EMB2_calques_png_8px.zip`, ORA, WebP, masques et README dans `renders/entree_mt_blaze_sud_nord_v2/`.
+
+**V1/EMB1** reste disponible séparément dans `renders/entree_mt_blaze_sud_nord_v1/` et `source/entree_mt_blaze_sud_nord_v1/` ; sa composition et ses anciens cycles n’ont pas été écrasés.
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
