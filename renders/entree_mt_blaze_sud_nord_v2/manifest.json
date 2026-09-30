@@ -1,0 +1,342 @@
+{
+  "lot": "entree_mt_blaze_sud_nord_v2",
+  "prefix": "EMB2",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "biome": "Mt. Blaze (lave)",
+  "method": "rendu genere reference : decor complet sur magenta ; sol complet miroir ; base quantifiee ; lave visqueuse Worley periodique palette Mt Blaze + veines palette cycling",
+  "reference_da": {
+    "file": "Rescue_Team_-_Mt._Blaze_Entrance.png",
+    "sha256": "f11f2e5aa85b7b08ef727e40b0908dda3f0821fadd627622a736db0f5eede268"
+  },
+  "generation": [
+    {
+      "file": "decor.png",
+      "images": [
+        "Rescue_Team_-_Mt._Blaze_Entrance.png"
+      ],
+      "prompt": "Use EXACTLY the same textures, palette and pixel-art style as the reference image (Pokemon Mystery Dungeon Red Rescue Team, Mt. Blaze Entrance - GBA): same beige cracked sandy ground with darker crack lines in block patterns, same grey boulders and stacked rocky walls with black outlines, same orange-red lava with yellow highlights. Make a NEW, larger top-down map, WIDE LANDSCAPE 4:3, zoomed out so the area feels vast. Layout: the player arrives at the SOUTH (bottom edge center) on the beige cracked sand path between grey rocks; the sand opens into a wide clearing; on the LEFT and RIGHT sides shallow LAVA POOLS (the entire lava surface is filled with flat pure magenta #FF00FF, no gradient, no shading, completely flat magenta for segmentation); grey boulders and small stones at lava edges; at the NORTH center a large dark cave entrance (black) framed by grey rock pillars, behind it dark rocky ground. No characters, no text, no UI, no border.",
+      "essais": "genere reference Mt Blaze GBA (plateau beige + piliers gris + lave magenta), 1200x896"
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "source/entree_mt_blaze_sud_nord_v2/bruts/decor.png"
+      ],
+      "prompt": "Same image, same framing and pixel-art style, but only beige cracked sandy ground everywhere, replacing all lava (magenta), grey rocks, pillars and the dark cave mouth with the same beige cracked sand texture, keeping the exact sand palette and crack pattern, no other textures, no magenta remaining.",
+      "essais": "edite depuis decor (magenta->sable, piliers conserves sous calque roche)"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor.png",
+      "sha256": "bb4fa9b0dc1e32d6f9465780e35603f008f77b5f61cc887db6b1572cbf96acef",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/sol_complet.png",
+      "sha256": "298c725ad437e5c7225ea5b76d23e167c7084ec6a892be75b2e3b00c87560fad",
+      "size": [
+        1200,
+        896
+      ]
+    }
+  ],
+  "fidelite_rip": {
+    "sable": {
+      "rip_rgb": [
+        175.9,
+        135.8,
+        109.3
+      ],
+      "decor_rgb": [
+        176.9,
+        136.0,
+        110.6
+      ],
+      "distance": 1.7
+    },
+    "roche": {
+      "rip_rgb": [
+        159.0,
+        119.0,
+        103.0
+      ],
+      "decor_rgb": [
+        155.0,
+        116.0,
+        100.3
+      ],
+      "distance": 5.7
+    }
+  },
+  "layers": [
+    {
+      "file": "animation/lave/EMB2_00_lave_fNN.png",
+      "phases": 32,
+      "ticks": 15
+    },
+    {
+      "file": "calques/EMB2_01_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/EMB2_02_sable.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/EMB2_03_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/EMB2_04_berge.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/EMB2_05_roche.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/EMB2_06_piliers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/EMB2_07_profondeur.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "animation/veines/EMB2_08_veines_fNN.png",
+      "phases": 32,
+      "ticks": 15
+    }
+  ],
+  "lave": {
+    "phases": 32,
+    "frame_length_ticks": 15,
+    "palette": [
+      [
+        55,
+        18,
+        12
+      ],
+      [
+        95,
+        28,
+        16
+      ],
+      [
+        145,
+        45,
+        22
+      ],
+      [
+        165,
+        65,
+        30
+      ],
+      [
+        185,
+        95,
+        25
+      ],
+      [
+        205,
+        125,
+        22
+      ],
+      [
+        218,
+        140,
+        18
+      ],
+      [
+        232,
+        155,
+        12
+      ],
+      [
+        240,
+        170,
+        0
+      ],
+      [
+        240,
+        188,
+        12
+      ],
+      [
+        250,
+        210,
+        30
+      ],
+      [
+        255,
+        230,
+        60
+      ],
+      [
+        255,
+        255,
+        90
+      ]
+    ],
+    "periode_texture": [
+      192,
+      96
+    ],
+    "cellule": 24,
+    "drift": "une periode (96 px) vers le sud par boucle",
+    "pieds_cascade": [],
+    "origine": "module source/magma_visqueux/magma.py adapte palette Mt Blaze ; pixels calcules Worley periodique"
+  },
+  "veines": {
+    "phases": 32,
+    "frame_length_ticks": 15,
+    "palette": [
+      [
+        55,
+        18,
+        12
+      ],
+      [
+        95,
+        28,
+        16
+      ],
+      [
+        145,
+        45,
+        22
+      ],
+      [
+        165,
+        65,
+        30
+      ],
+      [
+        185,
+        95,
+        25
+      ],
+      [
+        205,
+        125,
+        22
+      ],
+      [
+        218,
+        140,
+        18
+      ],
+      [
+        232,
+        155,
+        12
+      ],
+      [
+        240,
+        170,
+        0
+      ],
+      [
+        240,
+        188,
+        12
+      ],
+      [
+        250,
+        210,
+        30
+      ],
+      [
+        255,
+        230,
+        60
+      ],
+      [
+        255,
+        255,
+        90
+      ]
+    ],
+    "pixels": 5177,
+    "origine": "veines extraites du decor (orange dans roche) + fissures Worley fines, palette cycling frame par frame"
+  },
+  "scene_loop_ticks": 480,
+  "access": {
+    "markers": {
+      "entrance": [
+        392,
+        560
+      ],
+      "boss": [
+        384,
+        296
+      ],
+      "objectif": [
+        504,
+        184
+      ]
+    },
+    "paths_16x16": {
+      "entrance->boss": {
+        "ok": true
+      },
+      "entrance->objectif": {
+        "ok": true
+      }
+    },
+    "blocked_cells": 5114,
+    "total_cells": 6912,
+    "walkable_cells": 1798,
+    "rule": "case bloquee si >25% hors sable",
+    "north_closed": true
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "emb2_entree_mt_blaze_sud_nord_v2",
+    "namespace": "entree_mt_blaze_sud_nord_v2",
+    "tiles_per_bank": {
+      "EMB2_00_LAVE": 38816,
+      "EMB2_01_SOL": 4900,
+      "EMB2_02_SABLE": 1602,
+      "EMB2_03_OMBRES": 682,
+      "EMB2_04_BERGE": 125,
+      "EMB2_05_ROCHE": 227,
+      "EMB2_06_PILIERS": 3851,
+      "EMB2_07_PROFONDEUR": 64,
+      "EMB2_08_VEINES": 4855
+    },
+    "banks": [
+      "EMB2_00_LAVE",
+      "EMB2_01_SOL",
+      "EMB2_02_SABLE",
+      "EMB2_03_OMBRES",
+      "EMB2_04_BERGE",
+      "EMB2_05_ROCHE",
+      "EMB2_06_PILIERS",
+      "EMB2_07_PROFONDEUR",
+      "EMB2_08_VEINES"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}
