@@ -41,7 +41,7 @@
   "raw_inputs": [
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor.png",
-      "sha256": "6f436645e62dfe58143d427293a6408930ab5cc99e910f12b636f535c036123d",
+      "sha256": "840128dfd6cf6a0fb1b21c541b62db21eef2ec1afc97220a04799a9f0c68d052",
       "size": [
         1200,
         896
@@ -49,7 +49,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/sol_complet.png",
-      "sha256": "6210f7877da838583933a3e5e8422eb196f4c2339e4f742e9d8163b5b253e6e0",
+      "sha256": "4c852f777a8c1ef91918808347ecc288d8e8fa89a12cae5c5b3607d4b02227c2",
       "size": [
         1200,
         896
@@ -64,11 +64,11 @@
         109.3
       ],
       "decor_rgb": [
-        187.0,
-        137.1,
-        100.7
+        186.1,
+        136.9,
+        102.2
       ],
-      "distance": 14.2
+      "distance": 12.6
     },
     "roche": {
       "rip_rgb": [
@@ -77,11 +77,11 @@
         103.0
       ],
       "decor_rgb": [
-        145.5,
-        99.7,
-        80.8
+        145.2,
+        100.2,
+        81.8
       ],
-      "distance": 32.4
+      "distance": 31.5
     }
   },
   "layers": [
@@ -280,7 +280,7 @@
         0
       ]
     ],
-    "pixels": 36526,
+    "pixels": 11310,
     "origine": "veines extraites du decor (orange dans roche) + fissures Worley fines, palette cycling frame par frame"
   },
   "scene_loop_ticks": 480,
@@ -318,15 +318,15 @@
     "asset": "emb2_entree_mt_blaze_sud_nord_v2",
     "namespace": "entree_mt_blaze_sud_nord_v2",
     "tiles_per_bank": {
-      "EMB2_00_LAVE": 26928,
-      "EMB2_01_SOL": 6285,
-      "EMB2_02_SABLE": 1336,
-      "EMB2_03_OMBRES": 559,
-      "EMB2_04_BERGE": 42,
-      "EMB2_05_ROCHE": 280,
-      "EMB2_06_PILIERS": 4405,
+      "EMB2_00_LAVE": 67512,
+      "EMB2_01_SOL": 5245,
+      "EMB2_02_SABLE": 1332,
+      "EMB2_03_OMBRES": 558,
+      "EMB2_04_BERGE": 231,
+      "EMB2_05_ROCHE": 291,
+      "EMB2_06_PILIERS": 3428,
       "EMB2_07_PROFONDEUR": 83,
-      "EMB2_08_VEINES": 28984
+      "EMB2_08_VEINES": 11320
     },
     "banks": [
       "EMB2_00_LAVE",
