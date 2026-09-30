@@ -20,10 +20,14 @@
     {
       "file": "decor.png",
       "images": [
-        "Rescue_Team_-_Mt._Blaze_Entrance.png"
+        "layout a faire multicalque lave etc séparer.png",
+        "65097.png",
+        "Rescue_Team_-_Mt._Blaze_Entrance.png",
+        "112438.png",
+        "221081.png"
       ],
-      "prompt": "Use EXACTLY the same textures, palette and pixel-art style as the reference image (Pokemon Mystery Dungeon Red Rescue Team, Mt. Blaze Entrance - GBA): same beige cracked sandy ground with darker crack lines in block patterns, same grey boulders and stacked rocky walls with black outlines, same orange-red lava with yellow highlights. Make a NEW, larger top-down map, WIDE LANDSCAPE 4:3, zoomed out so the area feels vast. Layout: the player arrives at the SOUTH (bottom edge center) on the beige cracked sand path between grey rocks; the sand opens into a wide clearing; on the LEFT and RIGHT sides shallow LAVA POOLS (the entire lava surface is filled with flat pure magenta #FF00FF, no gradient, no shading, completely flat magenta for segmentation); grey boulders and small stones at lava edges; at the NORTH center a large dark cave entrance (black) framed by grey rock pillars, behind it dark rocky ground. No characters, no text, no UI, no border.",
-      "essais": "genere reference Mt Blaze GBA (plateau beige + piliers gris + lave magenta), 1200x896"
+      "prompt": "STRICT COPY of layout a faire multicalque lave etc séparer.png - EXACT same layout, same positions, same shapes. Central beige cracked sand, south path centered between low grey rocks, north cave black with two pillars and stalactites, lava pools left and right exactly as reference (orange pools with yellow highlights, dark red wavy flows with orange glow), grey boulders at same spots, rocky walls north/west/east/south with orange lava veins (cracks) in grey rock. Use EXACT textures from 65097 lava texture (orange-red with yellow core, dark maroon) + 112438 ground + Rescue palette. For segmentation, entire lava pool surfaces (bright orange pools) filled flat pure magenta #FF00FF, no gradient. Hard pixel art, 1200x896, top-down, no characters.",
+      "essais": "strict 30/09 00:17 layout séparer.png + 65097 lave + 112438, 106k magenta, veines orange conservées"
     },
     {
       "file": "sol_complet.png",
@@ -37,7 +41,7 @@
   "raw_inputs": [
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor.png",
-      "sha256": "bb4fa9b0dc1e32d6f9465780e35603f008f77b5f61cc887db6b1572cbf96acef",
+      "sha256": "18d6ee7f7b279c39cbb07a73b574af81f03698fcbad0395e23f56b2fa64f0680",
       "size": [
         1200,
         896
@@ -45,7 +49,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/sol_complet.png",
-      "sha256": "298c725ad437e5c7225ea5b76d23e167c7084ec6a892be75b2e3b00c87560fad",
+      "sha256": "c01d694f0ccf4c15b9945202c8ee1ec8cface3c07529ee8aaa994eaf44c4cbe3",
       "size": [
         1200,
         896
@@ -60,11 +64,11 @@
         109.3
       ],
       "decor_rgb": [
-        176.9,
-        136.0,
-        110.6
+        189.9,
+        141.1,
+        102.5
       ],
-      "distance": 1.7
+      "distance": 16.4
     },
     "roche": {
       "rip_rgb": [
@@ -73,11 +77,11 @@
         103.0
       ],
       "decor_rgb": [
-        155.0,
-        116.0,
-        100.3
+        144.8,
+        100.1,
+        83.6
       ],
-      "distance": 5.7
+      "distance": 30.5
     }
   },
   "layers": [
@@ -276,14 +280,14 @@
         90
       ]
     ],
-    "pixels": 5177,
+    "pixels": 33456,
     "origine": "veines extraites du decor (orange dans roche) + fissures Worley fines, palette cycling frame par frame"
   },
   "scene_loop_ticks": 480,
   "access": {
     "markers": {
       "entrance": [
-        392,
+        384,
         560
       ],
       "boss": [
@@ -291,7 +295,7 @@
         296
       ],
       "objectif": [
-        504,
+        376,
         184
       ]
     },
@@ -303,9 +307,9 @@
         "ok": true
       }
     },
-    "blocked_cells": 5114,
+    "blocked_cells": 5425,
     "total_cells": 6912,
-    "walkable_cells": 1798,
+    "walkable_cells": 1487,
     "rule": "case bloquee si >25% hors sable",
     "north_closed": true
   },
@@ -314,15 +318,15 @@
     "asset": "emb2_entree_mt_blaze_sud_nord_v2",
     "namespace": "entree_mt_blaze_sud_nord_v2",
     "tiles_per_bank": {
-      "EMB2_00_LAVE": 38816,
-      "EMB2_01_SOL": 4900,
-      "EMB2_02_SABLE": 1602,
-      "EMB2_03_OMBRES": 682,
-      "EMB2_04_BERGE": 125,
-      "EMB2_05_ROCHE": 227,
-      "EMB2_06_PILIERS": 3851,
-      "EMB2_07_PROFONDEUR": 64,
-      "EMB2_08_VEINES": 4855
+      "EMB2_00_LAVE": 26976,
+      "EMB2_01_SOL": 6246,
+      "EMB2_02_SABLE": 1189,
+      "EMB2_03_OMBRES": 555,
+      "EMB2_04_BERGE": 47,
+      "EMB2_05_ROCHE": 279,
+      "EMB2_06_PILIERS": 4354,
+      "EMB2_07_PROFONDEUR": 81,
+      "EMB2_08_VEINES": 26595
     },
     "banks": [
       "EMB2_00_LAVE",
