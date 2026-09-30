@@ -50,7 +50,7 @@ IDX_BRAISE = [3, 4, 5, 6, 7]                            # famille cycling 5
 IDX_COEUR = [10, 11]                                    # famille cycling 2 (cœurs lumineux des coulures)
 IDX_BLANC = [12]                                        # cœur blanc : n'apparaît que dans les sprites natifs
 
-PHASES, TICKS = 32, 20                                  # 640 ticks = 10,7 s : pas ralenti, « super visqueuse »
+PHASES, TICKS = 32, 24                                  # 768 ticks = 12,8 s : pas encore ralenti, « super visqueuse »
 AMP = 0.8                                               # amplitude du pliage, en pixels du rendu final (grille 8 px)
 
 
@@ -88,6 +88,44 @@ def clean_speckles(idx, tones=(9,), min_size=12, merge_to=None):
         small = np.isin(lab, [i for i in range(1, n + 1) if sizes[i] < min_size]) & m
         out[small] = int(merge_to if merge_to is not None else IDX_MARE[0])
     return out
+
+
+def clean_look(idx, mask, crust_ids=(1, 2), pool=8, ring=(4, 3), glow=7,
+               warm=(1, 2, 3, 4, 5, 6, 7, 9), cores=(10, 11, 12), rim_px=1.0, glow_px=2.6):
+    """Lecture de la planche : larges plaques de croute, lisere rouge puis halo orange, mare a plat.
+
+    Le rendu genere est bruite (tons intermediaires en semis, chair 4 fois trop presente) et le
+    re-echantillonnage de l'animation en fabrique d'autres. On reaffecte donc CHAQUE phase selon la seule
+    distance aux plaques : lisere rouge a 2 px, halo orange a 4 px, mare a plat au-dela. Les coeurs chauds
+    de la planche (240,160,0 / 240,232,0 / 240,240,240) sont conserves tels quels.
+    """
+    out = idx.copy()
+    m = mask
+    crust = np.isin(out, crust_ids) & m
+    crust = nd.binary_closing(crust, np.ones((3, 3), bool))
+    warm_m = np.isin(out, warm) & m
+    crust = (nd.binary_dilation(crust, np.ones((3, 3), bool), iterations=3) & warm_m) | crust
+    crust = nd.binary_closing(crust, np.ones((3, 3), bool)) & m
+    # plaques : on ne garde que les vraies (les semis de quelques pixels de la planche de travail sont du bruit)
+    lab, n = nd.label(crust, np.ones((3, 3), bool))
+    if n:
+        sizes = np.bincount(lab.ravel(), minlength=n + 1)
+        crust = np.isin(lab, [i for i in range(1, n + 1) if sizes[i] >= 40])
+    cores_m = np.isin(out, cores) & m
+    d = nd.distance_transform_edt(~crust)
+    hors = m & ~crust
+    out = np.full(idx.shape, pool, np.int8)
+    # (136,96,88) est, sur la planche, le givre clair accroché à certaines plaques épaisses : on le garde
+    # uniquement là où la texture le donnait ET où la plaque est épaisse — jamais en aplat.
+    epais = nd.distance_transform_edt(crust) >= 2.5
+    givre = crust & epais & np.isin(idx, (2,))
+    out[crust] = 1
+    out[givre] = 2
+    out[hors & (d <= rim_px)] = ring[0]                            # liseré braise, À L'EXTÉRIEUR de la plaque
+    out[hors & (d > rim_px) & (d <= glow_px)] = ring[1]            # halo orangé clair
+    out[cores_m] = idx[cores_m]
+    out[~m] = -1
+    return out.astype(np.int8)
 
 
 def to_grid(idx, src, out, n_pal=N_PAL):
@@ -159,6 +197,11 @@ def phases(base, mask, phases=PHASES, amp=AMP, seed=5, sprites=None):
         u = xx + fade * amp * (np.sin(2 * np.pi * yy / 97.0 + ph) + 0.6 * g1 * np.cos(ph))
         v = yy + fade * amp * (np.cos(2 * np.pi * xx / 123.0 - ph) + 0.6 * g2 * np.sin(ph))
         tone = _bilinear(b.astype('float32'), u, v)
+        # traînée visqueuse : les plaques de croûte glissent moins vite que la mare et se cisaillement
+        # contre elle (deuxième échantillonnage, décalé et contracté) — c'est ce qui donne le « collant ».
+        b_crust = np.isin(b, IDX_CROUTE)
+        if b_crust.any():
+            tone = np.where(b_crust, _bilinear(b.astype('float32'), 0.84 * u + 7.0, 0.84 * v + 5.0), tone)
         # gonflement : les plaques de croûte s'éclaircissent puis retombent ; la mare respire d'un ton
         heave = np.sin(ph + psi)
         tone = np.where(np.isin(np.rint(tone).astype(int), IDX_CROUTE),
@@ -167,7 +210,8 @@ def phases(base, mask, phases=PHASES, amp=AMP, seed=5, sprites=None):
         plaque = np.isin(np.rint(tone).astype(int), IDX_CROUTE)
         liseré = nd.binary_dilation(plaque, iterations=2) & ~plaque
         tone = np.where(liseré & (heave > 0.55), 9.0, np.where(liseré & (heave < -0.75), 7.0, tone))
-        idx = np.clip(np.rint(tone).astype(int), 0, N_PAL - 1)
+        idx = np.clip(np.rint(tone).astype(int), 0, N_PAL - 1).astype(np.int8)
+        idx = clean_look(idx, mask)                                   # lecture de la planche, à chaque phase
         idx = rotate(idx, k_braise(t, phases), k_coeur(t, phases))   # palette cycling fermé sur la boucle
         a = np.zeros((H, W, 4), 'uint8')
         a[..., :3] = PAL_NP[idx]; a[..., 3] = 255

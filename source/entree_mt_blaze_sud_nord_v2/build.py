@@ -74,7 +74,7 @@ LAVE_PAL = [tuple(int(v) for v in c) for c in LC.PAL]
 LAVE_PAL_NP = LC.PAL_NP
 
 S = JM.SCALE
-LOOP_TICKS = 640  # 32*20 : pas ralenti, lave « super visqueuse »
+LOOP_TICKS = 768  # 32*24 : pas encore ralenti, lave « super visqueuse »
 
 def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -238,6 +238,7 @@ def build():
     lidx_full = LC.clean_speckles(LC.classify(larr))   # semis de transition retirés (planche : rehaut continu seulement)
     lidx = LC.to_grid(lidx_full, SRC, (W, H))
     mask_lave = visible & ex['water']
+    lidx = LC.clean_look(lidx, mask_lave)     # lecture de la planche : plaques franches, liserés, mare plate
     # frames natifs de la planche : bulles qui montent + gouttes qui pendent et tombent, collés tels quels
     sheet = HERE / 'reference/65097.png'
     frames_nat = LC.sheet_frames(sheet)

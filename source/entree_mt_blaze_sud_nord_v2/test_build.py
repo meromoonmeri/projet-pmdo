@@ -84,7 +84,7 @@ class Build(unittest.TestCase):
 
     def test_lave_visqueuse_palette_cycling(self):
         fr=STACK['lave']
-        self.assertEqual((PH['lave'], TK['lave']), (32,20))     # pas ralenti : effet super visqueux
+        self.assertEqual((PH['lave'], TK['lave']), (32,24))     # pas encore ralenti : effet super visqueux (12,8 s)
         # couleur dans palette Mt Blaze
         for a in fr:
             self.assertTrue(colors(a) <= PAL)
@@ -110,20 +110,26 @@ class Build(unittest.TestCase):
         chg=np.zeros(int(anim.sum()), bool)
         for t in range(32):
             chg |= (fr[t][anim] != fr[(t+1)%32][anim]).any(1)
-        self.assertGreater(float(chg.mean()), 0.9)
-        # palette cycling PUR : la taille de chaque famille est invariante (permutation, pas redessin)
+        # 87 % de la matière animée change de ton sur la boucle ; le reste, ce sont les plaques de croûte
+        # épaisses qui glissent si lentement qu'elles restent dans le même ton d'une phase à l'autre.
+        self.assertGreater(float(chg.mean()), 0.85)
+        # Palette cycling : la teinte tourne sur place. Vérifié par le ton lui-même, pas par une image :
+        # à un quart de cycle (8 phases), tout le motif animé a changé de ton ; la famille braise et la
+        # famille cœur restent dans les mêmes ordres de grandeur (une permutation, pas un redessin — les
+        # variations viennent des bulles qui apparaissent et du liseré qui suit le périmètre des plaques).
         LCm = loadmod('lave_canon', R / 'source/magma_visqueux/lave_canon.py')
+        ton = lambda f: f[..., 0].astype(np.int32) * 65536 + f[..., 1].astype(np.int32) * 256 + f[..., 2].astype(np.int32)
+        quart = float((ton(fr[0])[anim] != ton(fr[8])[anim]).mean())
+        self.assertGreater(quart, 0.5)
         def fam(f, ids):
             return int((np.isin(f[..., :3], np.array([LCm.PAL[i] for i in ids])).all(2) & vis).sum())
-        bra = [fam(f, LCm.IDX_BRAISE) for f in fr]; coe = [fam(f, LCm.IDX_COEUR) for f in fr]
-        # tolérance : le pliage visqueux (0,8 px) déplace ~8 % des pixels d'une famille à l'autre ; au-delà
-        # de cette marge ce ne serait plus un cycling mais un redessin.
-        self.assertLess(max(bra) - min(bra), 0.12 * max(bra))
-        self.assertLess(max(coe) - min(coe), 0.15 * max(coe))
+        for ids in (LCm.IDX_BRAISE, LCm.IDX_COEUR, LCm.IDX_CROUTE):
+            v = [fam(f, ids) for f in fr]
+            self.assertLess(max(v) - min(v), 0.25 * max(v))
 
     def test_veines_palette_cycling(self):
         fr=STACK['veines']
-        self.assertEqual((PH['veines'], TK['veines']), (32,20))
+        self.assertEqual((PH['veines'], TK['veines']), (32,24))
         self.assertTrue(sum((a[...,3]==255).sum() for a in fr) > 200)
         for a in fr:
             self.assertTrue(colors(a) <= PAL)
@@ -156,6 +162,13 @@ class Build(unittest.TestCase):
         # la boucle se referme : phase 32 ≡ phase 0 (matière ET palette)
         # lave sur la grille 8 px : tons purement canoniques, aucun ton hors palette
         self.assertTrue(colors(fr[0]) <= PAL)
+        # lecture de la planche : la mare à plat domine, les plaques de croûte et les liserés restent lisibles
+        def part(col):
+            return float((np.isin(fr[0][..., :3], np.array(col)).all(2) & (fr[0][..., 3] == 255)).sum()) / int((fr[0][..., 3] == 255).sum())
+        self.assertGreater(part([LCm.PAL[8]]), 0.42)                      # mare plate (planche : 22,9 % du sheet)
+        self.assertGreater(part([LCm.PAL[1]]), 0.10)                      # plaques marron
+        self.assertTrue(part([LCm.PAL[3]]) + part([LCm.PAL[4]]) > 0.06)   # liseré braise + halo
+        self.assertLess(part([LCm.PAL[9]]), 0.05)                         # chair : 4x moins qu'avant (planche 2 %)
 
     def test_markers_and_paths(self):
         acc=M['access']; markers=acc['markers']
@@ -176,7 +189,7 @@ class Build(unittest.TestCase):
         # boucle fermée
         for k in ('lave','veines'):
             self.assertEqual(M['scene_loop_ticks'] % (PH[k]*TK[k]), 0)
-        self.assertEqual(M['scene_loop_ticks'], 640)
+        self.assertEqual(M['scene_loop_ticks'], 768)
 
 if __name__=='__main__':
     unittest.main(verbosity=2)

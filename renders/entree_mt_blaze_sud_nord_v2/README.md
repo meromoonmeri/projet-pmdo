@@ -18,6 +18,9 @@ C'est l'entrée de donjon du volcan, inspirée de `Rescue_Team_-_Mt._Blaze_Entra
 |---|---|
 | Palette cycling | Deux familles tournent **sur place** par permutation cyclique : braise 5 entrées, cœurs chauds 2 entrées. La surface de mare reste **à plat** (elle ne change jamais de ton, comme sur la planche). Pas ralenti : **20 ticks par phase**, soit 10,7 s la boucle |
 | Dérive visqueuse | La matière dérive lentement (pliage 0,8 px, une oscillation par boucle, amplitude **annulée au bord**), croûtes qui se soulèvent puis retombent, liseré chaud qui s'allume le long des plaques |
+| **Frames natifs de la planche** | La planche 65097 contient sa propre animation de lave, collée **telle quelle** (aucun redessin, aucune mise à l'échelle) : **12 bulles** qui gonflent puis s'éteignent (les 8 premières frames de la bande y 551–604, en aller-retour) et **10 gouttes** accrochées à la croûte qui pendent, s'allongent puis se détachent en gouttelettes (16 frames de la bande y 635–711). Le cœur blanc incandescent (240,240,240) et la chair chaude (240,128,88) viennent de ces frames |
+
+Les frames natifs parcourent leur séquence entière une fois par boucle (10,7 s), donc l'animation reste **super visqueuse** : une bulle met ~3 s à gonfler et autant à s'éteindre.
 
 La silhouette de la couche de lave est **exactement** celle du layout à chaque phase : le pliage est annulé au bord, donc la découpe ne bouge jamais et la boucle se referme (phase 32 ≡ phase 0).
 

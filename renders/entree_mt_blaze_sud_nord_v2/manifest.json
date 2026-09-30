@@ -105,7 +105,7 @@
     {
       "file": "animation/lave/EMB2_00_lave_fNN.png",
       "phases": 32,
-      "ticks": 20
+      "ticks": 24
     },
     {
       "file": "calques/EMB2_01_sol_complet.png",
@@ -145,12 +145,12 @@
     {
       "file": "animation/veines/EMB2_08_veines_fNN.png",
       "phases": 32,
-      "ticks": 20
+      "ticks": 24
     }
   ],
   "lave": {
     "phases": 32,
-    "ticks": 20,
+    "ticks": 24,
     "amp_px": 0.8,
     "familles": {
       "braise": 5,
@@ -170,38 +170,38 @@
       "chute": 10
     },
     "sprites_px_par_phase": [
-      3591,
-      3591,
-      4036,
-      4320,
-      4229,
-      4337,
-      4616,
-      4664,
-      4310,
-      4310,
-      4013,
-      4013,
-      4436,
-      4436,
-      4548,
-      4548,
-      4694,
-      4694,
-      4421,
-      4346,
-      4083,
-      3882,
-      4476,
-      4311,
-      4684,
-      4684,
-      4527,
-      4527,
-      4048,
-      4048,
-      3624,
-      3624
+      4186,
+      4186,
+      4741,
+      4923,
+      5344,
+      5314,
+      5332,
+      5476,
+      4977,
+      4977,
+      4572,
+      4572,
+      4190,
+      4190,
+      4286,
+      4286,
+      4546,
+      4546,
+      4208,
+      4068,
+      3719,
+      3584,
+      3416,
+      3338,
+      3455,
+      3455,
+      3997,
+      3997,
+      3759,
+      3759,
+      3548,
+      3548
     ],
     "sprites_origine": "planches 65097 : 18 frames de montée (y 551..604) et 16 frames de chute (y 635..711), collées telles quelles",
     "palette": [
@@ -292,7 +292,7 @@
       120,
       40
     ],
-    "part_ton_dominant": 0.502,
+    "part_ton_dominant": 0.493,
     "ecart_ton_dominant_mare": 0.0,
     "sites_pose": {
       "montee": 12,
@@ -305,11 +305,11 @@
       "braise": 5,
       "coeur": 2
     },
-    "frame_length_ticks": 20
+    "frame_length_ticks": 24
   },
   "veines": {
     "phases": 32,
-    "frame_length_ticks": 20,
+    "frame_length_ticks": 24,
     "palette": [
       [
         40,
@@ -380,7 +380,7 @@
     "pixels": 11310,
     "origine": "veines extraites du decor (orange dans roche) + fissures Worley fines ; palette canonique + cycling ferme"
   },
-  "scene_loop_ticks": 640,
+  "scene_loop_ticks": 768,
   "access": {
     "markers": {
       "entrance": [
@@ -415,7 +415,7 @@
     "asset": "emb2_entree_mt_blaze_sud_nord_v2",
     "namespace": "entree_mt_blaze_sud_nord_v2",
     "tiles_per_bank": {
-      "EMB2_00_LAVE": 44828,
+      "EMB2_00_LAVE": 27803,
       "EMB2_01_SOL": 5245,
       "EMB2_02_SABLE": 1332,
       "EMB2_03_OMBRES": 558,
