@@ -98,7 +98,9 @@ class Build(unittest.TestCase):
         # cycling lent (« super visqueux ») : chaque phase change, aucune phase figée
         ch=[float((fr[t][vis] != fr[(t+1)%32][vis]).any(1).mean()) for t in range(32)]
         self.assertGreater(min(ch), 0.03)
-        self.assertLess(max(ch)-min(ch), 0.16)      # pas d'à-coup : le pas reste régulier sur la boucle
+        # la dérive visqueuse est régulière ; les bulles et gouttes de la planche ajoutent volontairement
+        # des à-coups (une bulle qui éclate change beaucoup de pixels d'un coup), d'où la marge large.
+        self.assertLess(max(ch)-min(ch), 0.25)
         # sur la boucle, toute la matière animée a tourné au moins une fois.
         # Exception voulue et conforme à la planche : la surface de mare (216,120,40) est À PLAT, elle ne
         # change pas de ton ; on ne teste donc le brassage que sur les croûtes, braises et cœurs chauds.
@@ -139,6 +141,11 @@ class Build(unittest.TestCase):
         for c in L['palette']:
             self.assertIn(tuple(c), have)
         self.assertEqual(L['familles'], {'braise': 5, 'coeur': 2})
+        # frames natifs de la planche employés tels quels (collés, jamais redessinés)
+        self.assertEqual(L['sprites_natifs'], {'montee': 8, 'chute': 16, 'montee_planche': 18})
+        self.assertEqual(L['sites_pose'], {'montee': 12, 'chute': 10})
+        self.assertEqual(L['sprites_anim'], {'montee': 'pingpong', 'chute': 'seq'})
+        self.assertGreater(min(L['sprites_px_par_phase']), 1000)
         self.assertLessEqual(L['ecart_ton_dominant_mare'], 1.0)      # surface de mare canonique
         self.assertGreaterEqual(L['part_ton_dominant'], 0.45)
         # silhouette invariante : la découpe est celle du layout, aucune phase ne bouge

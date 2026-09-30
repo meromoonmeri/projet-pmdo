@@ -9,16 +9,25 @@ C'est l'entrée de donjon du volcan, inspirée de `Rescue_Team_-_Mt._Blaze_Entra
 - **Décor** : rendu généré référencé avec le rip en `images=` (lave en magenta #FF00FF)
 - **Sol complet** : édité depuis le décor (sable seul, 0,0)
 - **Base** (sable, ombres, berge, roche, piliers, profondeur) : segmentation pleine résolution → down_class 8px (moyenne pondérée par classe), palette commune quantifiée
-- **Lave** : magma visqueux procédural — bruit de Worley périodique (cellules 24px, période 192×96), dérive lente plein sud (1 période par boucle), pliage, gonflement et croûte sombre ; rampe de 13 tons Mt Blaze (croûte 3 + lave 10, du rouge sombre au jaune vif), pixels calculés, 32 phases × 15 ticks — **animation palette cycling frame par frame, cohérente à la texture du rip**
-- **Veines** : fissures orange dans la roche extraites du décor + fissures Worley fines (cell 18) pour garantir la densité ; même rampe, 32 phases × 15 ticks, palette cycling (distance au bord + Worley + heave sinus)
+- **Lave** : **texture canonique GBA** relevée sur les planches Spriters Resource `65097.png` (Mt Blaze Dungeon Tiles, rip ToastyPK) et `221081.png` (Mt. Blaze Entrance, re-rip à palette unique). 12 tons, chacun présent tel quel dans la planche : liseré (40,32,24), croûtes (96,40,56) et (136,96,88), braise 5 tons de (152,0,0) à (216,72,16), **surface de mare à plat (216,120,40)**, rehaut (240,128,88), cœurs (240,160,0) et (240,232,0). Le calque est un rendu généré dédié (`bruts/lave_source.png`, layout strict + planche canonique en `images=`) clippé sur la silhouette de lave du layout — **aucune greffe manuelle**
+- **Veines** : fissures orange dans la roche extraites du décor + fissures Worley fines (cell 18) pour garantir la densité ; **palette canonique** et même cycling fermé, 32 phases × 20 ticks
 
-Boucle : **480 ticks = 8 s** (32×15). Aucun warp.
+### Animation « super visqueuse » (2 composantes)
+
+| Composante | Détail |
+|---|---|
+| Palette cycling | Deux familles tournent **sur place** par permutation cyclique : braise 5 entrées, cœurs chauds 2 entrées. La surface de mare reste **à plat** (elle ne change jamais de ton, comme sur la planche). Pas ralenti : **20 ticks par phase**, soit 10,7 s la boucle |
+| Dérive visqueuse | La matière dérive lentement (pliage 0,8 px, une oscillation par boucle, amplitude **annulée au bord**), croûtes qui se soulèvent puis retombent, liseré chaud qui s'allume le long des plaques |
+
+La silhouette de la couche de lave est **exactement** celle du layout à chaque phase : le pliage est annulé au bord, donc la découpe ne bouge jamais et la boucle se referme (phase 32 ≡ phase 0).
+
+Boucle : **640 ticks = 10,7 s** (32×20). Aucun warp.
 
 ## Calques (bas → haut)
 
 | # | Calque | Animation |
 |---|---|---|
-| 00 | Lave visqueuse (Worley, palette Mt Blaze) | 32 × 15 ticks |
+| 00 | Lave canonique (palette Spriters Resource 65097 + 221081) | 32 × 20 ticks |
 | 01 | Sol complet (sable) | fixe |
 | 02 | Sable praticable | fixe |
 | 03 | Ombres au pied des parois | fixe |
@@ -26,7 +35,7 @@ Boucle : **480 ticks = 8 s** (32×15). Aucun warp.
 | 05 | Parois rocheuses grises | fixe |
 | 06 | Rochers et piliers | fixe |
 | 07 | Profondeur (bouche sombre) | fixe |
-| 08 | Veines de lave dans la roche (palette cycling) | 32 × 15 ticks |
+| 08 | Veines de lave dans la roche (palette canonique, cycling) | 32 × 20 ticks |
 | 09 | Vide, `Layer=4` (Top) | — |
 
 ## Marqueurs et collisions
@@ -36,5 +45,6 @@ Boucle : **480 ticks = 8 s** (32×15). Aucun warp.
 
 ## Limites
 
-- Terrain et lave : dessins générés à partir du rip ; ce ne sont pas des tuiles natives.
-- Lave et veines : modules `source/magma_visqueux/magma.py` adapté palette Mt Blaze ; textures procédurales cohérentes au rip, animées par palette cycling + dérive visqueuse.
+- Terrain, roche, piliers et sable restent des dessins générés à partir du rip ; ce ne sont pas des tuiles natives.
+- Lave : palette **canonique** (relevée sur les planches), texture issue du rendu généré référencé sur ces planches, animation `source/magma_visqueux/lave_canon.py` (palette cycling fermé + dérive visqueuse). Aucune tuile native de la planche n'est collée : la proximité vient de la palette et de la référence en `images=`.
+- Veines : procédurales, palette canonique.

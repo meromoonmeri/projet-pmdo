@@ -238,7 +238,17 @@ def build():
     lidx_full = LC.clean_speckles(LC.classify(larr))   # semis de transition retirés (planche : rehaut continu seulement)
     lidx = LC.to_grid(lidx_full, SRC, (W, H))
     mask_lave = visible & ex['water']
-    mf, lava_meta = LC.phases(lidx, mask_lave, phases=32)
+    # frames natifs de la planche : bulles qui montent + gouttes qui pendent et tombent, collés tels quels
+    sheet = HERE / 'reference/65097.png'
+    frames_nat = LC.sheet_frames(sheet)
+    # montée : les huit premières frames seulement (6 -> 22 px) : la bulle gonfle puis se dégonfle,
+    # les grandes frames de colonne de la planche sont des coulées verticales, pas des bulles de mare
+    fr_montee = frames_nat['montee'][:8]
+    sp_montee = [(x, y, (i * 3) % (2 * len(fr_montee) - 2)) for i, (x, y) in enumerate(LC.sites(mask_lave, lidx, 'montee', seed=13, spacing=54, limit=12))]
+    sp_chute = [(x, y, (i * 5) % len(frames_nat['chute'])) for i, (x, y) in enumerate(LC.sites(mask_lave, lidx, 'chute', seed=17, spacing=64, limit=10))]
+    mf, lava_meta = LC.phases(lidx, mask_lave, phases=32,
+                              sprites={'montee': (fr_montee, sp_montee, 'pingpong'),
+                                       'chute': (frames_nat['chute'], sp_chute, 'seq')})
     dom, ndom = np.unique(lidx[lidx >= 0], return_counts=True)
     dom_i = int(dom[ndom.argmax()])
     lava_meta.update({'tons_planche': sorted(set(int(v) for v in np.unique(lidx_full[lidx_full >= 0]))),
@@ -246,6 +256,9 @@ def build():
                       'ton_dominant': [int(v) for v in LAVE_PAL[dom_i]],
                       'part_ton_dominant': round(float(ndom.max() / ndom.sum()), 3),
                       'ecart_ton_dominant_mare': round(float(np.linalg.norm(np.array(LAVE_PAL[dom_i]) - np.array([216, 120, 40]))), 1),
+                      'sprites_natifs': {'montee': len(fr_montee), 'chute': len(frames_nat['chute']),
+                                         'montee_planche': len(frames_nat['montee'])},
+                      'sites_pose': {'montee': len(sp_montee), 'chute': len(sp_chute)},
                       'texture': 'bruts/lave_source.png (rendu généré référencé : layout strict + planche canonique en images=)',
                       'nettoyage_semis': 'tons isoles < 12 px ramenes a la mare (cf. lave_canon.clean_speckles)',
                       'clip': 'silhouette = eau du decor (layout strict) ; pliage annulé au bord (fade)',
