@@ -28,10 +28,11 @@ PFX = 'EMB2'
 W, H = 768, 576
 SRC = (1200, 896)
 
-# Palette Mt Blaze : 3 tons de croûte + 10 tons de rampe relevée sur la lave du rip (orange GBA, 151,71,39 → jaune)
-MTB_CRUST = [(55, 18, 12), (95, 28, 16), (145, 45, 22)]
-MTB_RAMP = [(165, 65, 30), (185, 95, 25), (205, 125, 22), (218, 140, 18), (232, 155, 12),
-            (240, 170, 0), (240, 188, 12), (250, 210, 30), (255, 230, 60), (255, 255, 90)]
+# Palette Mt Blaze corrigée d'après 221081.png (Spriters Resource) - 10 couleurs lave exactes GBA, palette cycling pur
+# Lava 221081: 156,58,25 → 230,107,0 (pas de jaune), rip unique sans doublon
+MTB_CRUST = [(55, 18, 12), (85, 28, 16), (115, 40, 22)]
+MTB_RAMP = [(156, 58, 25), (165, 49, 16), (173, 41, 8), (181, 99, 25), (189, 90, 16),
+            (197, 82, 8), (206, 74, 0), (214, 123, 16), (222, 115, 8), (230, 107, 0)]
 MTB_PAL = MTB_CRUST + MTB_RAMP  # 13 tons, index 0..12
 MTB_PAL_NP = np.array(MTB_PAL, 'uint8')
 

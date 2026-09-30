@@ -41,7 +41,7 @@
   "raw_inputs": [
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/decor.png",
-      "sha256": "18d6ee7f7b279c39cbb07a73b574af81f03698fcbad0395e23f56b2fa64f0680",
+      "sha256": "6f436645e62dfe58143d427293a6408930ab5cc99e910f12b636f535c036123d",
       "size": [
         1200,
         896
@@ -49,7 +49,7 @@
     },
     {
       "file": "source/entree_mt_blaze_sud_nord_v2/bruts/sol_complet.png",
-      "sha256": "c01d694f0ccf4c15b9945202c8ee1ec8cface3c07529ee8aaa994eaf44c4cbe3",
+      "sha256": "6210f7877da838583933a3e5e8422eb196f4c2339e4f742e9d8163b5b253e6e0",
       "size": [
         1200,
         896
@@ -64,11 +64,11 @@
         109.3
       ],
       "decor_rgb": [
-        189.9,
-        141.1,
-        102.5
+        187.0,
+        137.1,
+        100.7
       ],
-      "distance": 16.4
+      "distance": 14.2
     },
     "roche": {
       "rip_rgb": [
@@ -77,11 +77,11 @@
         103.0
       ],
       "decor_rgb": [
-        144.8,
-        100.1,
-        83.6
+        145.5,
+        99.7,
+        80.8
       ],
-      "distance": 30.5
+      "distance": 32.4
     }
   },
   "layers": [
@@ -141,64 +141,64 @@
         12
       ],
       [
-        95,
+        85,
         28,
         16
       ],
       [
-        145,
-        45,
+        115,
+        40,
         22
       ],
       [
-        165,
-        65,
-        30
-      ],
-      [
-        185,
-        95,
+        156,
+        58,
         25
       ],
       [
-        205,
-        125,
-        22
+        165,
+        49,
+        16
       ],
       [
-        218,
-        140,
-        18
+        173,
+        41,
+        8
       ],
       [
-        232,
-        155,
-        12
+        181,
+        99,
+        25
       ],
       [
-        240,
-        170,
+        189,
+        90,
+        16
+      ],
+      [
+        197,
+        82,
+        8
+      ],
+      [
+        206,
+        74,
         0
       ],
       [
-        240,
-        188,
-        12
+        214,
+        123,
+        16
       ],
       [
-        250,
-        210,
-        30
+        222,
+        115,
+        8
       ],
       [
-        255,
         230,
-        60
-      ],
-      [
-        255,
-        255,
-        90
+        107,
+        0
       ]
     ],
     "periode_texture": [
@@ -220,67 +220,67 @@
         12
       ],
       [
-        95,
+        85,
         28,
         16
       ],
       [
-        145,
-        45,
+        115,
+        40,
         22
       ],
       [
-        165,
-        65,
-        30
-      ],
-      [
-        185,
-        95,
+        156,
+        58,
         25
       ],
       [
-        205,
-        125,
-        22
+        165,
+        49,
+        16
       ],
       [
-        218,
-        140,
-        18
+        173,
+        41,
+        8
       ],
       [
-        232,
-        155,
-        12
+        181,
+        99,
+        25
       ],
       [
-        240,
-        170,
+        189,
+        90,
+        16
+      ],
+      [
+        197,
+        82,
+        8
+      ],
+      [
+        206,
+        74,
         0
       ],
       [
-        240,
-        188,
-        12
+        214,
+        123,
+        16
       ],
       [
-        250,
-        210,
-        30
+        222,
+        115,
+        8
       ],
       [
-        255,
         230,
-        60
-      ],
-      [
-        255,
-        255,
-        90
+        107,
+        0
       ]
     ],
-    "pixels": 33456,
+    "pixels": 36526,
     "origine": "veines extraites du decor (orange dans roche) + fissures Worley fines, palette cycling frame par frame"
   },
   "scene_loop_ticks": 480,
@@ -296,7 +296,7 @@
       ],
       "objectif": [
         376,
-        184
+        192
       ]
     },
     "paths_16x16": {
@@ -307,9 +307,9 @@
         "ok": true
       }
     },
-    "blocked_cells": 5425,
+    "blocked_cells": 5434,
     "total_cells": 6912,
-    "walkable_cells": 1487,
+    "walkable_cells": 1478,
     "rule": "case bloquee si >25% hors sable",
     "north_closed": true
   },
@@ -318,15 +318,15 @@
     "asset": "emb2_entree_mt_blaze_sud_nord_v2",
     "namespace": "entree_mt_blaze_sud_nord_v2",
     "tiles_per_bank": {
-      "EMB2_00_LAVE": 26976,
-      "EMB2_01_SOL": 6246,
-      "EMB2_02_SABLE": 1189,
-      "EMB2_03_OMBRES": 555,
-      "EMB2_04_BERGE": 47,
-      "EMB2_05_ROCHE": 279,
-      "EMB2_06_PILIERS": 4354,
-      "EMB2_07_PROFONDEUR": 81,
-      "EMB2_08_VEINES": 26595
+      "EMB2_00_LAVE": 26928,
+      "EMB2_01_SOL": 6285,
+      "EMB2_02_SABLE": 1336,
+      "EMB2_03_OMBRES": 559,
+      "EMB2_04_BERGE": 42,
+      "EMB2_05_ROCHE": 280,
+      "EMB2_06_PILIERS": 4405,
+      "EMB2_07_PROFONDEUR": 83,
+      "EMB2_08_VEINES": 28984
     },
     "banks": [
       "EMB2_00_LAVE",
