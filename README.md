@@ -1,5 +1,16 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Mt. Thunder : sommet d'orage, FTH1 (1er octobre 2026)
+
+**Demande** : « passe a la prochaine map » (après FCO2). Fin suivante de la série : **FTH1** prolonge l'entrée EMT1 (Mt. Thunder). Biome et portée choisis par l'agent, **à confirmer**. Préfixe FTH1 : FMT1 est cité comme repère par des branches sœurs, évité (signalé).
+
+- Sorties : `renders/fin_mt_thunder_v1/`, aperçu `apercu_fin_mt_thunder_v1.html`, build `source/fin_mt_thunder_v1/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur la planche de Mt. Thunder (Red Rescue Team). Ce ne sont pas des tuiles natives. Le sable de fond est celui d'EMT1 (mêmes octets, testé).
+- **Layout** : crête de sable au sud, très grand plateau rond bordé de falaises, estrade de roche au nord (sans grotte). Marqueurs `entrance`, `boss` (centre), `objectif` (pied de l'estrade) ; aucune sortie, aucun warp.
+- **Calques** : sol complet, sable, cailloux, pics, falaise, ciel, nuages, lueurs et éclairs (48 × 5 ticks, sprites et couleurs EXACTS de la planche), plus un Top vide.
+- **Fidélité** (seuil 35) : sable 3,9, falaise 10,2, ciel 6,9, nuages 2,9 / 6,8.
+- **Contrôles** : 10 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+
 ## Fin Couloir violet V2 : feux follets, FCO2 (1er octobre 2026)
 
 **Demande** : « rajoute de feu folet dans cette salle améliore la et passe a la prochaine map ». FCO1 est conservée ; **FCO2** est une nouvelle version avec feux follets et lueur. Biome et portée restent **à confirmer**.

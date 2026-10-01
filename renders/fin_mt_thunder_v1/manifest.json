@@ -1,0 +1,471 @@
+{
+  "lot": "fin_mt_thunder_v1",
+  "prefix": "FTH1",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "branche de session (EWC1 et ESN1 pour les utilitaires, EMT1 pour le sable et la planche des eclairs) ; aucun emprunt aux branches soeurs",
+  "biome": "sommet d orage au-dessus des nuages (grand plateau de sable, estrade de roche), choisi par l agent ; a confirmer",
+  "method": "textures canoniques = rendu genere REFERENCE : rip passe au generateur ; decor complet et sol complet generes avec le rip en reference ; eclairs et arc Flash copies de la planche du rip",
+  "reference_da": {
+    "file": "Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png",
+    "sha256": "6f1dc6a9a907fff7e3e8f57ea3a97a3e0a5de36312ce7939d7834f6d407da416",
+    "scene_rows": [
+      0,
+      352
+    ],
+    "titre": "Mt. Thunder, salle du boss (Red Rescue Team, GBA) : nom de fichier de la planche",
+    "deja_utilise_hors_serie": "mt_thunder_orage_v1 sur 01a0d8a8, 01a0d9b3, 01a0d9f7 (rien repris)"
+  },
+  "generation": [
+    {
+      "file": "decor.png",
+      "images": [
+        "Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png"
+      ],
+      "prompt": "Use EXACTLY the same textures, palette and pixel-art style as the top part of the reference image (Pokemon Mystery Dungeon Mt. Thunder summit): same pale yellow sandy ground with tiny grey pebbles, same brown rocky cliff edges with cracks, same small pointed tan rock spikes, same scalloped storm clouds in grey-purple tones (darker purple-grey clouds higher up, light grey and white clouds lower down), same dark grey storm sky. Make a NEW, larger top-down map: the END-OF-DUNGEON BOSS SUMMIT. WIDE LANDSCAPE 4:3, zoomed out so the summit feels vast. Layout: the player arrives at the SOUTH (bottom edge center) on a narrow sandy mountain ridge path rising out of the clouds; the path climbs north and opens onto a very large, wide, round sandy summit plateau (a boss arena) edged all around by brown rocky cliffs, mostly open flat sand in the middle with only a few rock spikes and pebbles near the edges; at the NORTH (top center) a broad raised rocky crag of the same brown rock forming a natural stone dais, WITHOUT any cave or dark opening, with sand reaching right to its foot. A sea of scalloped storm clouds fills the left and right sides and the bottom corners; dark storm sky at the top corners. No lightning, no characters, no text, no UI, no border.",
+      "essais": "premier essai ; 1200 x 896 (4:3), conforme"
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png"
+      ],
+      "prompt": "Fill the ENTIRE image edge to edge with only the pale yellow sandy ground texture from the reference image's summit plateau: same pale yellow sand colour, same subtle pixel-art speckle texture and faint darker patches, keep the texture detail. No pebbles, no rocks, no cliffs, no clouds, no dark areas. Wide landscape 4:3.",
+      "essais": "COPIE du sol complet d EMT1 (source/entree_mt_thunder_sud_nord_v1/bruts/sol_complet.png, memes octets) : moyenne (234.1,225.0,157.0), distance 3.7 au sable du rip ; pas de nouvelle generation"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/fin_mt_thunder_v1/bruts/decor.png",
+      "sha256": "17edc89d6050f8eb0ade0f5be411872e2160b3b8df66e72a6e8d7857978e84ee",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_mt_thunder_v1/bruts/sol_complet.png",
+      "sha256": "29287ddf22ffeb0a350921aeccc54173701ce803909810db76750ade58240f73",
+      "size": [
+        1200,
+        896
+      ]
+    }
+  ],
+  "segmentation_mesures": {
+    "pics": 6,
+    "cailloux": 48
+  },
+  "fidelite_rip": {
+    "methode": "moyenne RGB par matiere, meme classifieur pixel sur la scene du rip (y < 352) et sur le brut ; distance euclidienne ; seuil 35 ; gris de l orage mesures PAR TON",
+    "brut": {
+      "sable": {
+        "rip_rgb": [
+          231.5,
+          222.3,
+          156.5
+        ],
+        "decor_rgb": [
+          230.3,
+          220.8,
+          155.0
+        ],
+        "distance": 2.4
+      },
+      "roche": {
+        "rip_rgb": [
+          166.1,
+          141.3,
+          115.7
+        ],
+        "decor_rgb": [
+          161.9,
+          135.8,
+          111.6
+        ],
+        "distance": 8.0
+      },
+      "ciel": {
+        "rip_rgb": [
+          64.2,
+          56.2,
+          64.1
+        ],
+        "decor_rgb": [
+          60.5,
+          53.3,
+          61.2
+        ],
+        "distance": 5.5
+      },
+      "nuages_sombres": {
+        "rip_rgb": [
+          127.7,
+          119.7,
+          127.7
+        ],
+        "decor_rgb": [
+          126.3,
+          118.3,
+          126.2
+        ],
+        "distance": 2.5
+      },
+      "nuages_clairs": {
+        "rip_rgb": [
+          219.3,
+          219.2,
+          219.2
+        ],
+        "decor_rgb": [
+          216.6,
+          216.5,
+          216.2
+        ],
+        "distance": 4.9
+      }
+    },
+    "calques_finaux": {
+      "sable:sable": {
+        "calque": "sable",
+        "matiere": "sable",
+        "rgb": [
+          230.1,
+          219.8,
+          153.8
+        ],
+        "distance_rip": 3.9
+      },
+      "falaise:roche": {
+        "calque": "falaise",
+        "matiere": "roche",
+        "rgb": [
+          160.7,
+          134.3,
+          110.7
+        ],
+        "distance_rip": 10.2
+      },
+      "ciel:ciel": {
+        "calque": "ciel",
+        "matiere": "ciel",
+        "rgb": [
+          59.8,
+          52.7,
+          60.0
+        ],
+        "distance_rip": 6.9
+      },
+      "nuages:nuages_sombres": {
+        "calque": "nuages",
+        "matiere": "nuages_sombres",
+        "rgb": [
+          125.7,
+          118.0,
+          126.4
+        ],
+        "distance_rip": 2.9
+      },
+      "nuages:nuages_clairs": {
+        "calque": "nuages",
+        "matiere": "nuages_clairs",
+        "rgb": [
+          215.3,
+          215.7,
+          215.1
+        ],
+        "distance_rip": 6.8
+      }
+    },
+    "nuages_un_seul_groupe_ecarte": {
+      "distance": 47.2,
+      "raison": "moyenne de tons discrets ponderee par leurs proportions (ciel sombre abondant dans le rip, bas de carte blanc dans le brut) : mesure la composition, pas la couleur ; remplacee par la mesure par ton"
+    },
+    "sol_complet": 3.7,
+    "eclairs": "pixels et couleurs EXACTS de la planche du rip"
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "methode": "moyenne ponderee par classe (BOX), attribution exclusive par poids maximal",
+    "palettes": {
+      "sable": {
+        "calques": [
+          "sol_complet",
+          "sable"
+        ],
+        "couleurs": 32
+      },
+      "roche": {
+        "calques": [
+          "cailloux",
+          "pics",
+          "falaise"
+        ],
+        "couleurs": 96
+      },
+      "orage": {
+        "calques": [
+          "ciel",
+          "nuages"
+        ],
+        "couleurs": 32
+      }
+    }
+  },
+  "segmentation": "sable = r > 195, g > 175, r-b > 45, fermé/ouvert 2 px, composantes > 8000 px (le dessus de l'estrade compte), trous\n    bouchés ; relief = sable + roche brune (r > g >= b, r-b >= 25), fermé 3 px, trous bouchés, > 50000 px ; îlots = trous\n    du sable qui ne sont pas du sable, ouverts 1 px, fermés 2 px et bouchés (pics creux) : >= 150 px = pics (et pierres\n    moussues), 12 à 150 px = cailloux ; falaise = toute la roche (parois du plateau et face de l'estrade) ; ciel = gris de\n    lum < 90 hors relief, ouvert 3 px, relié au bord haut ; nuages = le reste.",
+  "layers": [
+    {
+      "file": "calques/FTH1_00_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FTH1_01_sable.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FTH1_02_cailloux.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FTH1_03_pics.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FTH1_04_falaise.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FTH1_05_ciel.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FTH1_06_nuages.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "animation/lueurs/FTH1_07_lueurs_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    },
+    {
+      "file": "animation/eclairs/FTH1_08_eclairs_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    }
+  ],
+  "eclairs": {
+    "boites_rip": {
+      "1": [
+        372,
+        443,
+        121,
+        129
+      ],
+      "2": [
+        372,
+        436,
+        169,
+        185
+      ],
+      "3": [
+        372,
+        498,
+        219,
+        243
+      ],
+      "4": [
+        372,
+        475,
+        284,
+        307
+      ]
+    },
+    "flash_rip": [
+      393,
+      401,
+      15,
+      55
+    ],
+    "pastilles": {
+      "normal": [
+        [
+          240,
+          240,
+          128
+        ],
+        [
+          240,
+          240,
+          0
+        ]
+      ],
+      "fading": [
+        [
+          184,
+          176,
+          120
+        ],
+        [
+          160,
+          152,
+          32
+        ]
+      ]
+    },
+    "couleurs": "eclair = pastille vive (240,240,0) puis (160,152,32) ; arc = pastille pale (240,240,128) puis (184,176,120) : interpretation des pastilles Normal / Fading (paire pale, paire vive)",
+    "frappes": [
+      [
+        1,
+        false,
+        60,
+        50,
+        0
+      ],
+      [
+        3,
+        true,
+        716,
+        140,
+        8
+      ],
+      [
+        2,
+        false,
+        40,
+        300,
+        16
+      ],
+      [
+        4,
+        true,
+        700,
+        330,
+        24
+      ],
+      [
+        3,
+        false,
+        30,
+        440,
+        32
+      ],
+      [
+        2,
+        true,
+        690,
+        60,
+        40
+      ]
+    ],
+    "arcs": [
+      [
+        43,
+        118
+      ],
+      [
+        697,
+        263
+      ],
+      [
+        26,
+        361
+      ],
+      [
+        682,
+        430
+      ],
+      [
+        32,
+        563
+      ],
+      [
+        679,
+        121
+      ]
+    ],
+    "normal_phases": 2,
+    "fading_phases": 2,
+    "phases": 48,
+    "frame_length_ticks": 5,
+    "miroir": "eclair 1 a gauche seulement ; 2 a 4 a gauche ou en miroir a droite (note de la planche)",
+    "limite": "l eclair 3 touche le bas de la planche (y = 498) : il est peut-etre tronque",
+    "origine": "dessin et couleurs EXACTS de la planche ; placement, cadence et arc au pied de l eclair crees par nous"
+  },
+  "scene_loop_ticks": 240,
+  "access": {
+    "entry_px": [
+      376,
+      560
+    ],
+    "boss_px": [
+      376,
+      232
+    ],
+    "objective_px": [
+      384,
+      112
+    ],
+    "path_found_16x16": true,
+    "path_to_boss": true,
+    "path_to_objective": true,
+    "cells_explored": 453,
+    "blocked_cells": 4724,
+    "total_cells": 6912,
+    "walkable_cells": 2188,
+    "rule": "case bloquee si > 25 % hors praticable (sable et cailloux relies au bord sud)",
+    "boss": "case 2 x 2 libre la plus proche du centre de gravite du plateau",
+    "objectif": "case libre la plus haute de la colonne centrale (pied de l estrade du nord)"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "fth1_fin_mt_thunder",
+    "namespace": "fin_mt_thunder",
+    "tiles_per_bank": {
+      "FTH1_00_SOL": 6884,
+      "FTH1_01_SABLE": 2617,
+      "FTH1_02_CAILLOUX": 111,
+      "FTH1_03_PICS": 62,
+      "FTH1_04_FALAISE": 1272,
+      "FTH1_05_CIEL": 571,
+      "FTH1_06_NUAGES": 2165,
+      "FTH1_07_LUEURS": 101,
+      "FTH1_08_ECLAIRS": 293
+    },
+    "banks": [
+      "FTH1_00_SOL",
+      "FTH1_01_SABLE",
+      "FTH1_02_CAILLOUX",
+      "FTH1_03_PICS",
+      "FTH1_04_FALAISE",
+      "FTH1_05_CIEL",
+      "FTH1_06_NUAGES",
+      "FTH1_07_LUEURS",
+      "FTH1_08_ECLAIRS"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}
