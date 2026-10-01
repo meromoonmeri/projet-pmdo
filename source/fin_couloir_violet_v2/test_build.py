@@ -1,0 +1,326 @@
+"""Tests dédiés — Fin Couloir violet V1 (FCO2, 4:3 vaste).
+.venv/bin/python -m unittest source.fin_couloir_violet_v2.test_build -v
+Contrôles d'images, de formats, de palettes, de fidélité au rip, de cadence et de grille : PAS un test du moteur PMDO.
+"""
+from pathlib import Path
+import hashlib, importlib.util, io, json, re, unittest, zipfile
+import numpy as np
+from PIL import Image
+from scipy import ndimage as nd
+
+HERE = Path(__file__).resolve().parent
+R = HERE.parents[1]
+O = R / 'renders/fin_couloir_violet_v2'
+S = R / '.cache/fin_couloir_violet_v2/fin_couloir_violet_v2'
+M = json.loads((O / 'manifest.json').read_text())
+W, H = M['size_px']
+NAMES = [Path(L['file']).name.replace('_fNN', '') for L in M['layers']]
+STATIC = ('sol', 'ombres', 'gravillons', 'blocs', 'rochers', 'falaise', 'vide')
+REF = R / 'large.S05P03A.png.301f7a1eadda348357be0801e81faa2a.png'
+
+
+def load(p):
+    return np.array(Image.open(p).convert('RGBA'))
+
+
+def loadmod(name, path):
+    sp = importlib.util.spec_from_file_location(name, path)
+    m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); return m
+
+
+def expand(L):
+    if L['phases'] == 1:
+        return [load(O / L['file'])]
+    return [load(O / L['file'].replace('fNN', f'f{t:02d}')) for t in range(L['phases'])]
+
+
+STACK = [expand(L) for L in M['layers']]
+BY = {re.sub(r'^FCO2_\d\d_', '', Path(n).stem): fr for n, fr in zip(NAMES, STACK)}
+ORDER = list(BY)
+MASK = {k: np.array(Image.open(O / f'masques/FCO2_masque_{k}.png')) > 0 for k in (*STATIC, 'praticable')}
+B = loadmod('fco1_build', HERE / 'build.py')
+
+
+def alpha(a):
+    return a[..., 3] == 255
+
+
+def colors(frames):
+    return {tuple(int(v) for v in c) for a in frames for c in np.unique(a[a[..., 3] > 0][:, :3], axis=0)}
+
+
+def rip_colors():
+    a = np.array(Image.open(REF).convert('RGB'))
+    return {tuple(int(v) for v in c) for c in np.unique(a.reshape(-1, 3), axis=0)}
+
+
+def lum(px):
+    return px[..., :3].astype(float) @ [.299, .587, .114]
+
+
+def pebbles():
+    return {k: load(O / f'poses/FCO2_gravillon_{k}.png') for k in M['eboulis']['gravillons_rip']}
+
+
+def puffs():
+    return [load(O / f'poses/FCO2_poussiere_{i}.png') for i in range(len(M['poussiere']['fenetres']))]
+
+
+def sha_(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+
+class Build(unittest.TestCase):
+    def test_raw_hashes_and_reference(self):
+        for r in M['raw_inputs']:
+            self.assertEqual(hashlib.sha256((R / r['file']).read_bytes()).hexdigest(), r['sha256'])
+        ref = M['reference_da']
+        self.assertEqual(ref['file'], REF.name)
+        self.assertEqual(hashlib.sha256(REF.read_bytes()).hexdigest(), ref['sha256'])
+        g = M['generation']
+        self.assertEqual([x['file'] for x in g], ['decor.png', 'sol_complet.png', 'poussiere_poses.png', 'feux_follets_poses.png'])
+        V1 = R / 'source/fin_couloir_violet_v1/bruts/decor.png'                                    # décor de FCO1, mêmes octets
+        self.assertEqual((HERE / 'bruts/decor.png').read_bytes(), V1.read_bytes())
+        self.assertTrue(all(REF.name in x['images'] and len(x['prompt']) > 100 for x in g))       # rip en référence
+        for f in ('sol_complet.png', 'poussiere_poses.png'):                                       # copies d'ECV1, même octets
+            self.assertEqual((HERE / 'bruts' / f).read_bytes(), (R / 'source/entree_couloir_violet_sud_nord_v1/bruts' / f).read_bytes())
+        self.assertNotEqual(sha_(HERE / 'bruts/decor.png'), sha_(R / 'source/entree_couloir_violet_sud_nord_v1/bruts/decor.png'))
+        self.assertIn('choisi par l agent', M['biome'])
+        self.assertFalse(M['art_approved']); self.assertFalse(M['pmdo']['runtime_tested'])
+
+    def test_sizes_names_alpha_no_magenta(self):
+        self.assertEqual(len(NAMES), len(set(NAMES))); self.assertTrue(all(n.startswith('FCO2_') for n in NAMES))
+        self.assertEqual((W, H, W % 8, H % 8), (768, 576, 0, 0)); self.assertEqual(W * 3, H * 4)   # 4:3
+        n = M['normalization']; self.assertAlmostEqual(n['scale'], 576 / 896)
+        self.assertEqual(n['scaled'][0] - sum(n['crop_x']), W)
+        for name, frames in BY.items():
+            for a in frames:
+                self.assertEqual(a.shape[:2], (H, W))
+                self.assertTrue(set(np.unique(a[..., 3])) <= {0, 255}, name)
+                v = a[a[..., 3] > 0].astype(int)
+                bad = (v[:, 0] - v[:, 1] > 60) & (v[:, 2] - v[:, 1] > 60)
+                self.assertEqual(int(bad.sum()), 0, name)
+
+    def test_multicalque_full_coverage_and_order(self):
+        self.assertEqual(ORDER, ['sol_complet', *STATIC, 'eboulis', 'poussiere', 'lueur', 'feux_follets'])
+        self.assertTrue(alpha(BY['sol_complet'][0]).all())
+        fixed = [alpha(BY[k][0]) for k in STATIC]
+        self.assertTrue((np.sum(fixed, 0) == 1).all())                      # calques fixes : partition exacte
+        for k in STATIC:
+            self.assertGreater(int(alpha(BY[k][0]).sum()), 500, k)
+            self.assertTrue((alpha(BY[k][0]) == MASK[k]).all(), k)
+        sol = BY['sol_complet'][0][..., :3].astype(float).reshape(-1, 3)
+        self.assertGreater(len(colors(BY['sol_complet'])), 12)              # texture, pas un aplat
+        self.assertGreater(sol.mean(0)[0], sol.mean(0)[1] + 8)              # mauve (r > g)
+
+    def test_palettes_et_matieres(self):
+        for g, v in M['normalization']['palettes'].items():
+            self.assertLessEqual(len(colors([BY[k][0] for k in v['calques']])), v['couleurs'], g)
+        L = lambda k: BY[k][0][alpha(BY[k][0])][:, :3].astype(int)
+        self.assertLess(float(np.median(lum(L('vide')))), 30)
+        s = L('sol'); self.assertGreater(float((s[:, 0] > s[:, 1] + 4).mean()), 0.8)          # sol mauve
+        for k in ('rochers', 'blocs', 'falaise'):
+            p = L(k).mean(0); self.assertGreater(p[2], p[0] + 25, k); self.assertLess(abs(p[0] - p[1]), 12, k)   # bleu-violet
+        lab, n = nd.label(MASK['blocs']); self.assertGreaterEqual(n, 6)
+        lab, n = nd.label(MASK['gravillons']); self.assertGreaterEqual(n, 15)
+        # Blocs et gravillons posés dans le sol (entourés de sol / ombres) ; rochers autour du tunnel.
+        floor = MASK['sol'] | MASK['ombres']
+        ring = nd.binary_dilation(MASK['blocs'], iterations=2) & ~MASK['blocs']
+        self.assertGreater(float(floor[ring].mean()), 0.9)
+        # Pile de rochers géante au nord : un bloc de roche au centre du haut de l'arène, au contact du sol.
+        pile = MASK['rochers'] | MASK['blocs']
+        north = np.zeros((H, W), bool); north[:150, W // 2 - 40:W // 2 + 40] = True
+        self.assertGreater(int((pile & north).sum()), 2500)
+        self.assertTrue((nd.binary_dilation(pile & north, iterations=3) & floor).any())
+        ys, _ = np.nonzero(MASK['falaise']); self.assertLess(float(np.median(ys)), H * 0.35)   # falaise au fond
+
+    def test_ombres_et_sol_continu(self):
+        L = lambda k: lum(BY[k][0][alpha(BY[k][0])])
+        self.assertLess(L('ombres').mean(), L('sol').mean() - 15)             # sol assombri
+        o = BY['ombres'][0][alpha(BY['ombres'][0])][:, :3].astype(int)
+        self.assertGreater(float((o[:, 0] >= o[:, 1]).mean()), 0.8)          # reste du sol mauve
+        base = nd.distance_transform_edt(~(MASK['rochers'] | MASK['blocs'] | MASK['gravillons'] | MASK['falaise']
+                                           | MASK['vide']))
+        self.assertLessEqual(float(base[MASK['ombres']].max()), 30 * 576 / 896 + 3)   # au pied des parois seulement
+        # Aucune bouche sombre : pas de zone très sombre à l'intérieur du sol (le vide reste hors de l'arène).
+        dark = lum(BY['sol_complet'][0][..., :3].astype(float)) < 40
+        self.assertEqual(int(dark.sum()), 0)
+        # Couloir sud continu jusqu'à l'arène.
+        col = MASK['praticable'][H - 120:H, :]
+        self.assertTrue(col[-1].any() and col[0].any())
+
+    def test_fidelite_rip(self):
+        dec, ref = B.rgb(HERE / 'bruts/decor.png'), B.rgb(REF)
+        fid = B.fidelity(dec, ref)
+        for k, v in fid.items():
+            self.assertLess(v['distance'], 35, (k, v))
+            self.assertAlmostEqual(v['distance'], M['fidelite_rip']['brut'][k]['distance'], places=1)
+        for nm, v in M['fidelite_rip']['calques_finaux'].items():
+            lay = BY[nm][0]; px = lay[alpha(lay)][:, :3].astype(float)
+            sel = B.materials(px.reshape(-1, 1, 3))[v['matiere']][:, 0]
+            self.assertGreater(int(sel.sum()), 50, nm)                     # la matière est bien présente
+            d = float(np.linalg.norm(px[sel].mean(0) - np.array(fid[v['matiere']]['rip_rgb'])))
+            self.assertLess(d, 35, (nm, d)); self.assertAlmostEqual(d, v['distance_rip'], places=1)
+        f = B.rgb(HERE / 'bruts/sol_complet.png').reshape(-1, 3).mean(0)
+        self.assertLess(float(np.linalg.norm(f - np.array(fid['sol']['rip_rgb']))), 35)
+
+    def test_eboulis_gravillons_exacts_boucle_fermee(self):
+        E = M['eboulis']; fr = BY['eboulis']; ps = pebbles(); ref = B.rgb(REF)
+        self.assertEqual((len(fr), E['frame_length_ticks']), (24, 5))
+        for k, (y, x, h, w) in E['gravillons_rip'].items():                 # pixels EXACTS du rip
+            p = ps[k]; self.assertEqual(p.shape[:2], (h, w))
+            self.assertTrue((p[alpha(p)][:, :3] == ref[y:y + h, x:x + w][alpha(p)]).all(), k)
+            self.assertGreater(int(alpha(p).sum()), 15, k)
+        self.assertTrue(colors(fr) <= rip_colors())                         # couleurs EXACTES du rip
+        spots = [tuple(s) for s in E['chutes']]; self.assertEqual(len(spots), 4)
+        calc_p, calc_d = B.anim_frames(ps, puffs(), spots)
+        for t in range(24):
+            self.assertTrue((fr[t] == calc_p[t]).all(), t); self.assertTrue((BY['poussiere'][t] == calc_d[t]).all(), t)
+        p24, d24 = B.anim_frames(ps, puffs(), spots, ts=[24])
+        self.assertTrue((p24[0] == fr[0]).all()); self.assertTrue((d24[0] == BY['poussiere'][0]).all())   # 24 = 0
+        floor = MASK['sol'] | MASK['ombres']; wall = MASK['rochers'] | MASK['blocs']
+        for x, y, name, off, sens in spots:
+            self.assertTrue(floor[y, x] and wall[y - 8, x] and wall[y - 20, x])   # au pied d'une paroi
+            # Trajet continu : chute accélérée (pas croissants, <= 9 px), roulement <= 1 px / phase, repos au sol.
+            st = [B.pebble_state(u, sens) for u in range(24)]
+            vis = [s for s in st if s]; self.assertEqual(len(vis), E['visible_phases'])
+            self.assertTrue(all(abs(vis[i + 1][1] - vis[i][1]) <= 9 and abs(vis[i + 1][0] - vis[i][0]) <= 1
+                                for i in range(len(vis) - 1)))
+            steps = np.diff(E['chute_dy']); self.assertTrue((steps > 0).all() and (np.diff(steps) > 0).all())
+            self.assertEqual(vis[-1][1], 0)
+            self.assertIsNone(st[23]); self.assertEqual(st[0][1], E['chute_dy'][0])   # 23 absent -> 0 recommence
+        for a in fr + BY['poussiere']:
+            self.assertFalse((alpha(a) & MASK['vide']).any())              # rien dans le vide hors carte
+        n_vis = [int(alpha(a).sum() > 0) for a in fr]; self.assertTrue(all(n_vis))   # toujours un gravillon en scène
+
+    def test_poussiere_poses(self):
+        P = M['poussiere']; ps = puffs(); fr = BY['poussiere']
+        self.assertEqual(len(ps), 4); self.assertLessEqual(len(colors(fr)), 6)
+        widths = [p.shape[1] for p in ps]; self.assertTrue(8 <= widths[0] < widths[1])   # nuage qui grossit
+        self.assertTrue(all(w <= 28 for w in widths))
+        for p in ps[:3]:                                                    # nuages pleins : une tache principale
+            lab, n = nd.label(alpha(p), structure=np.ones((3, 3))); sz = nd.sum(alpha(p), lab, range(1, n + 1))
+            self.assertGreater(float(sz.max() / sz.sum()), 0.8)
+        for p in ps:
+            v = p[alpha(p)][:, :3].astype(int); self.assertTrue(((v[:, 2] - v[:, 0]) < 40).all())   # pas de rocher bleu
+        busy = [t for t, a in enumerate(fr) if alpha(a).any()]
+        self.assertEqual(len(busy), 16)                                     # 4 chutes x 4 phases, sans recouvrement
+
+    def test_feux_follets(self):
+        F = M['feux_follets']; fr = BY['feux_follets']
+        ps = {k: load(O / f'poses/FCO2_feu_{k}.png') for k in F['poses']}
+        self.assertEqual(len(ps), 12); self.assertEqual((len(fr), F['frame_length_ticks']), (24, 5))
+        self.assertTrue(all(p.shape[0] == p.shape[1] == B.FF_WIN // B.FF_K for p in ps.values()))
+        self.assertLessEqual(len(colors(fr)), 12)
+        for k, p in ps.items():                                             # un feu = un corps principal (pointe détachée admise)
+            lab, n = nd.label(alpha(p), structure=np.ones((3, 3))); sz = nd.sum(alpha(p), lab, range(1, n + 1))
+            self.assertGreater(float(sz.max() / sz.sum()), 0.85, k); self.assertGreater(int(alpha(p).sum()), 60, k)
+        g, v = ps['glace_0'][alpha(ps['glace_0'])][:, :3].astype(int), ps['violet_0'][alpha(ps['violet_0'])][:, :3].astype(int)
+        self.assertGreater(lum(g).mean(), lum(v).mean() + 20)               # glace plus clair que violet
+        self.assertGreater(v[:, 0].mean(), v[:, 1].mean() + 20)             # violet : rouge et bleu > vert
+        wisps = [tuple(w) for w in F['feux']]; self.assertEqual(len(wisps), 5)
+        calc = B.wisp_frames(ps, wisps)
+        for t, a in enumerate(fr):
+            self.assertTrue((a == calc[t]).all(), t); self.assertGreater(int(alpha(a).sum()), 5 * 60, t)
+        self.assertTrue((B.wisp_frames(ps, wisps, ts=[24])[0] == fr[0]).all())      # 24 = 0
+        arene = nd.binary_dilation(MASK['praticable'], iterations=12)
+        for w in wisps:                                                     # vols continus, fermés, au-dessus de l'arène
+            pos = [B.wisp_pos(w, t) for t in range(25)]
+            self.assertTrue(all(np.hypot(pos[t + 1][0] - pos[t][0], pos[t + 1][1] - pos[t][1]) < 12 for t in range(24)))
+            self.assertAlmostEqual(pos[24][0], pos[0][0]); self.assertAlmostEqual(pos[24][1], pos[0][1])
+            self.assertTrue(all(arene[int(round(y)), int(round(x))] for x, y in pos))
+        for a in fr:
+            self.assertFalse((alpha(a) & (MASK['vide'] | MASK['falaise'])).any())   # jamais dans le vide ni sur la falaise
+        self.assertEqual(sorted({w[5] for w in wisps}), sorted(w[5] for w in wisps))   # décalages tous distincts
+
+    def test_lueur(self):
+        Lr = M['lueur']; fr = BY['lueur']; self.assertEqual((len(fr), Lr['frame_length_ticks']), (24, 5))
+        self.assertTrue(colors(fr) <= rip_colors())                          # couleurs EXACTES du rip, pas d'alpha intermédiaire
+        base = np.zeros((H, W, 4), 'uint8')
+        for k in STATIC:
+            base[alpha(BY[k][0])] = BY[k][0][alpha(BY[k][0])]
+        floor = MASK['sol'] | MASK['ombres'] | MASK['gravillons']; rock = MASK['blocs'] | MASK['rochers'] | MASK['falaise']
+        ref = B.rgb(REF); ramps = B.rip_ramps(ref)
+        wisps = [tuple(w) for w in M['feux_follets']['feux']]
+        calc = B.lueur_frames(base[..., :3], floor, rock, ramps, wisps)
+        for t, a in enumerate(fr):
+            self.assertTrue((a == calc[t]).all(), t)
+            lit = alpha(a)
+            self.assertTrue((lit <= (floor | rock)).all())                  # seulement sol et rochers, jamais le vide
+            self.assertGreater(float(lum(a[lit][:, :3]).mean()), float(lum(base[lit][:, :3]).mean()) + 3)   # plus clair
+            self.assertTrue((lum(a[lit][:, :3]) > lum(base[lit][:, :3]) + 0).all())
+            self.assertGreater(int(lit.sum()), 1500)
+            for w in wisps:                                                  # chaque feu éclaire autour de lui
+                x, y = B.wisp_pos(w, t); y += Lr['decalage_y']
+                yy, xx = np.mgrid[:H, :W]; near = np.hypot(xx - x, yy - y) <= 8
+                self.assertGreater(float(lit[near & (floor | rock)].mean()), 0.7)
+        self.assertEqual(len({int(alpha(a).sum()) for a in fr}) > 6, True)   # le rayon pulse et les feux bougent
+        self.assertTrue((B.lueur_frames(base[..., :3], floor, rock, ramps, wisps, ts=[24])[0] == fr[0]).all())   # 24 = 0
+
+    def test_ora_and_scene(self):
+        with zipfile.ZipFile(O / 'FCO2_fin_couloir_violet_calques.ora') as z:
+            merged = np.array(Image.open(io.BytesIO(z.read('mergedimage.png'))).convert('RGBA'))
+            self.assertIn(b'Couloir violet', z.read('stack.xml'))
+        sc = Image.new('RGBA', (W, H))
+        for frames in STACK:
+            sc.alpha_composite(Image.fromarray(frames[0]))
+        self.assertTrue((np.array(sc) == merged).all())
+        self.assertTrue((np.array(sc) == load(O / 'review/FCO2_scene_t000.png')).all())
+        for L in M['layers']:
+            self.assertEqual(M['scene_loop_ticks'] % (L['phases'] * L['ticks']) if L['phases'] > 1 else 0, 0)
+
+    def test_access(self):
+        a = M['access']; self.assertTrue(a['path_found_16x16'] and a['path_to_boss'] and a['path_to_objective'])
+        ex, ey = a['entry_px']; bx, by = a['boss_px']; ox, oy = a['objective_px']
+        self.assertGreater(ey, H - 64)
+        self.assertTrue(MASK['praticable'][ey:ey + 16, ex:ex + 16].mean() > 0.9)     # arrivée dans le couloir sud
+        self.assertTrue(MASK['praticable'][by:by + 16, bx:bx + 16].mean() > 0.9)     # boss sur le sol
+        dn = nd.distance_transform_edt(MASK['praticable'])
+        self.assertGreater(float(dn[by + 8, bx + 8]), 40)                            # boss au coeur de l'arène
+        self.assertLess(abs(ox + 8 - W // 2), 72)                                    # objectif dans la colonne centrale
+        self.assertLess(oy, by - 80)                                                 # objectif au nord du boss
+        pile = MASK['rochers'] | MASK['blocs']
+        self.assertTrue((nd.binary_dilation(pile, iterations=24)[oy:oy + 16, ox:ox + 16]).any())   # au pied de la pile
+        self.assertEqual(a['walkable_cells'] + a['blocked_cells'], (W // 8) * (H // 8))
+        self.assertGreater(a['walkable_cells'], 1500)
+        doc = json.loads((S / f"Data/Ground/{M['pmdo']['asset']}.rsground").read_text())
+        blocked = np.array([[c['Tags'] for c in col] for col in doc['Object']['obstacles']]).T.astype(bool)
+        for k in ('blocs', 'rochers', 'falaise', 'vide'):
+            cells = MASK[k].reshape(H // 8, 8, W // 8, 8).mean((1, 3)) > 0.5
+            self.assertTrue(blocked[cells].all(), k)
+        cells = MASK['praticable'].reshape(H // 8, 8, W // 8, 8).mean((1, 3)) == 1
+        self.assertFalse(blocked[cells].any())
+        self.assertFalse((MASK['praticable'] & (MASK['rochers'] | MASK['blocs'] | MASK['vide'])).any())
+
+    def test_prefix_and_namespace_unique(self):
+        for p in (R / 'source').glob('*/build.py'):
+            if p.parent != HERE:
+                s = p.read_text(errors='ignore')
+                self.assertNotIn("PFX = 'FCO2'", s, p); self.assertNotIn("'fin_couloir_violet_v2'", s, p)
+
+    def test_ground_roundtrip(self):
+        doc = json.loads((S / f"Data/Ground/{M['pmdo']['asset']}.rsground").read_text()); o = doc['Object']
+        self.assertEqual(doc['Version'], '0.8.12.0'); self.assertEqual(len(o['Layers']), len(STACK) + 1)
+        self.assertEqual(o['Layers'][-1]['Layer'], 4)
+        nr = loadmod('native_reader', R / 'source/cote_v5_expeditions/audit_references.py')
+        banks = {p.stem: nr.tiles(p)[1] for p in (S / 'Content/Tile').glob('*.tile')}
+        self.assertEqual(set(banks), set(M['pmdo']['banks']))
+        for li, (frames, L) in enumerate(zip(STACK, M['layers'])):
+            for t in sorted({0, len(frames) // 2, len(frames) - 1}):
+                out = np.zeros((H, W, 4), 'uint8')
+                for x, col in enumerate(o['Layers'][li]['Tiles']):
+                    for y, cell in enumerate(col):
+                        for track in cell['Layers']:
+                            if len(track['Frames']) > 1:
+                                self.assertEqual((len(track['Frames']), track['FrameLength']), (len(frames), L['ticks']))
+                            f = track['Frames'][t % len(track['Frames'])]
+                            out[y*8:y*8+8, x*8:x*8+8] = np.array(nr.straight(banks[f['Sheet']][f['TexLoc']['X'], f['TexLoc']['Y']]))
+                self.assertTrue((out == frames[t]).all(), (li, t))
+        self.assertEqual(sum(w['Tags'] for c in o['obstacles'] for w in c), M['access']['blocked_cells'])
+        self.assertEqual({m['EntName'] for m in o['Entities'][0]['Markers']}, {'entrance', 'boss', 'objectif'})
+        tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
+        self.assertEqual(set(tools.read_index(S / 'Content/Tile/index.idx')), set(M['pmdo']['banks']))
+
+
+if __name__ == '__main__':
+    unittest.main()

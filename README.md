@@ -1,5 +1,14 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Couloir violet V2 : feux follets, FCO2 (1er octobre 2026)
+
+**Demande** : « rajoute de feu folet dans cette salle améliore la et passe a la prochaine map ». FCO1 est conservée ; **FCO2** est une nouvelle version avec feux follets et lueur. Biome et portée restent **à confirmer**.
+
+- Sorties : `renders/fin_couloir_violet_v2/`, aperçu `apercu_fin_couloir_violet_v2.html`, build `source/fin_couloir_violet_v2/build.py`.
+- **Ajouts** : calque animé de 5 feux follets (3 bleu glace, 2 violets ; huit fermé sur 24 phases, vacillement en 12 poses, dessin généré) et calque animé de lueur (sol et rochers éclaircis d'un à trois crans dans la rampe EXACTE du rip, sans alpha intermédiaire). Décor, collisions, éboulis et poussière repris de FCO1.
+- **Contrôles** : 14 tests PASS (FCO1 : 12 PASS toujours), 4 mutations détectées. `art_approved: false`, pas de runtime.
+- Les feux follets n'ont ni collision ni rôle de jeu.
+
 ## Fin Couloir violet : arène de rochers, FCO1 (1er octobre 2026)
 
 **Demande** : « la suite » (après FTC1). Suite de la série des fins de donjon dans l'ordre du mod : **FCO1** prolonge l'entrée ECV1 (Couloir violet). Biome et portée choisis par l'agent, **à confirmer**.

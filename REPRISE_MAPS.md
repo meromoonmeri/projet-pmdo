@@ -226,3 +226,7 @@ Réserves relevées dans V16 :
 - L’alignement sur 8 px et le nommage Halcyon ne prouvent pas un import moteur.
 
 Les succès de chargement PMDO cités dans les anciens rapports restent historiques ; aucun lancement PMDO, rendu GPU ou test de gameplay n’a été effectué dans cette reprise.
+
+## 1er octobre 2026 — FCO2 (Couloir violet V2, feux follets)
+
+Demande : « rajoute de feu folet dans cette salle améliore la et passe a la prochaine map ». `source/fin_couloir_violet_v2/` (préfixe FCO2, namespace `fin_couloir_violet_v2`, Ground `fco2_fin_couloir_violet`), sortie `renders/fin_couloir_violet_v2/`. FCO1 inchangée. Ajouts : calques `lueur` et `feux_follets` (24 × 5 ticks). La planche `feux_follets_poses.png` n'a pas respecté la grille demandée : fenêtres mesurées (108 px, réduction 1/3), troisième rangée (doublon violet) ignorée. Piège de test : la lueur ne peut pas être de la transparence (calques 0/255) : recoloration du sol avec les couleurs exactes du rip. Un pixel qui ne peut pas s'éclaircir (déjà en haut de la rampe) reste tel quel. 14 tests PASS, 4 mutations détectées (la mutation « lueur dans le vide » seule n'est visible que si le rayon atteint le vide : testée avec un rayon de 200 px). Prochaine fin : Mt. Thunder.
