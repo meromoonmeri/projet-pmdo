@@ -1,5 +1,16 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Jardin secret : feuilles, fleurs Halcyon, pétales, FJA1 (1er octobre 2026)
+
+**Demande** : « rajoute un calque de mouvement de feuille et des animation de fleur palika halcyon et des petale de fleur », puis « LA SUITE ! ». Dernière fin de la série : **FJA1** prolonge l'entrée EJS1 (Jardin secret). Biome et portée choisis par l'agent, **à confirmer**. Préfixe FJA1 (FJS1 = Jungle sud).
+
+- Sorties : `renders/fin_jardin_secret_v1/`, aperçu `apercu_fin_jardin_secret_v1.html`, build `source/fin_jardin_secret_v1/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `secretgarden.png` et le décor d'EJS1. Ce ne sont pas des tuiles natives. Le fond d'herbe est celui d'EJS1 (mêmes octets, testé).
+- **Layout** : allée au sud, arène ronde de prairie bordée de haies, souche à marches sous le rayon au nord. Marqueurs `entrance`, `boss` (centre), `objectif` (pied des marches) ; aucune sortie, aucun warp.
+- **Trois calques de végétation animés** : `feuilles` (houle d'ouest en est des amas de feuilles des arbres et des haies ; phase 0 = décor d'origine), `fleurs_halcyon` (14 touffes NATIVES de Palikadude/Halcyon, séquence 0/1/0/2 à 14 ticks, pixels sans retouche, attribution aux auteurs) et `petales` (38 pétales aux couleurs exactes des fleurs du rip). Rayon et lucioles repris d'EJS1 (24 × 7 ticks), boucle de 336 ticks.
+- **Fidélité** (seuil 35) : roche brute 33,8 et prairie 33,6 sont **proches du seuil**. Prairie relevée à b < 66.
+- **Contrôles** : 15 tests PASS, 6 mutations. Pas de runtime PMDO, `art_approved: false`.
+
 ## Fin Mt. Thunder : sommet d'orage, FTH1 (1er octobre 2026)
 
 **Demande** : « passe a la prochaine map » (après FCO2). Fin suivante de la série : **FTH1** prolonge l'entrée EMT1 (Mt. Thunder). Biome et portée choisis par l'agent, **à confirmer**. Préfixe FTH1 : FMT1 est cité comme repère par des branches sœurs, évité (signalé).
