@@ -1,5 +1,18 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Clairière tropicale : arène de jungle et lagon, FTC1 (1er octobre 2026)
+
+**Demande** : « vas-y go lance toi », après la proposition de poursuivre avec la fin Clairière tropicale. Suite de la série des fins de donjon dans l'ordre du mod : **FTC1** prolonge l'entrée ETC1. Biome et portée choisis par l'agent, **à confirmer**.
+
+- Sorties : `renders/fin_clairiere_tropicale_v1/`, aperçu `apercu_fin_clairiere_tropicale_v1.html`, build `source/fin_clairiere_tropicale_v1/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `large.S01P03A…png` et sur le décor d'ETC1. Ce ne sont pas des tuiles natives.
+- **Layout** : arrivée au sud par une piste de dalles, grande arène d'herbe ceinte de jungle, de palmiers et d'hibiscus, anneau de dalles au centre, lagon au nord avec falaise de terre et estrade de pierre. Marqueurs `entrance`, `boss` (centre), `objectif` (estrade) ; aucune sortie, aucun warp.
+- **Calques** : sol complet, herbe, dalles, touffes, fleurs, jungle, palmiers, estrade, rive, mer (24 × 5 ticks, vagues du rip vers la rive, donc vers le sud), papillons d'ETC1 (24 × 5 ticks), plus un Top vide.
+- **Décor écarté** : jungle trop sombre (calque final 35,1–35,4 pour un seuil de 35). Décor édité : jungle 28,9 sur le calque final. Les reflets olive de la jungle passaient pour des dalles : critère resserré et testé.
+- **Fidélité** (seuil 35) : herbe 21,7, jungle 28,9, dalles 15,1.
+- **Contrôles** : 12 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- Fins restantes : Couloir violet, Mt. Thunder, Jardin secret.
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
