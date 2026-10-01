@@ -1,5 +1,14 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## CLR2 — Colonnes Lances, sommet de la montagne (1er octobre 2026)
+
+**Demande** : « J'aimerais voir le site avec les map que tu as fait et que tu passe au sommet d'une montagne style colonne lance ». Le site (serveur d'aperçus, port 8000) est relancé. Nouvelle carte **CLR2** : la terrasse des colonnes au sommet d'une montagne de roche brune et de neige ; CLR1 (ruines flottantes) est conservée.
+
+- `renders/colonnes_lances_v2/CLR2/`, aperçu `apercu_colonnes_lances_sommet.html`, source `source/colonnes_lances_v2/`.
+- Terrasse ovale de briques, cinq colonnes, deux colonnes couchées, dais à vitrail au nord (loi de palette ROM), escalier taillé dans la roche au sud ; nuages qui dérivent, rochers, éclats.
+- **Aucune référence de montagne** : roche et neige ne sont pas mesurées contre le rip. Fidélité briques 9,8, piliers 10,3, nuages 8,0, escalier 28,9 (seuil 35).
+- 9 tests PASS, 3 mutations détectées sur 4. Pas de runtime PMDO, `art_approved: false`. Biome à confirmer.
+
 ## Mod des 16 fins de donjon (1er octobre 2026)
 
 Sur « bon la suite » : `renders/mod_guilde_fins_v1/guilde_fins_donjon_pmdo_0812.zip` (namespace `guilde_fins_donjon`), galerie `apercu_mod_guilde_fins_v1.html`, source `source/mod_guilde_fins_v1/`. Les 16 fins de la série (dont FGG1/FGG2 et FCO1/FCO2), banques et Grounds copiés octet pour octet. Il s'installe en même temps que le mod des entrées (`guilde_entrees_sud_nord`, v2). Aucune validation de l'utilisateur n'est enregistrée pour les fins ; aucun test en jeu PMDO. 7 tests PASS. Choix de l'agent, à confirmer.
