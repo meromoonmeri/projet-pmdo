@@ -1218,3 +1218,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
 - **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
 
+## Fin Mt. Thunder V2 — FTN1, ajouts à la recette
+
+- **Reprise** : quand toutes les fins restantes existent sur des branches sœurs (`gh api repos/<repo>/compare/main...<branche>`), demander à l'utilisateur (`ask_user`) : refaire ici, fusionner d'abord ou autre biome. Réponse ici : refaire, sans rien reprendre. Préfixe vérifié sur les sœurs (FTH1 pris, FMT1 repère) : **FTN1**.
+- **Fin construite depuis l'entrée** : copier le lot d'entrée avec `sed` (`entree_mt_thunder_sud_nord_v1` → `fin_mt_thunder_v2`, `EMT1` → `FTN1`, noms d'asset, aperçu), puis remplacer `classify`, les calques, les marqueurs, le manifeste et les tests. Les lois d'éclair restent celles de l'entrée ; seul le rythme change (8 frappes, `range(0, 48, 6)`).
+- **Prompt de fin** : « solid rock with NO opening and NO dark hole », sans « boss » ni « cave » : le premier essai a rendu 1200 × 896 et une arène ronde utilisable.
+- **Dessus de blocs de la couronne** : même jaune que le sable, donc classés sable par les seuils. Ne pas les rendre praticables : noyau = `open_(sable | cailloux, 9)` (diamant), plus grand morceau, réagrandi de 7 px, puis composante reliée au bord sud (`CORE_OPEN`, `CORE_BACK`). Un test vérifie qu'il reste du sable non praticable (> 800 px) et un seul sol relié.
+- **Nid / pilier** : segmenté par boîte (`y < 205`, `500 < x < 705`), le reste de la roche est la falaise. Le pilier généré est plus sombre que la roche du rip (52,7 sur 35). Plutôt que d'élargir le seuil, le test borne l'écart (35 à 60) et exige la déclaration `fidelite_rip.limites` du manifeste.
+- **Mutations** vérifiées : pixel rouge dans le sable, boss sur une paroi, `donjon_seuil` ajouté, éclair décalé d'un pixel, masque du nid modifié (`/tmp/mut.py` : sauvegarder `renders/` et `.cache/`, restaurer après chaque essai).
+- **Sandbox** : `.venv` à recréer (`python3 -m venv .venv && .venv/bin/pip install pillow numpy scipy`). `renders/<lot>/README.md` doit exister avant `package.py`.

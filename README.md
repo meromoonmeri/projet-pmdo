@@ -1,5 +1,18 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Mt. Thunder V2 : arène du sommet, FTN1 (1er octobre 2026)
+
+**Demande** : « Poursuis le projet, on va continuer avec la méthode création de map, lis les read me, outil générateur d'image multicalque etc. » Lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et du README de l'outil maps PMD Sky. Sur main, la série des fins s'arrêtait à FST1 ; les quatre fins restantes (Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret) existaient déjà en parallèle sur des branches sœurs non fusionnées. **L'utilisateur a choisi** de refaire Fin Mt. Thunder ici, sans rien reprendre des sœurs. Biome de la fin = prolongement d'EMT1, **à confirmer**.
+
+- Sorties : `renders/fin_mt_thunder_v2/`, aperçu `apercu_fin_mt_thunder_v2.html`, build `source/fin_mt_thunder_v2/build.py`. Préfixe **FTN1** (FTH1 est pris par la sœur `01a0ed06`, FMT1 par un repère de `01a0eaca`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur la planche Mt. Thunder (*Red Rescue Team*, 432 × 498). Ce ne sont pas des tuiles natives.
+- **Layout** : arrivée au sud par une crête de sable, grande arène ronde fermée par une couronne de falaises, anneau de pics, nid de pierre plein au nord sur une corniche. Marqueurs `entrance`, `boss` (centre), `objectif` (pied du nid) ; aucune sortie, aucun warp, pas de `donjon_seuil`.
+- **Calques** : sol complet, sable, cailloux, pics, falaise, nid, ciel, nuages, lueurs, éclairs, plus un Top vide. Éclairs et arc « Flash » copiés pixel par pixel de la planche (couleurs Normal / Fading exactes), **8 frappes par boucle de 4 s** (une toutes les 6 phases), plus orageux que l'entrée.
+- **Dessus de blocs jaunes** : ils ont la couleur du sable et restent dans le calque sable, mais le sol praticable est un noyau (ouverture 9 px, réagrandi 7 px) qui les exclut.
+- **Fidélité** (seuil 35) : sable 2,2, roche 26,0, ciel 5,8, nuages 9,7 et 23,7. **Limite signalée : le nid est plus sombre (52,7)**. Layout gardé, brut non régénéré ; le test impose que l'écart soit déclaré.
+- **Contrôles** : 11 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- Fins restantes sur main : Clairière tropicale, Couloir violet, Jardin secret (existent sur les sœurs).
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.

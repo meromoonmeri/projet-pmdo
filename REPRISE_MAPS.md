@@ -86,6 +86,8 @@ Même jour (29 septembre, session `arena/01a0ec9c`, branchée sur `311b0dd0`), s
 
 Même jour, suite (« bon travail continue la suite ! ») : lot **Fin Star Cave** (`renders/fin_star_cave_v1/`, préfixe `FST1`, réf. `starcavepmdsky.png`, aperçu `apercu_fin_star_cave_v1.html`, 13 tests PASS, 5 mutations). Prolonge ESC1, planche de poussière réutilisée. Biome et portée choisis par l'agent, **à confirmer**. Fins restantes ici : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe pris en plus : FST1.
 
+Même jour, 1er octobre (session `arena/01a0f697`), sur « Poursuis le projet, on va continuer avec la méthode création de map, lis les read me, outil générateur d'image multicalque etc. » : lot **Fin Mt. Thunder V2** (`renders/fin_mt_thunder_v2/`, préfixe `FTN1`, réf. planche Mt. Thunder *Red Rescue Team*, aperçu `apercu_fin_mt_thunder_v2.html`, 11 tests PASS, 5 mutations). **Relevé des branches** (`gh api compare`) : `01a0ed06`, `01a0eecd`, `01a0ef89` ont déjà FTH1 (Fin Mt. Thunder), FCT1, FVC1, FGS1, Mt. Blaze (EMB1/EMB2/FMB1/FMB2) ; `01a0ef03` a EMB2. Rien fusionné ni repris. L'utilisateur a choisi (`ask_user`) de refaire Fin Mt. Thunder ici. Préfixes pris en plus : FTN1, FTH1, FCT1, FVC1, FGS1, EMB1, EMB2, FMB1, FMB2. Fins restantes sur main : Clairière tropicale, Couloir violet, Jardin secret.
+
 ## Branches sœurs de la série (relevé du 27 septembre)
 
 Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) ; `01a0e017` travaille sur un autre historique. Aucune n'a été fusionnée et rien n'en a été repris. Leurs têtes étaient identiques au démarrage et avant le commit d'EQS1.
