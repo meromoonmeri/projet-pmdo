@@ -1,5 +1,9 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Mod des 16 fins de donjon (1er octobre 2026)
+
+Sur « bon la suite » : `renders/mod_guilde_fins_v1/guilde_fins_donjon_pmdo_0812.zip` (namespace `guilde_fins_donjon`), galerie `apercu_mod_guilde_fins_v1.html`, source `source/mod_guilde_fins_v1/`. Les 16 fins de la série (dont FGG1/FGG2 et FCO1/FCO2), banques et Grounds copiés octet pour octet. Il s'installe en même temps que le mod des entrées (`guilde_entrees_sud_nord`, v2). Aucune validation de l'utilisateur n'est enregistrée pour les fins ; aucun test en jeu PMDO. 7 tests PASS. Choix de l'agent, à confirmer.
+
 ## Mod v2 des entrées sud → nord, 20 cartes (1er octobre 2026)
 
 Sur « lance toi » (après EJS3) : `renders/mod_guilde_entrees_v2/guilde_entrees_sud_nord_pmdo_0812.zip` (Mod.xml 1.2.0.0), galerie `apercu_mod_guilde_entrees_v2.html`, source `source/mod_guilde_entrees_v2/`. Les 19 cartes du mod v1 plus **EJS3** (jardin secret, temple de Celebi et végétation animée). Le mod v1 est conservé ; **v2 remplace v1** (même namespace). EJS2 et EJS3 restent à confirmer. 7 tests PASS, aucun test en jeu PMDO. Choix de l'agent, à confirmer.

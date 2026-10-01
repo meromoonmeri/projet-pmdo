@@ -1,0 +1,1361 @@
+{
+ "lot": "mod_guilde_fins_v1",
+ "namespace": "guilde_fins_donjon",
+ "target": "0.8.12",
+ "cartes": 16,
+ "banques": 150,
+ "validation_utilisateur": {
+  "date": null,
+  "citation": null,
+  "portee": "aucune validation de l utilisateur enregistree pour les fins ; verifications de fichiers uniquement, aucun test en jeu PMDO",
+  "cartes_validees": [],
+  "a_confirmer": [
+   "FVS1",
+   "FCF1",
+   "FRP1",
+   "FGG1",
+   "FGG2",
+   "FBS1",
+   "FJS1",
+   "FWC1",
+   "FOC1",
+   "FSM1",
+   "FST1",
+   "FTC1",
+   "FCO1",
+   "FCO2",
+   "FTH1",
+   "FJA1"
+  ]
+ },
+ "runtime_tested": false,
+ "methode": "banques et Grounds copies octet pour octet depuis les ZIP projets versionnes des lots ; index fusionne ; scripts deplaces sous le namespace commun, contenu inchange",
+ "maps": [
+  {
+   "lot": "fin_vapeur_sommet_v1",
+   "prefixe": "FVS1",
+   "titre": "Vapeur (sommet)",
+   "asset": "fvs1_fin_vapeur_sommet",
+   "image": "FVS1_scene_t000.png",
+   "apercu": "apercu_fin_vapeur_sommet_v1.html",
+   "zip_source": "renders/fin_vapeur_sommet_v1/FVS1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "5b7897300b620890a26661c0161ddbd93efe3deb832bc39021500600fe5ea58c",
+   "namespace_source": "fin_vapeur_sommet",
+   "script_source": "Data/Script/fin_vapeur_sommet/ground/fvs1_fin_vapeur_sommet/init.lua",
+   "banques": [
+    "FVS1_00_EAU",
+    "FVS1_01_BULLES",
+    "FVS1_02_SOL",
+    "FVS1_03_SOL",
+    "FVS1_04_MARGELLE",
+    "FVS1_05_EVENTS",
+    "FVS1_06_STALAGMITES",
+    "FVS1_07_VAPEUR"
+   ],
+   "ground": {
+    "nom": "Fin Vapeur - sommet de Steam Cave (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 9,
+    "pistes_animees": [
+     [
+      4,
+      10
+     ],
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FVS1_00_EAU",
+     "FVS1_01_BULLES",
+     "FVS1_02_SOL",
+     "FVS1_03_SOL",
+     "FVS1_04_MARGELLE",
+     "FVS1_05_EVENTS",
+     "FVS1_06_STALAGMITES",
+     "FVS1_07_VAPEUR"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      376,
+      344
+     ],
+     "source": [
+      376,
+      224
+     ]
+    },
+    "cases_bloquees": 4931,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "bf12528d4633a6617acf60a89ad7761daef9b9d5be46db2a058967144824d900",
+   "tiles_sha256": {
+    "FVS1_00_EAU": "10c5cce8b3f5fa6f28f014936977827d51367761149cc8c82df9700511cbd445",
+    "FVS1_01_BULLES": "e8faa801a4f32677f89ff0a318926f4b71e1dc8af4fd6fa1e5e658f5aec8fdf5",
+    "FVS1_02_SOL": "7213ff38e0f9eb722013f6a05a04b1c7c379af11e5224e4760cbfb90f0d1939a",
+    "FVS1_03_SOL": "a042d7252b195c80cba585d34b8929c522c42b9267aa6e416407534e81788d50",
+    "FVS1_04_MARGELLE": "7854e27d72681b3d7345961827296d91304592b3e525220f0e9c89c95e03e180",
+    "FVS1_05_EVENTS": "9e0c5b2baf588c120d1bf659c64cbf4d54d866c85f9b0f42dfd0b12c50fe3339",
+    "FVS1_06_STALAGMITES": "63cf3f92ec46f0f9bdfa8a8579548b55bbefd3384dfd5e1a456a248cd313cce8",
+    "FVS1_07_VAPEUR": "e51dfcac36df3007d914265a87d78254de49f7b596ee4501582b0dfd04d9007f"
+   }
+  },
+  {
+   "lot": "fin_cratere_fosse_v1",
+   "prefixe": "FCF1",
+   "titre": "Cratère (fosse)",
+   "asset": "fcf1_fin_cratere_fosse",
+   "image": "FCF1_scene_t000.png",
+   "apercu": "apercu_fin_cratere_fosse_v1.html",
+   "zip_source": "renders/fin_cratere_fosse_v1/FCF1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "b9eb61091d3c73a3e4f3659c1b1438a4dffb9aa401540f21a9cfc7326ac1cb6f",
+   "namespace_source": "fin_cratere_fosse",
+   "script_source": "Data/Script/fin_cratere_fosse/ground/fcf1_fin_cratere_fosse/init.lua",
+   "banques": [
+    "FCF1_00_LAVE",
+    "FCF1_01_ECLATS",
+    "FCF1_02_BULLES",
+    "FCF1_03_SOL",
+    "FCF1_04_SOL",
+    "FCF1_05_REBORD",
+    "FCF1_06_PITONS",
+    "FCF1_07_EMBLEME",
+    "FCF1_08_LUEUR"
+   ],
+   "ground": {
+    "nom": "Fin Cratere - fosse de Dark Crater (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 10,
+    "pistes_animees": [
+     [
+      4,
+      10
+     ],
+     [
+      6,
+      10
+     ],
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FCF1_00_LAVE",
+     "FCF1_01_ECLATS",
+     "FCF1_02_BULLES",
+     "FCF1_03_SOL",
+     "FCF1_04_SOL",
+     "FCF1_05_REBORD",
+     "FCF1_06_PITONS",
+     "FCF1_07_EMBLEME",
+     "FCF1_08_LUEUR"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      376,
+      288
+     ],
+     "embleme": [
+      376,
+      96
+     ]
+    },
+    "cases_bloquees": 4395,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "d8a1b7a9a24b2f47e71e98c7c68bf1c67b10fe6217528a522bf6e5080136a526",
+   "tiles_sha256": {
+    "FCF1_00_LAVE": "3655d7e336ef85c02d2b7626a6bcecff3dad3620ee96f655923ffb99662fd1cc",
+    "FCF1_01_ECLATS": "66f05d1175de2b165d26e14b7f84b6dc89f98519ba64e83fa63f31e434977420",
+    "FCF1_02_BULLES": "3055b38d8ce3b266ba656b8005f25d3a2e98affef6bdcbe4fc3156d308b859d4",
+    "FCF1_03_SOL": "cf4d850c5744beaa8adc5a132fc6efbd0d0e16a9e9a3a69289e2950a9510e878",
+    "FCF1_04_SOL": "4ac019efcb10ca25af63adfa3cbeefdefb96869f06c1de3442eed0cb1f279ebb",
+    "FCF1_05_REBORD": "d125bcbc844aeb555e9c20b0105c2799f0172f2794d1b394a59ddf761b0be6d4",
+    "FCF1_06_PITONS": "764fc465cb818ef87adff5f75f02839867a3fd37a9cbf4570053f530cd46eaa6",
+    "FCF1_07_EMBLEME": "4fc9681c47d5b9d127712863d3e22c77a91eea8a1b0801753ad2b70c61746af9",
+    "FCF1_08_LUEUR": "f3bd3acb89254cdf2e397972344e2364ef837c80d9a88483105165b7020f44b3"
+   }
+  },
+  {
+   "lot": "fin_ruine_puits_v1",
+   "prefixe": "FRP1",
+   "titre": "Ruine (puits scellé)",
+   "asset": "frp1_fin_ruine_puits",
+   "image": "FRP1_scene_t000.png",
+   "apercu": "apercu_fin_ruine_puits_v1.html",
+   "zip_source": "renders/fin_ruine_puits_v1/FRP1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "1f664b69e04a3fa9d68ad09913d647df07a8ab63a25a49b3dbfefe36c86403a8",
+   "namespace_source": "fin_ruine_puits",
+   "script_source": "Data/Script/fin_ruine_puits/ground/frp1_fin_ruine_puits/init.lua",
+   "banques": [
+    "FRP1_00_SOL",
+    "FRP1_01_OMBRE",
+    "FRP1_02_AURA",
+    "FRP1_03_TOURBILLONS",
+    "FRP1_04_PAROIS",
+    "FRP1_05_CLE",
+    "FRP1_06_FISSURE",
+    "FRP1_07_FEUX"
+   ],
+   "ground": {
+    "nom": "Fin Ruine - fosse de Sealed Ruin (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 9,
+    "pistes_animees": [
+     [
+      6,
+      10
+     ],
+     [
+      8,
+      5
+     ],
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FRP1_00_SOL",
+     "FRP1_01_OMBRE",
+     "FRP1_02_AURA",
+     "FRP1_03_TOURBILLONS",
+     "FRP1_04_PAROIS",
+     "FRP1_05_CLE",
+     "FRP1_06_FISSURE",
+     "FRP1_07_FEUX"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      384,
+      288
+     ],
+     "cle_de_voute": [
+      376,
+      176
+     ]
+    },
+    "cases_bloquees": 5377,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "12ba1de8a3714128c0d836382a2704115a9be608d54bd9dd492aab0766bc5c10",
+   "tiles_sha256": {
+    "FRP1_00_SOL": "f3735baceaedaee22f9a90b033ab6fadb68a8ae5799928ac5f16e2f989337d9d",
+    "FRP1_01_OMBRE": "c6b95d630f7a46fbe840e1d7b079564b19d7a53150888a28e71f309199ed8d22",
+    "FRP1_02_AURA": "311bf5052edb02b0ec73534723da49aa28117fbb4e73d6e033986a5809f830d4",
+    "FRP1_03_TOURBILLONS": "206658a26c170aea9d44259752d33326907a1f050a6e994dc80978e4659073b9",
+    "FRP1_04_PAROIS": "e4dfb3d5555bb7429c2213c49d3c8e748d0a345e0dfe0b2b35295d358ddce4d7",
+    "FRP1_05_CLE": "f4b0a14af1d61a16f5841801f02dc95e094b8e5c1fc9404f93aab3321848e4e0",
+    "FRP1_06_FISSURE": "a939949dc3d1b5b84f6ad8bb2336e02888ec1ff80c0fd29b22ddce1d9549dded",
+    "FRP1_07_FEUX": "f7714af602519ebe590cb9625d280f05482dc9abfb83861d710c59d2dfef5d20"
+   }
+  },
+  {
+   "lot": "fin_givre_grotte_v1",
+   "prefixe": "FGG1",
+   "titre": "Givre, grotte de cristal",
+   "asset": "fgg1_fin_givre_grotte",
+   "image": "FGG1_scene_t000.png",
+   "apercu": "apercu_fin_givre_grotte_v1.html",
+   "zip_source": "renders/fin_givre_grotte_v1/FGG1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "b23a7eecb025949abd7739b8bc7775e1f9c1471bb2e48c4b233b1860827ab557",
+   "namespace_source": "fin_givre_grotte",
+   "script_source": "Data/Script/fin_givre_grotte/ground/fgg1_fin_givre_grotte/init.lua",
+   "banques": [
+    "FGG1_00_EAU",
+    "FGG1_01_REFLETS",
+    "FGG1_02_SOL",
+    "FGG1_03_SOL",
+    "FGG1_04_PAROIS",
+    "FGG1_05_CRISTAL",
+    "FGG1_06_LUEUR",
+    "FGG1_07_FLOCONS"
+   ],
+   "ground": {
+    "nom": "Fin Givre - Frosty Grotto (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 9,
+    "pistes_animees": [
+     [
+      4,
+      10
+     ],
+     [
+      6,
+      10
+     ],
+     [
+      48,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FGG1_00_EAU",
+     "FGG1_01_REFLETS",
+     "FGG1_02_SOL",
+     "FGG1_03_SOL",
+     "FGG1_04_PAROIS",
+     "FGG1_05_CRISTAL",
+     "FGG1_06_LUEUR",
+     "FGG1_07_FLOCONS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      376,
+      312
+     ],
+     "cristal": [
+      376,
+      232
+     ]
+    },
+    "cases_bloquees": 5338,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "59d303452524631e8d934f730691726a83e243b4359ff633e1b7977bfcef1e4c",
+   "tiles_sha256": {
+    "FGG1_00_EAU": "c7a3a38103969c1701bf76eeefd87a47dbba8e9a13b1cea9aac5260508c6bcd8",
+    "FGG1_01_REFLETS": "f48be1c62dbfa5660a58b5cc5699a068022031e68d5733714b8da8398b81eff1",
+    "FGG1_02_SOL": "6af983258b7769d71487275a342af27281448606da8292096bdf124e28d21d13",
+    "FGG1_03_SOL": "2545c51f53621cabc552ca7fec091e869dc750b9b57643756a0228229f36ccfb",
+    "FGG1_04_PAROIS": "a8eceb9df823eb4f04beb26550fbd70ed8421bf2652a597629e6147fbdc3d820",
+    "FGG1_05_CRISTAL": "be2b46be87450e94f5867e3ccffc1ba402064cb1da97bbc48cf40b42181f8301",
+    "FGG1_06_LUEUR": "8ba22394ab0a87176f0863b7ebc186114735d6f00cfae7559de960848d7b0eb6",
+    "FGG1_07_FLOCONS": "6ec079f33582678b656b8fb14514339e0a722ed4c5a6d303a5cf24a02238cb98"
+   }
+  },
+  {
+   "lot": "fin_givre_aurore_v2",
+   "prefixe": "FGG2",
+   "titre": "Givre V2 (aurore)",
+   "asset": "fgg2_fin_givre_aurore",
+   "image": "FGG2_scene_t000.png",
+   "apercu": "apercu_fin_givre_aurore_v2.html",
+   "zip_source": "renders/fin_givre_aurore_v2/FGG2_projet_pmdo_0812.zip",
+   "zip_source_sha256": "6140a5f5126209679b44c96051a8e74c11fd104d8160fbd623fb46caeaba14bd",
+   "namespace_source": "fin_givre_aurore",
+   "script_source": "Data/Script/fin_givre_aurore/ground/fgg2_fin_givre_aurore/init.lua",
+   "banques": [
+    "FGG2_00_EAU",
+    "FGG2_01_REFLETS",
+    "FGG2_02_SOL",
+    "FGG2_03_CIEL",
+    "FGG2_04_ETOILES",
+    "FGG2_05_AURORE",
+    "FGG2_06_SOL",
+    "FGG2_07_PAROIS",
+    "FGG2_08_FLOCONS"
+   ],
+   "ground": {
+    "nom": "Fin Givre V2 - Frosty Grotto, aurores (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 10,
+    "pistes_animees": [
+     [
+      4,
+      10
+     ],
+     [
+      12,
+      10
+     ],
+     [
+      48,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FGG2_00_EAU",
+     "FGG2_01_REFLETS",
+     "FGG2_02_SOL",
+     "FGG2_03_CIEL",
+     "FGG2_04_ETOILES",
+     "FGG2_05_AURORE",
+     "FGG2_06_SOL",
+     "FGG2_07_PAROIS",
+     "FGG2_08_FLOCONS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      376,
+      304
+     ],
+     "belvedere": [
+      376,
+      184
+     ]
+    },
+    "cases_bloquees": 5247,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "a17c3021947b77d18559006c0402f6ef9be36313ef2f0cc4df7c6df5c74cdda0",
+   "tiles_sha256": {
+    "FGG2_00_EAU": "795220a887eb14397362c1ae31c8624e5504c5b917e1a7a52e07c7c5c6f265e3",
+    "FGG2_01_REFLETS": "f48be1c62dbfa5660a58b5cc5699a068022031e68d5733714b8da8398b81eff1",
+    "FGG2_02_SOL": "6347d2cdb97d0dd965ee777ba736715264d11ff2edf266807ab4fc0f66bc9cbc",
+    "FGG2_03_CIEL": "1b801b16f1ac486ed2ff9825b3f2e635096ac90517747506cd94779a08baf3e7",
+    "FGG2_04_ETOILES": "2c8ad55dd277f859e109764a9d3650c6eaddf1b283d86bfad2ecff19559085e0",
+    "FGG2_05_AURORE": "8d3a5b5ec4fd4be05e6bd8cbd164eba889d3db26393378f76fe7ecbd9fa28408",
+    "FGG2_06_SOL": "859415fe4b28e12b15484b88eeb4419321c69ecb5767beb644e0611baf718528",
+    "FGG2_07_PAROIS": "ee1082ae4aee004ea8733442eb3d3f22b098b9a950d78bf1653b1c4e1f207187",
+    "FGG2_08_FLOCONS": "6ec079f33582678b656b8fb14514339e0a722ed4c5a6d303a5cf24a02238cb98"
+   }
+  },
+  {
+   "lot": "fin_bristle_sommet_v1",
+   "prefixe": "FBS1",
+   "titre": "Bristle (sommet)",
+   "asset": "fbs1_fin_bristle_sommet",
+   "image": "FBS1_scene_t000.png",
+   "apercu": "apercu_fin_bristle_sommet_v1.html",
+   "zip_source": "renders/fin_bristle_sommet_v1/FBS1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "31f6077f36c89e97f35c452617968bf43b22f1d53131d3504b409bf9deb523af",
+   "namespace_source": "fin_bristle_sommet",
+   "script_source": "Data/Script/fin_bristle_sommet/ground/fbs1_fin_bristle_sommet/init.lua",
+   "banques": [
+    "FBS1_00_SOL",
+    "FBS1_01_SABLE",
+    "FBS1_02_RAFALES",
+    "FBS1_03_ROCHERS",
+    "FBS1_04_TOUFFES",
+    "FBS1_05_FALAISES"
+   ],
+   "ground": {
+    "nom": "Fin Bristle - sommet de Mt. Bristle (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 7,
+    "pistes_animees": [
+     [
+      12,
+      10
+     ],
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FBS1_00_SOL",
+     "FBS1_01_SABLE",
+     "FBS1_02_RAFALES",
+     "FBS1_03_ROCHERS",
+     "FBS1_04_TOUFFES",
+     "FBS1_05_FALAISES"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      384,
+      288
+     ],
+     "azurill": [
+      376,
+      160
+     ]
+    },
+    "cases_bloquees": 4561,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "8b65e234bd32e0e3fda288ba28d1503584eb69c2c1dfd4f7514ed509733f98bf",
+   "tiles_sha256": {
+    "FBS1_00_SOL": "ae77f681f8cfff05213f6a934a6c619120110696b9ff229d3b85e4303bf3c510",
+    "FBS1_01_SABLE": "8081a6ce5a9d7ee12af50173f01aef0bf98773e805476349571fed4dcab2f054",
+    "FBS1_02_RAFALES": "261e20132b2a734f3bb2ecf03484118e10ab89a6ef399bd3c9933074a57050f3",
+    "FBS1_03_ROCHERS": "78638b8f06f8bddf2d547982f088031f67f114f7fc442d5c1827717eb6257b62",
+    "FBS1_04_TOUFFES": "6089341129526b6d733a53d888e47fab5195c5ad1d15c13467912337a5db19e4",
+    "FBS1_05_FALAISES": "79a914103006723e9def25e12a81ae47406ab2a2d7391dd44adf9156bf4b00b4"
+   }
+  },
+  {
+   "lot": "fin_jungle_sud_v1",
+   "prefixe": "FJS1",
+   "titre": "Jungle sud",
+   "asset": "fjs1_fin_jungle_sud",
+   "image": "FJS1_scene_t000.png",
+   "apercu": "apercu_fin_jungle_sud_v1.html",
+   "zip_source": "renders/fin_jungle_sud_v1/FJS1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "a85e4711cb2e238abcd34f47728377b762cb10fae58c245e788ae3fd6fdc24fb",
+   "namespace_source": "fin_jungle_sud",
+   "script_source": "Data/Script/fin_jungle_sud/ground/fjs1_fin_jungle_sud/init.lua",
+   "banques": [
+    "FJS1_00_SOL",
+    "FJS1_01_SABLE",
+    "FJS1_02_PELOUSE",
+    "FJS1_03_FEUILLES",
+    "FJS1_04_ROCHER",
+    "FJS1_05_JUNGLE",
+    "FJS1_06_PAPILLONS",
+    "FJS1_07_CANOPEE"
+   ],
+   "ground": {
+    "nom": "Fin Jungle - fond de Southern Jungle (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 9,
+    "pistes_animees": [
+     [
+      48,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FJS1_00_SOL",
+     "FJS1_01_SABLE",
+     "FJS1_02_PELOUSE",
+     "FJS1_03_FEUILLES",
+     "FJS1_04_ROCHER",
+     "FJS1_05_JUNGLE",
+     "FJS1_06_PAPILLONS",
+     "FJS1_07_CANOPEE"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "boss": [
+      384,
+      296
+     ],
+     "objectif": [
+      376,
+      176
+     ]
+    },
+    "cases_bloquees": 4698,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "a2917483793ebbca7297170b18bb9bba296a4d388639251aead6408e8e5066e8",
+   "tiles_sha256": {
+    "FJS1_00_SOL": "cf9f38201596620b957fb3d8b2a9ba060446eab71acb7c771e80b626b72753fd",
+    "FJS1_01_SABLE": "7e7353f7346dd092353e4c3bc2ce98e7a3f0fa4b1326da33bf461c49fd80d9ef",
+    "FJS1_02_PELOUSE": "51cc3ba1362150db1c7a1806929375928cee66d079011e95bed3a411726e15e1",
+    "FJS1_03_FEUILLES": "d92938c1a2564e1fcac751e364df3fce9ce3802258cda90bba7b48ffa106f20e",
+    "FJS1_04_ROCHER": "b45c76e267fc6bb24326bcb7874dc974d34d9b3b231af41449992c043399a9b2",
+    "FJS1_05_JUNGLE": "82ff11cb9faef6e1e5fd1689d9eb80573d8035c0def63b6cfd87676ccb1cda14",
+    "FJS1_06_PAPILLONS": "f33cf1126c3022fcfa48a757d9f41e46e358b0fbd9226da51b98d26c9b57090e",
+    "FJS1_07_CANOPEE": "9ca3558a54ed344bc0070841dd66403933bd9109dbed3115d0c3ddee8a16a081"
+   }
+  },
+  {
+   "lot": "fin_waterfall_cave_v1",
+   "prefixe": "FWC1",
+   "titre": "Waterfall Cave",
+   "asset": "fwc1_fin_waterfall_cave",
+   "image": "FWC1_scene_t000.png",
+   "apercu": "apercu_fin_waterfall_cave_v1.html",
+   "zip_source": "renders/fin_waterfall_cave_v1/FWC1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "0d1749eb1a7d5ff4822f7d12e1eb26dca20e53d53635100a0cc23a27f1c399b3",
+   "namespace_source": "fin_waterfall_cave",
+   "script_source": "Data/Script/fin_waterfall_cave/ground/fwc1_fin_waterfall_cave/init.lua",
+   "banques": [
+    "FWC1_00_SOL",
+    "FWC1_01_EAU",
+    "FWC1_02_SOL",
+    "FWC1_03_PAROIS",
+    "FWC1_04_CRISTAUX",
+    "FWC1_05_JOYAU",
+    "FWC1_06_LUEUR",
+    "FWC1_07_SCINTILLEMENTS"
+   ],
+   "ground": {
+    "nom": "Fin Waterfall Cave - salle du joyau (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 9,
+    "pistes_animees": [
+     [
+      12,
+      5
+     ],
+     [
+      24,
+      10
+     ]
+    ],
+    "banques_utilisees": [
+     "FWC1_00_SOL",
+     "FWC1_01_EAU",
+     "FWC1_02_SOL",
+     "FWC1_03_PAROIS",
+     "FWC1_04_CRISTAUX",
+     "FWC1_05_JOYAU",
+     "FWC1_06_LUEUR",
+     "FWC1_07_SCINTILLEMENTS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "arene": [
+      384,
+      312
+     ],
+     "joyau": [
+      376,
+      224
+     ]
+    },
+    "cases_bloquees": 5857,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "bb49d94b8b2ff77bc2bc89c86ca23623f7e82136de06d9f106d6039ed498fb4a",
+   "tiles_sha256": {
+    "FWC1_00_SOL": "a309fb2497a6962cac76b2aee1ba6df190b6486ba5f1cc0850240e9f66aeaf78",
+    "FWC1_01_EAU": "08e13fd5f0f4c5bf09ad500efeac83b49fa7427c07fae7b6747af89efe8dd1b3",
+    "FWC1_02_SOL": "e7537b05df5cdd0adf718e18cb171410c1a523942e339fd46f31850d8adc6586",
+    "FWC1_03_PAROIS": "f457920a0cb1096685fa037b3dd9d528ada766b74053b05b6b0bacb01760b1fd",
+    "FWC1_04_CRISTAUX": "083616662ba7c6da46da44bfff58c4b914ac1670f3840e9f5be5aeba01072f7e",
+    "FWC1_05_JOYAU": "b154c4ddf0da349b80e7c7845ea98c47940b85208f70e08a672ccb03045d7a0b",
+    "FWC1_06_LUEUR": "300cd8dcfe90bd16854d5a52cfd218932d13d87764b3d0d037151d0eb9836885",
+    "FWC1_07_SCINTILLEMENTS": "bb35e325c0eb49f493938cf4bba56a3300b1be77ff4800cc4ac5c2fe59b10fd6"
+   }
+  },
+  {
+   "lot": "fin_ocean_kyogre_v1",
+   "prefixe": "FOC1",
+   "titre": "Océan de Kyogre",
+   "asset": "foc1_fin_ocean_kyogre",
+   "image": "FOC1_scene_t000.png",
+   "apercu": "apercu_fin_ocean_kyogre_v1.html",
+   "zip_source": "renders/fin_ocean_kyogre_v1/FOC1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "ca52d7b478127834411b7b7444da29da93aaff90dd5eb14dcee84783e0f8141f",
+   "namespace_source": "fin_ocean_kyogre",
+   "script_source": "Data/Script/fin_ocean_kyogre/ground/foc1_fin_ocean_kyogre/init.lua",
+   "banques": [
+    "FOC1_00_SOL",
+    "FOC1_01_ABYSSE",
+    "FOC1_02_SOL",
+    "FOC1_03_NUANCES",
+    "FOC1_04_MOTIFS",
+    "FOC1_05_PAROIS",
+    "FOC1_06_CORAUX",
+    "FOC1_07_ALGUES",
+    "FOC1_08_BULLES",
+    "FOC1_09_SCINTILLEMENTS"
+   ],
+   "ground": {
+    "nom": "Fin Ocean - arene de Kyogre sous la mer (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 11,
+    "pistes_animees": [
+     [
+      12,
+      5
+     ],
+     [
+      12,
+      20
+     ],
+     [
+      16,
+      15
+     ],
+     [
+      24,
+      10
+     ],
+     [
+      48,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FOC1_00_SOL",
+     "FOC1_01_ABYSSE",
+     "FOC1_02_SOL",
+     "FOC1_03_NUANCES",
+     "FOC1_04_MOTIFS",
+     "FOC1_05_PAROIS",
+     "FOC1_06_CORAUX",
+     "FOC1_07_ALGUES",
+     "FOC1_08_BULLES",
+     "FOC1_09_SCINTILLEMENTS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "kyogre": [
+      368,
+      200
+     ],
+     "sceau": [
+      376,
+      296
+     ]
+    },
+    "cases_bloquees": 4256,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "4f75d2bec04d8d86eb29c6dfccf2280f4f03f84f3f385152ab164221f557b512",
+   "tiles_sha256": {
+    "FOC1_00_SOL": "98aa8412e52dfa725a35c7234b7ab1c50f8d81bf8d6a2568c1c47bbace60452a",
+    "FOC1_01_ABYSSE": "dfce36158d087a68093309d477eb1f80a974df6afccc9790e01a74417845b0e9",
+    "FOC1_02_SOL": "256c1e9159f454b69d6e70305c034cb989ad29dd476cb088ba4f6864ccbacb8f",
+    "FOC1_03_NUANCES": "07bab23904f0a3c631298475279064ca48702033ae7fe8c6fdacc23e2af79052",
+    "FOC1_04_MOTIFS": "991207969024bc02e26717fe24a4e16f6275fd632184cad3319ddf3b152265ee",
+    "FOC1_05_PAROIS": "a45cc3a52e767974237b6ec544651206353561ae4da67db1fdc3582882dcf749",
+    "FOC1_06_CORAUX": "cc418bc676f9e065f88cd132ba2275269ceec0e00664c959d46c78bf5b84489c",
+    "FOC1_07_ALGUES": "b76ccb6bc05e800e885a31365b7ecc8053ab7d11eb4a294d6b1b5d96fc5b8273",
+    "FOC1_08_BULLES": "0ed96edf89568414e684e60b2bf4939aa28bfb4ade8e0a360393fc76111f4ac5",
+    "FOC1_09_SCINTILLEMENTS": "e5d316e2a0e0a9c6ed42e5adc0141421bf1d793bb326938a064501d33418e9ad"
+   }
+  },
+  {
+   "lot": "fin_sables_mouvants_v1",
+   "prefixe": "FSM1",
+   "titre": "Sables mouvants",
+   "asset": "fsm1_fin_sables_mouvants",
+   "image": "FSM1_scene_t000.png",
+   "apercu": "apercu_fin_sables_mouvants_v1.html",
+   "zip_source": "renders/fin_sables_mouvants_v1/FSM1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "5318ccb71ea181f885516e8feb0c1bd2346b9f0c551d59579f883a254fad0a27",
+   "namespace_source": "fin_sables_mouvants",
+   "script_source": "Data/Script/fin_sables_mouvants/ground/fsm1_fin_sables_mouvants/init.lua",
+   "banques": [
+    "FSM1_00_FOSSE",
+    "FSM1_01_SOL",
+    "FSM1_02_SABLE",
+    "FSM1_03_OMBRES",
+    "FSM1_04_BORD",
+    "FSM1_05_ROCHE",
+    "FSM1_06_PIERRES",
+    "FSM1_07_CHUTES",
+    "FSM1_08_POUSSIERE"
+   ],
+   "ground": {
+    "nom": "Fin Sables mouvants - arene du desert (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 10,
+    "pistes_animees": [
+     [
+      12,
+      10
+     ],
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FSM1_00_FOSSE",
+     "FSM1_01_SOL",
+     "FSM1_02_SABLE",
+     "FSM1_03_OMBRES",
+     "FSM1_04_BORD",
+     "FSM1_05_ROCHE",
+     "FSM1_06_PIERRES",
+     "FSM1_07_CHUTES",
+     "FSM1_08_POUSSIERE"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "boss": [
+      384,
+      440
+     ],
+     "objectif": [
+      352,
+      160
+     ]
+    },
+    "cases_bloquees": 4728,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "e5353c7657eb446ee42ad1365ecaaae6079dd685a736246b4fc7294cf65f014f",
+   "tiles_sha256": {
+    "FSM1_00_FOSSE": "12ad7ca156279ac87604b25b7b027d9a3c43af33a76aec179ee66cae9a9c3b95",
+    "FSM1_01_SOL": "63b1e84a5054120bdcf93106ba3c2121626f5d80e9202bcfd0e68c3c72c7b8cb",
+    "FSM1_02_SABLE": "88e69a2454364707a3bcccd59a6a3be64262cd6ef503e04438ce2803abe3b8dc",
+    "FSM1_03_OMBRES": "055c4d86b120161ff006dc66ed380e0486005031f1eabe06f7a42b2a76acad0f",
+    "FSM1_04_BORD": "add776f548c750717737a14d3c05e42c4a1b4064fbae49328c32097c6cb34df6",
+    "FSM1_05_ROCHE": "1c887405d5da01391ef1d0786b72773c1a8e137bb1755ec0d466ea96565de658",
+    "FSM1_06_PIERRES": "46f7e9dad3bd3a27fea3a1cba372c71dd94dbc2d05203a6eeb9cdb4d3fb591b5",
+    "FSM1_07_CHUTES": "d71a0ff58c0d98ab86132adfe5fab0a0214b9ab5e748f52b9e52300f1765e216",
+    "FSM1_08_POUSSIERE": "576d236981c6e461f5db7b6e0660095774dc9a12e8f32cff92948bacc070025e"
+   }
+  },
+  {
+   "lot": "fin_star_cave_v1",
+   "prefixe": "FST1",
+   "titre": "Star Cave",
+   "asset": "fst1_fin_star_cave",
+   "image": "FST1_scene_t000.png",
+   "apercu": "apercu_fin_star_cave_v1.html",
+   "zip_source": "renders/fin_star_cave_v1/FST1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "43a094797c39f1a51c6d45fb8e4950296b7cd1133e5a475e719b38a98b40f29d",
+   "namespace_source": "fin_star_cave",
+   "script_source": "Data/Script/fin_star_cave/ground/fst1_fin_star_cave/init.lua",
+   "banques": [
+    "FST1_00_SOL",
+    "FST1_01_SOL",
+    "FST1_02_OMBRES",
+    "FST1_03_PAROIS",
+    "FST1_04_BLOCS",
+    "FST1_05_REFLETS",
+    "FST1_06_ETOILES",
+    "FST1_07_POUSSIERE"
+   ],
+   "ground": {
+    "nom": "Fin Star Cave - arene de cristal (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 9,
+    "pistes_animees": [
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FST1_00_SOL",
+     "FST1_01_SOL",
+     "FST1_02_OMBRES",
+     "FST1_03_PAROIS",
+     "FST1_04_BLOCS",
+     "FST1_05_REFLETS",
+     "FST1_06_ETOILES",
+     "FST1_07_POUSSIERE"
+    ],
+    "marqueurs": {
+     "entrance": [
+      384,
+      560
+     ],
+     "boss": [
+      384,
+      320
+     ],
+     "objectif": [
+      384,
+      152
+     ]
+    },
+    "cases_bloquees": 5253,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "0099a9bc859c91eed817fc4be8fa9cf3934cee4c38cdd535bc8f4e763196fe40",
+   "tiles_sha256": {
+    "FST1_00_SOL": "e7661e6bc261b10dd4a000a4ea5221a339016e50100d0ef1a9eab2cb9e85d8b3",
+    "FST1_01_SOL": "b9c8776ffcac95d5c16c5afdad870eba537a532b402c72f4e2c93113a054ac11",
+    "FST1_02_OMBRES": "dcdf6d8623c40a48ac3aede10936e9094c928832160bb204dcedc5c8ff31a467",
+    "FST1_03_PAROIS": "ff9b05f90e7edc9ff77132179e304f4b113271bf539c7ab8d1d41aa1631e4ef8",
+    "FST1_04_BLOCS": "63c8f8bb792917a8434a63f8c70a4e494872b1059a6a02d1075a167e5751699e",
+    "FST1_05_REFLETS": "aa8e6274904b532146e5c2b4439423454ed5c813fe29230ed7a5400e0fe7c8d8",
+    "FST1_06_ETOILES": "d627b86ccfdd19e357b122c502628a8f16c4df754dfdf7ac0818bd50c0b3e37f",
+    "FST1_07_POUSSIERE": "be66c9c5f1682e45e53e0584d044fcea6f3f340bdd9f7eb2aab3a795c638ea03"
+   }
+  },
+  {
+   "lot": "fin_clairiere_tropicale_v1",
+   "prefixe": "FTC1",
+   "titre": "Clairière tropicale",
+   "asset": "ftc1_fin_clairiere_tropicale",
+   "image": "FTC1_scene_t000.png",
+   "apercu": "apercu_fin_clairiere_tropicale_v1.html",
+   "zip_source": "renders/fin_clairiere_tropicale_v1/FTC1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "25309487a66d60cbad051cdc5cad8146c064ba634a420e92de9cbd2da1198b7c",
+   "namespace_source": "fin_clairiere_tropicale",
+   "script_source": "Data/Script/fin_clairiere_tropicale/ground/ftc1_fin_clairiere_tropicale/init.lua",
+   "banques": [
+    "FTC1_00_SOL",
+    "FTC1_01_HERBE",
+    "FTC1_02_DALLES",
+    "FTC1_03_TOUFFES",
+    "FTC1_04_FLEURS",
+    "FTC1_05_JUNGLE",
+    "FTC1_06_PALMIERS",
+    "FTC1_07_ESTRADE",
+    "FTC1_08_RIVE",
+    "FTC1_09_MER",
+    "FTC1_10_PAPILLONS"
+   ],
+   "ground": {
+    "nom": "Fin Clairiere tropicale - arene (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 12,
+    "pistes_animees": [
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FTC1_00_SOL",
+     "FTC1_01_HERBE",
+     "FTC1_02_DALLES",
+     "FTC1_03_TOUFFES",
+     "FTC1_04_FLEURS",
+     "FTC1_05_JUNGLE",
+     "FTC1_06_PALMIERS",
+     "FTC1_07_ESTRADE",
+     "FTC1_08_RIVE",
+     "FTC1_09_MER",
+     "FTC1_10_PAPILLONS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      352,
+      560
+     ],
+     "boss": [
+      384,
+      240
+     ],
+     "objectif": [
+      384,
+      64
+     ]
+    },
+    "cases_bloquees": 4422,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "18835c40ef1a71e254b18505fdfcff888c5aa9f030fa83a77f0dee743a711ef2",
+   "tiles_sha256": {
+    "FTC1_00_SOL": "b2eaa99214242766302c5980ae36e97186bc1b59275bece609437d24780d7fbf",
+    "FTC1_01_HERBE": "745b4a6ba4e651e6e9708d1c468466bd371e6789555492decf75d226b45a2c4c",
+    "FTC1_02_DALLES": "42a07b35df60d4129c6ad01f1635350dc4fcb44f2b52e97e713e40eb9cd766de",
+    "FTC1_03_TOUFFES": "cf76a3fce2871d39722b4016a67bcb29097224cd6e5b5c6261913851543aa557",
+    "FTC1_04_FLEURS": "8a23f12e73469346ae8aa3544daac404b6df6a1bd1b24bc102d7b4b3069ab46d",
+    "FTC1_05_JUNGLE": "3c6a66f9650e6befe6ce31af94b8c0eb1345f5fb53a5a58cfb7b97e7845eea1a",
+    "FTC1_06_PALMIERS": "c7e5496b544cce2ac7090f608447955275db32d9f01c6d2928288d58b8481145",
+    "FTC1_07_ESTRADE": "1b74eb880afd539397c966e50697b278778eebaf26f09bbf0019d078e746f81f",
+    "FTC1_08_RIVE": "121571257c2e6276b593ea2f11f3fcc27d59b86cc3aa913a80c9288151efbfd0",
+    "FTC1_09_MER": "db278ac92b81e064a2ee5551996132399e5c6506e0feba839f28a64d700d3c30",
+    "FTC1_10_PAPILLONS": "af090dc1df31519a2ccf012f4cb1c1947cd31b1eaf3946f664d627a12c93ca58"
+   }
+  },
+  {
+   "lot": "fin_couloir_violet_v1",
+   "prefixe": "FCO1",
+   "titre": "Couloir violet",
+   "asset": "fco1_fin_couloir_violet",
+   "image": "FCO1_scene_t000.png",
+   "apercu": "apercu_fin_couloir_violet_v1.html",
+   "zip_source": "renders/fin_couloir_violet_v1/FCO1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "80bb08c3d568cab7288389defadd1bb1d6cbaa3f8fdf57bebf61e3d46aa46886",
+   "namespace_source": "fin_couloir_violet",
+   "script_source": "Data/Script/fin_couloir_violet/ground/fco1_fin_couloir_violet/init.lua",
+   "banques": [
+    "FCO1_00_SOL",
+    "FCO1_01_SOL",
+    "FCO1_02_OMBRES",
+    "FCO1_03_GRAVILLONS",
+    "FCO1_04_BLOCS",
+    "FCO1_05_ROCHERS",
+    "FCO1_06_FALAISE",
+    "FCO1_07_VIDE",
+    "FCO1_08_EBOULIS",
+    "FCO1_09_POUSSIERE"
+   ],
+   "ground": {
+    "nom": "Fin Couloir violet - arene (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 11,
+    "pistes_animees": [
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FCO1_00_SOL",
+     "FCO1_01_SOL",
+     "FCO1_02_OMBRES",
+     "FCO1_03_GRAVILLONS",
+     "FCO1_04_BLOCS",
+     "FCO1_05_ROCHERS",
+     "FCO1_06_FALAISE",
+     "FCO1_07_VIDE",
+     "FCO1_08_EBOULIS",
+     "FCO1_09_POUSSIERE"
+    ],
+    "marqueurs": {
+     "entrance": [
+      392,
+      560
+     ],
+     "boss": [
+      384,
+      272
+     ],
+     "objectif": [
+      384,
+      144
+     ]
+    },
+    "cases_bloquees": 4090,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "133183f4fd3e8ad89071496420196fe73bfb911eb379c7754e5fe01690f60af2",
+   "tiles_sha256": {
+    "FCO1_00_SOL": "1f126c5755d38294eeab512ad34fa297021cdd5f4931a499eeae26b35dcbc5a9",
+    "FCO1_01_SOL": "47fee8b4efce27523f54f5814b81331dd8063f9fdacefb28a28cdfb85c29c085",
+    "FCO1_02_OMBRES": "2bb718498f56d6be2dc31e963dece35e98751d48c7dbd6de4fdb884d3bafa620",
+    "FCO1_03_GRAVILLONS": "86c4e678b1c221b172dee669a9cf1f196f2292c66b6d06f52f30932f0145e05c",
+    "FCO1_04_BLOCS": "ed17dbf81ee94b0948c96d025295d0d46ae2f94bfcd348b583edec6a5a3f36b8",
+    "FCO1_05_ROCHERS": "66dd43b29a88eba294502daf9ed92ffcd15f701d94d8b2fcbd9ad024fd88babc",
+    "FCO1_06_FALAISE": "3bef8754eb9eab66e3a2e1a803314d4e76fd78090190b2e9616e4bbf08911a57",
+    "FCO1_07_VIDE": "7299f7f30689380381d6868fccc03e2ffec6b1932cf180a2f5a73f05d31e9f04",
+    "FCO1_08_EBOULIS": "5dbc8954ea6cbe76aa245d65bff577a5d3c4e45278f4041af49c8ef969c7e902",
+    "FCO1_09_POUSSIERE": "458f0c2205651672c637806d644a49af659030b89e346519b7c2e8eaf5adccbe"
+   }
+  },
+  {
+   "lot": "fin_couloir_violet_v2",
+   "prefixe": "FCO2",
+   "titre": "Couloir violet V2",
+   "asset": "fco2_fin_couloir_violet",
+   "image": "FCO2_scene_t000.png",
+   "apercu": "apercu_fin_couloir_violet_v2.html",
+   "zip_source": "renders/fin_couloir_violet_v2/FCO2_projet_pmdo_0812.zip",
+   "zip_source_sha256": "e4ddb23b5963fdc4ebf97bb356bcc033fc5db67cdb2521116678b9be4ae65f4a",
+   "namespace_source": "fin_couloir_violet_v2",
+   "script_source": "Data/Script/fin_couloir_violet_v2/ground/fco2_fin_couloir_violet/init.lua",
+   "banques": [
+    "FCO2_00_SOL",
+    "FCO2_01_SOL",
+    "FCO2_02_OMBRES",
+    "FCO2_03_GRAVILLONS",
+    "FCO2_04_BLOCS",
+    "FCO2_05_ROCHERS",
+    "FCO2_06_FALAISE",
+    "FCO2_07_VIDE",
+    "FCO2_08_EBOULIS",
+    "FCO2_09_POUSSIERE",
+    "FCO2_10_LUEUR",
+    "FCO2_11_FEUX"
+   ],
+   "ground": {
+    "nom": "Fin Couloir violet - arene (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 13,
+    "pistes_animees": [
+     [
+      24,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FCO2_00_SOL",
+     "FCO2_01_SOL",
+     "FCO2_02_OMBRES",
+     "FCO2_03_GRAVILLONS",
+     "FCO2_04_BLOCS",
+     "FCO2_05_ROCHERS",
+     "FCO2_06_FALAISE",
+     "FCO2_07_VIDE",
+     "FCO2_08_EBOULIS",
+     "FCO2_09_POUSSIERE",
+     "FCO2_10_LUEUR",
+     "FCO2_11_FEUX"
+    ],
+    "marqueurs": {
+     "entrance": [
+      392,
+      560
+     ],
+     "boss": [
+      384,
+      272
+     ],
+     "objectif": [
+      384,
+      144
+     ]
+    },
+    "cases_bloquees": 4090,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "c90b9cb2acb021cbfdcbe5a53ac0bad35e135ad3720c6655e994d9820dedf35b",
+   "tiles_sha256": {
+    "FCO2_00_SOL": "1f126c5755d38294eeab512ad34fa297021cdd5f4931a499eeae26b35dcbc5a9",
+    "FCO2_01_SOL": "47fee8b4efce27523f54f5814b81331dd8063f9fdacefb28a28cdfb85c29c085",
+    "FCO2_02_OMBRES": "2bb718498f56d6be2dc31e963dece35e98751d48c7dbd6de4fdb884d3bafa620",
+    "FCO2_03_GRAVILLONS": "86c4e678b1c221b172dee669a9cf1f196f2292c66b6d06f52f30932f0145e05c",
+    "FCO2_04_BLOCS": "ed17dbf81ee94b0948c96d025295d0d46ae2f94bfcd348b583edec6a5a3f36b8",
+    "FCO2_05_ROCHERS": "66dd43b29a88eba294502daf9ed92ffcd15f701d94d8b2fcbd9ad024fd88babc",
+    "FCO2_06_FALAISE": "3bef8754eb9eab66e3a2e1a803314d4e76fd78090190b2e9616e4bbf08911a57",
+    "FCO2_07_VIDE": "7299f7f30689380381d6868fccc03e2ffec6b1932cf180a2f5a73f05d31e9f04",
+    "FCO2_08_EBOULIS": "5dbc8954ea6cbe76aa245d65bff577a5d3c4e45278f4041af49c8ef969c7e902",
+    "FCO2_09_POUSSIERE": "458f0c2205651672c637806d644a49af659030b89e346519b7c2e8eaf5adccbe",
+    "FCO2_10_LUEUR": "40109cf2de859939590f91cd42c55c9fda96271902543df6c1f935338a092699",
+    "FCO2_11_FEUX": "a4a009ae9ff742a667e4d325d016c2a0816f7fe67a10767a0e633434ded1b3e7"
+   }
+  },
+  {
+   "lot": "fin_mt_thunder_v1",
+   "prefixe": "FTH1",
+   "titre": "Mt. Thunder",
+   "asset": "fth1_fin_mt_thunder",
+   "image": "FTH1_scene_t000.png",
+   "apercu": "apercu_fin_mt_thunder_v1.html",
+   "zip_source": "renders/fin_mt_thunder_v1/FTH1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "3f51144ffe55899ccfd997e154d1b53135795066178f709ce25a3b20e5655145",
+   "namespace_source": "fin_mt_thunder",
+   "script_source": "Data/Script/fin_mt_thunder/ground/fth1_fin_mt_thunder/init.lua",
+   "banques": [
+    "FTH1_00_SOL",
+    "FTH1_01_SABLE",
+    "FTH1_02_CAILLOUX",
+    "FTH1_03_PICS",
+    "FTH1_04_FALAISE",
+    "FTH1_05_CIEL",
+    "FTH1_06_NUAGES",
+    "FTH1_07_LUEURS",
+    "FTH1_08_ECLAIRS"
+   ],
+   "ground": {
+    "nom": "Fin Mt. Thunder - sommet (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 10,
+    "pistes_animees": [
+     [
+      48,
+      5
+     ]
+    ],
+    "banques_utilisees": [
+     "FTH1_00_SOL",
+     "FTH1_01_SABLE",
+     "FTH1_02_CAILLOUX",
+     "FTH1_03_PICS",
+     "FTH1_04_FALAISE",
+     "FTH1_05_CIEL",
+     "FTH1_06_NUAGES",
+     "FTH1_07_LUEURS",
+     "FTH1_08_ECLAIRS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "boss": [
+      376,
+      232
+     ],
+     "objectif": [
+      384,
+      112
+     ]
+    },
+    "cases_bloquees": 4724,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "1c69cd2a3e1b85038ff507bd4c6458d8fdf8afc0c4523941eb60c0895b7b3bcd",
+   "tiles_sha256": {
+    "FTH1_00_SOL": "fa731050e71c76e83f0edb080302ce9218353aae29fc0b68a3a6ea99e99a1018",
+    "FTH1_01_SABLE": "8268b725fa373272ce3ed126d995af2aab9c6c0c39036bb16df534e83e370a55",
+    "FTH1_02_CAILLOUX": "afd7fe9e13d022535f2010ee227d70d05fa73c2b0a853cd31d60ec72edeef41b",
+    "FTH1_03_PICS": "4967ee5e07c2a77dba23b86cf67f37fa1e14ffd83395319449589cf53809a4ad",
+    "FTH1_04_FALAISE": "b0d94f233d1bdc471eb304a88f56f0b903fff3bc9b4bc812082420c3bbd3fbbf",
+    "FTH1_05_CIEL": "0d8160f0c71448572d607ab611a4136dbc963c2597a5de06940333a582848a65",
+    "FTH1_06_NUAGES": "ce7975d1bde6623cda36358f1474eca8dcdf746a9279b922c1db2341d63356f3",
+    "FTH1_07_LUEURS": "368c3a78014b1373c472be36b2dd6e76504fdf662a4db868056a0125d7b82b68",
+    "FTH1_08_ECLAIRS": "b89429a0d1f7a546a7237f46788c776d0a8330f59f93588f948069d2bbdeb31a"
+   }
+  },
+  {
+   "lot": "fin_jardin_secret_v1",
+   "prefixe": "FJA1",
+   "titre": "Jardin secret (végétation animée)",
+   "asset": "fja1_fin_jardin_secret",
+   "image": "FJA1_scene_t000.png",
+   "apercu": "apercu_fin_jardin_secret_v1.html",
+   "zip_source": "renders/fin_jardin_secret_v1/FJA1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "c0054bcdb7a4e3f2259a279d04485f1c61641b4c633fb8a88b5a673b53cd0767",
+   "namespace_source": "fin_jardin_secret",
+   "script_source": "Data/Script/fin_jardin_secret/ground/fja1_fin_jardin_secret/init.lua",
+   "banques": [
+    "FJA1_00_SOL",
+    "FJA1_01_PRAIRIE",
+    "FJA1_02_HERBE",
+    "FJA1_03_OMBRES",
+    "FJA1_04_FLEURS",
+    "FJA1_05_ROCHERS",
+    "FJA1_06_ARBRES",
+    "FJA1_07_HAIES",
+    "FJA1_08_SOUCHE",
+    "FJA1_09_MARCHES",
+    "FJA1_10_PROFONDEUR",
+    "FJA1_11_FOND",
+    "FJA1_12_FLEURS",
+    "FJA1_13_PETALES",
+    "FJA1_14_FEUILLES",
+    "FJA1_15_RAYON",
+    "FJA1_16_LUCIOLES"
+   ],
+   "ground": {
+    "nom": "Fin Jardin secret - arene (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 18,
+    "pistes_animees": [
+     [
+      4,
+      14
+     ],
+     [
+      8,
+      7
+     ],
+     [
+      24,
+      7
+     ],
+     [
+      24,
+      14
+     ]
+    ],
+    "banques_utilisees": [
+     "FJA1_00_SOL",
+     "FJA1_01_PRAIRIE",
+     "FJA1_02_HERBE",
+     "FJA1_03_OMBRES",
+     "FJA1_04_FLEURS",
+     "FJA1_05_ROCHERS",
+     "FJA1_06_ARBRES",
+     "FJA1_07_HAIES",
+     "FJA1_08_SOUCHE",
+     "FJA1_09_MARCHES",
+     "FJA1_10_PROFONDEUR",
+     "FJA1_11_FOND",
+     "FJA1_12_FLEURS",
+     "FJA1_13_PETALES",
+     "FJA1_14_FEUILLES",
+     "FJA1_15_RAYON",
+     "FJA1_16_LUCIOLES"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "boss": [
+      376,
+      272
+     ],
+     "objectif": [
+      376,
+      160
+     ]
+    },
+    "cases_bloquees": 4316,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "d26ddb00f14c27e0729efcf17f91530e6c2ab8dcb0c58ae1c58df988eb239476",
+   "tiles_sha256": {
+    "FJA1_00_SOL": "f13eb78b3f2f504f1a1dabd1670b9026c83edfeafca965bcc226215bb38f7f40",
+    "FJA1_01_PRAIRIE": "a8c8eea97e65c24c99755f6589ed3f62a307ff5c6deab5a295197b0d11886a62",
+    "FJA1_02_HERBE": "b8cb60cebd23dfec3c13b12f85dfb38084075113371ed49c4a3a43f4b7b1e363",
+    "FJA1_03_OMBRES": "ac001ef529db53701052312ab6ea18ddf1b05820f65bb1a05e91476ea901d576",
+    "FJA1_04_FLEURS": "e3e934943178eb51bf4b6d62ae305507e3a3be0e23ec491afb33fa322f8093f6",
+    "FJA1_05_ROCHERS": "663393d6048ae84397f8d47c3cfc9e6d9a29b573610fe942e4294779c1fbae85",
+    "FJA1_06_ARBRES": "15e42f065ebb72e8509106aa401e0efa352d0521e0dee40040f15656b5c1128b",
+    "FJA1_07_HAIES": "365ff5279a7ee098b28c4959a7d4708fd1c8317d02dbce7ee01047007b6a8352",
+    "FJA1_08_SOUCHE": "735f50ad39c9af85a5cbc9a7004ce06aa3da47e1f5689ef7b7a47214f2dc2663",
+    "FJA1_09_MARCHES": "c26ba49dd90e82c3d37df1cf4cc180fe64a75c7a720819df1a2b803f2527cc56",
+    "FJA1_10_PROFONDEUR": "e5a25e5a02914b3de9316020c858052015bfa5f61047b805827aa4b650bee85b",
+    "FJA1_11_FOND": "92869688d74bf85847649c12fac34e4ce7d6edfe5fddf52db3090b54b5ae2b14",
+    "FJA1_12_FLEURS": "1150b3333edafa3e64d8f32a65289c171c8a2bd492302790504d3a971603c8f8",
+    "FJA1_13_PETALES": "a52646adc26188980713d72cc4fcc1e523a3cd416bf9ce39e1d6d7f41ddbd037",
+    "FJA1_14_FEUILLES": "811db754620195bcb7c37ae9954c74c6e1af1609bf4f6eb321b3cc3a1c837c90",
+    "FJA1_15_RAYON": "7c35d9a025e19bd48e4c03a52253d9e1994242715b475d5c775480e92f477eba",
+    "FJA1_16_LUCIOLES": "fe88fc0c126cda20dcce7bbf806c303bfc7f2dfd80c8ca0605d4cebaccbf14e3"
+   }
+  }
+ ]
+}
