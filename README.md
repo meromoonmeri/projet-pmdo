@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## IMW2 — Ciel de Mew, fond animé en boucle au format PMDO (1er octobre 2026)
+
+**Demande** : « continue » (suite d'IMW1, « fond animé » d'une intro de Mew). Choix de l'agent, à confirmer : IMW1 est une vidéo ; IMW2 en est le fond de ciel au format projet PMDO (Ground, tuiles de 8 px, calques animés).
+
+- `renders/intro_mew_ciel_v1/`, aperçu `apercu_intro_mew_ciel.html`, source `source/intro_mew_ciel_v1/`.
+- Mew vole **sur place** (bosse de 3 px, queue qui ondule, 8 poses) pendant que le décor défile ; soleil à rayons qui tournent (12 phases) ; trois plans de nuages en parallaxe (12, 24, 36 px/s) et mer de nuages ; éclats derrière Mew. Boucle de **2400 ticks (40 s)**, tous les cycles divisent la boucle.
+- Aucune référence ROM : tout est procédural, Mew est le sprite généré d'IMW1 (66 × 58, 13 couleurs, en pixels × 2).
+- **Fond de cinématique, pas une zone de jeu** : grille entièrement bloquante, marqueurs `entrance`, `mew`, `soleil` pour repère. Aucun warp. L'enchaînement des 11 cartes d'IMW1 n'est pas rejoué en tuiles. Les nuages lointains répètent leur motif tous les 480 px.
+- 9 tests PASS (dont l'aller-retour Ground sur 3 instants par calque), 3 mutations détectées sur 3. Pas de runtime PMDO, `art_approved: false`.
+
 ## IMW1 — Intro animée de Mew, voyage à travers le ciel et le monde Pokémon (1er octobre 2026)
 
 **Demande** : « une intro d'un mew qui voyage à travers le ciel avec un soleil et il voyage à travers le monde pokémon avec différents biomes (une cinématique avec plusieurs map) ».

@@ -1,0 +1,182 @@
+{
+  "lot": "intro_mew_ciel_v1",
+  "asset": "IMW2",
+  "serie": "Cinematiques",
+  "biome": "ciel d aube au-dessus d une mer de nuages (choisi par l agent, a confirmer)",
+  "demande": [
+    "tu peux faire fond animé une intro d'un mew qui voyage a traver le ciel avec un soleil et il voyage a travers le monde pokemon avec différent biome (une cinematique avec plusieurs map etc)"
+  ],
+  "choix_agent": {
+    "portee": "IMW1 est la cinematique video (11 cartes) ; IMW2 est son fond de ciel en boucle, au format PMDO Ground (calques et tuiles de 8 px). Les cartes de biome restent leurs propres projets : l'enchainement des 11 cartes n'est pas rejoue en tuiles (a confirmer)",
+    "mew": "sprite de IMW1 (66 x 58 px natifs, 13 couleurs) en pixels x2, sur place : il flotte et sa queue ondule, le decor defile",
+    "repetition": "les nuages lointains repetent leur motif tous les 480 px (2 fois par 768 px) : limite de la boucle de 40 s"
+  },
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "method": "generation procedurale (nuages, soleil, eclats, degrade de ciel trame) et sprite de Mew genere ; aucune reference ROM ; bandes de nuages periodiques (recouvrement circulaire) decalees d un pas fixe par phase",
+  "raw_inputs": [
+    {
+      "file": "source/intro_mew_v1/bruts/mew_a.png",
+      "sha256": "ab205cfc5274a316e98748032c0247b8180d88e9305ff9f347ff3c7a54ecea63",
+      "utilise": true,
+      "editions": 0,
+      "note": "resample a la grille native 11,75 px (66 x 58, 13 couleurs) : bruts/mew_natif.png"
+    }
+  ],
+  "layer_order_bottom_to_top": [
+    "calques/IMW2_00_ciel.png",
+    "animation/soleil/IMW2_01_soleil_fNN.png",
+    "animation/nuages_loin/IMW2_02_nuages_loin_fNNN.png",
+    "animation/nuages_moyens/IMW2_03_nuages_moyens_fNNN.png",
+    "animation/mew/IMW2_04_mew_fNN.png",
+    "animation/mer/IMW2_05_mer_fNNN.png",
+    "animation/eclats/IMW2_06_eclats_fNN.png"
+  ],
+  "ciel": {
+    "haut": [
+      112,
+      150,
+      222
+    ],
+    "horizon": [
+      255,
+      205,
+      150
+    ],
+    "bandes": 14,
+    "trame": "Bayer 4 x 4"
+  },
+  "soleil": {
+    "centre_logique": [
+      270,
+      118
+    ],
+    "rayon_logique": 26,
+    "rayons": 14,
+    "phases": 12,
+    "frame_length_ticks": 200,
+    "loi": "rotation de 2/12 rayon par phase : la figure (deux longueurs de rayon alternees) revient a l identique en 12 phases"
+  },
+  "nuages_loin": {
+    "phases": 240,
+    "frame_length_ticks": 10,
+    "periode_px": 480,
+    "pas_px": 2,
+    "vitesse_px_s": 12
+  },
+  "nuages_moyens": {
+    "phases": 240,
+    "frame_length_ticks": 10,
+    "periode_px": 960,
+    "pas_px": 4,
+    "vitesse_px_s": 24
+  },
+  "mer": {
+    "phases": 240,
+    "frame_length_ticks": 10,
+    "periode_px": 1440,
+    "pas_px": 6,
+    "vitesse_px_s": 36,
+    "contenu": "nuages proches et mer de nuages (deux copies decalees de 360 px logiques, recouvrement circulaire)"
+  },
+  "mew": {
+    "phases": 8,
+    "frame_length_ticks": 6,
+    "centre_px": [
+      280,
+      300
+    ],
+    "bosse_px": [
+      0,
+      4,
+      6,
+      4,
+      0,
+      -4,
+      -6,
+      -4
+    ],
+    "taille_native": [
+      66,
+      58
+    ],
+    "couleurs": 13,
+    "loi": "pose k de la queue (onde calculee, boucle exacte), bosse round(3 sin(2 pi k / 8)) px logiques"
+  },
+  "eclats": {
+    "phases": 8,
+    "frame_length_ticks": 6,
+    "tons": [
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        242,
+        170
+      ],
+      [
+        255,
+        196,
+        226
+      ]
+    ],
+    "emissions_par_cycle": 8,
+    "vie_pas": 11
+  },
+  "scene_loop_ticks": 2400,
+  "access": {
+    "markers": {
+      "entrance": [
+        376,
+        560
+      ],
+      "mew": [
+        272,
+        292
+      ],
+      "soleil": [
+        532,
+        228
+      ]
+    },
+    "blocked_cells": 6912,
+    "total_cells": 6912,
+    "rule": "fond de cinematique : toute la grille est bloquante, marqueurs de repere (entrance, mew, soleil) seulement"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "imw2_ciel_de_mew",
+    "namespace": "ciel_de_mew",
+    "tiles_per_bank": {
+      "IMW2_00_CIEL": 61,
+      "IMW2_01_SOLEIL": 1137,
+      "IMW2_02_NUAGES": 430,
+      "IMW2_03_NUAGES": 366,
+      "IMW2_04_MEW": 475,
+      "IMW2_05_MER": 724,
+      "IMW2_06_ECLATS": 141
+    },
+    "banks": [
+      "IMW2_00_CIEL",
+      "IMW2_01_SOLEIL",
+      "IMW2_02_NUAGES",
+      "IMW2_03_NUAGES",
+      "IMW2_04_MEW",
+      "IMW2_05_MER",
+      "IMW2_06_ECLATS"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}

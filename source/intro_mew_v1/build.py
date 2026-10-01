@@ -229,13 +229,13 @@ def sky_gradient(top, hor, bands=14):
     return out.astype(np.uint8)
 
 
-def draw_sun(img, cx, cy, r, tl, warm=(1.0, 1.0, 1.0)):
+def draw_sun(img, cx, cy, r, tl, warm=(1.0, 1.0, 1.0), rot=None):
     """Soleil à 3 tons et 14 rayons qui tournent par pas de 1/3."""
     ov = Image.new('RGBA', (LW, LH), (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
-    step = int(tl * 3) % 3
+    step = int(tl * 3) % 3 if rot is None else None
     n = 14
     for i in range(n):
-        a = 2 * math.pi * (i + step / 3.0) / n
+        a = 2 * math.pi * (((i + step / 3.0) if rot is None else ((i + rot) % n))) / n
         w = 0.07 + (0.03 if i % 2 == 0 else 0.0)
         long = r * (2.1 if i % 2 == 0 else 1.65)
         pts = [(cx + math.cos(a - w) * r * 1.15, cy + math.sin(a - w) * r * 1.15), (cx + math.cos(a) * long, cy + math.sin(a) * long),
