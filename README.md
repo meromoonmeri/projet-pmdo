@@ -1,5 +1,18 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Couloir violet : arène de rochers, FCO1 (1er octobre 2026)
+
+**Demande** : « la suite » (après FTC1). Suite de la série des fins de donjon dans l'ordre du mod : **FCO1** prolonge l'entrée ECV1 (Couloir violet). Biome et portée choisis par l'agent, **à confirmer**.
+
+- Sorties : `renders/fin_couloir_violet_v1/`, aperçu `apercu_fin_couloir_violet_v1.html`, build `source/fin_couloir_violet_v1/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `large.S05P03A…png` et sur le décor d'ECV1. Ce ne sont pas des tuiles natives. Le fond de sol et la planche de poussière sont copiés d'ECV1 (mêmes octets, testé).
+- **Layout** : arrivée au sud par un couloir, grande arène ronde de rochers bleu-violet, énorme pile de rochers dans l'alcôve du nord, sans bouche sombre. Marqueurs `entrance`, `boss` (centre), `objectif` (pied de la pile) ; aucune sortie, aucun warp.
+- **Calques** : sol complet, sol, ombres, gravillons, blocs, rochers, falaise, vide, éboulis (24 × 5 ticks, gravillons exacts du rip), poussière (24 × 5 ticks), plus un Top vide.
+- **Fidélité** (seuil 35) : sol 14,1, rochers 13,6, blocs 20,8.
+- **Contrôles** : 12 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- **Préfixe** : FCO1, et non FCV1 (cité comme pris par un repère d'une branche sœur). **Alerte** : la même note cite aussi **FTC1** (repère de fin Clairière tropicale sur la branche sœur `arena/01a0eaca`), préfixe que j'ai pris pour la Fin Clairière tropicale sans le vérifier. Les branches sœurs ne sont pas accessibles ici ; collision à trancher si elles sont fusionnées.
+- Fins restantes : Mt. Thunder, Jardin secret.
+
 ## Fin Clairière tropicale : arène de jungle et lagon, FTC1 (1er octobre 2026)
 
 **Demande** : « vas-y go lance toi », après la proposition de poursuivre avec la fin Clairière tropicale. Suite de la série des fins de donjon dans l'ordre du mod : **FTC1** prolonge l'entrée ETC1. Biome et portée choisis par l'agent, **à confirmer**.

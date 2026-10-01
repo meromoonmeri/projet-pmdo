@@ -88,6 +88,8 @@ Même jour, suite (« bon travail continue la suite ! ») : lot **Fin Star Cave*
 
 1er octobre (session `arena/01a0f7e8`), sur « vas-y go lance toi » : lot **Fin Clairière tropicale** (`renders/fin_clairiere_tropicale_v1/`, préfixe `FTC1`, réf. `large.S01P03A…png` + décor d'ETC1, aperçu `apercu_fin_clairiere_tropicale_v1.html`, 12 tests PASS, 5 mutations détectées). Biome et portée choisis par l'agent, **à confirmer**. Arène d'herbe ceinte de jungle, piste de dalles au sud, lagon et estrade au nord ; mer animée vers la rive (sud), papillons d'ETC1. Premier décor écarté (jungle finale 35,1 > 35), décor édité (28,9). `.venv` recréée (Pillow 12.3). Fins restantes : Couloir violet, Mt. Thunder, Jardin secret.
 
+Même jour, sur « la suite » : lot **Fin Couloir violet** (`renders/fin_couloir_violet_v1/`, préfixe `FCO1`, réf. `large.S05P03A…png` + décor d'ECV1, aperçu `apercu_fin_couloir_violet_v1.html`, 12 tests PASS, 5 mutations détectées). Biome et portée choisis par l'agent, **à confirmer**. Arène ronde de rochers, pile géante au nord sans bouche sombre ; éboulis aux gravillons exacts du rip. Fond de sol et poussière copiés d'ECV1. **Alerte préfixes** : les notes du 29 septembre citent FCV1 et FTC1 comme repères de la branche sœur `arena/01a0eaca` ; FCV1 évité (FCO1), mais FTC1 a été repris par la Fin Clairière tropicale sans vérification. Fins restantes : Mt. Thunder, Jardin secret.
+
 ## Branches sœurs de la série (relevé du 27 septembre)
 
 Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) ; `01a0e017` travaille sur un autre historique. Aucune n'a été fusionnée et rien n'en a été repris. Leurs têtes étaient identiques au démarrage et avant le commit d'EQS1.
