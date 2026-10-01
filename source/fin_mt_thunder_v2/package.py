@@ -49,7 +49,7 @@ def main():
         poses.append({'id': p.stem.replace(PFX + '_', ''), 'uri': uri(p), 'w': w, 'h': h})
     data = {'size': M['size_px'], 'loop': M['scene_loop_ticks'], 'stack': stack, 'surface': 'rgb(112,104,112)', 'poses': poses,
             'collisions': uri(O / f'review/{PFX}_collisions_marqueurs.png'),
-            'entry': M['access']['entry_px'], 'threshold': M['access']['threshold_px']}
+            'entry': M['access']['entry_px']}
     page = (HERE / 'viewer_template.html').read_text().replace('__DATA__', json.dumps(data))
     (R / 'apercu_fin_mt_thunder_v2.html').write_text(page)
     for p in [O / f'{PFX}_projet_pmdo_0812.zip', O / f'{PFX}_calques_png_8px.zip', R / 'apercu_fin_mt_thunder_v2.html']:

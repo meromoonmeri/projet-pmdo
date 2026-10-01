@@ -2,7 +2,7 @@
 <html lang="fr">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Entrée Mt. Thunder · sud → nord · 4:3</title>
+<title>Fin Mt. Thunder · arène du sommet · 4:3</title>
 <style>
 body{background:#141b24;color:#e4e6f2;font:15px/1.55 system-ui,sans-serif;margin:0;padding:24px}
 main{max-width:1180px;margin:auto}
@@ -21,8 +21,8 @@ button.on{background:#e7c77f}
 code{color:#cfe4ee}
 </style>
 <main>
-<h1>Entrée Mt. Thunder — format 4:3 vaste (768×576)</h1>
-<p>Rendu généré <strong>référencé sur la planche de Mt. Thunder</strong> (<code>Game Boy Advance - … - Mt. Thunder.png</code> : salle du sommet de <em>Red Rescue Team</em>, plateau de sable, falaises de roche brune, pics, mer de nuages d'orage ; en bas de la planche, 4 éclairs, l'arc « Flash » et les couleurs « Normal » / « Fading »). Biome choisi par l'agent pour la suite de la série. Le générateur a reçu la capture en référence et a produit, du premier coup, le décor complet en 4:3 (sable à 4,0, roche à 6,8 de la capture ; gris de l'orage mesurés par ton : 7,4, 19,5 et 13,5 ; seuil 35) et un sol de sable complet. Le tout a été découpé en <strong>12 calques</strong> (plus un calque Top vide dans le Ground). Les <strong>éclairs</strong> et l'<strong>arc</strong> sont <strong>copiés pixel par pixel de la planche</strong>, avec ses couleurs exactes : 2 phases « Normal », 2 phases « Fading », puis rien ; l'arc s'allume sur les nuages au pied de l'éclair. L'éclair 1 frappe à gauche seulement, les éclairs 2 à 4 à gauche ou en miroir à droite, comme l'indique la planche. Six éclairs par boucle de 4 s (48 × 5 ticks). L'arrivée est au sud, sur une crête de sable qui sort des nuages ; elle mène au plateau du sommet, coupé par une falaise en gradin ouverte au centre, jusqu'à la grotte d'un piton rocheux, au nord.</p>
+<h1>Fin Mt. Thunder — arène du sommet, format 4:3 vaste (768×576)</h1>
+<p>Rendu généré <strong>référencé sur la planche de Mt. Thunder</strong> (<code>Game Boy Advance - … - Mt. Thunder.png</code> : salle du sommet de <em>Red Rescue Team</em>, avec en bas de la planche les 4 éclairs, l'arc « Flash » et les couleurs « Normal » / « Fading »). Zone de fin qui prolonge l'entrée EMT1 ; biome et portée choisis avec l'utilisateur, à confirmer. Le générateur a reçu la capture en référence et a produit, du premier coup, une arène ronde de sable fermée par une couronne de falaises, avec un nid de pierre plein au nord, puis un sol de sable complet (sable à 2,2 de la capture, ciel 5,8, roche 26,0 ; le pilier du nid est plus sombre : 52,7, limite signalée). Le tout est découpé en <strong>10 calques</strong> (plus un calque Top vide dans le Ground). Les <strong>éclairs</strong> et l'<strong>arc</strong> sont <strong>copiés pixel par pixel de la planche</strong>, couleurs exactes : 2 phases « Normal », 2 phases « Fading », puis rien. Huit éclairs par boucle de 4 s (48 × 5 ticks), un toutes les 6 phases, plus orageux que l'entrée. L'arrivée est au sud, sur une crête de sable ; l'arène est au centre, le nid au nord.</p>
 <div class="wrap">
   <div class="stage" id="stage"><canvas id="c"></canvas></div>
   <aside>
@@ -36,7 +36,7 @@ code{color:#cfe4ee}
     <fieldset><legend>Calques (bas → haut)</legend><div id="layers"></div><button id="solo">Tout afficher</button></fieldset>
     <fieldset><legend>Sprites exacts de la planche (×4) : éclairs 1 à 4, arc « Flash »</legend><div id="poses" style="display:flex;flex-wrap:wrap;gap:6px"></div></fieldset>
     <fieldset><legend>Export</legend><button id="png">PNG de la vue actuelle (1×)</button></fieldset>
-    <p class="note">Le terrain est généré à partir de la capture ; les éclairs, l'arc et leurs couleurs sont les pixels exacts de la planche. Le placement, la cadence et l'arc au pied de l'éclair sont créés par nous : ce n'est pas l'animation officielle. Marqueurs : jaune = <code>entrance</code>, cyan = <code>donjon_seuil</code>. Aucun test fait dans PMDO.</p>
+    <p class="note">Le terrain est généré à partir de la capture ; les éclairs, l'arc et leurs couleurs sont les pixels exacts de la planche. Le placement, la cadence et l'arc au pied de l'éclair sont créés par nous : ce n'est pas l'animation officielle. Marqueurs : jaune = <code>entrance</code>, magenta = <code>boss</code>, cyan = <code>objectif</code>. Aucun test fait dans PMDO.</p>
   </aside>
 </div>
 </main>
