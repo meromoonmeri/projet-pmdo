@@ -1,5 +1,13 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Entrée Jardin secret V3 : végétation animée, EJS3 (1er octobre 2026)
+
+**Demande** : « lance toi » (après FJA1). Les trois calques de végétation de la fin FJA1 (`feuilles`, `fleurs_halcyon` natives de Palikadude/Halcyon, `petales`) sont appliqués à l'entrée du jardin secret : **EJS3** = EJS2 (temple de Celebi) + ces calques. EJS1 et EJS2 sont conservées. Choix de l'agent, **à confirmer**.
+
+- Sorties : `renders/entree_jardin_secret_sud_nord_v3/`, aperçu `apercu_entree_jardin_secret_sud_nord_v3.html`, build `source/entree_jardin_secret_sud_nord_v3/build.py`.
+- Emblème, rayon et lucioles passent à 24 × 7 ticks ; boucle commune de 336 ticks. Marqueurs et accès inchangés (`entrance`, `donjon_seuil`).
+- **Contrôles** : 17 tests PASS, 5 mutations détectées. Pas de runtime PMDO, `art_approved: false`.
+
 ## Fin Jardin secret : feuilles, fleurs Halcyon, pétales, FJA1 (1er octobre 2026)
 
 **Demande** : « rajoute un calque de mouvement de feuille et des animation de fleur palika halcyon et des petale de fleur », puis « LA SUITE ! ». Dernière fin de la série : **FJA1** prolonge l'entrée EJS1 (Jardin secret). Biome et portée choisis par l'agent, **à confirmer**. Préfixe FJA1 (FJS1 = Jungle sud).
