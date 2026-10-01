@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## ECL1 — Entrée Colonnes Lances sud → nord, le sentier de la montagne (1er octobre 2026)
+
+**Demande** : « suite ». Choix de l'agent, à confirmer : l'entrée de donjon (série sud → nord, marqueurs `entrance` et `donjon_seuil`) qui monte vers le sommet de CLR2.
+
+- `renders/entree_colonnes_lances_sud_nord_v1/`, aperçu `apercu_entree_colonnes_lances_sud_nord_v1.html`, source `source/entree_colonnes_lances_sud_nord_v1/`.
+- Sentier de briques en trois lacets sur la pente rocheuse, deux escaliers diagonaux, colonnes brisées ou couchées, portique à emblème vert (loi de palette ROM) au nord ; nuages, rochers, éclats.
+- **Aucune référence de montagne** : roche et neige ne sont pas mesurées contre le rip. Fidélité (seuil 35) : briques 26,2, piliers 25,0, nuages 7,3 ; escalier 35,0, **hors seuil** (matière différente de D28P33A), donné à titre d'information.
+- Sol limité à trois zones, quatre escaliers et deux goulots (~15 px < 16 px requis) **élargis à la main** (`PASSAGES`) ; la roche a le ton des briques.
+- 9 tests PASS ; sur 4 mutations, 2 détectées (les 2 autres : colonne couchée hors sentier, zones élargies sans effet). Pas de runtime PMDO, `art_approved: false`. Non ajoutée au mod v2 des entrées.
+
 ## CLR2 — Colonnes Lances, sommet de la montagne (1er octobre 2026)
 
 **Demande** : « J'aimerais voir le site avec les map que tu as fait et que tu passe au sommet d'une montagne style colonne lance ». Le site (serveur d'aperçus, port 8000) est relancé. Nouvelle carte **CLR2** : la terrasse des colonnes au sommet d'une montagne de roche brune et de neige ; CLR1 (ruines flottantes) est conservée.
