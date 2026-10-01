@@ -1,0 +1,347 @@
+{
+ "lot": "mod_guilde_colonnes_mew_v1",
+ "namespace": "guilde_colonnes_mew",
+ "target": "0.8.12",
+ "cartes": 4,
+ "banques": 28,
+ "validation_utilisateur": {
+  "date": null,
+  "citation": null,
+  "portee": "aucune validation de l utilisateur enregistree pour ces cartes ; verifications de fichiers uniquement, aucun test en jeu PMDO",
+  "cartes_validees": [],
+  "a_confirmer": [
+   "CLR1",
+   "CLR2",
+   "ECL1",
+   "IMW2"
+  ]
+ },
+ "runtime_tested": false,
+ "methode": "banques et Grounds copies octet pour octet depuis les ZIP projets versionnes des lots ; index fusionne ; scripts deplaces sous le namespace commun, contenu inchange",
+ "maps": [
+  {
+   "lot": "colonnes_lances_v1/CLR1",
+   "prefixe": "CLR1",
+   "titre": "Colonnes Lances, ruines flottantes",
+   "asset": "clr1_colonnes_lances",
+   "image": "CLR1_scene_t000.png",
+   "apercu": "apercu_colonnes_lances.html",
+   "zip_source": "renders/colonnes_lances_v1/CLR1/CLR1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "50024e1e46553ee6cb0bc8fba5363f4a195c01240d7b196b63038d59a5c89dd9",
+   "namespace_source": "colonnes_lances",
+   "script_source": "Data/Script/colonnes_lances/ground/clr1_colonnes_lances/init.lua",
+   "banques": [
+    "CLR1_00_CIEL",
+    "CLR1_01_NUAGES",
+    "CLR1_02_SOL",
+    "CLR1_03_RUINES",
+    "CLR1_04_ROCHERS",
+    "CLR1_05_VITRAIL",
+    "CLR1_06_ECLATS"
+   ],
+   "ground": {
+    "nom": "Colonnes Lances - ruines (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 8,
+    "pistes_animees": [
+     [
+      12,
+      10
+     ],
+     [
+      30,
+      20
+     ],
+     [
+      60,
+      10
+     ],
+     [
+      120,
+      10
+     ]
+    ],
+    "banques_utilisees": [
+     "CLR1_00_CIEL",
+     "CLR1_01_NUAGES",
+     "CLR1_02_SOL",
+     "CLR1_03_RUINES",
+     "CLR1_04_ROCHERS",
+     "CLR1_05_VITRAIL",
+     "CLR1_06_ECLATS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "autel": [
+      376,
+      160
+     ],
+     "centre": [
+      376,
+      296
+     ]
+    },
+    "cases_bloquees": 4653,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "152d1fa8c0afd178364e899e490084ee2d3c7c031e66df4fdff888d0c07d1a47",
+   "tiles_sha256": {
+    "CLR1_00_CIEL": "df6fed0faddc3d54c399819380422fb061279685f00fea43f3e4eb553e84d13f",
+    "CLR1_01_NUAGES": "ec3cfe4587b7e84dc9c861d5eeb9323b01dbab4f614f29e20da428cb01f7a09c",
+    "CLR1_02_SOL": "61e52fef60baa4325ae4b11f189e51497d4f37b6000774ab638f9800f1a8bf96",
+    "CLR1_03_RUINES": "13729c49959cdb8434b756396c0af3372636ec9fa8d0aefca628d146504238f0",
+    "CLR1_04_ROCHERS": "0e5d590785779ca15cf84f59f9b048be88925205a198e8f1ae243cea56ed3bd2",
+    "CLR1_05_VITRAIL": "ba875f87b6a6b39deaed1d54dd90a0bf6ad21f086d202c820f10114f742f94c9",
+    "CLR1_06_ECLATS": "a001d81f6effe37c656b4b1b9c8018d032cc91fe3efade7fe384a6c7361603b2"
+   }
+  },
+  {
+   "lot": "colonnes_lances_v2/CLR2",
+   "prefixe": "CLR2",
+   "titre": "Colonnes Lances, sommet de la montagne",
+   "asset": "clr2_colonnes_lances_sommet",
+   "image": "CLR2_scene_t000.png",
+   "apercu": "apercu_colonnes_lances_sommet.html",
+   "zip_source": "renders/colonnes_lances_v2/CLR2/CLR2_projet_pmdo_0812.zip",
+   "zip_source_sha256": "9339c3bfc2ea6f2033f66912e64d26775a10db5227e066c18a27aa4d1795deab",
+   "namespace_source": "colonnes_lances_sommet",
+   "script_source": "Data/Script/colonnes_lances_sommet/ground/clr2_colonnes_lances_sommet/init.lua",
+   "banques": [
+    "CLR2_00_CIEL",
+    "CLR2_01_NUAGES",
+    "CLR2_02_SOL",
+    "CLR2_03_MONTAGNE",
+    "CLR2_04_ROCHERS",
+    "CLR2_05_VITRAIL",
+    "CLR2_06_ECLATS"
+   ],
+   "ground": {
+    "nom": "Colonnes Lances - sommet de la montagne (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 8,
+    "pistes_animees": [
+     [
+      12,
+      10
+     ],
+     [
+      30,
+      20
+     ],
+     [
+      60,
+      10
+     ],
+     [
+      120,
+      10
+     ]
+    ],
+    "banques_utilisees": [
+     "CLR2_00_CIEL",
+     "CLR2_01_NUAGES",
+     "CLR2_02_SOL",
+     "CLR2_03_MONTAGNE",
+     "CLR2_04_ROCHERS",
+     "CLR2_05_VITRAIL",
+     "CLR2_06_ECLATS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "autel": [
+      376,
+      184
+     ],
+     "centre": [
+      376,
+      264
+     ]
+    },
+    "cases_bloquees": 6170,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "b24489c47c922afda5a68a7aa55129ebcdd6d7fe0df7dcda4415a524c650fdf6",
+   "tiles_sha256": {
+    "CLR2_00_CIEL": "df6fed0faddc3d54c399819380422fb061279685f00fea43f3e4eb553e84d13f",
+    "CLR2_01_NUAGES": "deaae97364dd527191b0a7adc03b3af87abebc41b7995e94d0660cbeab1bb719",
+    "CLR2_02_SOL": "3a2bd6065968ab5f2e06e04aeb391a25bdefb666daaace24c2f764efffb2f4c8",
+    "CLR2_03_MONTAGNE": "dd8477ec0934ae3b5c2fedfcdcadf8234936f1234dfb5cc8f1a45150496dda4c",
+    "CLR2_04_ROCHERS": "aae67b135175b7480cec9eccf2e6c962d9e7b502293bec51af980ecc880400bb",
+    "CLR2_05_VITRAIL": "025955d4816989eb7b273812975c6e405251a2463de4d71466f89de1a4993ea0",
+    "CLR2_06_ECLATS": "3c4b1ee43c96ab84a9f7ae49c96cb32a44a50835d927241316cce739c414c498"
+   }
+  },
+  {
+   "lot": "entree_colonnes_lances_sud_nord_v1",
+   "prefixe": "ECL1",
+   "titre": "Entrée Colonnes Lances, sentier de la montagne",
+   "asset": "ecl1_entree_colonnes_lances",
+   "image": "ECL1_scene_t000.png",
+   "apercu": "apercu_entree_colonnes_lances_sud_nord_v1.html",
+   "zip_source": "renders/entree_colonnes_lances_sud_nord_v1/ECL1_projet_pmdo_0812.zip",
+   "zip_source_sha256": "a15fb48f91d89dcb9e908c419ff1d2a253f247d74b0e4acc6472d36a8f357be2",
+   "namespace_source": "entree_colonnes_lances_sud_nord_v1",
+   "script_source": "Data/Script/entree_colonnes_lances_sud_nord_v1/ground/ecl1_entree_colonnes_lances/init.lua",
+   "banques": [
+    "ECL1_00_CIEL",
+    "ECL1_01_NUAGES",
+    "ECL1_02_SOL",
+    "ECL1_03_MONTAGNE",
+    "ECL1_04_ROCHERS",
+    "ECL1_05_VITRAIL",
+    "ECL1_06_ECLATS"
+   ],
+   "ground": {
+    "nom": "Entree Colonnes Lances sud-nord (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 8,
+    "pistes_animees": [
+     [
+      12,
+      10
+     ],
+     [
+      30,
+      20
+     ],
+     [
+      60,
+      10
+     ],
+     [
+      120,
+      10
+     ]
+    ],
+    "banques_utilisees": [
+     "ECL1_00_CIEL",
+     "ECL1_01_NUAGES",
+     "ECL1_02_SOL",
+     "ECL1_03_MONTAGNE",
+     "ECL1_04_ROCHERS",
+     "ECL1_05_VITRAIL",
+     "ECL1_06_ECLATS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "donjon_seuil": [
+      376,
+      104
+     ]
+    },
+    "cases_bloquees": 6436,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "9cf120d68c58a5f6b1282faa42d513d6b05eccf78be340daa329a3637a9ee9e3",
+   "tiles_sha256": {
+    "ECL1_00_CIEL": "df6fed0faddc3d54c399819380422fb061279685f00fea43f3e4eb553e84d13f",
+    "ECL1_01_NUAGES": "234b0e4ba8246e5fb23f75d358e5ec074eec5acf8a8dbfff2aca1b6b31af96e8",
+    "ECL1_02_SOL": "1a5dcc70da8c2434d8bb57ef32d5dd41e3122aed142b316231786689a4bf11bc",
+    "ECL1_03_MONTAGNE": "46f6d70838c1031d00ed55b32bdc06188ce52ed973831e06d03c032261f75ad3",
+    "ECL1_04_ROCHERS": "3b2ee0a15c72e49d4b6cda180ecfbeee5d300fea194dd8d6d6535858f4a6367e",
+    "ECL1_05_VITRAIL": "360ee763a1e42047f9adf7b6477b0dd098719a81f5cf5029149886e0c05e2494",
+    "ECL1_06_ECLATS": "7e117869c6f2d77ef4e5f8dbb0978d5a5027769aee97ca82cf4478a95b2e1dce"
+   }
+  },
+  {
+   "lot": "intro_mew_ciel_v1",
+   "prefixe": "IMW2",
+   "titre": "Ciel de Mew, fond animé en boucle",
+   "asset": "imw2_ciel_de_mew",
+   "image": "IMW2_scene_t000.png",
+   "apercu": "apercu_intro_mew_ciel.html",
+   "zip_source": "renders/intro_mew_ciel_v1/IMW2_projet_pmdo_0812.zip",
+   "zip_source_sha256": "c0f83df7813899607c8150c057b497a29851c0e00d655ee4b877a5cd894a22ce",
+   "namespace_source": "ciel_de_mew",
+   "script_source": "Data/Script/ciel_de_mew/ground/imw2_ciel_de_mew/init.lua",
+   "banques": [
+    "IMW2_00_CIEL",
+    "IMW2_01_SOLEIL",
+    "IMW2_02_NUAGES",
+    "IMW2_03_NUAGES",
+    "IMW2_04_MEW",
+    "IMW2_05_MER",
+    "IMW2_06_ECLATS"
+   ],
+   "ground": {
+    "nom": "Ciel de Mew - fond anime (4:3)",
+    "taille_px": [
+     768,
+     576
+    ],
+    "calques": 8,
+    "pistes_animees": [
+     [
+      8,
+      6
+     ],
+     [
+      12,
+      200
+     ],
+     [
+      240,
+      10
+     ]
+    ],
+    "banques_utilisees": [
+     "IMW2_00_CIEL",
+     "IMW2_01_SOLEIL",
+     "IMW2_02_NUAGES",
+     "IMW2_03_NUAGES",
+     "IMW2_04_MEW",
+     "IMW2_05_MER",
+     "IMW2_06_ECLATS"
+    ],
+    "marqueurs": {
+     "entrance": [
+      376,
+      560
+     ],
+     "mew": [
+      272,
+      292
+     ],
+     "soleil": [
+      532,
+      228
+     ]
+    },
+    "cases_bloquees": 6912,
+    "cases": 6912,
+    "version": "0.8.12.0"
+   },
+   "ground_sha256": "705af20338d20156a45dc4ca7f15349b4a1fce40dc8431e1fa9fb9c96a2a8eb7",
+   "tiles_sha256": {
+    "IMW2_00_CIEL": "8bf1a2129ece7e2d9058fced443b700de42bd815bc350dca5f95f1329aa31e5b",
+    "IMW2_01_SOLEIL": "84f799b92de638ba5e92a6fa6ba229d5a31e11c2466e6d05f1eaed290228f669",
+    "IMW2_02_NUAGES": "e0863d56c7ab9e5d494182c55e8d98f79cb767d0550de9b1b8e08b623e89baf6",
+    "IMW2_03_NUAGES": "eeebd12926ff6f75e1a28cf5a7f8d0dbffa0461ca0186d404418ae788e5957c9",
+    "IMW2_04_MEW": "6da5fc01042537d5523766d7c80efe8c4364857a4e0f45dcf69b6a32407de483",
+    "IMW2_05_MER": "7aae4000c5be2a54be97e83f754cd15e9412c5566e8ff49dc8d19533663b6ae5",
+    "IMW2_06_ECLATS": "f7a8dac310779a596a91cb7eea5e2f1b182164047a0123771d79c2493e1e3e92"
+   }
+  }
+ ]
+}

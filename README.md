@@ -1,5 +1,13 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Mod Colonnes Lances et Mew — 4 cartes (1er octobre 2026)
+
+**Demande** : « alors ? ». Choix de l'agent, à confirmer : les quatre cartes autonomes qu'aucun mod ne contenait (CLR1, CLR2, ECL1, IMW2) réunies en un mod, comme pour les entrées et les fins.
+
+- `renders/mod_guilde_colonnes_mew_v1/guilde_colonnes_mew_pmdo_0812.zip` (4,9 Mo), namespace `guilde_colonnes_mew`, 28 banques, galerie `apercu_mod_guilde_colonnes_mew_v1.html`, source `source/mod_guilde_colonnes_mew_v1/`.
+- Banques et Grounds copiés **octet pour octet** depuis les ZIP projets de leurs lots ; index fusionné ; scripts déplacés sous le namespace commun. La vidéo IMW1 n'est pas une carte et n'y figure pas. Les mods des entrées (20) et des fins (16) sont inchangés.
+- 7 tests PASS, 3 mutations détectées sur 3 (carte retirée, banque modifiée, namespace faux). Aucune validation utilisateur enregistrée, aucun test dans PMDO.
+
 ## IMW2 — Ciel de Mew, fond animé en boucle au format PMDO (1er octobre 2026)
 
 **Demande** : « continue » (suite d'IMW1, « fond animé » d'une intro de Mew). Choix de l'agent, à confirmer : IMW1 est une vidéo ; IMW2 en est le fond de ciel au format projet PMDO (Ground, tuiles de 8 px, calques animés).
