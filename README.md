@@ -1,5 +1,9 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Mod v2 des entrées sud → nord, 20 cartes (1er octobre 2026)
+
+Sur « lance toi » (après EJS3) : `renders/mod_guilde_entrees_v2/guilde_entrees_sud_nord_pmdo_0812.zip` (Mod.xml 1.2.0.0), galerie `apercu_mod_guilde_entrees_v2.html`, source `source/mod_guilde_entrees_v2/`. Les 19 cartes du mod v1 plus **EJS3** (jardin secret, temple de Celebi et végétation animée). Le mod v1 est conservé ; **v2 remplace v1** (même namespace). EJS2 et EJS3 restent à confirmer. 7 tests PASS, aucun test en jeu PMDO. Choix de l'agent, à confirmer.
+
 ## Entrée Jardin secret V3 : végétation animée, EJS3 (1er octobre 2026)
 
 **Demande** : « lance toi » (après FJA1). Les trois calques de végétation de la fin FJA1 (`feuilles`, `fleurs_halcyon` natives de Palikadude/Halcyon, `petales`) sont appliqués à l'entrée du jardin secret : **EJS3** = EJS2 (temple de Celebi) + ces calques. EJS1 et EJS2 sont conservées. Choix de l'agent, **à confirmer**.
