@@ -47,6 +47,9 @@ GEN = [
     {'file': 'lave_source.png', 'images': ['source/entree_mt_blaze_sud_nord_v2/reference/layout_strict.png', 'source/entree_mt_blaze_sud_nord_v2/reference/65097.png'], 'prompt':
      'Pixel art lava layer ONLY, 1200x896, top-down, everything that is not lava is flat pure magenta #FF00FF (no ground, no sand, no rocks, no walls, no characters, no text). The lava occupies EXACTLY the same areas as the lava in the first reference layout: two big pools on the left and right that rise along the sides and wrap around the grey rocks, with wavy fingers and channels flowing toward the north cave and toward the bottom, matching the reference\'s pool outlines shape for shape. Texture and colors EXACTLY as the second reference (canonical Pokemon Mystery Dungeon Mt Blaze lava sheet): flat orange pool surface (216,120,40), thick dark maroon crust bands and islands (96,40,56), red glowing rims (176,56,32), bright hot spots (240,160,0) with yellow cores (240,232,0) as small ovals, dark red-brown shore outline (40,32,24). Thick, sticky, viscous look. Hard pixel art edges, GBA style.',
      'essais': 'calque lave seul 30/09 03:0x : layout_strict + planche canonique 65097 en images=, reste magenta pur, U est/ouest conformes'},
+    {'file': 'veines_source.png', 'images': ['source/entree_mt_blaze_sud_nord_v2/reference/layout_strict.png', 'source/entree_mt_blaze_sud_nord_v2/reference/221081.png'], 'prompt':
+     'Pixel art lava veins layer ONLY, 1200x896, top-down, everything that is not a vein is flat pure magenta #FF00FF. Thin red-orange glowing cracks running inside the grey rock, positioned EXACTLY where the reference layout has its lava veins: along the top rock walls, the two side walls, the bottom rocks, the pillars and the boulder clusters, same paths and same branching shape. Colors EXACTLY as the lava of the second reference: dark red core (152,0,0), hot orange glow (216,72,16), bright hot spots (240,160,0), yellow-white cores (240,232,0), dark maroon (96,40,56) at the edges. Cracks 2 to 5 pixels wide with a glowing halo. Hard pixel art edges, GBA style.',
+     'essais': 'calque veines seul 30/09 : layout_strict + 221081 en images=, filaments ramifies 1,3% des pixels, epaisseur mediane 2 px'}, 
     {'file': 'sol_complet.png', 'images': ['source/entree_mt_blaze_sud_nord_v2/bruts/decor.png'], 'prompt':
      'Same image, same framing and pixel-art style, but only beige cracked sandy ground everywhere, replacing all lava (magenta), grey rocks, pillars and the dark cave mouth with the same beige cracked sand texture, keeping the exact sand palette and crack pattern, no other textures, no magenta remaining.',
      'essais': 'edite depuis decor (magenta->sable, piliers conserves sous calque roche)'},
@@ -166,37 +169,6 @@ def vein_mask_from_rock(a, rock_union):
             pass
     return m
 
-def vein_frames(vein_mask_down, H, W, phases=32):
-    """Veines de lave dans la roche : palette canonique (lave_canon) + palette cycling fermé.
-
-    Ton = profondeur dans la fente (distance à la rive) modulée par un Worley fin et un gonflement
-    lent, puis permutation cyclique des familles braise / cœur, identique à la lave. Aucun ton inventé.
-    """
-    if not vein_mask_down.any():
-        return [np.zeros((H, W, 4), 'uint8') for _ in range(phases)]
-    dist = nd.distance_transform_edt(vein_mask_down)
-    yy, xx = np.mgrid[:H, :W].astype(float)
-    try:
-        f1, f2, _ = MG.worley(xx * 1.0, yy * 1.0, P=MG.PERIOD, cell=18, seed=9)
-        q = 2 * f1 / (f1 + f2 + 1e-9)
-    except Exception:
-        q = np.zeros((H, W))
-    depth = np.clip(dist / 2.6 + 1.4 * q + 0.6 * LC.smooth((H, W), 21, 12), 0, 5)
-    TONES = [1, 4, 6, 7, 9, 10, 11]                    # croûte -> braise -> cœur chaud (tons de la planche)
-    bornes = [0.9, 1.6, 2.4, 3.0, 3.8, 4.6]
-    pos0 = np.searchsorted(bornes, depth).clip(0, 6)
-    frames = []
-    for t in range(phases):
-        ph = 2 * np.pi * t / phases
-        pos = np.clip(np.rint(pos0 + 0.9 * np.sin(ph + 2 * np.pi * q)), 0, 6).astype(int)
-        idx = np.array(TONES)[pos]
-        idx = LC.rotate(idx, LC.k_braise(t, phases), LC.k_coeur(t, phases))
-        a = np.zeros((H, W, 4), 'uint8')
-        a[..., :3] = LAVE_PAL_NP[idx]; a[..., 3] = 255
-        a[~vein_mask_down] = 0
-        frames.append(a)
-    return frames
-
 def build():
     gfx = loadmod('pmdo_codec', R / 'source/pmdo_cote/build.py')
     tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
@@ -209,12 +181,15 @@ def build():
     a = rgb(RAW/'decor.png'); f = rgb(RAW/'sol_complet.png'); ref = rgb(REF)
     assert a.shape[:2]==f.shape[:2]==(SRC[1],SRC[0])
     m, seg = classify(a,f)
-    # Veines : extraction depuis roche+piliers
-    rock_union = m['roche'] | m['piliers']
-    vein_mask_1200 = vein_mask_from_rock(a, rock_union)
-    m['veines'] = vein_mask_1200
-    m['roche'] = m['roche'] & ~vein_mask_1200
-    m['piliers'] = m['piliers'] & ~vein_mask_1200
+    # Veines : calque généré dédié (calqué sur les fissures du layout), filtré sur les tons de la planche
+    vsrc = Image.open(RAW/'veines_source.png').convert('RGB')
+    if vsrc.size != SRC:
+        vsrc = vsrc.resize(SRC, Image.NEAREST)
+    vfull = LC.vein_classify(np.array(vsrc))
+    m['veines'] = vfull >= 0
+    # la roche garde ses fissures peintes : on les retire là où le calque animé prend le relais
+    m['roche'] = m['roche'] & ~nd.binary_dilation(m['veines'], iterations=2)
+    m['piliers'] = m['piliers'] & ~nd.binary_dilation(m['veines'], iterations=2)
     order = ['water','profondeur','sable','ombres','berge','piliers','roche','veines']
     down_class, down_full, rgba = JM.down_class, JM.down_full, JM.rgba
     ex, cols = down_class(a, m, order)
@@ -265,9 +240,13 @@ def build():
                       'clip': 'silhouette = eau du decor (layout strict) ; pliage annulé au bord (fade)',
                       'rotation_pas': {'braise': len(LC.IDX_BRAISE), 'coeur': len(LC.IDX_COEUR)}})
     lava_meta.pop('rotation', None)
-    # veines 32 phases palette cycling
-    vein_mask_down = ex['veines']
-    vf = vein_frames(vein_mask_down, H, W, phases=32)
+    # veines : animation canonique (la lave monte et descend le long de la fissure, palette cycling).
+    # Le masque vient de la couverture réelle des filaments (la descente par classe majoritaire du pipeline
+    # effacerait les fissures de 2 px).
+    vbase = LC.vein_to_grid(vfull, SRC, (W, H))
+    vein_mask_down = vbase >= 0
+    ex['veines'] = vein_mask_down
+    vf = LC.vein_phases(vbase, vein_mask_down, phases=32)
     # stack ordre bas->haut : lave, base, veines (veines au dessus de roche mais sous piliers? on met au dessus de piliers pour visibilité)
     # On garde : lave, sol_complet, sable, ombres, berge, roche, piliers, profondeur, veines
     # Veines sont dans la roche donc au dessus de roche/piliers
@@ -348,7 +327,12 @@ def build():
             layer_list.append({'file':f'animation/{nm}/{PFX}_{i:02d}_{nm}_fNN.png','phases':len(frames),'ticks':ticks})
         else:
             layer_list.append({'file':f'calques/{PFX}_{i:02d}_{nm}.png','phases':1,'ticks':60})
-    manifest={'lot':'entree_mt_blaze_sud_nord_v2','prefix':PFX,'format':'4:3 vaste','size_px':[W,H],'grid_8px':[W//8,H//8],'biome':'Mt. Blaze (lave)','method':'rendu genere reference : decor complet sur magenta ; sol complet miroir ; base quantifiee ; lave = texture canonique GBA (planches Spriters Resource 65097 + 221081) via calque genere dedie, clippee sur la silhouette du layout, animee en palette cycling (braise 5 / coeur 2) + derive visqueuse de la croute ; veines palette canonique + cycling ferme','reference_da':{'file':REF.name,'sha256':sha(REF)},'generation':GEN,'raw_inputs':[{'file':f'source/entree_mt_blaze_sud_nord_v2/bruts/{g["file"]}','sha256':sha(RAW/g['file']),'size':list(Image.open(RAW/g['file']).size)} for g in GEN],'fidelite_rip':fid,'layers':layer_list,'lave':dict(lava_meta, frame_length_ticks=LC.TICKS, palette=[list(c) for c in LAVE_PAL]),'veines':{'phases':32,'frame_length_ticks':LC.TICKS,'palette':[list(c) for c in LAVE_PAL],'pixels':int(vein_mask_down.sum()),'origine':'veines extraites du decor (orange dans roche) + fissures Worley fines ; palette canonique + cycling ferme' },'scene_loop_ticks':LOOP_TICKS,'access':{'markers':markers,'paths_16x16':{'entrance->boss':{'ok':reachable2(blocked,entrance,boss)},'entrance->objectif':{'ok':reachable2(blocked,entrance,objectif)}},'blocked_cells':int(blocked.sum()),'total_cells':int(blocked.size),'walkable_cells':int((~blocked).sum()),'rule':'case bloquee si >25% hors sable','north_closed':True},'pmdo':{'target':'0.8.12','asset':ASSET,'namespace':NAMESPACE,'tiles_per_bank':counts,'banks':list(counts),'runtime_tested':False,'warp':'aucun'},'art_approved':False}
+    manifest={'lot':'entree_mt_blaze_sud_nord_v2','prefix':PFX,'format':'4:3 vaste','size_px':[W,H],'grid_8px':[W//8,H//8],'biome':'Mt. Blaze (lave)','method':'rendu genere reference : decor complet sur magenta ; sol complet miroir ; base quantifiee ; lave = texture canonique GBA (planches Spriters Resource 65097 + 221081) via calque genere dedie, clippee sur la silhouette du layout, animee en palette cycling (braise 5 / coeur 2) + derive visqueuse de la croute ; veines palette canonique + cycling ferme','reference_da':{'file':REF.name,'sha256':sha(REF)},'generation':GEN,'raw_inputs':[{'file':f'source/entree_mt_blaze_sud_nord_v2/bruts/{g["file"]}','sha256':sha(RAW/g['file']),'size':list(Image.open(RAW/g['file']).size)} for g in GEN],'fidelite_rip':fid,'layers':layer_list,'lave':dict(lava_meta, frame_length_ticks=LC.TICKS, palette=[list(c) for c in LAVE_PAL]),'veines':{'phases':32,'frame_length_ticks':LC.TICKS,'palette':[list(c) for c in LAVE_PAL],'pixels':int(vein_mask_down.sum()),
+                       'texture':'bruts/veines_source.png (rendu genere dedie : layout strict + planche canonique en images=), filtre sur les tons de fissure de la planche (coeur sombre + filaments chauds, paquets >= 10 px)',
+                       'animation':'palette cycling le long de la fissure : le rang de temperature monte et descend, onde verticale (2 periodes sur la hauteur) + onde du coeur vers le halo ; aucun pixel ne bouge',
+                       'rampe':[list(LAVE_PAL[i]) for i in LC.VEIN_ORDER],
+                       'epaisseur_px':'2 a 4,5 px (planche : 2 a 5 px)',
+                       'origine':'planche Spriters Resource 65097 (ripple ToastyPK) + 221081, tons canoniques uniquement' },'scene_loop_ticks':LOOP_TICKS,'access':{'markers':markers,'paths_16x16':{'entrance->boss':{'ok':reachable2(blocked,entrance,boss)},'entrance->objectif':{'ok':reachable2(blocked,entrance,objectif)}},'blocked_cells':int(blocked.sum()),'total_cells':int(blocked.size),'walkable_cells':int((~blocked).sum()),'rule':'case bloquee si >25% hors sable','north_closed':True},'pmdo':{'target':'0.8.12','asset':ASSET,'namespace':NAMESPACE,'tiles_per_bank':counts,'banks':list(counts),'runtime_tested':False,'warp':'aucun'},'art_approved':False}
     (OUT/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n')
     shutil.copyfile(HERE / 'README_PACK.md', OUT / 'README.md')
     shutil.copyfile(OUT/'manifest.json', STAGE/'manifest.json')

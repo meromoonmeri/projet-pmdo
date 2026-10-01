@@ -39,6 +39,15 @@
       "essais": "calque lave seul 30/09 03:0x : layout_strict + planche canonique 65097 en images=, reste magenta pur, U est/ouest conformes"
     },
     {
+      "file": "veines_source.png",
+      "images": [
+        "source/entree_mt_blaze_sud_nord_v2/reference/layout_strict.png",
+        "source/entree_mt_blaze_sud_nord_v2/reference/221081.png"
+      ],
+      "prompt": "Pixel art lava veins layer ONLY, 1200x896, top-down, everything that is not a vein is flat pure magenta #FF00FF. Thin red-orange glowing cracks running inside the grey rock, positioned EXACTLY where the reference layout has its lava veins: along the top rock walls, the two side walls, the bottom rocks, the pillars and the boulder clusters, same paths and same branching shape. Colors EXACTLY as the lava of the second reference: dark red core (152,0,0), hot orange glow (216,72,16), bright hot spots (240,160,0), yellow-white cores (240,232,0), dark maroon (96,40,56) at the edges. Cracks 2 to 5 pixels wide with a glowing halo. Hard pixel art edges, GBA style.",
+      "essais": "calque veines seul 30/09 : layout_strict + 221081 en images=, filaments ramifies 1,3% des pixels, epaisseur mediane 2 px"
+    },
+    {
       "file": "sol_complet.png",
       "images": [
         "source/entree_mt_blaze_sud_nord_v2/bruts/decor.png"
@@ -62,6 +71,14 @@
       "size": [
         1200,
         893
+      ]
+    },
+    {
+      "file": "source/entree_mt_blaze_sud_nord_v2/bruts/veines_source.png",
+      "sha256": "7b054987333ed4a8604599a064a412ae3fe3a01577add563c66c3d48f693d27c",
+      "size": [
+        1200,
+        896
       ]
     },
     {
@@ -377,8 +394,53 @@
         240
       ]
     ],
-    "pixels": 11310,
-    "origine": "veines extraites du decor (orange dans roche) + fissures Worley fines ; palette canonique + cycling ferme"
+    "pixels": 7563,
+    "texture": "bruts/veines_source.png (rendu genere dedie : layout strict + planche canonique en images=), filtre sur les tons de fissure de la planche (coeur sombre + filaments chauds, paquets >= 10 px)",
+    "animation": "palette cycling le long de la fissure : le rang de temperature monte et descend, onde verticale (2 periodes sur la hauteur) + onde du coeur vers le halo ; aucun pixel ne bouge",
+    "rampe": [
+      [
+        152,
+        0,
+        0
+      ],
+      [
+        176,
+        56,
+        32
+      ],
+      [
+        208,
+        56,
+        0
+      ],
+      [
+        208,
+        64,
+        8
+      ],
+      [
+        216,
+        72,
+        16
+      ],
+      [
+        240,
+        128,
+        88
+      ],
+      [
+        240,
+        160,
+        0
+      ],
+      [
+        240,
+        232,
+        0
+      ]
+    ],
+    "epaisseur_px": "2 a 4,5 px (planche : 2 a 5 px)",
+    "origine": "planche Spriters Resource 65097 (ripple ToastyPK) + 221081, tons canoniques uniquement"
   },
   "scene_loop_ticks": 768,
   "access": {
@@ -416,14 +478,14 @@
     "namespace": "entree_mt_blaze_sud_nord_v2",
     "tiles_per_bank": {
       "EMB2_00_LAVE": 27803,
-      "EMB2_01_SOL": 5245,
+      "EMB2_01_SOL": 5259,
       "EMB2_02_SABLE": 1332,
-      "EMB2_03_OMBRES": 558,
-      "EMB2_04_BERGE": 231,
-      "EMB2_05_ROCHE": 291,
-      "EMB2_06_PILIERS": 3428,
+      "EMB2_03_OMBRES": 557,
+      "EMB2_04_BERGE": 232,
+      "EMB2_05_ROCHE": 299,
+      "EMB2_06_PILIERS": 3445,
       "EMB2_07_PROFONDEUR": 83,
-      "EMB2_08_VEINES": 15439
+      "EMB2_08_VEINES": 5860
     },
     "banks": [
       "EMB2_00_LAVE",

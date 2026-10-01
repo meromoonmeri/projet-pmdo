@@ -11,7 +11,7 @@ C'est l'entrée de donjon du volcan, inspirée de `Rescue_Team_-_Mt._Blaze_Entra
 - **Base** (sable, ombres, berge, roche, piliers, profondeur) : segmentation pleine résolution → down_class 8px (moyenne pondérée par classe), palette commune quantifiée
 - **Lave** : **texture canonique GBA** relevée sur les planches Spriters Resource `65097.png` (Mt Blaze Dungeon Tiles, rip ToastyPK) et `221081.png` (Mt. Blaze Entrance, re-rip à palette unique). 12 tons, chacun présent tel quel dans la planche : liseré (40,32,24), croûtes (96,40,56) et (136,96,88), braise 5 tons de (152,0,0) à (216,72,16), **surface de mare à plat (216,120,40)**, rehaut (240,128,88), cœurs (240,160,0) et (240,232,0). Le calque est un rendu généré dédié (`bruts/lave_source.png`, layout strict + planche canonique en `images=`) clippé sur la silhouette de lave du layout — **aucune greffe manuelle**.
 Lecture de la planche (`lave_canon.clean_look`, appliquée **à chaque phase**) : les plaques de croûte franches gardent le marron `96,40,56` (le clair `136,96,88` n'y subsiste qu'en givre sur les plaques épaisses), un liseré braise fait le tour des plaques, un halo orangé clair le suit, et **tout le reste de la mare est à plat** `216,120,40` — soit 58 % de la surface de lave, contre 23 % sur la planche elle-même (le reste y étant les rives et le canal)
-- **Veines** : fissures orange dans la roche extraites du décor + fissures Worley fines (cell 18) pour garantir la densité ; **palette canonique** et même cycling fermé, 32 phases × 20 ticks
+- **Veines** : **calque généré dédié** (`bruts/veines_source.png`, layout strict + planche 221081 en `images=`) — le générateur a dessiné les filaments ramifiés le long des parois, des piliers et des rochers, comme dans le layout. Filtrage canonique : on ne garde que le **cœur sombre** `152,0,0` et les **filaments chauds** qui le bordent (le rendu avait recopié la croûte de lave, écartée), paquets ≥ 10 px, épaisseur médiane 2 px / 90ᵉ centile 4,5 px (planche : 2 à 5 px). Animation : **palette cycling le long de la fissure** — le rang de température monte et descend, onde verticale (2 périodes sur la hauteur) + onde du cœur vers le halo, aucun pixel ne bouge, 32 phases × 24 ticks
 
 ### Animation « super visqueuse » (2 composantes)
 
@@ -39,7 +39,7 @@ Boucle : **768 ticks = 12,8 s** (32×24). Aucun warp.
 | 05 | Parois rocheuses grises | fixe |
 | 06 | Rochers et piliers | fixe |
 | 07 | Profondeur (bouche sombre) | fixe |
-| 08 | Veines de lave dans la roche (palette canonique, cycling) | 32 × 20 ticks |
+| 08 | Veines de lave dans la roche (filaments de la planche, cycling) | 32 × 24 ticks |
 | 09 | Vide, `Layer=4` (Top) | — |
 
 ## Marqueurs et collisions
@@ -51,4 +51,4 @@ Boucle : **768 ticks = 12,8 s** (32×24). Aucun warp.
 
 - Terrain, roche, piliers et sable restent des dessins générés à partir du rip ; ce ne sont pas des tuiles natives.
 - Lave : palette **canonique** (relevée sur les planches), texture issue du rendu généré référencé sur ces planches, animation `source/magma_visqueux/lave_canon.py` (palette cycling fermé + dérive visqueuse). Aucune tuile native de la planche n'est collée : la proximité vient de la palette et de la référence en `images=`.
-- Veines : procédurales, palette canonique.
+- Veines : calque généré puis filtré sur les tons de fissure de la planche ; animation par cycling le long de la fissure. Ce sont des filaments dessinés, pas les tuiles natives de la planche.

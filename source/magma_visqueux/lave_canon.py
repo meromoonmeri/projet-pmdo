@@ -352,3 +352,73 @@ def sites(mask, base, kind, seed=13, spacing=52, limit=14, edge_min=8):
             if len(out) >= limit:
                 break
     return out
+
+
+# ---------------------------------------------------------------- veines de lave dans la roche
+VEIN_HOT = (4, 5, 6, 7, 9, 10, 11)          # tons de fissure chaude (planche)
+VEIN_DARK = (3,)                            # cœur sombre de la fissure
+VEIN_ORDER = (3, 4, 5, 6, 7, 9, 10, 11)     # rampe de température le long de la fissure
+
+
+def vein_classify(a):
+    """Index de ton des fissures, -1 ailleurs.
+
+    Le rendu généré des veines contient aussi la croûte de lave qu'il a recopiée : on ne garde que les
+    filaments chauds et le cœur sombre qui les borde de près (une fissure canonique = cœur + halo), puis on
+    jette les paquets de moins de 10 px (semis du rendu)."""
+    a = a.astype(int)
+    idx = classify(a)
+    hot = np.isin(idx, VEIN_HOT)
+    dark = np.isin(idx, VEIN_DARK)
+    crack = hot | (dark & nd.binary_dilation(hot, np.ones((5, 5), bool)))
+    lab, n = nd.label(crack, np.ones((3, 3), bool))
+    if not n:
+        return np.full(idx.shape, -1, np.int8)
+    sizes = np.bincount(lab.ravel())
+    keep = [i for i in range(1, n + 1) if sizes[i] >= 10]
+    out = np.where(np.isin(lab, keep) & crack, np.where(dark, 3, np.maximum(idx, 3)), -1)
+    return out.astype(np.int8)
+
+
+def vein_phases(base, mask, phases=PHASES):
+    """Phases RGBA des veines : la lave monte et descend le long de la fissure (palette cycling).
+
+    Le ton de chaque pixel est son rang dans la rampe de température ; à chaque phase on décale ce rang
+    d'une onde qui court **le long** de la fissure (axe vertical des parois) et **en travers** d'elle
+    (du cœur vers le halo) : la fissure s'allume, rougit puis se repose, sans qu'aucun pixel ne bouge.
+    Tous les tons restent ceux de la planche."""
+    H, W = mask.shape
+    out = []
+    yy, xx = np.mgrid[:H, :W].astype(float)
+    long_ = yy / max(H - 1, 1)                                  # position le long de la paroi
+    d = nd.distance_transform_edt(mask)
+    across = np.clip(d / 3.0, 0, 1)                             # cœur -> halo
+    order = np.array(VEIN_ORDER)
+    pos0 = np.full((H, W), -1, int)
+    m = mask & (base >= 0)
+    pos0[m] = np.searchsorted(order, base[m])
+    for t in range(phases):
+        ph = 2 * np.pi * t / phases
+        wave = 1.6 * np.sin(ph - 2 * np.pi * long_ * 2.0) + 1.0 * np.cos(ph * 2 - across * 2.2)
+        pos = np.clip(np.rint(pos0 + wave).astype(int), 0, len(order) - 1)
+        idx = np.where(m, order[np.clip(pos, 0, len(order) - 1)], 0)
+        a = np.zeros((H, W, 4), 'uint8')
+        a[..., :3] = PAL_NP[idx]; a[..., 3] = 255
+        a[~m] = 0
+        out.append(a)
+    return out
+
+
+def vein_to_grid(base, src, out):
+    """Descente des veines pleine résolution -> grille finale, par vote de couverture (et non par moyenne
+    d'indices, qui efface les fissures fines de 2 px)."""
+    sw, sh = src
+    ow, oh = out
+    cov = np.zeros((len(VEIN_ORDER), oh, ow), 'float32')
+    for i, tone in enumerate(VEIN_ORDER):
+        m = (base == tone).astype('float32')
+        cov[i] = np.asarray(Image.fromarray(m, 'F').resize((ow, oh), Image.BOX))
+    size = np.asarray(Image.fromarray((base >= 0).astype('float32'), 'F').resize((ow, oh), Image.BOX))
+    best = cov.argmax(0)
+    out_idx = np.where(size > 0.15, np.array(VEIN_ORDER)[best], -1)   # un peu de matière : la fissure tient
+    return out_idx.astype(np.int8)

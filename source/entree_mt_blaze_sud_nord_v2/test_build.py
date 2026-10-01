@@ -57,7 +57,7 @@ class Build(unittest.TestCase):
         self.assertEqual(ref['file'],'Rescue_Team_-_Mt._Blaze_Entrance.png')
         self.assertEqual(hashlib.sha256((R / ref['file']).read_bytes()).hexdigest(), ref['sha256'])
         g=M['generation']
-        self.assertEqual([x['file'] for x in g], ['decor.png','lave_source.png','sol_complet.png'])
+        self.assertEqual([x['file'] for x in g], ['decor.png','lave_source.png','veines_source.png','sol_complet.png'])
         self.assertTrue(any('65097.png' in x for x in g[1]['images']))          # calque lave référencé sur la planche canonique
         self.assertTrue(all(x['images'] and len(x['prompt'])>100 for x in g))
         self.assertIn('Rescue_Team_-_Mt._Blaze_Entrance.png', g[0]['images'])
@@ -130,14 +130,19 @@ class Build(unittest.TestCase):
     def test_veines_palette_cycling(self):
         fr=STACK['veines']
         self.assertEqual((PH['veines'], TK['veines']), (32,24))
-        self.assertTrue(sum((a[...,3]==255).sum() for a in fr) > 200)
+        m = alpha(fr[0])
+        self.assertGreater(int(m.sum()), 4000)                          # filaments lisibles
         for a in fr:
-            self.assertTrue(colors(a) <= PAL)
-        # au moins 50% des pixels changent entre phases (palette cycling)
-        m=alpha(fr[0])
-        if m.any():
-            diff = float((fr[0][m] != fr[16][m]).any(1).mean())
-            self.assertGreater(diff, 0.3)
+            self.assertTrue(colors(a) <= PAL)                           # tons de la planche uniquement
+        # palette cycling le long de la fissure : à un quart de cycle, la majorité des pixels a changé de ton
+        ton = lambda f: f[..., 0].astype(np.int32)*65536 + f[..., 1].astype(np.int32)*256 + f[..., 2].astype(np.int32)
+        self.assertGreater(float((ton(fr[0])[m] != ton(fr[8])[m]).mean()), 0.5)
+        # la fissure ne bouge pas : même silhouette aux 32 phases
+        for a in fr:
+            self.assertTrue(np.array_equal(a[..., 3], fr[0][..., 3]))
+        # largeur canonique : 2 à 5 px de matière (fiords fins, pas des aplats)
+        import scipy.ndimage as ndi
+        self.assertLess(np.percentile(ndi.distance_transform_edt(m)[m]*2, 90), 6.0)
 
     def test_lave_canonique_conforme_planche(self):
         L = M['lave']
