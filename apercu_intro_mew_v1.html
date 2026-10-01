@@ -1,0 +1,28 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Intro de Mew · voyage à travers le monde Pokémon · 4:3</title>
+<style>
+body{font:15px/1.5 system-ui,sans-serif;background:#1c1c24;color:#e8e8ee;margin:0;padding:18px;max-width:1100px;margin:auto}
+h1{margin:.2em 0}a{color:#ffd76a}video,img{image-rendering:pixelated}
+video{width:100%;max-width:768px;display:block;background:#000;border:2px solid #444}
+.row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+button{background:#33334a;color:#eee;border:1px solid #666;border-radius:5px;padding:4px 9px;cursor:pointer}button:hover{background:#4b4b70}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}.g img{width:100%;border:1px solid #444}
+.warn{background:#3a2c18;border-left:4px solid #e0a040;padding:8px 12px;margin:12px 0}
+code{background:#2b2b38;padding:0 4px}
+</style></head><body>
+<h1>Intro de Mew — voyage à travers le monde Pokémon</h1>
+<p>Cinématique <strong>4:3 de 63,5 s</strong> : l'aube, un soleil qui se lève derrière une mer de nuages, puis Mew survole <strong>11 biomes</strong> déjà livrés par le projet avant de s'éloigner dans le soleil doré. Mew, nuages, soleil et lumière du jour sont ici générés ou procéduraux ; les décors sont les scènes animées des cartes existantes.</p>
+<div class="warn"><strong>Ce n'est pas une map PMDO ni un Ground</strong> : c'est une vidéo. <code>art_approved: false</code>, non testée dans PMDO. Mew est un sprite généré (66 × 58 px, 13 couleurs), jamais validé comme sprite SpriteCollab. Le choix et l'ordre des biomes sont à confirmer.</div>
+<video id="v" src="renders/intro_mew_v1/IMW1_intro_mew.mp4" controls loop muted playsinline preload="auto"></video>
+<div class="row" id="ch"></div>
+<p><a href="renders/intro_mew_v1/IMW1_intro_mew.mp4" download>Télécharger le mp4 (11,5 Mo)</a> · <a href="renders/intro_mew_v1/IMW1_intro_mew_pack.zip" download>Télécharger le pack (vidéo, calques, arrêts sur image, manifeste)</a></p>
+<h2>Arrêts sur image</h2><div class="g" id="g"></div>
+<h2>Calques</h2>
+<p>Mew, 8 poses (onde de la queue, boucle de 0,8 s) :<br><img src="renders/intro_mew_v1/calques/IMW1_mew_vol_8poses.png" style="width:1056px;max-width:100%"></p>
+<div class="g"><div><img src="renders/intro_mew_v1/calques/IMW1_ciel_aube.png"><br>ciel d'ouverture</div><div><img src="renders/intro_mew_v1/calques/IMW1_ciel_dore.png"><br>ciel de finale</div><div><img src="renders/intro_mew_v1/calques/IMW1_mur_de_nuages_transition.png"><br>mur de nuages de transition</div></div>
+<script>
+const CH=[[0.0, "Ouverture, aube"], [8.0, "Aube sur la prairie et la mer"], [12.5, "Clairière tropicale et rivière"], [17.0, "Jungle du sud"], [21.5, "Jardin secret"], [26.0, "Sables mouvants"], [30.5, "Grotte de la cascade"], [35.0, "Mont Foudre au-dessus des nuages"], [39.5, "Cratère de magma"], [44.0, "Forêt de givre et aurores"], [48.5, "Fonds de l'océan"], [53.0, "Colonnes Lances, le sommet"], [57.5, "Finale dorée"]];const v=document.getElementById('v');
+const ch=document.getElementById('ch');
+for(const [t,n] of CH){const b=document.createElement('button');b.textContent=t.toFixed(1)+' s · '+n;b.onclick=()=>{v.currentTime=t;v.play()};ch.appendChild(b)}
+const g=document.getElementById('g');
+for(const f of ["IMW1_t003.0s.png", "IMW1_t006.0s.png", "IMW1_t010.2s.png", "IMW1_t014.7s.png", "IMW1_t019.2s.png", "IMW1_t023.7s.png", "IMW1_t028.2s.png", "IMW1_t032.7s.png", "IMW1_t037.2s.png", "IMW1_t041.7s.png", "IMW1_t046.2s.png", "IMW1_t050.7s.png", "IMW1_t055.2s.png", "IMW1_t058.5s.png", "IMW1_t062.0s.png"]){const i=document.createElement('img');i.src='renders/intro_mew_v1/review/'+f;i.loading='lazy';g.appendChild(i)}
+</script></body></html>

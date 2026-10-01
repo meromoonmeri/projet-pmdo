@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## IMW1 — Intro animée de Mew, voyage à travers le ciel et le monde Pokémon (1er octobre 2026)
+
+**Demande** : « une intro d'un mew qui voyage à travers le ciel avec un soleil et il voyage à travers le monde pokémon avec différents biomes (une cinématique avec plusieurs map) ».
+
+- `renders/intro_mew_v1/IMW1_intro_mew.mp4` (11,5 Mo, 63,5 s, 768 × 576, 30 i/s), aperçu `apercu_intro_mew_v1.html`, source `source/intro_mew_v1/`.
+- Ouverture à l'aube (soleil qui se lève derrière une mer de nuages), survol de **11 cartes déjà livrées** (prairie, clairière, jungle, jardin secret, sables, cascade, Mont Foudre, magma, givre, océan, Colonnes Lances) reliées par un mur de nuages, cycle jour → couchant → nuit → aube dorée, finale dans le soleil.
+- Mew : un seul sprite généré, ré-échantillonné à sa grille native (66 × 58, 13 couleurs), 8 poses par onde de queue calculée. Nuages, soleil, éclats et lumière : procéduraux.
+- **Ce n'est pas une map PMDO ni un Ground** : une vidéo. `art_approved: false`, non testée dans PMDO ; Mew jamais validé comme sprite SpriteCollab ; choix et ordre des biomes à confirmer.
+- 10 tests PASS, 3 mutations sur 3 détectées. Le serveur d'aperçus gère maintenant les requêtes `Range` (lecture et avance dans les vidéos).
+
 ## ECL1 — Entrée Colonnes Lances sud → nord, le sentier de la montagne (1er octobre 2026)
 
 **Demande** : « suite ». Choix de l'agent, à confirmer : l'entrée de donjon (série sud → nord, marqueurs `entrance` et `donjon_seuil`) qui monte vers le sommet de CLR2.

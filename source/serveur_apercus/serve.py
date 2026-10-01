@@ -80,7 +80,32 @@ class Handler(SimpleHTTPRequestHandler):
         if '/.git' in self.path or self.path.startswith('/.venv'):
             self.send_error(404)
             return
+        rng = self.headers.get('Range')
+        if rng and rng.startswith('bytes='):                  # lecture partielle (vidéos : avance et retour dans le lecteur)
+            f = Path(self.translate_path(self.path))
+            if f.is_file():
+                size = f.stat().st_size
+                a, _, b = rng[6:].split(',')[0].partition('-')
+                start = int(a) if a else max(0, size - int(b)); end = min(int(b), size - 1) if (a and b) else size - 1
+                if start > end or start >= size:
+                    self.send_response(416); self.send_header('Content-Range', f'bytes */{size}'); self.end_headers(); return
+                self.send_response(206)
+                self.send_header('Content-Type', self.guess_type(str(f)))
+                self.send_header('Content-Range', f'bytes {start}-{end}/{size}')
+                self.send_header('Content-Length', str(end - start + 1))
+                self.end_headers()
+                with open(f, 'rb') as fh:
+                    fh.seek(start); left = end - start + 1
+                    while left > 0:
+                        chunk = fh.read(min(65536, left))
+                        if not chunk: break
+                        self.wfile.write(chunk); left -= len(chunk)
+                return
         super().do_GET()
+
+    def end_headers(self):
+        self.send_header('Accept-Ranges', 'bytes')            # annonce la lecture partielle sur toutes les réponses
+        super().end_headers()
 
     def log_message(self, fmt, *args):
         pass

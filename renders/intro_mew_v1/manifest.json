@@ -1,0 +1,534 @@
+{
+ "lot": "intro_mew_v1",
+ "asset": "IMW1",
+ "serie": "Cinematiques",
+ "demande": "une intro d'un mew qui voyage a travers le ciel avec un soleil et il voyage a travers le monde pokemon avec differents biomes (une cinematique avec plusieurs map)",
+ "choix_agent": {
+  "format": "4:3, 768 x 576, 30 i/s, 63,5 s",
+  "ordre_des_biomes": "cycle aube, jour, couchant, nuit, aube doree ; a confirmer",
+  "cartes": "les 11 cartes sont des maps deja livrees du projet (leurs scenes animees), pas de nouveau decor"
+ },
+ "format": {
+  "size_px": [
+   768,
+   576
+  ],
+  "logique_px": [
+   384,
+   288
+  ],
+  "fps": 30,
+  "frames": 1905,
+  "duree_s": 63.5,
+  "zoom_entier": 2,
+  "codec": "H.264 yuv420p, crf 21"
+ },
+ "actes": [
+  {
+   "cle": "ouverture_aube",
+   "t_debut_s": 0.0,
+   "t_fin_s": 8.0
+  },
+  {
+   "cle": "carte_aube",
+   "t_debut_s": 8.0,
+   "t_fin_s": 12.5
+  },
+  {
+   "cle": "carte_clairiere",
+   "t_debut_s": 12.5,
+   "t_fin_s": 17.0
+  },
+  {
+   "cle": "carte_jungle",
+   "t_debut_s": 17.0,
+   "t_fin_s": 21.5
+  },
+  {
+   "cle": "carte_jardin",
+   "t_debut_s": 21.5,
+   "t_fin_s": 26.0
+  },
+  {
+   "cle": "carte_sables",
+   "t_debut_s": 26.0,
+   "t_fin_s": 30.5
+  },
+  {
+   "cle": "carte_cascade",
+   "t_debut_s": 30.5,
+   "t_fin_s": 35.0
+  },
+  {
+   "cle": "carte_tonnerre",
+   "t_debut_s": 35.0,
+   "t_fin_s": 39.5
+  },
+  {
+   "cle": "carte_magma",
+   "t_debut_s": 39.5,
+   "t_fin_s": 44.0
+  },
+  {
+   "cle": "carte_givre",
+   "t_debut_s": 44.0,
+   "t_fin_s": 48.5
+  },
+  {
+   "cle": "carte_ocean",
+   "t_debut_s": 48.5,
+   "t_fin_s": 53.0
+  },
+  {
+   "cle": "carte_sommet",
+   "t_debut_s": 53.0,
+   "t_fin_s": 57.5
+  },
+  {
+   "cle": "finale_doree",
+   "t_debut_s": 57.5,
+   "t_fin_s": 63.5
+  }
+ ],
+ "scenes": [
+  {
+   "cle": "aube",
+   "carte_source": "zone_reveil_prairie_horizon_v2",
+   "legende": "Aube sur la prairie et la mer",
+   "t_debut_s": 8.0,
+   "t_fin_s": 12.5,
+   "fenetre_depart_xy": [
+    0,
+    288
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    0
+   ]
+  },
+  {
+   "cle": "clairiere",
+   "carte_source": "entree_clairiere_tropicale_sud_nord_v1",
+   "legende": "Clairière tropicale et rivière",
+   "t_debut_s": 12.5,
+   "t_fin_s": 17.0,
+   "fenetre_depart_xy": [
+    0,
+    0
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    200
+   ]
+  },
+  {
+   "cle": "jungle",
+   "carte_source": "entree_jungle_sud_nord_v1",
+   "legende": "Jungle du sud",
+   "t_debut_s": 17.0,
+   "t_fin_s": 21.5,
+   "fenetre_depart_xy": [
+    0,
+    288
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    40
+   ]
+  },
+  {
+   "cle": "jardin",
+   "carte_source": "entree_jardin_secret_sud_nord_v3",
+   "legende": "Jardin secret",
+   "t_debut_s": 21.5,
+   "t_fin_s": 26.0,
+   "fenetre_depart_xy": [
+    0,
+    160
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    120
+   ]
+  },
+  {
+   "cle": "sables",
+   "carte_source": "entree_sables_mouvants_sud_nord_v1",
+   "legende": "Sables mouvants",
+   "t_debut_s": 26.0,
+   "t_fin_s": 30.5,
+   "fenetre_depart_xy": [
+    0,
+    0
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    288
+   ]
+  },
+  {
+   "cle": "cascade",
+   "carte_source": "entree_waterfall_cave_sud_nord_v3",
+   "legende": "Grotte de la cascade",
+   "t_debut_s": 30.5,
+   "t_fin_s": 35.0,
+   "fenetre_depart_xy": [
+    0,
+    288
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    0
+   ]
+  },
+  {
+   "cle": "tonnerre",
+   "carte_source": "entree_mt_thunder_sud_nord_v1",
+   "legende": "Mont Foudre au-dessus des nuages",
+   "t_debut_s": 35.0,
+   "t_fin_s": 39.5,
+   "fenetre_depart_xy": [
+    0,
+    288
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    100
+   ]
+  },
+  {
+   "cle": "magma",
+   "carte_source": "entree_cratere_magma_v1",
+   "legende": "Cratère de magma",
+   "t_debut_s": 39.5,
+   "t_fin_s": 44.0,
+   "fenetre_depart_xy": [
+    0,
+    0
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    288
+   ]
+  },
+  {
+   "cle": "givre",
+   "carte_source": "fin_givre_aurore_v2",
+   "legende": "Forêt de givre et aurores",
+   "t_debut_s": 44.0,
+   "t_fin_s": 48.5,
+   "fenetre_depart_xy": [
+    0,
+    288
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    0
+   ]
+  },
+  {
+   "cle": "ocean",
+   "carte_source": "fin_ocean_kyogre_v1",
+   "legende": "Fonds de l'océan",
+   "t_debut_s": 48.5,
+   "t_fin_s": 53.0,
+   "fenetre_depart_xy": [
+    0,
+    0
+   ],
+   "fenetre_arrivee_xy": [
+    384,
+    288
+   ]
+  },
+  {
+   "cle": "sommet",
+   "carte_source": "colonnes_lances_v2/CLR2",
+   "legende": "Colonnes Lances, le sommet",
+   "t_debut_s": 53.0,
+   "t_fin_s": 57.5,
+   "fenetre_depart_xy": [
+    150,
+    288
+   ],
+   "fenetre_arrivee_xy": [
+    240,
+    0
+   ]
+  }
+ ],
+ "transitions": {
+  "type": "mur de nuages",
+  "duree_s": 1.6,
+  "frontieres_s": [
+   8.0,
+   12.5,
+   17.0,
+   21.5,
+   26.0,
+   30.5,
+   35.0,
+   39.5,
+   44.0,
+   48.5,
+   53.0,
+   57.5
+  ],
+  "changement_de_carte": "a la frontiere (le mur couvre tout l'ecran)"
+ },
+ "mew": {
+  "source": "source/intro_mew_v1/bruts/mew_a.png",
+  "grille_px_brut": 11.75,
+  "taille_native": [
+   66,
+   58
+  ],
+  "couleurs": 13,
+  "poses_queue": 8,
+  "periode_s": 0.8,
+  "ecarte": "seconde generation (queue enroulee sur le corps), bruts/ecartes/"
+ },
+ "lumiere_du_jour": [
+  {
+   "t_s": 0.0,
+   "soleil_xy": [
+    270,
+    330
+   ],
+   "force_lueur": 0.0,
+   "rgb_lueur": [
+    255,
+    190,
+    140
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.92,
+    0.86
+   ]
+  },
+  {
+   "t_s": 8.0,
+   "soleil_xy": [
+    330,
+    -70
+   ],
+   "force_lueur": 0.3,
+   "rgb_lueur": [
+    255,
+    200,
+    150
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.9,
+    0.82
+   ]
+  },
+  {
+   "t_s": 14.0,
+   "soleil_xy": [
+    280,
+    -80
+   ],
+   "force_lueur": 0.3,
+   "rgb_lueur": [
+    255,
+    235,
+    190
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.97,
+    0.92
+   ]
+  },
+  {
+   "t_s": 22.0,
+   "soleil_xy": [
+    190,
+    -90
+   ],
+   "force_lueur": 0.28,
+   "rgb_lueur": [
+    255,
+    250,
+    225
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  {
+   "t_s": 31.0,
+   "soleil_xy": [
+    110,
+    -80
+   ],
+   "force_lueur": 0.3,
+   "rgb_lueur": [
+    255,
+    240,
+    200
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.97,
+    0.9
+   ]
+  },
+  {
+   "t_s": 37.0,
+   "soleil_xy": [
+    40,
+    -20
+   ],
+   "force_lueur": 0.4,
+   "rgb_lueur": [
+    255,
+    190,
+    120
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.86,
+    0.72
+   ]
+  },
+  {
+   "t_s": 42.0,
+   "soleil_xy": [
+    -20,
+    110
+   ],
+   "force_lueur": 0.5,
+   "rgb_lueur": [
+    255,
+    140,
+    80
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.74,
+    0.58
+   ]
+  },
+  {
+   "t_s": 46.5,
+   "soleil_xy": [
+    -60,
+    200
+   ],
+   "force_lueur": 0.1,
+   "rgb_lueur": [
+    150,
+    160,
+    255
+   ],
+   "multiplicateur_scene": [
+    0.7,
+    0.76,
+    0.95
+   ]
+  },
+  {
+   "t_s": 51.0,
+   "soleil_xy": [
+    -60,
+    200
+   ],
+   "force_lueur": 0.1,
+   "rgb_lueur": [
+    150,
+    160,
+    255
+   ],
+   "multiplicateur_scene": [
+    0.62,
+    0.7,
+    0.95
+   ]
+  },
+  {
+   "t_s": 55.0,
+   "soleil_xy": [
+    192,
+    -80
+   ],
+   "force_lueur": 0.22,
+   "rgb_lueur": [
+    255,
+    215,
+    150
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.88,
+    0.72
+   ]
+  },
+  {
+   "t_s": 63.5,
+   "soleil_xy": [
+    192,
+    0
+   ],
+   "force_lueur": 0.3,
+   "rgb_lueur": [
+    255,
+    225,
+    160
+   ],
+   "multiplicateur_scene": [
+    1.0,
+    0.92,
+    0.8
+   ]
+  }
+ ],
+ "calques": [
+  "IMW1_ciel_aube.png",
+  "IMW1_ciel_dore.png",
+  "IMW1_mer_de_nuages.png",
+  "IMW1_mew_vol_8poses.png",
+  "IMW1_mur_de_nuages_transition.png",
+  "IMW1_nuage_far_0.png",
+  "IMW1_nuage_far_1.png",
+  "IMW1_nuage_far_2.png",
+  "IMW1_nuage_far_3.png",
+  "IMW1_nuage_mid_0.png",
+  "IMW1_nuage_mid_1.png",
+  "IMW1_nuage_mid_2.png",
+  "IMW1_nuage_near_0.png",
+  "IMW1_nuage_near_1.png",
+  "IMW1_nuage_near_2.png"
+ ],
+ "jalons_s": [
+  3.0,
+  6.0,
+  10.2,
+  14.7,
+  19.2,
+  23.7,
+  28.2,
+  32.7,
+  37.2,
+  41.7,
+  46.2,
+  50.7,
+  55.2,
+  58.5,
+  62.0
+ ],
+ "deterministe": true,
+ "art_approved": false,
+ "runtime_tested": false,
+ "reserves": [
+  "pas une map PMDO ni un Ground : une video generee a partir de maps existantes",
+  "Mew est un sprite genere (une seule generation), jamais valide comme sprite SpriteCollab",
+  "nuages, soleil et eclats procedurals, aucune reference ROM",
+  "le mp4 est compresse (H.264, sous-echantillonnage des couleurs) : les calques PNG font foi pour les pixels"
+ ]
+}
