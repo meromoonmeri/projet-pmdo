@@ -88,6 +88,8 @@ Même jour (29 septembre, session `arena/01a0ec9c`, branchée sur `311b0dd0`), s
 
 Même jour, suite (« bon travail continue la suite ! ») : lot **Fin Star Cave** (`renders/fin_star_cave_v1/`, préfixe `FST1`, réf. `starcavepmdsky.png`, aperçu `apercu_fin_star_cave_v1.html`, 13 tests PASS, 5 mutations). Prolonge ESC1, planche de poussière réutilisée. Biome et portée choisis par l'agent, **à confirmer**. Fins restantes ici : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe pris en plus : FST1.
 
+Reprise du 2 octobre (session `arena/01a0fd01`, branchée sur `6cca4a09` = FST1, dépôt allégé) : sur « j'aimerais une zone magnifique en bord de plage avec ciel étoilée dans les différent temps avec des recif etc multicalque », lot de zone **Plage aux récifs étoilés** (`renders/zone_plage_recifs_etoiles_v1/`, préfixe `ZPR1`, aperçu `apercu_zone_plage_recifs_etoiles_v1.html`, gabarit ZRV2). Méthode du rendu généré sur fond magenta multicalque. Biome, ambiances (jour, aube, crépuscule, nuit) et effectifs d'étoiles choisis par l'agent, **à confirmer** : étoiles à tous les temps (14, 62, 144, 536), Voie lactée, étoile filante, récifs rocheux et coraux sur leurs calques, lueur des coraux la nuit, marée, houle en arcs. 21 tests PASS ; `art_approved: false`, aucun test PMDO. Rien repris des branches sœurs : seuls les bruts de ZRV2 (astres, reflets, nuages) sont recopiés, avec leur sha256.
+
 ## Branches sœurs de la série (relevé du 27 septembre)
 
 Cinq sessions sont reparties de la même base que `arena/01a0dd03` (`95160e32`) ; `01a0e017` travaille sur un autre historique. Aucune n'a été fusionnée et rien n'en a été repris. Leurs têtes étaient identiques au démarrage et avant le commit d'EQS1.

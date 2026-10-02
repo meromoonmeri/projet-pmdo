@@ -1,5 +1,19 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Plage aux récifs étoilés : baie multicalque, ZPR1 (2 octobre 2026)
+
+**Demande** : « j'aimerais une zone magnifique en bord de plage avec ciel étoilée dans les différent temps avec des recif etc multicalque ». Lot de **zone** (même famille que ZRV2), ni entrée ni fin de donjon. Biome, composition, ambiances et nombre d'étoiles choisis par l'agent : **à confirmer**.
+
+- Sorties : `renders/zone_plage_recifs_etoiles_v1/` (`calques/`, `animation/`, `masques/`, `review/`, quatre `.ora`, `ZPR1_projet_pmdo_0812.zip`, `ZPR1_calques_png_8px.zip`, `manifest.json`, `README.md`), aperçu `apercu_zone_plage_recifs_etoiles_v1.html` (calques à cocher, zooms), build `source/zone_plage_recifs_etoiles_v1/build.py`.
+- **Images à voir** : `renders/zone_plage_recifs_etoiles_v1/review/ZPR1_quatre_ambiances_t000.png`, `ZPR1_{jour,aube,crepuscule,nuit}_scene_t000.png`, `ZPR1_{…}_scene_animee.webp`, `ZPR1_collisions_marqueurs.png`.
+- **Zone** : baie de 768 × 576 (4:3) fermée par deux promontoires de roches rouges ; barrière de sept récifs rocheux, lagon de treize patates de corail, plage de sable avec six palmiers, deux mares, coquillages, étoiles de mer et tronc échoué.
+- **Ciel étoilé aux quatre moments** (lecture littérale de « dans les différents temps », **à confirmer**) : jour 14 étoiles très pâles, aube 62, crépuscule 144, nuit 536 (440 fixes et 96 qui scintillent) avec Voie lactée et étoile filante au crépuscule et la nuit. Les effectifs sont les constantes `ETOILES`.
+- **Multicalque** : 21 (jour), 24 (aube), 25 (crépuscule) ou 26 (nuit) calques selon l'ambiance, mêmes numéros partout, plus un Top vide : ciel, Voie lactée, étoiles fixes, étoiles qui scintillent, étoile filante, astre, nuages, mer, coraux, caustiques, houle, scintillement, reflet, lueur, récifs, écume des récifs, sable, marée, mares et leurs éclats, rochers, coquillages, bois flotté, troncs, palmes, herbes.
+- **Généré** (journal `generation.json`) : terre du jour sur magenta, ciel et mer, planche de sept récifs, planche de douze coraux, trois retouches d'ambiance (aube, crépuscule, nuit, alignées au pixel sur le décor de jour). **Réutilisé de ZRV2** (sha256 dans le manifeste) : astres, reflets, trois bancs de nuages. **Calculé** : découpage en calques avec remplissage derrière chaque objet, placement des récifs, couleurs des ambiances (quantiles de luminance des retouches), étoiles, Voie lactée, étoile filante, houle en arcs qui épousent la baie, caustiques, écume, marée (bandes de la planche TD « Beach & Path »), palmes et herbes, lueur de nuit, collisions.
+- **Lois** : houle 12 × 10 ticks, scintillement 16 × 4, étoiles 24 × 5, nuages 384 × 16 (reprises de ZRV2) ; étoile filante 72 × 5, marée 18 × 8, palmes 12 × 10 (2 px au sommet), herbes 8 × 12, caustiques, écume et lueur 12 × 10.
+- **Contrôles** : 21 tests PASS (images, lois, boucles exactes, couleurs, grille, collisions et chemin sud → plage, ORA, Ground relu tuile par tuile). `art_approved: false`, `runtime_tested: false` : rien n'a été testé dans PMDO.
+- Poids ajouté au dernier état : environ 87 Mo (83 Mo de sorties dont 37 Mo d'archive PNG et 8 Mo de projet PMDO, 4 Mo d'aperçu).
+
 ## Allègement du dépôt : 120 anciens lots archivés (2 octobre 2026)
 
 **Demande** : « Ok allège-le alors ! », après l'échec du clonage du dépôt dans la session Arena (41 868 fichiers, 6,67 Go au dernier état). Niveau choisi par l'utilisateur : tout archiver, y compris la world map et `final_duos`.
