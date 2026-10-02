@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Allègement du dépôt : 120 anciens lots archivés (2 octobre 2026)
+
+**Demande** : « Ok allège-le alors ! », après l'échec du clonage du dépôt dans la session Arena (41 868 fichiers, 6,67 Go au dernier état). Niveau choisi par l'utilisateur : tout archiver, y compris la world map et `final_duos`.
+
+- **Retiré du dernier état** : 120 lots de `renders/` antérieurs au 25 septembre, leurs ZIP voisins et 74 aperçus `apercu_*.html` de la racine, soit 25 525 fichiers et 4,25 Go. Le dernier état passe de **6,67 Go à 2,42 Go** (41 868 → 16 343 fichiers).
+- **Rien n'est perdu ni réécrit** : tout reste dans l'historique, au commit `6cca4a0`. Restauration : `python3 source/restaurer_lot.py LOT` (options `--liste`, `--avec-dependances`, `--prefixe`). Liste complète, méthode et limites : [`ALLEGEMENT.md`](ALLEGEMENT.md).
+- **Gardé** : les lots depuis le 25 septembre, `source/`, `exports/`, `sprites/`, les références de la racine, les packs livrés et `mega_evolution_v1/v2` (cités par des aperçus conservés).
+- Les liens vers des lots archivés, dans les sections plus bas, sont morts tant que le lot n'est pas restauré.
+- Contrôle : les 69 fichiers de tests des lots conservés donnent des résultats identiques avant et après (584 tests ok), les builds de 48 lots conservés se refont sans aucun lot archivé, et les lots archivés restaurés retrouvent leurs 134 tests ok (détails dans `ALLEGEMENT.md`).
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
