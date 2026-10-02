@@ -26,7 +26,7 @@ Les fichiers sont seulement absents du dernier état. L'historique n'a pas été
   python3 source/restaurer_lot.py --prefixe world_map          # une famille
   ```
   Le manifeste est `source/allegement_2026-10-02.json` (chemins, tailles, dates, dépendances de build). Les fichiers restaurés restent **non suivis** et sont ajoutés à `.git/info/exclude` : un `git add -A` ne les recommit pas par erreur.
-- **Sans l'outil** : `git fetch --depth=1 --filter=blob:none origin 6cca4a09380211e510ab1bea454a1b1926ef4b5a` puis `git checkout 6cca4a09380211e510ab1bea454a1b1926ef4b5a -- renders/<lot>`.
+- **Sans l'outil** : `git fetch --depth=1 --filter=blob:none origin 6cca4a09380211e510ab1bea454a1b1926ef4b5a`, puis `git checkout 6cca4a09380211e510ab1bea454a1b1926ef4b5a -- renders/<lot>`, puis `git reset -q -- renders/<lot>`. Sans ce dernier `reset`, git garde les fichiers restaurés dans l'index et un prochain `git commit` les ajouterait de nouveau. Ajouter aussi `/renders/<lot>/` à `.git/info/exclude` pour qu'un `git add -A` les ignore.
 
 ## Critère
 
@@ -83,11 +83,11 @@ Les 175 pages HTML conservées (92 aperçus de la racine, plus celles des lots e
 
 `source/restaurer_lot.py` a été testé : `--liste` (avec filtre), `--a-sec`, lot inconnu (suggestions), un petit lot avec aperçu racine (16 fichiers, empreintes git identiques au commit d'archive), `--prefixe antre_` (2 518 fichiers), répétition d'une restauration (aucun doublon dans `.git/info/exclude`) et `--avec-dependances` sur 16 lots (18 lots, 1 911 fichiers, 820 Mo en 6 s). Les fichiers restaurés restent non suivis par git, et le nettoyage complet a été vérifié.
 
-Clone neuf, simulé en local (`git clone --depth 1`, protocole pack) : 43 s, `.git` 1,9 Go et arbre 2,3 Go, contre environ 5,1 et 6,4 Go avant l'allègement. Ce dernier état ne contient pas le commit d'archive : l'outil l'a récupéré lui-même (métadonnées seules, 60 Mo de base annexe après la restauration), puis a restauré `arene_halcyon_v16` avec sa dépendance `arene_guide_couches_v14` (58 fichiers, 65 Mo, 21 s). Les fichiers sont identiques au commit d'archive (empreintes git) et les 16 tests des deux lots passent. Cette simulation n'a pas interrogé GitHub ; la récupération réelle du commit d'archive depuis GitHub (métadonnées, 1,2 Mo, 4 s) avait été mesurée plus tôt dans la session.
+Clone réel depuis GitHub (`git clone --depth 1` de la branche allégée) : 79 s, `.git` 1,9 Go et arbre 2,3 Go (16 346 fichiers), contre environ 5,1 et 6,4 Go avant l'allègement. Ce dernier état ne contient pas le commit d'archive : l'outil l'a récupéré lui-même depuis GitHub (métadonnées seules), puis a restauré `arene_halcyon_v16` avec sa dépendance `arene_guide_couches_v14` (58 fichiers, 65 Mo, 20 s). Les fichiers sont identiques au commit d'archive (empreintes git) et les 16 tests des deux lots passent. La recette manuelle (`fetch` puis `checkout`) a aussi été essayée sur `lisiere_pmd_v1` (7 fichiers, moins d'une seconde) : elle laisse bien les fichiers dans l'index tant qu'on ne fait pas le `reset`.
 
 ### Ce qui n'est pas vérifié
 
-Ces contrôles portent sur le code, les fichiers et les tests existants. Le moteur PMDO n'a pas été lancé, la qualité artistique n'a pas été revue, et rien ici ne valide l'import dans l'éditeur. Le poids d'un clone n'a été mesuré qu'en simulation locale, pas depuis GitHub.
+Ces contrôles portent sur le code, les fichiers et les tests existants. Le moteur PMDO n'a pas été lancé, la qualité artistique n'a pas été revue, et rien ici ne valide l'import dans l'éditeur.
 
 ## Pour la suite
 
