@@ -1033,6 +1033,7 @@ def sway(layer, comps_dil, amp, n, ph_fn, tvals=None):
                 row = np.nonzero(mm[y - y0])[0]
                 if not len(row):
                     continue
+                dx = max(dx, -int(row.min() + x0)); dx = min(dx, W - 1 - int(row.max() + x0))      # aucun pixel ne sort de l'image
                 tx = row + x0 + dx; ok = (tx >= 0) & (tx < W)
                 a[y, tx[ok]] = layer[y, row[ok] + x0]
         frames.append(a)
