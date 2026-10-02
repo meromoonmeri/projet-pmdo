@@ -731,6 +731,332 @@ def recolor_terre(L, cls, amb):
     return out
 
 
+# ---------------------------------------------------------------- astres, étoiles, Voie lactée, étoile filante
+REFLET_SPAN = 200                                  # le reflet descend jusqu'au rivage de la baie (horizon 153 -> côte 366)
+Y_SHORE = 366
+HOULE_PASSES, HOULE_K = 1, 7                       # une crête avance d'un intervalle par cycle de 12 crans ; 7 crêtes de l'horizon au rivage
+ASTRE = {'jour': {'sprite': 1, 'd': 40, 'c': (600, 56)}, 'aube': {'sprite': 1, 'd': 54, 'c': (470, YH - 14)},
+         'crepuscule': {'sprite': 1, 'd': 64, 'c': (560, YH - 10)}, 'nuit': {'sprite': 0, 'd': 56, 'c': (470, 64)}}
+RAMPE_SOLEIL = {'aube': [(255, 250, 228), (255, 232, 170), (255, 205, 140), (252, 168, 124), (240, 130, 118)],
+                'crepuscule': [(255, 238, 170), (255, 205, 100), (255, 160, 70), (240, 100, 56), (200, 56, 60)]}
+HALO = {'jour': ((255, 255, 235), 0.16, 12), 'aube': ((255, 214, 170), 0.30, 26), 'crepuscule': ((255, 150, 80), 0.34, 30),
+        'nuit': ((150, 165, 235), 0.22, 18)}
+LUMIERE = {'jour': (235, 250, 255), 'aube': (255, 226, 226), 'crepuscule': (255, 190, 150), 'nuit': (140, 172, 232)}   # reflets clairs sur l'eau
+GAIN_EAU = {'jour': 1.0, 'aube': 0.9, 'crepuscule': 0.85, 'nuit': 0.6}
+ETOILES = {'jour': (0, 14), 'aube': (46, 16), 'crepuscule': (110, 34), 'nuit': (440, 96)}   # (fixes, scintillantes) : à confirmer
+ETOILE_K = {'jour': 0.34, 'aube': 0.72, 'crepuscule': 0.86, 'nuit': 1.0}                    # contraste avec le ciel
+VOIE_DENSITE = {'jour': 0.0, 'aube': 0.10, 'crepuscule': 0.20, 'nuit': 1.0}
+FILANTE = {'crepuscule': (0.7, (96, 26)), 'nuit': (1.0, (150, 20))}                         # (éclat, départ) ; une par cycle de 72 x 5 ticks
+FILANTE_PHASES = 72
+
+
+def astre_layer(amb, sheet, sky_rgb):
+    """Astre (planche ZRV2), recoloré aube/crépuscule en cinq anneaux, avec un halo tramé ; posé sur le ciel."""
+    A = ASTRE[amb]; d = A['d']; sp = astre_sprite(sheet, A['sprite'], d)
+    if amb in RAMPE_SOLEIL:
+        yy, xx = np.mgrid[:d, :d]; rn = np.hypot(yy - (d - 1) / 2, xx - (d - 1) / 2) / (d / 2)
+        ring = np.clip((rn * 5).astype(int), 0, 4); m_ = sp[..., 3] == 255
+        for k in range(5):
+            sp[m_ & (ring == k), :3] = RAMPE_SOLEIL[amb][k]
+    out = np.zeros((H, W, 4), 'uint8'); cx, cy = A['c']
+    yy, xx = np.mgrid[:H, :W]; r = np.hypot(xx - cx, yy - cy)
+    col, k, rad = HALO[amb]
+    for lo, hi, mod in ((d / 2 + 1, d / 2 + 1 + rad * 0.45, 2), (d / 2 + 1 + rad * 0.45, d / 2 + 1 + rad, 4)):
+        ring = (r > lo) & (r <= hi) & (yy < YH)
+        pat = ((xx + yy) % 2 == 0) if mod == 2 else ((xx % 2 == 0) & (yy % 2 == 0))
+        sel = ring & pat
+        base = sky_rgb[sel].astype(float)
+        out[sel, :3] = np.clip(base + (np.array(col) - base) * (k if mod == 2 else k * 0.7), 0, 255).astype('uint8'); out[sel, 3] = 255
+    x0, y0 = cx - d // 2, cy - d // 2
+    ys, xs = np.nonzero(sp[..., 3] == 255); ty, tx = ys + y0, xs + x0; ok = (ty >= 0) & (ty < H) & (tx >= 0) & (tx < W)
+    out[ty[ok], tx[ok]] = sp[ys[ok], xs[ok]]
+    out[YH:] = 0                                       # le calque de mer, au-dessus, cache le bas ; on ne garde rien sous l'horizon
+    return out
+
+
+def _value_noise(shape, cells, seed):
+    rng = np.random.default_rng(seed); g = rng.random((cells[1] + 2, cells[0] + 2))
+    return nd.zoom(g, (shape[0] / cells[1], shape[1] / cells[0]), order=1)[:shape[0], :shape[1]]
+
+
+def star_field(amb, ciel_rgb, land_mask, astre_mask):
+    """Étoiles du ciel (hasard fixé) : fixes (calque statique) et scintillantes (24 phases x 5 ticks, états plein / cœur / éteint).
+    Plus nombreuses en haut ; ni sur la terre, ni sur l'astre et son halo. Teinte = ciel + (étoile - ciel) x contraste de l'ambiance."""
+    nfix, nsc = ETOILES[amb]; K = ETOILE_K[amb]
+    rng = np.random.default_rng(1000 + hsh(amb, 7) % 1000)
+    blocked = land_mask | nd.binary_dilation(astre_mask, iterations=4); blocked[YH - 3:] = True
+    occ = np.zeros((H, W), bool); pts = []
+    yy = np.arange(YH - 3)
+    wy = (1 - yy / YH) ** 1.25 + 0.12; wy = wy / wy.sum()
+    tries = 0
+    while len(pts) < nfix + nsc and tries < 40000:
+        tries += 1
+        y = int(rng.choice(yy, p=wy)); x = int(rng.integers(3, W - 3))
+        if blocked[y, x] or occ[max(0, y - 3):y + 4, max(0, x - 3):x + 4].any():
+            continue
+        occ[y, x] = True; pts.append((y, x))
+    pal = [(255, 255, 255), (255, 255, 255), (255, 255, 255), (205, 222, 255), (255, 242, 205)]
+    fixes = np.zeros((H, W, 4), 'uint8'); twink = []
+    for i, (y, x) in enumerate(pts):
+        base = np.array(pal[int(rng.integers(len(pal)))], float); sky = ciel_rgb[y, x].astype(float)
+        def tone(f):
+            return tuple(int(v) for v in np.clip(sky + (base - sky) * K * f, 0, 255))
+        if i < nfix:
+            f = float(rng.choice([0.55, 0.75, 1.0], p=[0.5, 0.35, 0.15])); fixes[y, x, :3] = tone(f); fixes[y, x, 3] = 255
+        else:
+            big = rng.random() < 0.42
+            c1, c2 = tone(1.0), tone(0.55)
+            core = [(y, x, *c2)]
+            if big:
+                px = [(y, x, *c1)] + [(y + dy, x + dx, *tone(0.62)) for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1))
+                                      if 0 <= y + dy < YH - 2 and 0 <= x + dx < W]
+                core = [(y, x, *c1)]
+            else:
+                px = [(y, x, *c1)]
+            twink.append((px, core, int(rng.integers(STAR_PHASES))))
+    return fixes, twink
+
+
+def voie_lactee(amb, ciel_rgb, land_mask, astre_mask):
+    """Voie lactée : bande diagonale de poussière d'étoiles (points d'une couleur, jamais de flou), plus dense au cœur."""
+    dens = VOIE_DENSITE[amb]; out = np.zeros((H, W, 4), 'uint8')
+    if dens <= 0:
+        return out
+    rng = np.random.default_rng(77); yy, xx = np.mgrid[:H, :W]
+    th = math.radians(-22); nx, ny = -math.sin(th), math.cos(th)          # normale de la bande
+    dist = (xx - 330) * nx + (yy - 66) * ny
+    prof = np.exp(-(dist / 34.0) ** 2)
+    lane = 1 - 0.55 * np.exp(-((dist - 9) / 5.0) ** 2)                     # filament sombre le long de la bande
+    noise = _value_noise((H, W), (14, 9), 5) * 0.8 + _value_noise((H, W), (40, 28), 6) * 0.5
+    p = dens * 0.5 * prof * lane * np.clip(noise, 0, 1.2)
+    on = (rng.random((H, W)) < p) & ~land_mask & ~nd.binary_dilation(astre_mask, iterations=8) & (yy < YH - 3)
+    cols = np.array([(118, 118, 205), (150, 150, 226), (192, 202, 246), (228, 192, 236), (255, 255, 255)], float)
+    pick = np.minimum((rng.random((H, W)) ** 1.8 * 5).astype(int) + (prof > 0.7), 4)
+    K = ETOILE_K[amb]; sky = ciel_rgb.astype(float)
+    out[on, :3] = np.clip(sky[on] + (cols[pick[on]] - sky[on]) * K * 0.8, 0, 255).astype('uint8'); out[on, 3] = 255
+    return out
+
+
+def etoile_filante(amb, land_mask):
+    """Étoile filante : 12 images de passage dans un cycle de 72 x 5 ticks (6 s), tête blanche et queue qui s'éteint."""
+    frames = [np.zeros((H, W, 4), 'uint8') for _ in range(FILANTE_PHASES)]
+    if amb not in FILANTE:
+        return None
+    k, (x0, y0) = FILANTE[amb]; v = (7.4, 2.6)
+    for i in range(12):
+        a = frames[10 + i]
+        hx, hy = x0 + v[0] * i, y0 + v[1] * i
+        for j in range(0, 22):
+            t = j / 21; px, py = int(round(hx - v[0] * t * 2.4)), int(round(hy - v[1] * t * 2.4))
+            if not (0 <= px < W and 0 <= py < YH - 4) or land_mask[py, px]:
+                continue
+            if j > 4 and j % 2:
+                continue
+            c = np.array([255, 255, 255], float) * (1 - t) + np.array([120, 150, 235], float) * t
+            a[py, px, :3] = np.clip(c * (0.55 + 0.45 * k), 0, 255).astype('uint8'); a[py, px, 3] = 255
+    return frames
+
+
+def cloud_ramp(strip, amb, sky_rgb):
+    """Nuages de l'ambiance : chaque couleur du banc de jour prend la couleur de même quantile de luminance sur une rampe
+    ombre -> milieu -> lumière tirée du ciel de l'horizon (les nuages n'ont pas de retouche générée)."""
+    if amb == 'jour':
+        return strip
+    sh = sky_rgb[YH - 6].astype(float); mid = sky_rgb[YH - 40].astype(float)
+    mixc = lambda a, b, t: np.array(a, float) * (1 - t) + np.array(b, float) * t
+    anchors = {'aube': (mixc(mid, (122, 92, 150), 0.55), mixc(sh, (255, 255, 255), 0.42), mixc((255, 238, 222), sh, 0.3)),
+               'crepuscule': (mixc(mid, (60, 28, 86), 0.6), mixc(sh, (240, 110, 80), 0.45), mixc((255, 205, 130), sh, 0.25)),
+               'nuit': (mixc(sh, (6, 8, 40), 0.55), mixc(sh, (82, 96, 168), 0.6), mixc((150, 162, 220), sh, 0.2))}[amb]
+    out = strip.copy(); m = strip[..., 3] == 255
+    px = strip[m][:, :3].astype(int); cols, inv, cnt = np.unique(px, axis=0, return_inverse=True, return_counts=True)
+    order = np.argsort(lum(cols), kind='stable'); cum = np.cumsum(cnt[order]); q = np.empty(len(cols)); q[order] = (cum - cnt[order] / 2) / cum[-1]
+    lo, md, hi = anchors
+    tgt = np.where((q < 0.55)[:, None], lo + (md - lo) * (q / 0.55)[:, None], md + (hi - md) * ((q - 0.55) / 0.45)[:, None])
+    out[m, :3] = np.clip(tgt, 0, 255).astype('uint8')[inv.ravel()]
+    return out
+
+
+# ---------------------------------------------------------------- mer : houle, caustiques, écume, marée
+def sea_geometry(sea_vis):
+    """ys(x) : dernière rangée de mer visible dans chaque colonne (-1 si aucune) ; lissée."""
+    ys = np.full(W, -1, int)
+    for x in range(W):
+        col = sea_vis[YH:, x]
+        if col[0]:
+            nz = np.nonzero(~col)[0]; ys[x] = YH + (nz[0] if len(nz) else len(col)) - 1
+    ok = ys >= 0
+    sm = ys.copy(); sm[ok] = nd.median_filter(ys.astype(float), 9)[ok].astype(int)
+    return sm
+
+
+def houle_frames(sea_rgb, sea_vis, dist_land, ys, amb):
+    """Crêtes de houle en arcs qui épousent la baie : la crête de profondeur u est à y = YH + (ys(x) - YH) u^1,7. Le dessin ne
+    dépend que de (x, u), donc la boucle de 12 crans est exacte ; les crêtes s'éteignent (tramé) près du rivage et des falaises."""
+    g = GAIN_EAU[amb]; hi = np.array(LUMIERE[amb], float); frames = []
+    xs = np.arange(W); fade = np.clip((dist_land - 30) / 16, 0, 1)
+    for s in range(SWELL_STEPS):
+        a = np.zeros((H, W, 4), 'uint8')
+        for k in range(-1, HOULE_K + 1):
+            u = (k + HOULE_PASSES * s / SWELL_STEPS) / HOULE_K
+            if not 0.03 < u < 0.985:
+                continue
+            thr = 0.72 - 1.55 * u; th = 1 if u < 0.33 else (2 if u < 0.72 else 3)
+            n = np.sin(xs * 0.071 + 9.0 * u) + np.sin(xs * 0.033 - 6.3 * u + 1.3) + 0.6 * np.sin(xs * 0.19 + 17 * u)
+            for x in np.nonzero((ys >= 0) & (n > thr))[0]:
+                y0 = int(round(YH + (ys[x] - YH) * u ** 1.7))
+                for r in range(th):
+                    y = y0 + r
+                    if y >= H or not sea_vis[y, x] or ((x * 7 + y * 13) % 16) / 16 >= fade[y, x]:
+                        continue
+                    amt = g * (0.20 + 0.48 * u ** 0.8) * (1.28 if r == 0 else 0.86)
+                    base = sea_rgb[y, x].astype(float)
+                    a[y, x, :3] = np.clip(base + (hi - base) * min(amt, 0.95), 0, 255).astype('uint8'); a[y, x, 3] = 255
+        frames.append(a)
+    return frames
+
+
+def reflet_frames_zpr(dashes, xc, sea_vis):
+    """Reflet de l'astre : chaque trait oscille de A sin(phi), phi = 2 pi (passes s / 12 - 7 u), u = profondeur ; s'éteint un instant
+    quand sin(2 phi + phase propre) < -0,85. Boucle fermée."""
+    frames = []
+    for s in range(SWELL_STEPS):
+        a = np.zeros((H, W, 4), 'uint8')
+        for d in dashes:
+            u = min(max((d['y'] - YH) / (Y_SHORE - YH), 0), 1)
+            ph = 2 * math.pi * (SWELL_PASSES * s / SWELL_STEPS - HOULE_K * u)
+            if math.sin(2 * ph + d['ph']) < -0.85:
+                continue
+            sp = d['spr']; h_, w_ = sp.shape[:2]; amp = 1 + (d['y'] - YH) / 45
+            x0 = int(round(xc + d['dx'] + amp * math.sin(ph) - w_ / 2))
+            ys, xs = np.nonzero(sp[..., 3] == 255); ty, tx = ys + d['y'], xs + x0
+            ok = (ty >= YH) & (ty < H) & (tx >= 0) & (tx < W)
+            a[ty[ok], tx[ok]] = sp[ys[ok], xs[ok]]
+        a[~sea_vis] = 0
+        frames.append(a)
+    return frames
+
+
+def caustiques(sea_rgb, sea_vis, dist_land, amb, n=12):
+    """Lumière qui danse sur le fond du lagon : réseau de points clairs (produit de deux ondes), 12 crans en boucle exacte."""
+    zone = sea_vis & (dist_land < 78) & (dist_land > 3); yy, xx = np.mgrid[:H, :W]
+    g = {'jour': 0.40, 'aube': 0.32, 'crepuscule': 0.30, 'nuit': 0.26}[amb]; hi = np.array(LUMIERE[amb], float); frames = []
+    for t in range(n):
+        p1 = 2 * math.pi * t / n; p2 = 2 * p1
+        v = np.sin(0.165 * xx + 0.105 * yy + p1) * np.sin(0.131 * xx - 0.173 * yy + p2) + 0.25 * np.sin(0.41 * xx + 0.07 * yy - p1)
+        on = zone & (v > 0.80) & (((xx * 3 + yy * 5) % 4) != 0)
+        a = np.zeros((H, W, 4), 'uint8'); base = sea_rgb[on].astype(float)
+        a[on, :3] = np.clip(base + (hi - base) * g, 0, 255).astype('uint8'); a[on, 3] = 255
+        frames.append(a)
+    return frames
+
+
+def ecume_recifs(masks, sea_vis, sea_rgb, amb, n=12):
+    """Écume qui bat contre chaque récif : anneau de 1 à 5 px dont la densité respire (phase propre à chaque récif)."""
+    d_all = np.full((H, W), 99.0); own = np.zeros((H, W), int)
+    for i, m in enumerate(masks):
+        d = nd.distance_transform_edt(~m)
+        better = d < d_all; d_all[better] = d[better]; own[better] = i
+    yy, xx = np.mgrid[:H, :W]; hv = (((xx * 1103515245 + yy * 12345 + 99991) >> 7) % 997) / 997.0
+    hi = np.array(LUMIERE[amb], float); white = np.array([255, 255, 255], float) * 0.55 + hi * 0.45 if amb != 'jour' else np.array([252, 254, 255], float)
+    ph = np.array([(hsh(i, 5) % 100) / 100 for i in range(len(masks))]); frames = []
+    zone = sea_vis & (d_all >= 1) & (d_all <= 5.5)
+    for t in range(n):
+        thr = 0.98 - 0.17 * d_all + 0.28 * np.sin(2 * math.pi * (t / n + ph[own]))
+        on = zone & (hv < thr)
+        a = np.zeros((H, W, 4), 'uint8'); base = sea_rgb[on].astype(float)
+        w = np.where(d_all[on] <= 2.2, 0.92 if amb == 'jour' else 0.62, 0.5 if amb == 'jour' else 0.32)[:, None] * GAIN_EAU[amb] ** 0.5
+        a[on, :3] = np.clip(base + (white - base) * w, 0, 255).astype('uint8'); a[on, 3] = 255
+        frames.append(a)
+    return frames
+
+
+def maree(cls, sea_vis, sand_rgb, sea_rgb, amb, n=18, A=7.0):
+    """Marée sur la plage (bandes de la planche TD « Beach & Path » : ligne d'écume mouchetée, sable mouillé, eau claire) : le front
+    avance de 0 à A px sur le sable puis recule, 18 crans en boucle exacte ; la phase varie un peu le long du rivage."""
+    dsea = nd.distance_transform_edt(~sea_vis)
+    sand = (cls == CL['SABLE']) & (dsea <= A + 8)
+    yy, xx = np.mgrid[:H, :W]; hv = (((xx * 2654435761 + yy * 40503 + 7) >> 9) % 1013) / 1013.0
+    shallow = fill_nearest(sea_rgb, sea_vis).astype(float); hi = np.array(LUMIERE[amb], float)
+    foam = np.array([255, 255, 255], float) if amb == 'jour' else np.array([255, 255, 255], float) * 0.5 + hi * 0.5
+    wet_k = {'jour': (0.84, (176, 120, 44)), 'aube': (0.80, (120, 90, 120)), 'crepuscule': (0.78, (150, 70, 70)), 'nuit': (0.72, (30, 50, 90))}[amb]
+    adv = lambda t: A * (0.5 - 0.5 * np.cos(2 * math.pi * t / n + 0.011 * xx))
+    frames = []
+    for t in range(n):
+        a_t = adv(t); prev = np.maximum.reduce([adv((t - j) % n) for j in range(0, 5)])
+        a = np.zeros((H, W, 4), 'uint8')
+        under = sand & (dsea <= a_t)
+        wetm = sand & (dsea > a_t + 1.5) & (dsea <= prev + 3.0)
+        fm = sand & (dsea > a_t) & (dsea <= a_t + 1.5) & (hv < 0.78)
+        base = sand_rgb.astype(float)
+        a[wetm, :3] = np.clip(base[wetm] * wet_k[0] + np.array(wet_k[1], float) * (1 - wet_k[0]), 0, 255).astype('uint8'); a[wetm, 3] = 255
+        a[under, :3] = np.clip(shallow[under] * 0.82 + base[under] * 0.18 + (hi - shallow[under]) * 0.10 * GAIN_EAU[amb], 0, 255).astype('uint8'); a[under, 3] = 255
+        a[fm, :3] = np.clip(base[fm] * 0.25 + foam * 0.75 * (0.7 + 0.3 * GAIN_EAU[amb]), 0, 255).astype('uint8'); a[fm, 3] = 255
+        frames.append(a)
+    return frames
+
+
+# ---------------------------------------------------------------- végétation, mares, lueur
+def sway(layer, comps_dil, amp, n, ph_fn, flip=False):
+    """Cisaillement horizontal d'un calque par composante : chaque rangée glisse de A sin(phi) (1 au sommet, 0 à la base) ; n phases."""
+    lab, nc = nd.label(nd.binary_dilation(layer[..., 3] == 255, iterations=comps_dil), structure=np.ones((3, 3)))
+    al = layer[..., 3] == 255; boxes = nd.find_objects(lab); frames = []
+    for t in range(n):
+        a = np.zeros((H, W, 4), 'uint8')
+        for i, sl in enumerate(boxes):
+            y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop; mm = (lab[sl] == i + 1) & al[sl]
+            ph = 2 * math.pi * (t / n + ph_fn(i, x0, y0))
+            for y in range(y0, y1):
+                w = 1 - (y - y0) / max(1, (y1 - 1 - y0))
+                dx = int(round(amp * math.sin(ph) * w))
+                row = np.nonzero(mm[y - y0])[0]
+                if not len(row):
+                    continue
+                tx = row + x0 + dx; ok = (tx >= 0) & (tx < W)
+                a[y, tx[ok]] = layer[y, row[ok] + x0]
+        frames.append(a)
+    return frames
+
+
+def reflets_mares(mares_layer, amb, n=8):
+    """Éclats d'eau dans les mares (8 phases x 10 ticks) ; la nuit elles reflètent les étoiles."""
+    m = mares_layer[..., 3] == 255; ys, xs = np.nonzero(nd.binary_erosion(m, iterations=1))
+    rng = np.random.default_rng(31); sel = rng.choice(len(ys), size=min(26, len(ys)), replace=False) if len(ys) else []
+    col = {'jour': (255, 255, 255), 'aube': (255, 240, 235), 'crepuscule': (255, 214, 170), 'nuit': (214, 228, 255)}[amb]
+    off = rng.integers(n, size=len(sel)); frames = []
+    for t in range(n):
+        a = np.zeros((H, W, 4), 'uint8')
+        for j, k in enumerate(sel):
+            if (t + off[j]) % n in (0, 1, 2):
+                a[ys[k], xs[k], :3] = col; a[ys[k], xs[k], 3] = 255
+        frames.append(a)
+    return frames
+
+
+def lueur_nuit(coral_masks, coral_rgb, sea_vis, dist_land, n=12):
+    """Nuit : les coraux luisent (anneaux de 1 à 3 px, densité qui respire) et le plancton scintille dans le lagon (3 crans sur 12)."""
+    frames = []; yy, xx = np.mgrid[:H, :W]; hv = (((xx * 1103515245 + yy * 12345 + 4242) >> 7) % 991) / 991.0
+    rings = []
+    for i, m in enumerate(coral_masks):
+        if not m.any():
+            continue
+        d = nd.distance_transform_edt(~m); ring = (d >= 1) & (d <= 3.4) & sea_vis
+        c = coral_rgb[m].astype(float); c = c[np.argmax(c.max(1) - c.min(1))]
+        c = np.clip(c * 0.55 + 255 * 0.45 * (c / max(1.0, c.max())), 0, 255)       # couleur du corail, éclaircie, jamais blanche
+        rings.append((ring, d, c, (hsh(i, 9) % 100) / 100))
+    rng = np.random.default_rng(9); zone = np.argwhere(sea_vis & (dist_land > 4) & (dist_land < 80) & (np.arange(H)[:, None] > YH + 90))
+    pl = zone[rng.choice(len(zone), size=min(70, len(zone)), replace=False)]; off = rng.integers(n, size=len(pl))
+    for t in range(n):
+        a = np.zeros((H, W, 4), 'uint8')
+        for ring, d, c, ph in rings:
+            p = (0.60 - 0.17 * d) * (0.62 + 0.38 * math.sin(2 * math.pi * (t / n + ph)))
+            on = ring & (hv < p); a[on, :3] = c.astype('uint8'); a[on, 3] = 255
+        for j, (y, x) in enumerate(pl):
+            if (t + off[j]) % n in (0, 1, 2):
+                a[y, x, :3] = (150, 255, 235); a[y, x, 3] = 255
+        frames.append(a)
+    return frames
+
+
 def static_layers(amb, ctx):
     """Calques statiques d'une ambiance (RGBA 768 x 576) : ciel, mer, récifs, terre."""
     land, cls, Lday, RA, rd = ctx['land'], ctx['cls'], ctx['Lday'], ctx['RA'], ctx['rd']
