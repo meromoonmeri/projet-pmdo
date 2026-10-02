@@ -944,7 +944,7 @@ def reflet_frames_zpr(dashes, xc, sea_vis, tvals=None):
         a = np.zeros((H, W, 4), 'uint8')
         for d in dashes:
             u = min(max((d['y'] - YH) / (Y_SHORE - YH), 0), 1)
-            ph = 2 * math.pi * (SWELL_PASSES * s / SWELL_STEPS - HOULE_K * u)
+            ph = 2 * math.pi * (HOULE_PASSES * s / SWELL_STEPS - HOULE_K * u)      # phase liée à la crête : 1 passage par cycle de 12 crans
             if math.sin(2 * ph + d['ph']) < -0.85:
                 continue
             sp = d['spr']; h_, w_ = sp.shape[:2]; amp = 1 + (d['y'] - YH) / 45
@@ -1019,7 +1019,8 @@ def maree(cls, sea_vis, sand_rgb, sea_rgb, amb, n=18, A=7.0, tvals=None):
 # ---------------------------------------------------------------- végétation, mares, lueur
 def sway(layer, comps_dil, amp, n, ph_fn, tvals=None):
     """Cisaillement horizontal d'un calque par composante : chaque rangée glisse de A sin(phi) (1 au sommet, 0 à la base) ; n phases."""
-    lab, nc = nd.label(nd.binary_dilation(layer[..., 3] == 255, iterations=comps_dil), structure=np.ones((3, 3)))
+    base = layer[..., 3] == 255
+    lab, nc = nd.label(nd.binary_dilation(base, iterations=comps_dil) if comps_dil else base, structure=np.ones((3, 3)))   # iterations=0 dilaterait sans fin
     al = layer[..., 3] == 255; boxes = nd.find_objects(lab); frames = []
     for t in (range(n) if tvals is None else tvals):
         a = np.zeros((H, W, 4), 'uint8')

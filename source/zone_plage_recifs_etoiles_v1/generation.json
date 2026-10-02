@@ -65,7 +65,7 @@
   ],
   "essais": 0,
   "images": [],
-  "role": "entrée CALCULÉE par build.py (pas une génération) : décor de jour assemblé (ciel, mer, récifs, terre) mis à l'échelle 1,5625 sans lissage ; image 1 des trois retouches d'ambiance",
+  "role": "entrée CALCULÉE par build.py (pas une génération) : décor de jour assemblé (ciel, mer, récifs, terre) mis à l'échelle 1,5625 sans lissage ; image 1 des trois retouches d'ambiance. C'est l'image exacte donnée au générateur : les roches des récifs y étaient recolorées dans la palette des promontoires ; la version finale du jour garde les couleurs propres des sprites (algues vertes, liseré clair). Seuls ces pixels de roches diffèrent (vérifié par le test test_decor_jour_pour_ambiances_reproduit).",
   "prompt": ""
  },
  {
