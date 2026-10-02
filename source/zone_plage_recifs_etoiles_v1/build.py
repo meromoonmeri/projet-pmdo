@@ -471,7 +471,8 @@ CLOUD_TINT = 16                                    # raccord : fondu des teintes
 CLOUD_BLEND = 0                                    # pas de fondu (il laissait des colonnes isolées) : coupe raccordée
 STAR_PHASES, STAR_TICKS = 24, 5
 REFLET_SPAN, REFLET_SX = 172, 0.42                 # reflets : hauteur couverte sous l'horizon, échelle horizontale
-CLOUD_BASE_PX, CLOUD_FLAT_MIN, CLOUD_DOME = 17, 40, 30   # base pleine gardée (px finaux) ; sommets plats rognés -> arrondis (px du brut A)
+CLOUD_BASE_PX, CLOUD_FLAT_MIN, CLOUD_DOME = 17, 40, 30
+CLOUD_SINK = 22                                    # ZPR1 : rangées du bas du banc cachées derrière l'horizon (nuages au-delà de la mer)   # base pleine gardée (px finaux) ; sommets plats rognés -> arrondis (px du brut A)
 CLOUD_S0, CLOUD_EDGE = 0.30, 0.15                  # échelle provisoire ; coupes cherchées dans les 15 % du début et de la fin de chaque banc
 CLOUD_BANKS = [('banc_nuages_jour_c.png', 1.0, (0, 1200)),   # (brut, échelle relative, colonnes utilisables), mis bout à bout en boucle
                ('banc_nuages_jour.png', 1.0, (0, 360)),      # x 375-1075 : identique au brut c (copié par le générateur) -> non repris
@@ -735,8 +736,8 @@ def recolor_terre(L, cls, amb):
 REFLET_SPAN = 200                                  # le reflet descend jusqu'au rivage de la baie (horizon 153 -> côte 366)
 Y_SHORE = 366
 HOULE_PASSES, HOULE_K = 1, 7                       # une crête avance d'un intervalle par cycle de 12 crans ; 7 crêtes de l'horizon au rivage
-ASTRE = {'jour': {'sprite': 1, 'd': 40, 'c': (600, 56)}, 'aube': {'sprite': 1, 'd': 54, 'c': (470, YH - 14)},
-         'crepuscule': {'sprite': 1, 'd': 64, 'c': (560, YH - 10)}, 'nuit': {'sprite': 0, 'd': 56, 'c': (470, 64)}}
+ASTRE = {'jour': {'sprite': 1, 'd': 40, 'c': (600, 52)}, 'aube': {'sprite': 1, 'd': 54, 'c': (470, 100)},
+         'crepuscule': {'sprite': 1, 'd': 64, 'c': (560, 98)}, 'nuit': {'sprite': 0, 'd': 56, 'c': (470, 60)}}
 RAMPE_SOLEIL = {'aube': [(255, 250, 228), (255, 232, 170), (255, 205, 140), (252, 168, 124), (240, 130, 118)],
                 'crepuscule': [(255, 238, 170), (255, 205, 100), (255, 160, 70), (240, 100, 56), (200, 56, 60)]}
 HALO = {'jour': ((255, 255, 235), 0.16, 12), 'aube': ((255, 214, 170), 0.30, 26), 'crepuscule': ((255, 150, 80), 0.34, 30),
@@ -748,6 +749,18 @@ ETOILE_K = {'jour': 0.34, 'aube': 0.72, 'crepuscule': 0.86, 'nuit': 1.0}        
 VOIE_DENSITE = {'jour': 0.0, 'aube': 0.10, 'crepuscule': 0.20, 'nuit': 1.0}
 FILANTE = {'crepuscule': (0.7, (96, 26)), 'nuit': (1.0, (150, 20))}                         # (éclat, départ) ; une par cycle de 72 x 5 ticks
 FILANTE_PHASES = 72
+
+
+REFLET_COL = {'nuit': 0, 'aube': 1, 'crepuscule': 2}                # colonne de la planche de reflets (ZRV2)
+
+
+def astre_sprite(sheet, idx, d):
+    """Astre de la planche ZRV2 (0 lune à gauche, 1 soleil à droite) réduit au diamètre d (palette de 16 couleurs du sprite)."""
+    fg = ~is_magenta(sheet); lab, n = nd.label(fg)
+    objs = sorted([(s_, i + 1) for i, s_ in enumerate(nd.find_objects(lab)) if (lab[s_] == i + 1).sum() > 5000],
+                  key=lambda o: o[0][1].start)
+    s_, i = objs[idx]; m = lab[s_] == i
+    return down_rgba(sheet[s_], m, (d, d), palette_of(sheet[s_][m], 16))
 
 
 def astre_layer(amb, sheet, sky_rgb):
@@ -783,7 +796,7 @@ def star_field(amb, ciel_rgb, land_mask, astre_mask):
     """Étoiles du ciel (hasard fixé) : fixes (calque statique) et scintillantes (24 phases x 5 ticks, états plein / cœur / éteint).
     Plus nombreuses en haut ; ni sur la terre, ni sur l'astre et son halo. Teinte = ciel + (étoile - ciel) x contraste de l'ambiance."""
     nfix, nsc = ETOILES[amb]; K = ETOILE_K[amb]
-    rng = np.random.default_rng(1000 + hsh(amb, 7) % 1000)
+    rng = np.random.default_rng(1000 + hsh(list(AMBS).index(amb), 7) % 1000)
     blocked = land_mask | nd.binary_dilation(astre_mask, iterations=4); blocked[YH - 3:] = True
     occ = np.zeros((H, W), bool); pts = []
     yy = np.arange(YH - 3)
@@ -824,7 +837,7 @@ def voie_lactee(amb, ciel_rgb, land_mask, astre_mask):
         return out
     rng = np.random.default_rng(77); yy, xx = np.mgrid[:H, :W]
     th = math.radians(-22); nx, ny = -math.sin(th), math.cos(th)          # normale de la bande
-    dist = (xx - 330) * nx + (yy - 66) * ny
+    dist = (xx - 268) * nx + (yy - 78) * ny
     prof = np.exp(-(dist / 34.0) ** 2)
     lane = 1 - 0.55 * np.exp(-((dist - 9) / 5.0) ** 2)                     # filament sombre le long de la bande
     noise = _value_noise((H, W), (14, 9), 5) * 0.8 + _value_noise((H, W), (40, 28), 6) * 0.5
@@ -862,7 +875,7 @@ def cloud_ramp(strip, amb, sky_rgb):
     ombre -> milieu -> lumière tirée du ciel de l'horizon (les nuages n'ont pas de retouche générée)."""
     if amb == 'jour':
         return strip
-    sh = sky_rgb[YH - 6].astype(float); mid = sky_rgb[YH - 40].astype(float)
+    sh = sky_rgb[YH - 6, W // 2].astype(float); mid = sky_rgb[YH - 40, W // 2].astype(float)
     mixc = lambda a, b, t: np.array(a, float) * (1 - t) + np.array(b, float) * t
     anchors = {'aube': (mixc(mid, (122, 92, 150), 0.55), mixc(sh, (255, 255, 255), 0.42), mixc((255, 238, 222), sh, 0.3)),
                'crepuscule': (mixc(mid, (60, 28, 86), 0.6), mixc(sh, (240, 110, 80), 0.45), mixc((255, 205, 130), sh, 0.25)),
@@ -885,15 +898,18 @@ def sea_geometry(sea_vis):
         if col[0]:
             nz = np.nonzero(~col)[0]; ys[x] = YH + (nz[0] if len(nz) else len(col)) - 1
     ok = ys >= 0
-    sm = ys.copy(); sm[ok] = nd.median_filter(ys.astype(float), 9)[ok].astype(int)
+    sm = ys.copy(); f = nd.uniform_filter1d(nd.median_filter(ys.astype(float), 15), 9)
+    sm[ok] = np.round(f[ok]).astype(int)
     return sm
 
 
 def houle_frames(sea_rgb, sea_vis, dist_land, ys, amb):
     """Crêtes de houle en arcs qui épousent la baie : la crête de profondeur u est à y = YH + (ys(x) - YH) u^1,7. Le dessin ne
-    dépend que de (x, u), donc la boucle de 12 crans est exacte ; les crêtes s'éteignent (tramé) près du rivage et des falaises."""
+    dépend que de (x, u), donc la boucle de 12 crans est exacte. Les crêtes sont continues (une colonne rejoint la suivante), ne
+    sont tracées que là où la pente du rivage reste douce (elles se brisent contre les falaises) et s'éteignent (tramé) près du rivage."""
     g = GAIN_EAU[amb]; hi = np.array(LUMIERE[amb], float); frames = []
     xs = np.arange(W); fade = np.clip((dist_land - 30) / 16, 0, 1)
+    slope = np.abs(np.gradient(ys.astype(float))); douce = (ys >= 0) & (slope < 0.75)
     for s in range(SWELL_STEPS):
         a = np.zeros((H, W, 4), 'uint8')
         for k in range(-1, HOULE_K + 1):
@@ -902,12 +918,13 @@ def houle_frames(sea_rgb, sea_vis, dist_land, ys, amb):
                 continue
             thr = 0.72 - 1.55 * u; th = 1 if u < 0.33 else (2 if u < 0.72 else 3)
             n = np.sin(xs * 0.071 + 9.0 * u) + np.sin(xs * 0.033 - 6.3 * u + 1.3) + 0.6 * np.sin(xs * 0.19 + 17 * u)
-            for x in np.nonzero((ys >= 0) & (n > thr))[0]:
-                y0 = int(round(YH + (ys[x] - YH) * u ** 1.7))
-                for r in range(th):
-                    y = y0 + r
+            yc = np.round(YH + (ys - YH) * u ** 1.7).astype(int)
+            for x in np.nonzero(douce & (n > thr))[0]:
+                nx = min(x + 1, W - 1); y_a, y_b = yc[x], (yc[nx] if douce[nx] else yc[x])
+                for y in range(min(y_a, y_b), max(y_a, y_b) + th):
                     if y >= H or not sea_vis[y, x] or ((x * 7 + y * 13) % 16) / 16 >= fade[y, x]:
                         continue
+                    r = y - min(y_a, y_b)
                     amt = g * (0.20 + 0.48 * u ** 0.8) * (1.28 if r == 0 else 0.86)
                     base = sea_rgb[y, x].astype(float)
                     a[y, x, :3] = np.clip(base + (hi - base) * min(amt, 0.95), 0, 255).astype('uint8'); a[y, x, 3] = 255
@@ -936,9 +953,9 @@ def reflet_frames_zpr(dashes, xc, sea_vis):
     return frames
 
 
-def caustiques(sea_rgb, sea_vis, dist_land, amb, n=12):
+def caustiques(sea_rgb, sea_vis, dist_sand, amb, n=12):
     """Lumière qui danse sur le fond du lagon : réseau de points clairs (produit de deux ondes), 12 crans en boucle exacte."""
-    zone = sea_vis & (dist_land < 78) & (dist_land > 3); yy, xx = np.mgrid[:H, :W]
+    zone = sea_vis & (dist_sand < 72) & (dist_sand > 3) & (np.arange(H)[:, None] > YH + 110); yy, xx = np.mgrid[:H, :W]
     g = {'jour': 0.40, 'aube': 0.32, 'crepuscule': 0.30, 'nuit': 0.26}[amb]; hi = np.array(LUMIERE[amb], float); frames = []
     for t in range(n):
         p1 = 2 * math.pi * t / n; p2 = 2 * p1
@@ -1040,7 +1057,7 @@ def lueur_nuit(coral_masks, coral_rgb, sea_vis, dist_land, n=12):
         if not m.any():
             continue
         d = nd.distance_transform_edt(~m); ring = (d >= 1) & (d <= 3.4) & sea_vis
-        c = coral_rgb[m].astype(float); c = c[np.argmax(c.max(1) - c.min(1))]
+        c = coral_rgb[m][:, :3].astype(float); c = c[np.argmax(c.max(1) - c.min(1))]
         c = np.clip(c * 0.55 + 255 * 0.45 * (c / max(1.0, c.max())), 0, 255)       # couleur du corail, éclaircie, jamais blanche
         rings.append((ring, d, c, (hsh(i, 9) % 100) / 100))
     rng = np.random.default_rng(9); zone = np.argwhere(sea_vis & (dist_land > 4) & (dist_land < 80) & (np.arange(H)[:, None] > YH + 90))
@@ -1086,13 +1103,118 @@ def contexte():
     return {'land': land, 'cls': cls, 'Lday': Lday, 'RA': RA, 'rd': rd, 'ciel_day': ciel, 'mer_day': mer, 'sea_vis': sea_vis}
 
 
+# ---------------------------------------------------------------- assemblage des 26 calques de chaque ambiance
+ORDER = ['ciel', 'voie_lactee', 'etoiles_fixes', 'etoiles', 'etoile_filante', 'astre', 'nuages', 'mer', 'recifs_coraux',
+         'lagon_reflets', 'houle', 'scintillement', 'reflet', 'lueur', 'recifs', 'recifs_ecume', 'sable', 'ecume_rivage',
+         'mares', 'mares_reflets', 'rochers', 'coquillages', 'bois_flotte', 'troncs', 'palmes', 'herbes']
+TICKS = {'etoiles': STAR_TICKS, 'etoile_filante': STAR_TICKS, 'nuages': CLOUD_TICKS, 'lagon_reflets': SWELL_TICKS, 'houle': SWELL_TICKS,
+         'scintillement': GLINT_TICKS, 'reflet': SWELL_TICKS, 'lueur': SWELL_TICKS, 'recifs_ecume': SWELL_TICKS, 'ecume_rivage': 8,
+         'mares_reflets': SWELL_TICKS, 'palmes': SWELL_TICKS, 'herbes': 12}
+
+
+class LazySeq:
+    """Suite d'images calculées à la demande (les 384 images des nuages ne tiennent pas toutes en mémoire)."""
+    def __init__(self, n, fn):
+        self.n, self.fn = n, fn
+
+    def __len__(self):
+        return self.n
+
+    def __getitem__(self, i):
+        if isinstance(i, slice):
+            return [self[j] for j in range(*i.indices(self.n))]
+        return self.fn(i % self.n)
+
+    def __iter__(self):
+        for i in range(self.n):
+            yield self.fn(i)
+
+
+def cloud_frame(strip, t, hidden):
+    h = strip.shape[0] - CLOUD_SINK; a = np.zeros((H, W, 4), 'uint8')
+    a[YH - h:YH] = np.tile(np.roll(strip, t * CLOUD_PAS, axis=1)[:h], (1, W // CLOUD_PERIOD, 1)); a[hidden] = 0
+    return a
+
+
+def make_all(ctx):
+    """Calques (nom -> (images, ticks)) des quatre ambiances + mesures."""
+    land, cls, RA = ctx['land'], ctx['cls'], ctx['RA']
+    land_mask = land[..., 3] == 255; sea_vis = ctx['sea_vis']
+    dist_land = nd.distance_transform_edt(~land_mask); ys = sea_geometry(sea_vis)
+    dist_sand = nd.distance_transform_edt(cls != CL['SABLE'])
+    astres = rgb(BRUTS / 'astres.png'); refl_sheet = rgb(BRUTS / 'reflets_astres.png')
+    strip, cpal, cinfo = cloud_strip({k: rgb(BRUTS / k) for k, _, _ in CLOUD_BANKS})
+    info = {'nuages': cinfo, 'horizon_y': YH}
+    out = {}
+    for amb in AMBS:
+        S = static_layers(amb, ctx); L = {}; inf = {}
+        ciel = S['ciel']; sky = ciel[..., :3].astype(int)
+        sea_full = S['mer'][..., :3].astype(int)
+        # scintillement de l'horizon : paillettes retirées de la plaque, rendues par le calque animé
+        gl = glints(sea_full, sea_vis); glmask = np.zeros((H, W), bool)
+        for px, _ in gl:
+            for y, x in px:
+                glmask[y, x] = True
+        mer = S['mer'].copy()
+        if glmask.any():
+            plate_pal = np.unique(sea_full[sea_vis & ~glmask], axis=0)
+            med = np.stack([nd.median_filter(sea_full[..., c], 7) for c in range(3)], -1)
+            mer[glmask, :3] = nearest(med[glmask], plate_pal)
+        mer_rgb = mer[..., :3].astype(int)
+        inf['paillettes'] = {'groupes': len(gl), 'pixels': int(glmask.sum())}
+        L['ciel'] = ([ciel], 60); L['mer'] = ([mer], 60)
+        al = astre_layer(amb, astres, sky); L['astre'] = ([al], 60); amask = al[..., 3] > 0
+        fixes, twink = star_field(amb, sky, land_mask, amask)
+        if fixes[..., 3].any():
+            L['etoiles_fixes'] = ([fixes], 60)
+        L['etoiles'] = (star_frames(twink), STAR_TICKS)
+        inf['etoiles'] = {'fixes': int((fixes[..., 3] > 0).sum()), 'scintillantes': len(twink)}
+        vl = voie_lactee(amb, sky, land_mask, amask)
+        if vl[..., 3].any():
+            L['voie_lactee'] = ([vl], 60)
+        fl = etoile_filante(amb, land_mask)
+        if fl is not None:
+            L['etoile_filante'] = (fl, STAR_TICKS)
+        strip_a = cloud_ramp(strip, amb, sky)
+        L['nuages'] = (LazySeq(CLOUD_PHASES, lambda t, sa=strip_a: cloud_frame(sa, t, land_mask)), CLOUD_TICKS)
+        L['recifs_coraux'] = ([S['recifs_coraux']], 60)
+        L['lagon_reflets'] = (caustiques(mer_rgb, sea_vis, dist_sand, amb), SWELL_TICKS)
+        L['houle'] = (houle_frames(mer_rgb, sea_vis, dist_land, ys, amb), SWELL_TICKS)
+        gwhite = sea_full[glmask][np.argmax(lum(sea_full[glmask]))] if glmask.any() else np.array([255, 255, 255])
+        L['scintillement'] = (glint_frames(gl, sea_full, gwhite), GLINT_TICKS)
+        if amb != 'jour':
+            dashes, rinfo = reflet_dashes(refl_sheet, REFLET_COL[amb]); inf['reflet'] = {'x': ASTRE[amb]['c'][0], **rinfo}
+            L['reflet'] = (reflet_frames_zpr(dashes, ASTRE[amb]['c'][0], sea_vis), SWELL_TICKS)
+        if amb == 'nuit':
+            L['lueur'] = (lueur_nuit(RA['coral_masks'], RA['coral'], sea_vis, dist_land), SWELL_TICKS)
+        L['recifs'] = ([S['recifs']], 60)
+        L['recifs_ecume'] = (ecume_recifs(RA['rock_masks'], sea_vis, mer_rgb, amb), SWELL_TICKS)
+        L['sable'] = ([S['sable']], 60)
+        L['ecume_rivage'] = (maree(cls, sea_vis, S['sable'][..., :3], mer_rgb, amb), 8)
+        L['mares'] = ([S['mares']], 60); L['mares_reflets'] = (reflets_mares(S['mares'], amb), SWELL_TICKS)
+        for k in ('rochers', 'coquillages', 'bois_flotte', 'troncs'):
+            L[k] = ([S[k]], 60)
+        L['palmes'] = (sway(S['palmes'], 1, 2.0, 12, lambda i, x0, y0: (hsh(i, 3) % 100) / 100), SWELL_TICKS)
+        L['herbes'] = (sway(S['herbes'], 0, 1.4, 8, lambda i, x0, y0: (hsh(i, 4) % 100) / 100), 12)
+        out[amb] = {k: L[k] for k in ORDER if k in L}; info[amb] = inf
+    return out, info
+
+
+def scene(L, tick):
+    im = Image.new('RGBA', (W, H))
+    for nm in ORDER:
+        if nm in L:
+            fr, tk = L[nm]; im.alpha_composite(Image.fromarray(fr[(tick // tk) % len(fr)]))
+    return im
+
+
 if __name__ == '__main__':
     CACHE.mkdir(parents=True, exist_ok=True)
     ctx = contexte()
     debug_classes(ctx['cls'], CACHE / 'classes.png')
-    sheet = Image.new('RGB', (W * 2, H * 2))
-    for k, amb in enumerate(AMBS):
-        L = static_layers(amb, ctx); im = Image.fromarray(compose(L, ORDER_STATIC)).convert('RGB')
-        im.save(CACHE / f'statique_{amb}.png'); sheet.paste(im, ((k % 2) * W, (k // 2) * H))
-    sheet.save(CACHE / 'statiques_4.png')
-    print('ok')
+    out, info = make_all(ctx)
+    d = CACHE / 'apercu'; d.mkdir(exist_ok=True)
+    for amb, L in out.items():
+        for tk in (0, 60):
+            scene(L, tk).save(d / f'{amb}_t{tk:03d}.png')
+    print(json.dumps(info, ensure_ascii=False)[:1500])
