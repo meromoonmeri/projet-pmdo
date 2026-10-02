@@ -852,12 +852,12 @@ def voie_lactee(amb, ciel_rgb, land_mask, astre_mask):
 
 def etoile_filante(amb, land_mask):
     """Étoile filante : 12 images de passage dans un cycle de 72 x 5 ticks (6 s), tête blanche et queue qui s'éteint."""
-    frames = [np.zeros((H, W, 4), 'uint8') for _ in range(FILANTE_PHASES)]
+    empty = np.zeros((H, W, 4), 'uint8'); frames = [empty] * FILANTE_PHASES
     if amb not in FILANTE:
         return None
     k, (x0, y0) = FILANTE[amb]; v = (7.4, 2.6)
     for i in range(12):
-        a = frames[10 + i]
+        a = np.zeros((H, W, 4), 'uint8'); frames[10 + i] = a
         hx, hy = x0 + v[0] * i, y0 + v[1] * i
         for j in range(0, 22):
             t = j / 21; px, py = int(round(hx - v[0] * t * 2.4)), int(round(hy - v[1] * t * 2.4))
@@ -1136,17 +1136,27 @@ def cloud_frame(strip, t, hidden):
     return a
 
 
-def make_all(ctx):
-    """Calques (nom -> (images, ticks)) des quatre ambiances + mesures."""
+def make_shared(ctx):
+    """Données communes aux quatre ambiances (distances, géométrie de la baie, planches réutilisées, bande de nuages du jour)."""
+    global NUAGES_H
+    land_mask = ctx['land'][..., 3] == 255; sea_vis = ctx['sea_vis']
+    strip, cpal, cinfo = cloud_strip({k: rgb(BRUTS / k) for k, _, _ in CLOUD_BANKS})
+    NUAGES_H = strip.shape[0] - CLOUD_SINK
+    cinfo.update({'periode_px': CLOUD_PERIOD, 'pas_px': CLOUD_PAS, 'phases': CLOUD_PHASES, 'frame_length_ticks': CLOUD_TICKS,
+                  'hauteur_px': NUAGES_H, 'rangees_cachees_sous_horizon': CLOUD_SINK})
+    return {'dist_land': nd.distance_transform_edt(~land_mask), 'dist_sand': nd.distance_transform_edt(ctx['cls'] != CL['SABLE']),
+            'ys': sea_geometry(sea_vis), 'astres': rgb(BRUTS / 'astres.png'), 'refl_sheet': rgb(BRUTS / 'reflets_astres.png'),
+            'strip': strip, 'info_nuages': cinfo}
+
+
+def make_all(ctx, only=None, shared=None):
+    """Calques (nom -> (images, ticks)) d'une ambiance (only) ou des quatre ; retourne aussi les mesures."""
     land, cls, RA = ctx['land'], ctx['cls'], ctx['RA']
     land_mask = land[..., 3] == 255; sea_vis = ctx['sea_vis']
-    dist_land = nd.distance_transform_edt(~land_mask); ys = sea_geometry(sea_vis)
-    dist_sand = nd.distance_transform_edt(cls != CL['SABLE'])
-    astres = rgb(BRUTS / 'astres.png'); refl_sheet = rgb(BRUTS / 'reflets_astres.png')
-    strip, cpal, cinfo = cloud_strip({k: rgb(BRUTS / k) for k, _, _ in CLOUD_BANKS})
-    info = {'nuages': cinfo, 'horizon_y': YH}
-    out = {}
-    for amb in AMBS:
+    sh = shared or make_shared(ctx)
+    dist_land, dist_sand, ys, astres, refl_sheet, strip = (sh[k] for k in ('dist_land', 'dist_sand', 'ys', 'astres', 'refl_sheet', 'strip'))
+    out, info = {}, {'nuages': sh['info_nuages'], 'horizon_y': YH}
+    for amb in ([only] if only else AMBS):
         S = static_layers(amb, ctx); L = {}; inf = {}
         ciel = S['ciel']; sky = ciel[..., :3].astype(int)
         sea_full = S['mer'][..., :3].astype(int)
@@ -1197,6 +1207,8 @@ def make_all(ctx):
         L['palmes'] = (sway(S['palmes'], 1, 2.0, 12, lambda i, x0, y0: (hsh(i, 3) % 100) / 100), SWELL_TICKS)
         L['herbes'] = (sway(S['herbes'], 0, 1.4, 8, lambda i, x0, y0: (hsh(i, 4) % 100) / 100), 12)
         out[amb] = {k: L[k] for k in ORDER if k in L}; info[amb] = inf
+    if only:
+        return out[only], info[only]
     return out, info
 
 
@@ -1208,13 +1220,279 @@ def scene(L, tick):
     return im
 
 
-if __name__ == '__main__':
+# ---------------------------------------------------------------- export : ORA, projet Ground PMDO 0.8.12, masques, aperçus
+NAMESPACE = 'zone_plage_recifs_etoiles_v1'
+STAGE = ROOT / '.cache' / LOT / NAMESPACE
+ASSET = {k: f'zpr1_plage_recifs_{k}' for k in AMBS}
+MARQUEURS = {'plage': (376, 392), 'entrance': (376, 552)}          # (x, y) haut-gauche des repères de 16 x 16 : bord de l'eau, sortie sud
+RANGEES = lambda: None
+
+
+def loadmod(name, path):
+    import importlib.util
+    sp = importlib.util.spec_from_file_location(name, path)
+    m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m); return m
+
+
+def write_ora(path, layers, title):
+    import io, zipfile
+    import xml.etree.ElementTree as ET
+    root = ET.Element('image', w=str(W), h=str(H), name=title)
+    stack = ET.SubElement(root, 'stack'); comp = Image.new('RGBA', (W, H))
+    with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED) as z:
+        z.writestr('mimetype', 'image/openraster', compress_type=zipfile.ZIP_STORED)
+        items = list(layers.items())
+        for i, (name, a) in reversed(list(enumerate(items))):
+            fn = f'data/layer{i:02d}.png'
+            ET.SubElement(stack, 'layer', name=name, src=fn, x='0', y='0', opacity='1.0', visibility='visible',
+                          **{'composite-op': 'svg:src-over'})
+            b = io.BytesIO(); Image.fromarray(a).save(b, format='PNG'); z.writestr(fn, b.getvalue())
+        for _, a in items:
+            comp.alpha_composite(Image.fromarray(a))
+        b = io.BytesIO(); comp.save(b, format='PNG'); z.writestr('mergedimage.png', b.getvalue())
+        th = comp.copy(); th.thumbnail((256, 256)); b = io.BytesIO(); th.save(b, format='PNG')
+        z.writestr('Thumbnails/thumbnail.png', b.getvalue())
+        z.writestr('stack.xml', ET.tostring(root, encoding='utf-8', xml_declaration=True))
+
+
+def cases(frames):
+    """Accès rapide aux cases de 8 x 8 de toutes les phases d'un calque : retourne (get(x, y) -> liste d'images 8 x 8 ou None)."""
+    if isinstance(frames, LazySeq):                                   # nuages : on ne garde que la bande utile (rangées multiples de 8)
+        y0 = (YH - NUAGES_H) // 8 * 8; y1 = (YH + 7) // 8 * 8
+        st = np.stack([f[y0:y1] for f in frames])
+        act = (st[..., 3] > 0).any(0)
+
+        def get(x, y):
+            if not (y0 <= y * 8 < y1):
+                return None
+            sl = (slice(y * 8 - y0, y * 8 - y0 + 8), slice(x * 8, x * 8 + 8))
+            if not act[sl].any():
+                return None
+            return [st[(slice(None),) + sl][t] for t in range(len(st))]
+        return get
+    act = np.zeros((H, W), bool)
+    for a in frames:
+        act |= a[..., 3] > 0
+    cell_act = act.reshape(H // 8, 8, W // 8, 8).any((1, 3))
+
+    def get(x, y):
+        if not cell_act[y, x]:
+            return None
+        return [a[y * 8:y * 8 + 8, x * 8:x * 8 + 8] for a in frames]
+    return get
+
+
+def ground(amb, stack, blocked, markers, gfx, tpl):
+    tpl = json.loads(json.dumps(tpl)); o = tpl['Object']; gw, gh = W // 8, H // 8; layers, banks = [], []
+    for idx, title, frames, ticks in stack:
+        bank = gfx.TileBank(f'{PFX}{AMBS[amb]}_{idx:02d}_{title.split()[0].upper()}')
+        bank.ids[bytes(256)] = (0, 0); bank.data[(0, 0)] = bytes(256)
+        get = cases(frames)
+
+        def cell(x, y, get=get, bank=bank):
+            arrs = get(x, y)
+            if arrs is None:
+                return []
+            fs = []
+            for a in arrs:
+                f = bank.add(Image.fromarray(np.ascontiguousarray(a)), x, y)
+                fs.append(f if f else {'Sheet': bank.name, 'TexLoc': {'X': 0, 'Y': 0}})
+            if all(f['TexLoc'] == {'X': 0, 'Y': 0} for f in fs):
+                return []
+            return [fs[0]] if all(f == fs[0] for f in fs) else fs
+        layers.append(gfx.layer(f'{idx:02d} {title}', gw, gh, cell, ticks)); banks.append(bank)
+    layers.append(gfx.layer(f'{len(ORDER):02d} Vos elements avant-plan (Top)', gw, gh, draw=4))
+    for bank in banks:
+        bank.write(STAGE / f'Content/Tile/{bank.name}.tile')
+    o.update(Name={'DefaultText': f'Plage aux recifs etoiles ZPR1 ({amb})', 'LocalTexts': {}},
+             AssetName=ASSET[amb], Released=False, TexSize=1, Music='', EdgeView=1, ViewCenter=None,
+             ViewOffset={'X': 0, 'Y': 0}, ActiveChar=None, Status={}, Layers=layers,
+             Background={'$type': 'RogueEssence.Dungeon.LayeredBG, RogueEssence', 'Layers': []},
+             Comment=f'PMDO 0.8.12. Plage aux recifs etoiles ZPR1 ({amb}). Baie fermee par deux promontoires rouges, recifs et coraux, lagon, '
+                     'plage ; ciel etoile du jour a la nuit sur des calques separes (ciel, Voie lactee, etoiles, etoile filante, astre, nuages). '
+                     'Rendu genere reference. Houle 12 x 10 ticks, scintillement 16 x 4, etoiles 24 x 5, nuages 384 x 16, maree 18 x 8. '
+                     'Collisions par cellule de 8 px. Aucun warp.')
+    o['obstacles'] = [[{'Bounds': {'X': x * 8, 'Y': y * 8, 'Width': 8, 'Height': 8}, 'Tags': int(blocked[y, x])}
+                       for y in range(gh)] for x in range(gw)]
+    mk = lambda n, p: {'EntName': n, 'Direction': 4, 'EntEnabled': True, 'triggerType': 0,
+                       'Collider': {'X': p[0], 'Y': p[1], 'Width': 16, 'Height': 16}}
+    o['Entities'] = [{'Name': 'Entrees et vos acteurs', 'Visible': True, 'MapChars': [], 'GroundObjects': [], 'Spawners': [],
+                      'Markers': [mk(n, p) for n, p in markers.items()]}]
+    o['Decorations'] = [{'Name': 'Vos decorations', 'Layer': 2, 'Visible': True, 'Anims': []}]
+    tpl['Version'] = '0.8.12.0'
+    gfx.save(STAGE / f'Data/Ground/{ASSET[amb]}.rsground', json.dumps(tpl, ensure_ascii=False, separators=(',', ':')).encode())
+    gfx.save(STAGE / f'Data/Script/{NAMESPACE}/ground/{ASSET[amb]}/init.lua',
+             f'-- {ASSET[amb]} : plage aux recifs etoiles ZPR1 ({amb}), base d edition, aucun warp.\n'
+             f'-- Marqueurs : plage (bord de l eau), entrance (sortie sud).\n'
+             f'local {ASSET[amb]} = {{}}\nreturn {ASSET[amb]}\n'.encode())
+    return {b.name: len(b.data) for b in banks}
+
+
+def finish_stage(tools):
+    import shutil, uuid
+    nodes = {}
+    for p in sorted((STAGE / 'Content/Tile').glob('*.tile')):
+        with p.open('rb') as f:
+            nodes[p.stem] = tools.read_node(f)
+    (STAGE / 'Content/Tile/index.idx').write_bytes(tools.encode_index(nodes))
+    ident = uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/meromoonmeri/guilde-treehouse-pmd/' + NAMESPACE)
+    (STAGE / 'Mod.xml').write_text(f'''<?xml version="1.0" encoding="utf-8"?>
+<Header>
+  <Name>Plage aux recifs etoiles ZPR1 (jour, aube, crepuscule, nuit) - Atelier 0.8.12</Name>
+  <Author>meromoonmeri</Author>
+  <Description>Projet d'edition : une baie turquoise fermee par deux promontoires de roches rouges, barriere de recifs et coraux, lagon, plage de sable avec palmiers, mares et coquillages. Ciel etoile du jour a la nuit (Voie lactee, etoiles qui scintillent, etoile filante, lune, soleil, nuages), houle, reflets, maree. Quatre cartes Ground (une par ambiance), 26 calques animes chacune. Rendu genere, non teste dans PMDO.</Description>
+  <Namespace>{NAMESPACE}</Namespace>
+  <UUID>{ident}</UUID>
+  <Version>1.0.0.0</Version>
+  <GameVersion>0.8.12.0</GameVersion>
+  <ModType>Quest</ModType>
+  <Relationships />
+</Header>
+''')
+    script = (ROOT / 'source/pmdo_cote/INSTALLER.py').read_text()
+    needle = '            relative = src.relative_to(source)\n'
+    assert needle in script
+    script = script.replace(needle, needle + "            if relative.as_posix() == 'Content/Tile/index.idx':\n                continue\n")
+    (STAGE / 'INSTALLER.py').write_text(script)
+    shutil.copyfile(HERE / 'README_PACK.md', STAGE / 'README.md')
+
+
+def collisions(land, cls):
+    """Cellules de 8 px bloquées : mer et ciel, roches, troncs de palmiers, bois flotté (plus d'un quart de la cellule)."""
+    block = (land[..., 3] != 255) | np.isin(cls, [CL['ROCHE'], CL['TRONC'], CL['BOIS']])
+    return block.reshape(H // 8, 8, W // 8, 8).mean((1, 3)) > 0.25, block
+
+
+NUAGES_H = 76 - CLOUD_SINK                                          # hauteur visible de la bande de nuages (rangées sous le sommet)
+
+
+def make_amb(ctx, amb, shared):
+    """Les calques d'UNE ambiance (nom -> (images, ticks)) ; voir make_all."""
+    return make_all(ctx, only=amb, shared=shared)
+
+
+def export(ctx, only=None):
+    import io, shutil
+    from PIL import ImageDraw
+    gfx = loadmod('pmdo_codec', ROOT / 'source/pmdo_cote/build.py')
+    tools = loadmod('index_tools', ROOT / 'source/pmdo_cote/INSTALLER.py')
+    esn1 = loadmod('esn1', ROOT / 'source/entree_sud_nord_generee_v1/build.py')
+    for d in ['calques', 'animation', 'masques', 'review']:
+        shutil.rmtree(OUT / d, ignore_errors=True)
+    for d in ['masques', 'review']:
+        (OUT / d).mkdir(parents=True, exist_ok=True)
+    if STAGE.exists():
+        shutil.rmtree(STAGE)
+    land, cls = ctx['land'], ctx['cls']
+    blocked, block = collisions(land, cls)
+    entry, plage = MARQUEURS['entrance'], MARQUEURS['plage']
+    reach, explored = esn1.reachable(blocked, (entry[1] // 8, entry[0] // 8), (plage[1] // 8, plage[0] // 8))
+    assert reach, 'aucun chemin entre la sortie sud et la plage'
+    sea_vis = ctx['sea_vis']; RA = ctx['RA']
+    for nm, m in (('mer', sea_vis), ('terre', land[..., 3] == 255), ('praticable', ~block), ('recifs', RA['rock_mask'] | RA['coral_mask'])):
+        Image.fromarray((m * 255).astype('uint8')).save(OUT / 'masques' / f'{PFX}_masque_{nm}.png')
+    debug_classes(cls, OUT / 'masques' / f'{PFX}_classes_terre.png')
+    tpl_zip = zipfile.ZipFile(ROOT / 'mod_metano_expeditions_pmdo_0812.zip')
+    tpl = json.loads(tpl_zip.read('metano_expeditions/Data/Ground/v50812_01_crete_sillage_jour.rsground'))
+    shared = make_shared(ctx)
+    report, counts, info, scenes0 = {}, {}, {'nuages': shared['info_nuages'], 'horizon_y': YH}, {}
+    for amb in AMBS:
+        L, inf = make_all(ctx, only=amb, shared=shared); info[amb] = inf
+        layer_list, stack = [], []
+        for i, nm in enumerate(ORDER):
+            if nm not in L:
+                continue
+            frames, ticks = L[nm]
+            if len(frames) > 1:
+                d = OUT / 'animation' / amb / nm; d.mkdir(parents=True, exist_ok=True)
+                for t, fr in enumerate(frames):
+                    save_png(fr, d / f'{PFX}{AMBS[amb]}_{i:02d}_{nm}_f{t:03d}.png')
+                layer_list.append({'index': i, 'nom': nm, 'file': f'animation/{amb}/{nm}/{PFX}{AMBS[amb]}_{i:02d}_{nm}_fNNN.png',
+                                   'phases': len(frames), 'ticks': ticks})
+            else:
+                d = OUT / 'calques' / amb; d.mkdir(parents=True, exist_ok=True)
+                save_png(frames[0], d / f'{PFX}{AMBS[amb]}_{i:02d}_{nm}.png')
+                layer_list.append({'index': i, 'nom': nm, 'file': f'calques/{amb}/{PFX}{AMBS[amb]}_{i:02d}_{nm}.png', 'phases': 1, 'ticks': 60})
+            stack.append((i, nm.replace('_', ' ') + (f' {len(frames)} phases' if len(frames) > 1 else ''), frames, ticks))
+        step = 8
+        sc = [scene(L, tk) for tk in range(0, 480, step)]
+        sc[0].save(OUT / 'review' / f'{PFX}_{amb}_scene_t000.png'); scenes0[amb] = sc[0].copy()
+        sc[0].save(OUT / 'review' / f'{PFX}_{amb}_scene_animee.webp', save_all=True, append_images=sc[1:],
+                   duration=round(step * 1000 / 60), loop=0, quality=84, method=4)
+        if amb == 'jour':
+            col = sc[0].copy(); ov = Image.new('RGBA', (W, H), (0, 0, 0, 0)); dr = ImageDraw.Draw(ov)
+            for y, x in zip(*np.nonzero(blocked)):
+                dr.rectangle([x * 8, y * 8, x * 8 + 7, y * 8 + 7], fill=(220, 40, 40, 90))
+            for (qx, qy), c in ((entry, (255, 230, 40, 255)), (plage, (60, 220, 255, 255))):
+                dr.rectangle([qx, qy, qx + 15, qy + 15], outline=c, width=2)
+            col.alpha_composite(ov); col.save(OUT / 'review' / f'{PFX}_collisions_marqueurs.png')
+        write_ora(OUT / f'{PFX}_plage_recifs_{amb}_calques.ora',
+                  {f'{i:02d}_{nm}' + ('_f000' if len(L[nm][0]) > 1 else ''): L[nm][0][0] for i, nm in enumerate(ORDER) if nm in L},
+                  f'Plage aux recifs etoiles ZPR1 ({amb})')
+        counts.update(ground(amb, stack, blocked, MARQUEURS, gfx, tpl))
+        report[amb] = {'layers': layer_list}
+        del L, stack, sc
+    quatre = Image.new('RGB', (W * 2, H * 2))
+    for k, a in enumerate(AMBS):
+        quatre.paste(scenes0[a].convert('RGB'), ((k % 2) * W, (k // 2) * H))
+    quatre.save(OUT / 'review' / f'{PFX}_quatre_ambiances_t000.png')
+    finish_stage(tools)
+    return report, counts, info, blocked, reach, explored
+
+
+def main(apercu=False):
     CACHE.mkdir(parents=True, exist_ok=True)
     ctx = contexte()
-    debug_classes(ctx['cls'], CACHE / 'classes.png')
-    out, info = make_all(ctx)
-    d = CACHE / 'apercu'; d.mkdir(exist_ok=True)
-    for amb, L in out.items():
-        for tk in (0, 60):
-            scene(L, tk).save(d / f'{amb}_t{tk:03d}.png')
-    print(json.dumps(info, ensure_ascii=False)[:1500])
+    if apercu:
+        debug_classes(ctx['cls'], CACHE / 'classes.png')
+        sh = make_shared(ctx); d = CACHE / 'apercu'; d.mkdir(exist_ok=True)
+        for amb in AMBS:
+            L, inf = make_all(ctx, only=amb, shared=sh)
+            for tk in (0, 60):
+                scene(L, tk).save(d / f'{amb}_t{tk:03d}.png')
+        return
+    report, counts, info, blocked, reach, explored = export(ctx)
+    gen = json.loads((HERE / 'generation.json').read_text(encoding='utf-8'))
+    raws = sorted(p for p in BRUTS.glob('*.png') if p.name != 'terre_jour_baie_etroite.png')
+    refs = sorted((HERE / 'references').glob('*.png'))
+    manifest = {
+        'lot': LOT, 'prefix': PFX, 'prefixes_banques': {k: PFX + v for k, v in AMBS.items()},
+        'format': '4:3 vaste', 'size_px': [W, H], 'grid_8px': [W // 8, H // 8], 'horizon_y': YH,
+        'demande': "j'aimerais une zone magnifique en bord de plage avec ciel étoilée dans les différent temps avec des recif etc multicalque",
+        'interpretation_a_confirmer': {
+            'zone': 'une baie de plage fermée par deux promontoires de roches rouges, sable, palmiers, mares, coquillages (choix de l agent)',
+            'recifs': 'sept récifs rocheux émergés (barrière et récifs isolés) et treize patates de corail vues à travers l eau',
+            'temps': 'quatre ambiances : jour, aube, crépuscule, nuit',
+            'ciel_etoile': "étoiles à tous les temps, lecture littérale de « ciel étoilé dans les différents temps » : jour environ 14 très pâles, "
+                           'aube 62, crépuscule 144, nuit 536 (440 fixes + 96 scintillantes) avec Voie lactée et étoile filante ; effectifs = constantes ETOILES',
+            'multicalque': '26 calques par ambiance (24 le jour), chaque élément sur son propre calque, plus un calque Top vide'},
+        'method': 'rendu généré (terre, ciel et mer, planches de récifs, ambiances) + calculs ; aucun pixel natif ; texture canonique = rendu généré référence',
+        'generation': gen,
+        'raw_inputs': [{'file': f'source/{LOT}/bruts/{p.name}', 'sha256': sha(p), 'size': list(Image.open(p).size)} for p in raws],
+        'references': {p.name: {'file': f'source/{LOT}/references/{p.name}', 'sha256': sha(p)} for p in refs},
+        'reutilise_de_zrv2': {k: sha(BRUTS / k) for k in ('astres.png', 'reflets_astres.png', 'banc_nuages_jour.png', 'banc_nuages_jour_b.png', 'banc_nuages_jour_c.png')},
+        'mesures': info,
+        'recifs': {'roches': [{'sprite': n, 'x': x, 'pied_y': y, 'largeur_px': w} for n, x, y, w in RECIFS],
+                   'coraux': [{'sprite': n, 'x': x, 'pied_y': y, 'largeur_px': w} for n, x, y, w in CORAUX_POS],
+                   'teinte_et_luminosite_par_ambiance': CORAIL_AMB},
+        'etoiles': {'phases': STAR_PHASES, 'frame_length_ticks': STAR_TICKS, 'effectifs_fixes_scintillantes': ETOILES, 'contraste': ETOILE_K,
+                    'voie_lactee_densite': VOIE_DENSITE, 'filante': {'phases': FILANTE_PHASES, 'ticks': STAR_TICKS, 'ambiances': sorted(FILANTE)}},
+        'astres': ASTRE,
+        'houle': {'crans': SWELL_STEPS, 'frame_length_ticks': SWELL_TICKS, 'crêtes': HOULE_K, 'loi': 'la crête de profondeur u est à y = YH + (ys(x) - YH) u^1,7 ; u = (k + s / 12) / 7 ; '
+                  'elle épouse la baie ; dessin fonction de (x, u) seulement : boucle exacte'},
+        'scintillement': {'crans': GLINT_STEPS, 'frame_length_ticks': GLINT_TICKS, 'niveaux': GLINT_LEVELS},
+        'reflet': {'crans': SWELL_STEPS, 'frame_length_ticks': SWELL_TICKS, 'portee_px': REFLET_SPAN},
+        'maree': {'phases': 18, 'frame_length_ticks': 8, 'avance_max_px': 7.0, 'source': 'bandes de references/plage_td_marees.png : ligne d écume mouchetée, sable mouillé, eau claire'},
+        'vegetation': {'palmes': {'phases': 12, 'ticks': SWELL_TICKS, 'amplitude_px': 2.0}, 'herbes': {'phases': 8, 'ticks': 12, 'amplitude_px': 1.4}},
+        'ambiances': report,
+        'access': {'markers_px': MARQUEURS, 'path_found_16x16': reach, 'cells_explored': explored,
+                   'blocked_cells': int(blocked.sum()), 'walkable_cells': int((~blocked).sum())},
+        'pmdo': {'target': '0.8.12', 'namespace': NAMESPACE, 'assets': ASSET, 'tiles_per_bank': counts, 'markers': MARQUEURS, 'warps': 'aucun'},
+        'art_approved': False, 'runtime_tested': False,
+    }
+    (OUT / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=1))
+    print('manifest ok;', {k: len(v['layers']) for k, v in report.items()}, 'cellules bloquées', int(blocked.sum()))
+
+
+if __name__ == '__main__':
+    main(apercu='--apercu' in sys.argv)
