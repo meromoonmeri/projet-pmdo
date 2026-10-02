@@ -15,6 +15,10 @@ Aucun test dans le moteur PMDO : voir README.md du lot.
     ./.venv/bin/python source/zone_plage_recifs_etoiles_v1/build.py
 """
 import hashlib
+import io
+import shutil
+import uuid
+import zipfile
 import json
 import math
 import sys
@@ -903,14 +907,14 @@ def sea_geometry(sea_vis):
     return sm
 
 
-def houle_frames(sea_rgb, sea_vis, dist_land, ys, amb):
+def houle_frames(sea_rgb, sea_vis, dist_land, ys, amb, tvals=None):
     """Crêtes de houle en arcs qui épousent la baie : la crête de profondeur u est à y = YH + (ys(x) - YH) u^1,7. Le dessin ne
     dépend que de (x, u), donc la boucle de 12 crans est exacte. Les crêtes sont continues (une colonne rejoint la suivante), ne
     sont tracées que là où la pente du rivage reste douce (elles se brisent contre les falaises) et s'éteignent (tramé) près du rivage."""
     g = GAIN_EAU[amb]; hi = np.array(LUMIERE[amb], float); frames = []
     xs = np.arange(W); fade = np.clip((dist_land - 30) / 16, 0, 1)
     slope = np.abs(np.gradient(ys.astype(float))); douce = (ys >= 0) & (slope < 0.75)
-    for s in range(SWELL_STEPS):
+    for s in (range(SWELL_STEPS) if tvals is None else tvals):
         a = np.zeros((H, W, 4), 'uint8')
         for k in range(-1, HOULE_K + 1):
             u = (k + HOULE_PASSES * s / SWELL_STEPS) / HOULE_K
@@ -932,11 +936,11 @@ def houle_frames(sea_rgb, sea_vis, dist_land, ys, amb):
     return frames
 
 
-def reflet_frames_zpr(dashes, xc, sea_vis):
+def reflet_frames_zpr(dashes, xc, sea_vis, tvals=None):
     """Reflet de l'astre : chaque trait oscille de A sin(phi), phi = 2 pi (passes s / 12 - 7 u), u = profondeur ; s'éteint un instant
     quand sin(2 phi + phase propre) < -0,85. Boucle fermée."""
     frames = []
-    for s in range(SWELL_STEPS):
+    for s in (range(SWELL_STEPS) if tvals is None else tvals):
         a = np.zeros((H, W, 4), 'uint8')
         for d in dashes:
             u = min(max((d['y'] - YH) / (Y_SHORE - YH), 0), 1)
@@ -953,11 +957,11 @@ def reflet_frames_zpr(dashes, xc, sea_vis):
     return frames
 
 
-def caustiques(sea_rgb, sea_vis, dist_sand, amb, n=12):
+def caustiques(sea_rgb, sea_vis, dist_sand, amb, n=12, tvals=None):
     """Lumière qui danse sur le fond du lagon : réseau de points clairs (produit de deux ondes), 12 crans en boucle exacte."""
     zone = sea_vis & (dist_sand < 72) & (dist_sand > 3) & (np.arange(H)[:, None] > YH + 110); yy, xx = np.mgrid[:H, :W]
     g = {'jour': 0.40, 'aube': 0.32, 'crepuscule': 0.30, 'nuit': 0.26}[amb]; hi = np.array(LUMIERE[amb], float); frames = []
-    for t in range(n):
+    for t in (range(n) if tvals is None else tvals):
         p1 = 2 * math.pi * t / n; p2 = 2 * p1
         v = np.sin(0.165 * xx + 0.105 * yy + p1) * np.sin(0.131 * xx - 0.173 * yy + p2) + 0.25 * np.sin(0.41 * xx + 0.07 * yy - p1)
         on = zone & (v > 0.80) & (((xx * 3 + yy * 5) % 4) != 0)
@@ -967,7 +971,7 @@ def caustiques(sea_rgb, sea_vis, dist_sand, amb, n=12):
     return frames
 
 
-def ecume_recifs(masks, sea_vis, sea_rgb, amb, n=12):
+def ecume_recifs(masks, sea_vis, sea_rgb, amb, n=12, tvals=None):
     """Écume qui bat contre chaque récif : anneau de 1 à 5 px dont la densité respire (phase propre à chaque récif)."""
     d_all = np.full((H, W), 99.0); own = np.zeros((H, W), int)
     for i, m in enumerate(masks):
@@ -977,7 +981,7 @@ def ecume_recifs(masks, sea_vis, sea_rgb, amb, n=12):
     hi = np.array(LUMIERE[amb], float); white = np.array([255, 255, 255], float) * 0.55 + hi * 0.45 if amb != 'jour' else np.array([252, 254, 255], float)
     ph = np.array([(hsh(i, 5) % 100) / 100 for i in range(len(masks))]); frames = []
     zone = sea_vis & (d_all >= 1) & (d_all <= 5.5)
-    for t in range(n):
+    for t in (range(n) if tvals is None else tvals):
         thr = 0.98 - 0.17 * d_all + 0.28 * np.sin(2 * math.pi * (t / n + ph[own]))
         on = zone & (hv < thr)
         a = np.zeros((H, W, 4), 'uint8'); base = sea_rgb[on].astype(float)
@@ -987,7 +991,7 @@ def ecume_recifs(masks, sea_vis, sea_rgb, amb, n=12):
     return frames
 
 
-def maree(cls, sea_vis, sand_rgb, sea_rgb, amb, n=18, A=7.0):
+def maree(cls, sea_vis, sand_rgb, sea_rgb, amb, n=18, A=7.0, tvals=None):
     """Marée sur la plage (bandes de la planche TD « Beach & Path » : ligne d'écume mouchetée, sable mouillé, eau claire) : le front
     avance de 0 à A px sur le sable puis recule, 18 crans en boucle exacte ; la phase varie un peu le long du rivage."""
     dsea = nd.distance_transform_edt(~sea_vis)
@@ -998,7 +1002,7 @@ def maree(cls, sea_vis, sand_rgb, sea_rgb, amb, n=18, A=7.0):
     wet_k = {'jour': (0.84, (176, 120, 44)), 'aube': (0.80, (120, 90, 120)), 'crepuscule': (0.78, (150, 70, 70)), 'nuit': (0.72, (30, 50, 90))}[amb]
     adv = lambda t: A * (0.5 - 0.5 * np.cos(2 * math.pi * t / n + 0.011 * xx))
     frames = []
-    for t in range(n):
+    for t in (range(n) if tvals is None else tvals):
         a_t = adv(t); prev = np.maximum.reduce([adv((t - j) % n) for j in range(0, 5)])
         a = np.zeros((H, W, 4), 'uint8')
         under = sand & (dsea <= a_t)
@@ -1013,11 +1017,11 @@ def maree(cls, sea_vis, sand_rgb, sea_rgb, amb, n=18, A=7.0):
 
 
 # ---------------------------------------------------------------- végétation, mares, lueur
-def sway(layer, comps_dil, amp, n, ph_fn, flip=False):
+def sway(layer, comps_dil, amp, n, ph_fn, tvals=None):
     """Cisaillement horizontal d'un calque par composante : chaque rangée glisse de A sin(phi) (1 au sommet, 0 à la base) ; n phases."""
     lab, nc = nd.label(nd.binary_dilation(layer[..., 3] == 255, iterations=comps_dil), structure=np.ones((3, 3)))
     al = layer[..., 3] == 255; boxes = nd.find_objects(lab); frames = []
-    for t in range(n):
+    for t in (range(n) if tvals is None else tvals):
         a = np.zeros((H, W, 4), 'uint8')
         for i, sl in enumerate(boxes):
             y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop; mm = (lab[sl] == i + 1) & al[sl]
@@ -1049,7 +1053,7 @@ def reflets_mares(mares_layer, amb, n=8):
     return frames
 
 
-def lueur_nuit(coral_masks, coral_rgb, sea_vis, dist_land, n=12):
+def lueur_nuit(coral_masks, coral_rgb, sea_vis, dist_land, n=12, tvals=None):
     """Nuit : les coraux luisent (anneaux de 1 à 3 px, densité qui respire) et le plancton scintille dans le lagon (3 crans sur 12)."""
     frames = []; yy, xx = np.mgrid[:H, :W]; hv = (((xx * 1103515245 + yy * 12345 + 4242) >> 7) % 991) / 991.0
     rings = []
@@ -1062,7 +1066,7 @@ def lueur_nuit(coral_masks, coral_rgb, sea_vis, dist_land, n=12):
         rings.append((ring, d, c, (hsh(i, 9) % 100) / 100))
     rng = np.random.default_rng(9); zone = np.argwhere(sea_vis & (dist_land > 4) & (dist_land < 80) & (np.arange(H)[:, None] > YH + 90))
     pl = zone[rng.choice(len(zone), size=min(70, len(zone)), replace=False)]; off = rng.integers(n, size=len(pl))
-    for t in range(n):
+    for t in (range(n) if tvals is None else tvals):
         a = np.zeros((H, W, 4), 'uint8')
         for ring, d, c, ph in rings:
             p = (0.60 - 0.17 * d) * (0.62 + 0.38 * math.sin(2 * math.pi * (t / n + ph)))

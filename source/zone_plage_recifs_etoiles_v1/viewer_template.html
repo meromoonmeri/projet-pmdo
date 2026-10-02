@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plage aux récifs étoilés · ZPR1 · jour, aube, crépuscule, nuit</title>
+<style>
+body{background:#0d1420;color:#e4e6f2;font:15px/1.55 system-ui,sans-serif;margin:0;padding:22px}
+main{max-width:1240px;margin:auto}h1{font-size:28px;margin:0 0 6px}p{color:#b3c9d3;max-width:100ch}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+button{background:#1b2838;color:#e4e6f2;border:1px solid #33505f;border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer}
+button.on{background:#e7c77f;color:#1a1a1a;border-color:#e7c77f}
+.row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.stage{position:relative;display:inline-block;border:1px solid #29404c;border-radius:6px;overflow:hidden;background:#000;flex:0 1 920px}
+canvas{display:block;image-rendering:pixelated;width:100%;max-width:920px}
+#info{color:#9fb6c0;font-size:13px;margin-left:8px}
+.note{font-size:13px;color:#8fa6b0}
+#layers{font-size:13px;min-width:230px}#layers label{display:block;cursor:pointer;padding:1px 0;white-space:nowrap}
+#layers .dim{color:#6f8794}#layers .btns{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}#layers button{padding:3px 8px;font-size:12px}
+table{border-collapse:collapse;font-size:13px;margin-top:10px}td,th{border:1px solid #29404c;padding:3px 8px;text-align:left}
+</style>
+<main>
+<h1>Plage aux récifs étoilés — ZPR1</h1>
+<p>Une baie de plage <strong>multicalque</strong> : deux promontoires de roches rouges, une barrière de sept récifs, un lagon de treize patates de corail, une plage de sable avec six palmiers, des mares et des coquillages.
+Le <strong>ciel est étoilé à chaque moment</strong> : quelques étoiles très pâles le jour, de plus en plus à l'aube et au crépuscule, puis la nuit pleine lune, Voie lactée, 536 étoiles dont 96 qui scintillent et une étoile filante.
+Les coraux luisent la nuit, la houle épouse la baie, l'écume bat contre les récifs et la marée monte sur le sable.</p>
+<div class="bar">
+  <button data-amb="jour" class="on">Jour</button><button data-amb="aube">Aube</button><button data-amb="crepuscule">Crépuscule</button><button data-amb="nuit">Nuit</button>
+  <span style="width:16px"></span>
+  <button id="pause">Pause</button><button data-speed="0.5">×0,5</button><button data-speed="1" class="on">×1</button><button data-speed="2">×2</button><button data-speed="8">×8</button>
+  <span style="width:16px"></span>
+  <button data-zoom="0" class="on">Vue entière</button><button data-zoom="1">Zoom ×2 ciel</button><button data-zoom="2">Zoom ×2 récifs</button><button data-zoom="3">Zoom ×2 plage</button>
+  <button id="coll">Collisions et marqueurs</button>
+  <span id="info"></span>
+</div>
+<div class="row">
+<div class="stage"><canvas id="c"></canvas></div>
+<div id="layers"></div>
+</div>
+<p class="note">Rejoué à 60 ticks par seconde, comme le moteur : chaque calque avance de <code>tick / durée % phases</code>. Les cases à cocher montrent ou cachent chaque calque.
+Marqueurs : <code>plage</code> (cyan, au bord de l'eau) et <code>entrance</code> (jaune, sortie au sud). Rendu généré, non testé dans PMDO ; biome, ambiances et nombre d'étoiles sont des choix de l'agent, à confirmer.</p>
+<table><tr><th>Calque</th><th>Cadence</th><th>Origine</th></tr>
+<tr><td>Terre (sable, roches, palmes, troncs, herbes, mares, coquillages, bois)</td><td>fixes</td><td>générée (terre du jour sur magenta), découpée en calques ; couleurs de l'aube, du crépuscule et de la nuit : retouches générées du décor de jour, par quantile de luminance</td></tr>
+<tr><td>Ciel, mer</td><td>fixes</td><td>générés ; ciel d'ambiance rangée par rangée, mer prise dans la retouche</td></tr>
+<tr><td>Récifs rocheux, coraux</td><td>fixes</td><td>deux planches générées (sept roches, douze coraux), placées par le code ; coraux teintés par l'eau</td></tr>
+<tr><td>Étoiles</td><td>24 × 5 ticks (+ fixes)</td><td>calculées ; contraste avec le ciel par ambiance</td></tr>
+<tr><td>Voie lactée, étoile filante</td><td>fixe ; 72 × 5 ticks</td><td>calculées</td></tr>
+<tr><td>Soleil, lune, reflets</td><td>fixe ; 12 × 10 ticks</td><td>planches de ZRV2 réutilisées</td></tr>
+<tr><td>Nuages</td><td>384 × 16 ticks (102 s)</td><td>trois bancs de ZRV2 raccordés, base cachée derrière l'horizon, couleurs tirées du ciel</td></tr>
+<tr><td>Houle, scintillement</td><td>12 × 10, 16 × 4 ticks</td><td>lois de ZRV2 (V24P04A) ; crêtes calculées en arcs qui suivent la baie</td></tr>
+<tr><td>Caustiques, écume des récifs, lueur de nuit</td><td>12 × 10 ticks</td><td>calculées</td></tr>
+<tr><td>Marée</td><td>18 × 8 ticks</td><td>calculée d'après les bandes de la planche « Beach &amp; Path to Beach » (TD)</td></tr>
+<tr><td>Palmes, herbes, éclats des mares</td><td>12 × 10, 8 × 12, 8 × 10 ticks</td><td>calculés (cisaillement horizontal des couronnes)</td></tr></table>
+</main>
+<script>
+const D = __DATA__;
+const [W, H] = D.size; const cv = document.getElementById('c'); const cx = cv.getContext('2d');
+cv.width = W; cv.height = H; cx.imageSmoothingEnabled = false;
+const load = u => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = u; });
+let amb = 'jour', speed = 1, paused = false, showColl = false, zoom = 0, tick = 0, last = null;
+const ZOOMS = [null, [192, 0], [192, 170], [192, 288]];             // coin haut-gauche de la région de 384 x 288 agrandie ×2
+let POOL = [], COLL = null; const VIS = {};
+async function prep() {
+  POOL = await Promise.all(D.pool.map(load)); COLL = await load(D.collisions);
+  for (const a of Object.keys(D.amb)) VIS[a] = Object.fromEntries(D.amb[a].map(l => [l.nom, true]));
+  buildPanel(); requestAnimationFrame(loop);
+}
+const PRESETS = {'Tout': null, 'Ciel seul': ['ciel','voie_lactee','etoiles_fixes','etoiles','etoile_filante','astre','nuages'],
+  'Mer et récifs': ['ciel','astre','nuages','mer','recifs_coraux','lagon_reflets','houle','scintillement','reflet','lueur','recifs','recifs_ecume'],
+  'Plage': ['ciel','mer','sable','ecume_rivage','mares','mares_reflets','rochers','coquillages','bois_flotte','troncs','palmes','herbes']};
+function buildPanel() {
+  const el = document.getElementById('layers'); el.innerHTML = '<strong>Calques</strong> (du bas vers le haut)<div class="btns"></div>';
+  const bt = el.querySelector('.btns');
+  for (const [k, v] of Object.entries(PRESETS)) { const b = document.createElement('button'); b.textContent = k;
+    b.onclick = () => { for (const l of D.amb[amb]) VIS[amb][l.nom] = v === null || v.includes(l.nom); buildPanel(); }; bt.appendChild(b); }
+  D.amb[amb].forEach((l, i) => { const lb = document.createElement('label');
+    lb.innerHTML = `<input type="checkbox" ${VIS[amb][l.nom] ? 'checked' : ''}> <span class="${l.kind === 'fixe' ? 'dim' : ''}">${String(l.index).padStart(2, '0')} ${l.nom.replace(/_/g, ' ')}${l.kind === 'fixe' ? '' : ' ▸ ' + l.phases + '×' + l.ticks}</span>`;
+    lb.querySelector('input').onchange = e => { VIS[amb][l.nom] = e.target.checked; }; el.appendChild(lb); });
+}
+function draw() {
+  cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, W, H);
+  if (zoom) cx.setTransform(2, 0, 0, 2, -ZOOMS[zoom][0] * 2, -ZOOMS[zoom][1] * 2);
+  const N = D.nuages, t = Math.floor(tick / N.frame_length_ticks) % N.phases;
+  for (const l of D.amb[amb]) {
+    if (!VIS[amb][l.nom]) continue;
+    if (l.kind === 'fixe') cx.drawImage(POOL[l.img], 0, 0);
+    else if (l.kind === 'anim') cx.drawImage(POOL[l.frames[Math.floor(tick / l.ticks) % l.frames.length]], 0, 0);
+    else { const sh = (t * N.pas_px) % N.periode_px;       // np.roll(bande, t) : la bande glisse de t px vers la droite
+      for (let k = -1; k * N.periode_px < W; k++) cx.drawImage(POOL[l.img], sh + k * N.periode_px, D.horizon - N.hauteur_px); }
+  }
+  if (showColl) { cx.globalAlpha = 0.85; cx.drawImage(COLL, 0, 0); cx.globalAlpha = 1; }
+  document.getElementById('info').textContent = `${amb} · tick ${Math.floor(tick)} · houle cran ${Math.floor(tick / 10) % 12} · marée phase ${Math.floor(tick / 8) % 18} · nuages phase ${t}`;
+}
+function loop(ts) {
+  if (last !== null && !paused) tick += (ts - last) * 0.06 * speed;
+  last = ts; draw(); requestAnimationFrame(loop);
+}
+document.querySelectorAll('[data-amb]').forEach(b => b.onclick = () => {
+  amb = b.dataset.amb; document.querySelectorAll('[data-amb]').forEach(x => x.classList.toggle('on', x === b)); buildPanel(); });
+document.querySelectorAll('[data-speed]').forEach(b => b.onclick = () => {
+  speed = +b.dataset.speed; document.querySelectorAll('[data-speed]').forEach(x => x.classList.toggle('on', x === b)); });
+document.querySelectorAll('[data-zoom]').forEach(b => b.onclick = () => {
+  zoom = +b.dataset.zoom; document.querySelectorAll('[data-zoom]').forEach(x => x.classList.toggle('on', x === b)); });
+document.getElementById('pause').onclick = e => { paused = !paused; e.target.classList.toggle('on', paused); };
+document.getElementById('coll').onclick = e => { showColl = !showColl; e.target.classList.toggle('on', showColl); };
+prep();
+</script>
+</html>
