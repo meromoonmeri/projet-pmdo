@@ -403,51 +403,370 @@ CORAIL_TEINTE = 0.20                                   # part de la couleur de l
 TACHE_FONCE = 0.74                                     # eau plus sombre sous un corail (patate de corail)
 
 
-def reef_layers(sea_rgb):
-    """Calques de récifs du jour : coraux vus à travers l'eau (teintés de la couleur de la mer) et roches émergées."""
+def reef_assets(sea_vis):
+    """Sprites de récifs posés une fois (couleurs du brut) : coraux, patates d'eau sombre, roches émergées et leurs masques.
+    sea_vis : mer visible (ni terre ni calque de terre) ; rien n'est posé ailleurs."""
     sp_r, raw_r = cut_sprites(BRUTS / 'recifs_roches.png'); sp_c, raw_c = cut_sprites(BRUTS / 'recifs_coraux.png')
     rocks, corals = name_rocks(sp_r), name_corals(sp_c)
-    pal_r = palette_familles(raw_r[np.concatenate([s_['fg'].ravel() for s_ in sp_r])[:0].size and None or ~is_magenta(raw_r)],
-                             {'rouge': 30, 'vert': 6, 'neutre': 6, 'jaune': 6})
+    pal_r = palette_familles(raw_r[~is_magenta(raw_r)], {'rouge': 30, 'vert': 6, 'neutre': 6, 'jaune': 6})
     pal_c = palette_familles(raw_c[~is_magenta(raw_c)], {'rouge': 26, 'jaune': 12, 'vert': 12, 'bleu': 14, 'neutre': 4})
-    coraux = np.zeros((H, W, 4), 'uint8'); recifs = np.zeros((H, W, 4), 'uint8')
-    masks_c, masks_r = [], []
+    coral = np.zeros((H, W, 4), 'uint8'); rock = np.zeros((H, W, 4), 'uint8')
+    mc, mr, patch = [], [], np.zeros((H, W), bool)
     yy, xx = np.mgrid[:H, :W]
     for nom, cx, by, w in CORAUX_POS:                  # patates : eau plus sombre sous chaque corail, bord tramé
         d = ((xx - cx) / (w * 0.80)) ** 2 + ((yy - (by - w * 0.28)) / (w * 0.42)) ** 2
-        core = d <= 0.62; ring = (d > 0.62) & (d <= 1.0) & ((xx + yy) % 2 == 0)
-        pm = (core | ring) & (sea_rgb[..., 2] > 0)
-        coraux[pm, :3] = np.clip(sea_rgb[pm] * TACHE_FONCE, 0, 255).astype('uint8'); coraux[pm, 3] = 255
+        patch |= (d <= 0.62) | ((d > 0.62) & (d <= 1.0) & ((xx + yy) % 2 == 0))
     for nom, cx, by, w in CORAUX_POS:
-        spr = sprite_rgba(corals[nom], w, pal_c)
-        m = paste(coraux, spr, cx, by); masks_c.append(m)
-    # teinte « vu à travers l'eau » : le corail prend une part de la couleur de la mer à cet endroit
-    mc = np.zeros((H, W), bool)
-    for m in masks_c:
-        mc |= m
-    coraux[mc, :3] = np.clip((1 - CORAIL_TEINTE) * coraux[mc, :3] + CORAIL_TEINTE * sea_rgb[mc], 0, 255).astype('uint8')
+        mc.append(paste(coral, sprite_rgba(corals[nom], w, pal_c), cx, by))
     for nom, cx, by, w in RECIFS:
-        spr = sprite_rgba(rocks[nom], w, pal_r, drop_shadow=True)
-        masks_r.append(paste(recifs, spr, cx, by))
-    return coraux, recifs, masks_c, masks_r, (rocks, corals)
+        mr.append(paste(rock, sprite_rgba(rocks[nom], w, pal_r, drop_shadow=True), cx, by))
+    patch &= sea_vis
+    cm = np.zeros((H, W), bool)
+    for m in mc:
+        cm |= m
+    cm &= sea_vis; coral[~cm] = 0
+    rm = np.zeros((H, W), bool)
+    for m in mr:
+        rm |= m
+    rock[~sea_vis] = 0; rm &= sea_vis
+    return {'coral': coral, 'patch': patch, 'rock': rock, 'coral_mask': cm, 'rock_mask': rm, 'rock_masks': mr, 'coral_masks': mc}
+
+
+def relight(layer, day_smp, amb_smp):
+    """Change l'éclairage d'un calque sans perdre ses teintes propres (algues, liseré clair) : chaque couleur est multipliée par le
+    rapport (couleur de l'ambiance / couleur du jour) des roches de même quantile de luminance. Rapport 1 le jour."""
+    out = layer.copy(); m = layer[..., 3] == 255
+    if not m.any():
+        return out
+    ds = day_smp[np.argsort(lum(day_smp), kind='stable')].astype(float); asm = amb_smp[np.argsort(lum(amb_smp), kind='stable')].astype(float)
+    px = layer[m][:, :3].astype(float); cols, inv = np.unique(px, axis=0, return_inverse=True)
+    q = np.searchsorted(lum(ds), lum(cols)) / len(ds)
+    D = ds[np.clip((q * len(ds)).astype(int), 0, len(ds) - 1)]; T = asm[np.clip((q * len(asm)).astype(int), 0, len(asm) - 1)]
+    ratio = np.clip((T + 8) / (D + 8), 0.2, 2.2)
+    out[m, :3] = np.clip(cols * ratio, 0, 255).astype('uint8')[inv.ravel()]
+    return out
+
+
+def reef_ambiance(A, sea_rgb, amb, day_rock_smp, amb_rock_smp):
+    """Récifs d'une ambiance : coraux vus à travers l'eau (teinte et luminosité de l'ambiance), roches par quantile de luminance."""
+    tint, dim = CORAIL_AMB[amb]
+    coraux = np.zeros((H, W, 4), 'uint8')
+    coraux[A['patch'], :3] = np.clip(sea_rgb[A['patch']] * TACHE_FONCE, 0, 255).astype('uint8'); coraux[A['patch'], 3] = 255
+    cm = A['coral_mask']
+    coraux[cm, :3] = np.clip((1 - tint) * A['coral'][cm, :3] * dim + tint * sea_rgb[cm], 0, 255).astype('uint8'); coraux[cm, 3] = 255
+    recifs = relight(A['rock'], day_rock_smp, amb_rock_smp)
+    return coraux, recifs
+
+
+# ---------------------------------------------------------------- repris à l'identique de ZRV2 (zone_reveil_prairie_horizon_v2/build.py)
+# Lois et constantes : nuages (bande de 768 px, 384 phases), scintillement de l'horizon (16 x 4 ticks), étoiles (24 x 5 ticks),
+# houle 12 x 10 ticks. Les planches brutes réutilisées (astres, reflets, bancs de nuages) sont copiées dans bruts/ (sha256 dans generation.json).
+SWELL_STEPS, SWELL_TICKS = 12, 10                  # V24P04A : BPA 12 crans x 10 ticks
+SWELL_PASSES = 2                                   # V24P04A (12 images décodées) : une crête avance de 2 rangées par cycle, 5 à 8 px par cran
+GLINT_STEPS, GLINT_TICKS = 16, 4                   # V24P04A : palettes animées 16 crans x 4 ticks
+GLINT_LEVELS = [1, 1, 2, 2, 1, 1, 0, 0, 0, 0, 1, 1, 2, 1, 0, 0]   # 0 éteint, 1 couleur du brut, 2 blanc
+CLOUD_PERIOD, CLOUD_PAS, CLOUD_TICKS = 768, 2, 16  # période = largeur de l'écran : plus aucun nuage répété (256 px = 3 fois le même banc)
+CLOUD_PHASES = CLOUD_PERIOD // CLOUD_PAS           # 384 phases ; vitesse inchangée (1 px / 8 ticks)
+CLOUD_TINT = 16                                    # raccord : fondu des teintes sur 16 colonnes
+CLOUD_BLEND = 0                                    # pas de fondu (il laissait des colonnes isolées) : coupe raccordée
+STAR_PHASES, STAR_TICKS = 24, 5
+REFLET_SPAN, REFLET_SX = 172, 0.42                 # reflets : hauteur couverte sous l'horizon, échelle horizontale
+CLOUD_BASE_PX, CLOUD_FLAT_MIN, CLOUD_DOME = 17, 40, 30   # base pleine gardée (px finaux) ; sommets plats rognés -> arrondis (px du brut A)
+CLOUD_S0, CLOUD_EDGE = 0.30, 0.15                  # échelle provisoire ; coupes cherchées dans les 15 % du début et de la fin de chaque banc
+CLOUD_BANKS = [('banc_nuages_jour_c.png', 1.0, (0, 1200)),   # (brut, échelle relative, colonnes utilisables), mis bout à bout en boucle
+               ('banc_nuages_jour.png', 1.0, (0, 360)),      # x 375-1075 : identique au brut c (copié par le générateur) -> non repris
+               ('banc_nuages_jour_b.png', None, (0, 1584))]  # None : sommets ramenés à la hauteur de ceux du banc A
+
+
+def glints(sea_full, sea_region):
+    """Paillettes de la bande de l'horizon : pixels nettement plus clairs que leur voisinage, petits groupes."""
+    l = lum(sea_full); zone = sea_region & (np.arange(H)[:, None] < YH + 40)
+    sp = zone & (l > nd.median_filter(l, 7) + 22)
+    lab, n = nd.label(sp); out = []
+    for i, s in enumerate(nd.find_objects(lab)):
+        ys, xs = np.nonzero(lab[s] == i + 1); ys += s[0].start; xs += s[1].start
+        if len(ys) <= 8:
+            out.append(([(int(y), int(x)) for y, x in zip(ys, xs)], hsh(int(ys.mean()), int(xs.mean()), 3) % GLINT_STEPS))
+    return out
+
+
+def glint_frames(gl, base_cols, white):
+    frames = []
+    for t in range(GLINT_STEPS):
+        a = np.zeros((H, W, 4), 'uint8')
+        for px, off in gl:
+            lv = GLINT_LEVELS[(t + off) % GLINT_STEPS]
+            for y, x in px:
+                if lv:
+                    a[y, x, :3] = base_cols[y, x] if lv == 1 else white; a[y, x, 3] = 255
+        frames.append(a)
+    return frames
+
+
+def reflet_dashes(sheet, idx):
+    """Planche de reflets générée : colonne idx (0 lune, 1 aube, 2 crépuscule) -> traits (composantes) replacés sous l'astre.
+    Hauteur de la colonne -> [YH + 1, YH + 1 + REFLET_SPAN] ; largeur x REFLET_SX ; épaisseur 1 px au loin, 2 px près ;
+    les étincelles (composantes hautes) gardent leur forme au cinquième."""
+    fg = ~is_magenta(sheet); cx_ = np.nonzero(fg.any(0))[0]
+    groups = np.split(cx_, np.nonzero(np.diff(cx_) > 10)[0] + 1)
+    g = groups[idx]; x0, x1 = int(g[0]), int(g[-1])
+    sub, m = sheet[:, x0:x1 + 1], fg[:, x0:x1 + 1]
+    rows = np.nonzero(m.any(1))[0]; ytop, ybot = int(rows.min()), int(rows.max()); axis = (x1 - x0) / 2
+    pal = palette_of(sub[m], 16)
+    lab, n = nd.label(m, structure=np.ones((3, 3)))
+    dashes = []
+    for i, sl in enumerate(nd.find_objects(lab)):
+        mm = lab[sl] == i + 1
+        if mm.sum() < 6:
+            continue
+        cy = (sl[0].start + sl[0].stop - 1) / 2; cx = (sl[1].start + sl[1].stop - 1) / 2
+        v = (cy - ytop) / (ybot - ytop); h_, w_ = mm.shape
+        if h_ > 18:                                   # étincelle en croix
+            size = (max(3, round(w_ * 0.2)), max(3, round(h_ * 0.2))); thr = 0.3
+        else:
+            size = (max(1, round(w_ * REFLET_SX)), 1 if v < 0.45 else 2); thr = 0.35
+        spr = down_rgba(sub[sl], mm, size, pal, thr)
+        if not (spr[..., 3] == 255).any():
+            continue
+        dashes.append({'y': int(round(YH + 1 + v * REFLET_SPAN - size[1] / 2)), 'dx': (cx - axis) * REFLET_SX, 'spr': spr,
+                       'ph': (hsh(idx, i, 11) % 1000) / 1000 * 2 * math.pi})
+    return dashes, {'colonne_brut': [x0, x1], 'rangees_brut': [ytop, ybot], 'traits': len(dashes)}
+
+
+def round_flat(raw, r):
+    """Sommet plat de plus de CLOUD_FLAT_MIN px du brut = nuage rogné par le générateur : ses colonnes descendent
+    en dôme parabolique, le liseré clair du sommet descend avec elles."""
+    raw = raw.copy(); fg = ~is_magenta(raw); Wr = raw.shape[1]
+    tops = np.array([int(np.argmax(fg[:, x])) for x in range(Wr)])
+    runs, s0 = [], 0
+    for x in range(1, Wr + 1):
+        if x == Wr or tops[x] != tops[s0]:
+            if x - s0 >= CLOUD_FLAT_MIN:                   # en px du brut, pour tous les bancs (B, plus fin, est plus réduit)
+                runs.append((s0, x - 1, int(tops[s0])))
+            s0 = x
+    for x0, x1, ty in runs:
+        c = (x0 + x1) / 2; hw = (x1 - x0) / 2 + 6
+        for x in range(max(0, int(c - hw)), min(Wr, int(c + hw) + 1)):
+            d = int(round(CLOUD_DOME * ((x - c) / hw) ** 2))
+            t = int(tops[x]); d = ty + d - t          # le sommet descend jusqu'au dôme, jamais plus bas
+            if d <= 0:
+                continue
+            n = int(round(80 / r)); col, cm = raw[t:t + n, x].copy(), fg[t:t + n, x].copy(); n = len(col)
+            raw[t:t + d, x] = (255, 0, 255); fg[t:t + d, x] = False
+            raw[t + d:t + n, x] = col[:n - d]; fg[t + d:t + n, x] = cm[:n - d]
+    return raw, fg, runs
+
+
+def bank_band(raw, r):
+    """Banc du haut d'un brut : du premier pixel de nuage jusqu'à CLOUD_BASE_PX (espace final) dans la base pleine."""
+    raw, fg, runs = round_flat(raw, r)
+    top = int(np.nonzero(fg.any(1))[0].min())
+    full = next(y for y in range(top, raw.shape[0]) if fg[y].all())
+    bottom = min(raw.shape[0] - 1, full + int(round(CLOUD_BASE_PX / (CLOUD_S0 * r))))
+    return raw[top:bottom + 1], fg[top:bottom + 1], runs, (top, full, bottom)
+
+
+def _piece(band, m, x0, x1, sc, pal, hh):
+    """Colonnes [x0, x1) du banc réduites à l'échelle sc, posées en bas d'une bande de hauteur hh."""
+    x0, x1 = max(0, int(round(x0))), min(band.shape[1], int(round(x1)))
+    size = (max(1, int(round((x1 - x0) * sc))), max(1, int(round(band.shape[0] * sc))))
+    p = down_rgba(band[:, x0:x1], m[:, x0:x1], size, pal)
+    out = np.zeros((hh, p.shape[1], 4), 'uint8'); out[hh - p.shape[0]:] = p[-hh:]
+    return out
+
+
+def _tops(p):
+    al = p[..., 3] == 255
+    return np.where(al.any(0), al.argmax(0), p.shape[0]).astype(float)
+
+
+def cloud_strip(raws):
+    """Bande périodique de CLOUD_PERIOD px (= largeur de l'écran : aucun nuage répété à l'écran) faite de bancs générés
+    différents mis bout à bout (CLOUD_BANKS, en boucle). Chaque banc : sommets plats arrondis, échelle relative (le banc B,
+    plus haut, est ramené à la hauteur des sommets du banc A), colonnes utilisables (hors copie du générateur). Raccords :
+    colonnes où la silhouette du banc suivant prolonge celle du banc précédent (écart des sommets sur 8 px + écart de
+    teinte + marche entre les deux colonnes jointes), puis fondu des teintes seules sur CLOUD_TINT colonnes ; l'ensemble est remis à l'échelle pour faire 768 px."""
+    bands, info = [], {'bancs': []}
+    ref = bank_band(raws[CLOUD_BANKS[1][0]], 1.0)[3]
+    for name, r, cols in CLOUD_BANKS:
+        if r is None:                                 # sommets ramenés à la hauteur de ceux du banc A
+            t0, f0, _ = bank_band(raws[name], 1.0)[3]
+            r = (ref[1] - ref[0]) / (f0 - t0)
+        band, m, runs, rows = bank_band(raws[name], r)
+        bands.append((name, r, cols, band, m))
+        info['bancs'].append({'brut': name, 'echelle_relative': round(r, 4), 'colonnes_utilisables': list(cols),
+                              'rangees_brut': [rows[0], rows[2]], 'sommets_arrondis': [list(x) for x in runs]})
+    pal = palette_of(np.concatenate([b[3][b[4]] for b in bands]), 24)
+    hh0 = max(int(round(b[3].shape[0] * CLOUD_S0 * b[1])) for b in bands)
+    pre = [_piece(b[3], b[4], 0, b[3].shape[1], CLOUD_S0 * b[1], pal, hh0) for b in bands]
+    n = len(bands); K = 8; joints = []
+    for i in range(n):
+        j = (i + 1) % n; pi, pj = pre[i], pre[j]; si = CLOUD_S0 * bands[i][1]; sj = CLOUD_S0 * bands[j][1]
+        ci, cj = bands[i][2], bands[j][2]; wi = int(ci[1] * si); wj0, wj1 = int(ci[0] * si), 0
+        lo_i, hi_i = int(ci[0] * si + (1 - CLOUD_EDGE) * (ci[1] - ci[0]) * si), min(pi.shape[1], int(round(bands[i][3].shape[1] * si))) - CLOUD_TINT
+        hi_i = min(hi_i, int(ci[1] * si))
+        lo_j, hi_j = int((cj[0] + 8) * sj), int(cj[0] * sj + CLOUD_EDGE * (cj[1] - cj[0]) * sj)   # pas contre le bord du brut
+        ti, tj = _tops(pi), _tops(pj); ai, aj = pi[..., :3].astype(int), pj[..., :3].astype(int)
+        best = None
+        for e in range(lo_i, hi_i):
+            for s in range(lo_j, hi_j):
+                c = (np.abs(ti[e:e + K] - tj[s:s + K]).mean() + np.abs(ai[:, e:e + K] - aj[:, s:s + K]).mean() / 20
+                     + np.abs(ti[e - 1] - tj[s]) + np.abs(ai[:, e - 1] - aj[:, s]).mean() / 20)   # et la marche entre les deux colonnes jointes
+                c += 10 * ((ti[e - 1] < min(ti[e - 2], tj[s]) - 1) + (tj[s] < min(ti[e - 1], tj[s + 1]) - 1))   # colonne isolée au raccord
+                if best is None or c < best[0]:
+                    best = (c, e, s)
+        joints.append(best)
+    lens = [joints[i][1] - joints[i - 1][2] for i in range(n)]      # début du banc i = raccord (i-1 -> i)
+    f = CLOUD_PERIOD / sum(lens)
+    widths = [int(round(L * f)) for L in lens]; widths[-1] += CLOUD_PERIOD - sum(widths)
+    hh = max(int(round(b[3].shape[0] * CLOUD_S0 * b[1] * f)) for b in bands)
+    parts = []
+    for i, b in enumerate(bands):
+        s0 = CLOUD_S0 * b[1]; x0 = joints[i - 1][2] / s0; x1 = joints[i][1] / s0; sc = widths[i] / (x1 - x0)
+        p = _piece(b[3], b[4], x0, x1 + CLOUD_TINT / sc, sc, pal, hh)
+        if p.shape[1] < widths[i] + CLOUD_TINT:
+            p = np.concatenate([p, np.zeros((hh, widths[i] + CLOUD_TINT - p.shape[1], 4), 'uint8')], 1)
+        parts.append(p[:, :widths[i] + CLOUD_TINT].astype(float))
+        info['bancs'][i]['coupe_brut'] = [int(round(x0)), int(round(x1))]; info['bancs'][i]['largeur_px'] = widths[i]
+        info['bancs'][i]['ecart_raccord_suivant'] = round(float(joints[i][0]), 2)
+    out = np.concatenate([p[:, :w] for p, w in zip(parts, widths)], 1)
+    x = 0
+    for i in range(n):                                 # raccord (i-1 -> i) au début du banc i : teintes seules
+        prev = parts[i - 1]; wp = widths[i - 1]
+        for k in range(CLOUD_TINT):
+            w = (k + 0.5) / CLOUD_TINT; cur = out[:, x + k]; o = prev[:, wp + k]
+            both = (cur[:, 3] > 0) & (o[:, 3] > 0)
+            cur[both, :3] = w * cur[both, :3] + (1 - w) * o[both, :3]
+        x += widths[i]
+    res = np.zeros(out.shape, 'uint8'); al = out[..., 3] > 127
+    res[al, :3] = nearest(out[al, :3], pal); res[al, 3] = 255
+    res[-1, :, :3] = np.where(res[-1, :, 3:] == 255, res[-1, :, :3], res[-2, :, :3]); res[-1, :, 3] = 255   # base pleine
+    info.update({'taille_bande': list(res.shape[1::-1]), 'echelle': round(CLOUD_S0 * f, 4)})
+    return res, pal, info
+
+
+def cloud_frames(strip, hidden):
+    h = strip.shape[0]; frames = []
+    for t in range(CLOUD_PHASES):
+        a = np.zeros((H, W, 4), 'uint8')
+        a[YH - h:YH] = np.tile(np.roll(strip, t * CLOUD_PAS, axis=1), (1, W // CLOUD_PERIOD, 1))
+        a[hidden] = 0
+        frames.append(a)
+    return frames
+
+
+def star_state(off, t):
+    u = (t + off) % STAR_PHASES
+    return 'plein' if 4 <= u <= 11 else ('coeur' if u in (2, 3, 12, 13) else 'eteint')
+
+
+def star_frames(stars):
+    frames = []
+    for t in range(STAR_PHASES):
+        a = np.zeros((H, W, 4), 'uint8')
+        for px, core, off in stars:
+            st = star_state(off, t)
+            for y, x, r, g, b in (px if st == 'plein' else core if st == 'coeur' else []):
+                a[y, x] = (r, g, b, 255)
+        frames.append(a)
+    return frames
+
+
+# ---------------------------------------------------------------- ambiances (aube, crépuscule, nuit)
+YH = 153                                            # horizon (rangée de la première bande de mer) ; vérifié par ciel_mer_jour()
+ECHELLE_AMB = 1.5556                                # retouches générées : 1195 x 896 = 768 x 576 x 1,5556, alignées au pixel (0, 0)
+CORAIL_AMB = {'jour': (0.20, 1.00), 'aube': (0.28, 0.92), 'crepuscule': (0.30, 0.78), 'nuit': (0.16, 0.86)}   # (teinte de l'eau, luminosité)
+
+
+def amb_image(amb):
+    """Retouche générée de l'ambiance ramenée à 768 x 576 (moyenne par case) : couleurs et lumière de l'ambiance."""
+    return np.array(Image.open(BRUTS / f'ambiance_{amb}.png').convert('RGB').resize((W, H), Image.BOX)).astype(int)
+
+
+def erode_mask(m, n=1):
+    return nd.binary_erosion(m, iterations=n) if n else m
+
+
+def samples_of(img, mask, erode=1):
+    mk = erode_mask(mask, erode)
+    if mk.sum() < 40:
+        mk = mask
+    return img[mk]
+
+
+def ciel_ambiance(amb, ciel_day):
+    """Ciel de l'ambiance : chaque rangée prend la couleur médiane de la même rangée de la retouche (les étoiles, éparses, sont
+    écartées par la médiane) ; les couleurs sont ramenées à une palette de l'ambiance."""
+    a = amb_image(amb)
+    rows = np.array([np.median(a[y], axis=0) for y in range(YH)]).astype(int)
+    out = np.zeros((H, W, 4), 'uint8'); out[:YH, :, :3] = rows[:, None, :]; out[:YH, :, 3] = 255
+    pal = palette_of(rows, 40)
+    out[:YH, :, :3] = nearest(out[:YH, :, :3], pal)
+    return out
+
+
+def mer_ambiance(amb, land, excl):
+    """Mer de l'ambiance : pixels de la retouche, sauf là où se trouvent la terre et les récifs (excl) ; ces zones sont prolongées
+    par le plus proche pixel de mer propre (aucun trou ni reste de récif peint sous les calques de récifs)."""
+    a = amb_image(amb); rows = np.arange(H)[:, None]
+    bad = nd.binary_dilation(land | excl, iterations=3)
+    known = ~bad & (rows >= YH)
+    sea = fill_nearest(a, known)
+    pal = palette_of(a[known], 56)
+    sea = nearest(sea, pal)
+    out = np.zeros((H, W, 4), 'uint8'); out[YH:, :, :3] = sea[YH:]; out[YH:, :, 3] = 255
+    return out
+
+
+def recolor_terre(L, cls, amb):
+    """Calques de terre de l'ambiance : chaque couleur prend la couleur de même quantile de luminance des pixels de la retouche
+    qui portent la même classe (sable, roches, troncs, palmes...)."""
+    a = amb_image(amb); out = {}
+    cmap = {'sable': 'SABLE', 'rochers': 'ROCHE', 'troncs': 'TRONC', 'palmes': 'PALME', 'herbes': 'HERBE', 'mares': 'MARE',
+            'coquillages': 'COQUILLAGE', 'bois_flotte': 'BOIS'}
+    for nom, c in cmap.items():
+        smp = samples_of(a, cls == CL[c], 1 if nom in ('sable', 'rochers', 'palmes') else 0)
+        out[nom] = recolor_rank(L[nom], smp)
+    out['_rocs'] = samples_of(a, cls == CL['ROCHE'], 1)
+    return out
+
+
+def static_layers(amb, ctx):
+    """Calques statiques d'une ambiance (RGBA 768 x 576) : ciel, mer, récifs, terre."""
+    land, cls, Lday, RA, rd = ctx['land'], ctx['cls'], ctx['Lday'], ctx['RA'], ctx['rd']
+    if amb == 'jour':
+        L = {k: v.copy() for k, v in Lday.items()}
+        L['ciel'] = ctx['ciel_day']; L['mer'] = ctx['mer_day']; ra = rd
+    else:
+        L = recolor_terre(Lday, cls, amb); ra = L.pop('_rocs')
+        L['ciel'] = ciel_ambiance(amb, ctx['ciel_day'])
+        L['mer'] = mer_ambiance(amb, land[..., 3] == 255, RA['coral_mask'] | RA['rock_mask'] | RA['patch'])
+    L['recifs_coraux'], L['recifs'] = reef_ambiance(RA, L['mer'][..., :3].astype(int), amb, rd, ra)
+    return L
+
+
+ORDER_STATIC = ['ciel', 'mer', 'recifs_coraux', 'recifs', 'sable', 'mares', 'rochers', 'coquillages', 'bois_flotte', 'troncs', 'palmes', 'herbes']
+
+
+def contexte():
+    land, lpal = terre_jour()
+    ciel, mer, yh, spal = ciel_mer_jour(land)
+    assert yh == YH, yh
+    cls = classify_land(land)
+    Lday = partition(land, cls)
+    sea_vis = (land[..., 3] == 0) & (np.arange(H)[:, None] >= YH)
+    RA = reef_assets(sea_vis)
+    rd = samples_of(land[..., :3].astype(int), cls == CL['ROCHE'], 1)
+    return {'land': land, 'cls': cls, 'Lday': Lday, 'RA': RA, 'rd': rd, 'ciel_day': ciel, 'mer_day': mer, 'sea_vis': sea_vis}
 
 
 if __name__ == '__main__':
     CACHE.mkdir(parents=True, exist_ok=True)
-    land, lpal = terre_jour()
-    ciel, mer, yh, spal = ciel_mer_jour(land)
-    print('horizon y =', yh)
-    cls = classify_land(land)
-    debug_classes(cls, CACHE / 'classes.png')
-    L = partition(land, cls); L['ciel'] = ciel; L['mer'] = mer
-    ORDER0 = ['ciel', 'mer', 'sable', 'mares', 'rochers', 'coquillages', 'bois_flotte', 'troncs', 'palmes', 'herbes']
-    Image.fromarray(compose(L, ORDER0)).convert('RGB').save(CACHE / 'jour_terre_mer.png')
-    coraux, recifs, mc, mr, (rocks, corals) = reef_layers(mer[..., :3].astype(int))
-    L['recifs_coraux'] = coraux; L['recifs'] = recifs
-    print('sprites roches', sorted(rocks), 'coraux', len(corals))
-    ORDER1 = ['ciel', 'mer', 'recifs_coraux', 'recifs', 'sable', 'mares', 'rochers', 'coquillages', 'bois_flotte', 'troncs', 'palmes', 'herbes']
-    comp = compose(L, ORDER1)
-    Image.fromarray(comp).convert('RGB').save(CACHE / 'jour_recifs.png')
-    # image d'entrée donnée au générateur pour retoucher les ambiances (mise à l'échelle 1200 x 900, sans lissage)
-    Image.fromarray(comp[..., :3]).resize((1200, 900), Image.NEAREST).save(BRUTS / 'decor_jour_pour_ambiances.png')
+    ctx = contexte()
+    debug_classes(ctx['cls'], CACHE / 'classes.png')
+    sheet = Image.new('RGB', (W * 2, H * 2))
+    for k, amb in enumerate(AMBS):
+        L = static_layers(amb, ctx); im = Image.fromarray(compose(L, ORDER_STATIC)).convert('RGB')
+        im.save(CACHE / f'statique_{amb}.png'); sheet.paste(im, ((k % 2) * W, (k // 2) * H))
+    sheet.save(CACHE / 'statiques_4.png')
     print('ok')
