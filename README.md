@@ -1,5 +1,18 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Clairière tropicale V2 : arène du sanctuaire du lagon, FCT2 (3 octobre 2026)
+
+**Demande** : « passons a la suite » (après la trilogie Forêt Brumeuse EFB1/FFB1/ZFB1). Reprise de la série des fins de donjon restantes dans l'ordre du mod : **FCT2** prolonge l'entrée ETC1 (Clairière tropicale). Biome et portée choisis par l'agent, **à confirmer**. Préfixe **FCT2** (`FTC1`, `FCT1`, `FCL1` et `FCL2` sont déjà pris sur des branches sœurs non fusionnées).
+
+- Sorties : `renders/fin_clairiere_tropicale_v2/`, aperçu `apercu_fin_clairiere_tropicale_v2.html`, build `source/fin_clairiere_tropicale_v2/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png`. Ce ne sont pas des tuiles natives (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : arène fermée 4:3 (`768 × 576` px, `96 × 72` cases de 8 px) ; arrivée au sud par un couloir d'herbe et de dalles de sable (`entrance` à `[384, 560]`), grande clairière centrale (`boss` à `[376, 288]`) bordée à gauche et à droite de deux vasques de lagon tropical sous une rive de terre brune, et au nord d'un tertre de terre et de roche abritant un autel-sanctuaire de pierre sculptée sans bouche sombre (`objectif` à `[376, 168]` au pied de l'autel) ; aucune sortie, aucun warp.
+- **Calques** : `sol_complet`, `herbe`, `ombres`, `dalles`, `touffes`, `fleurs`, `jungle`, `palmiers`, `tertre`, `autel`, `rive`, `mer` (`24 × 5` ticks), `papillons` (`24 × 5` ticks), plus un Top vide (`Layer=4`).
+- **Cohérence avec l'entrée ETC1** : profil de vague (48 px, colonne `x = 0`, `y = 404..451`), crête, couleurs exactes de l'eau du rip (bande sombre `(15, 95, 199)` contre la rive, sans aucun liseré clair) et planche de papillons d'ETC1 réutilisés tels quels (même `sha256`). Le premier jet du décor (`bruts/ecartes/decor_magenta_essai1_jungle_sombre.png`, jungle à `46,8 > 35` et quatre coins en aplat sombre) a été écarté et recoloré avec le rip en seconde référence (`recalage` sol `5,05`, témoin `3,27` à `(0, 0)`).
+- **Fidélité** (seuil 35) : herbe `24,2` (calque final `25,9`), jungle `16,8` (calque final `18,2`), dalles `15,4` (calque final `17,2`).
+- **Contrôles** : 13 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- Fins restantes de la série sur cette branche : Couloir violet (ECV1), Mt. Thunder (EMT1), Jardin secret (EJS1/EJS2).
+
 ## Trilogie Forêt Brumeuse (Foggy Forest) en 4:3 : EFB1, FFB1 et ZFB1 (3 octobre 2026)
 
 **Demande** : nouvelle map / nouveau biome en 4:3, puis sélection par l'utilisateur de **Forêt brumeuse (`D08P11A` / `P21P02A`)** et **« les 3 »** layouts :

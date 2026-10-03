@@ -1226,4 +1226,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Arche rocheuse nord (`parois`) et seuil du chemin (`donjon_seuil`)** : dans `EFB1`, la boîte de détection de l'arche rocheuse (`parois`, non-verte) descendait sous la bouche sombre (`profondeur`) et capturait l'extrémité nord du chemin de terre (lui aussi non-vert), ce qui bloquait 4 cases devant la bouche. Exclure le couloir sous la bouche (`yy >= py_max - 2, 562 <= xx <= 638`) du masque `parois` permet au chemin d'atteindre directement `profondeur` (`donjon_seuil` à `[376, 104]`).
 - **Filtrage anti-frange sur les lucioles de la planche de poses** : exclure de `fly_px` et du masque de pose tout pixel où `g < r + 5` ou `g < b`, et le vérifier par un test (`all(g > r + 10 and g > b + 20 for r, g, b in colors(BY['lucioles']))`).
 
+## Fin Clairière tropicale V2 — FCT2, ajouts à la recette
+
+- **Préfixe anti-collision** : `FCT2` et dossier `source/fin_clairiere_tropicale_v2`, car `FTC1`, `FCT1`, `FCL1` et `FCL2` sont déjà pris sur les branches sœurs `01a0eaca`, `01a0ef89` et `01a0f7e8`.
+- **Réutilisation directe du module d'entrée (`ETC1`)** : charger `source/entree_clairiere_tropicale_sud_nord_v1/build.py` via `loadmod` pour partager sans duplication `wave_model`, `sea_frames`, `sheet_poses`, `butterfly_frames`, `materials`, `fidelity`, `recalage` et les constantes d'eau (`WAVE_COL`, `WAVE_Y0`, `WAVE_P`, `CREST_X`, `BANDE`, `CALME`), et réutiliser `papillons_poses.png` octet pour octet.
+- **Recoloration de la jungle et comblement des coins sur le premier essai** : le premier jet (`bruts/ecartes/decor_magenta_essai1_jungle_sombre.png`) avait une jungle trop sombre (`dist = 46,8 > 35`) et quatre coins extérieurs en aplat vert sombre. Une passe d'édition à deux références (`[essai1, S01P03A]`) a garni les quatre coins de feuillage et ramené la jungle à `16,8 < 35` tout en conservant le layout exact.
+- **Séparation `tertre` / `autel` et regroupement `close_(diff > 26, 4)` des palmiers** : fermer de 4 px l'écart décor/témoin relie le houppier et le tronc du cocotier nord-est en une seule composante (`6` palmiers exacts), et isoler la boîte centrale `(y = 130..258, x = 552..648)` du massif rocheux nord place l'autel-sanctuaire de pierre sculptée sur son propre calque `autel`.
+
+
 

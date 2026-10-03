@@ -222,3 +222,13 @@ Réserves relevées dans V16 :
 - L’alignement sur 8 px et le nommage Halcyon ne prouvent pas un import moteur.
 
 Les succès de chargement PMDO cités dans les anciens rapports restent historiques ; aucun lancement PMDO, rendu GPU ou test de gameplay n’a été effectué dans cette reprise.
+
+## Mise à jour du 3 octobre 2026 — Fin Clairière tropicale V2 (FCT2)
+
+Après la trilogie Forêt Brumeuse (`EFB1`, `FFB1`, `ZFB1`), sur « passons a la suite » : réalisation de **Fin Clairière tropicale V2** (`source/fin_clairiere_tropicale_v2/`, `renders/fin_clairiere_tropicale_v2/`, préfixe `FCT2`, aperçu `apercu_fin_clairiere_tropicale_v2.html`), qui prolonge l'entrée `ETC1` (`large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png`) :
+- Préfixe `FCT2` choisi pour éviter toute collision avec les branches sœurs (`FTC1`, `FCT1`, `FCL1`, `FCL2`).
+- Arène fermée 4:3 (`768 × 576` px, 13 calques + Top `Layer=4`) : arrivée au sud (`entrance` `[384, 560]`), arène centrale (`boss` `[376, 288]`) encadrée par deux vasques de lagon tropical et leurs rives de terre brune, et autel-sanctuaire de pierre sculptée au centre du tertre nord (`objectif` `[376, 168]`), sans bouche sombre ni sortie au nord.
+- Cohérence stricte avec `ETC1` : profil de vague de 48 px, crête et couleurs exactes du rip (bande sombre contre la rive, sans liseré clair) + planche `papillons_poses.png` d'`ETC1` réutilisée sans nouvelle génération (même `sha256`).
+- Fidélité au rip (`< 35`) : herbe `24,2` (final `25,9`), jungle `16,8` (final `18,2`), dalles `15,4` (final `17,2`) après recoloration du premier jet (`bruts/ecartes/decor_magenta_essai1_jungle_sombre.png`, jungle à `46,8 > 35`).
+- Contrôles : 13 tests unitaires PASS + 5 mutations détectées.
+
