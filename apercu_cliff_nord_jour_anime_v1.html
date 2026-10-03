@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cliff Nord-Ouest &amp; Cliff Day — Nuages (16 phases) &amp; Mer (8 phases) Animés (PMDO 0.8.12)</title>
+<style>
+  :root {
+    --bg: #0c121d;
+    --panel: #131c2b;
+    --card: #182437;
+    --border: #2a3b57;
+    --text: #e6eef8;
+    --muted: #9cb0c9;
+    --accent: #b8dd9a;
+    --cyan: #7dd3fc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.55 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  header, section {
+    max-width: 1520px;
+    margin: 0 auto 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  h1, h2, h3 { margin-top: 0; color: var(--accent); }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+  .badge {
+    background: #1d2d44;
+    border: 1px solid #355078;
+    color: #d5e6ff;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .downloads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 8px;
+    background: #233854;
+    border: 1px solid #3e6191;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .btn.primary {
+    background: #294c36;
+    border-color: #55966d;
+    color: #eafff0;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(640px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .pix {
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    border-radius: 8px;
+    border: 1px solid #2b3d59;
+    background: #080d14;
+    display: block;
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin: 12px 0;
+    padding: 10px 12px;
+    background: #101826;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .controls label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th { background: #1c2b42; color: var(--accent); }
+  code {
+    background: #0d1522;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--cyan);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  }
+  pre {
+    background: #0b121c;
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 8px;
+    overflow-x: auto;
+    color: #cfe3ff;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cliff Nord-Ouest &amp; Cliff Day — Nuages &amp; Mer Animés (PMDO 0.8.12)</h1>
+  <p>
+    Animation complète des calques de <strong>Mer (`v2_promontoire_jour_03.tile`, 8 phases canoniques, `FrameLength = 10` ticks = 1,33 s)</strong>,
+    de <strong>Nuages (`01_long_cap_jour_02.tile`, 16 phases de dérive éolienne multi-altitude sans saut de boucle, `FrameLength = 10` ticks = 2,67 s)</strong>
+    et des <strong>Cascades/Eaux Métano (`Metano_Town_Animation_Tileset.tile`, 3 à 4 phases natives, `FrameLength = 10`)</strong>
+    pour <code>cliffnordouesttest1.rsground</code> (<code>138×98</code> cases = <code>1104×784</code> px) et <code>cliffdaytest.rsground</code> (<code>123×99</code> cases = <code>984×792</code> px).
+  </p>
+  <div class="badges">
+    <span class="badge">PMDO 0.8.12.0 (TexSize = 1 / 8 px)</span>
+    <span class="badge">Mer : 8 phases (jour_mer_00..07)</span>
+    <span class="badge">Nuages : 16 phases multi-altitudes</span>
+    <span class="badge">325 décors séparés de Cloud/nuage</span>
+    <span class="badge">Cascades Métano corrigées (80 + 520 cases)</span>
+    <span class="badge">INSTALLER.py avec backup .avant_anim.bak</span>
+  </div>
+  <div class="downloads">
+    <a class="btn primary" href="mod_cliff_nord_jour_pmdo_0812.zip" download>⬇ Télécharger Mod PMDO 0.8.12 (mod_cliff_nord_jour_pmdo_0812.zip)</a>
+    <a class="btn primary" href="livrable_cliff_nord_jour_anime_v1.zip" download>⬇ Télécharger Livrable Complet PNG + ORA + .rsground + .tile (livrable_cliff_nord_jour_anime_v1.zip)</a>
+    <a class="btn" href="renders/cliff_nord_jour_anime_v1/cliffnordouesttest1.rsground" download>⬇ cliffnordouesttest1.rsground (animé)</a>
+    <a class="btn" href="renders/cliff_nord_jour_anime_v1/cliffdaytest.rsground" download>⬇ cliffdaytest.rsground (animé)</a>
+    <a class="btn" href="renders/cliff_nord_jour_anime_v1/cliffnordouesttest1_calques.ora" download>⬇ cliffnordouesttest1_calques.ora</a>
+    <a class="btn" href="renders/cliff_nord_jour_anime_v1/cliffdaytest_calques.ora" download>⬇ cliffdaytest_calques.ora</a>
+  </div>
+</header>
+
+<section>
+  <h2>1. Lecteur Interactif Temps Réel (Calques séparés Mer 8 phases + Nuages 16 phases)</h2>
+  <div class="controls">
+    <button class="btn primary" id="btn-play" type="button">⏸ Pause</button>
+    <label>Phase globale (0..15) :
+      <input type="range" id="phase-slider" min="0" max="15" value="0">
+      <code id="phase-label">Phase 00 (Mer 00 / Nuages 00)</code>
+    </label>
+    <label><input type="checkbox" class="layer-toggle" data-layer="ciel" checked> 00 Ciel (`00_ciel`)</label>
+    <label><input type="checkbox" class="layer-toggle" data-layer="nuages" checked> Nuages animés (16 phases)</label>
+    <label><input type="checkbox" class="layer-toggle" data-layer="mer" checked> Mer animée (8 phases)</label>
+    <label><input type="checkbox" class="layer-toggle" data-layer="terrain" checked> Falaises &amp; Relief</label>
+    <label><input type="checkbox" class="layer-toggle" data-layer="decor" checked> Objets, Chemins &amp; Cascades</label>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>cliffnordouesttest1.rsground — 138×98 tuiles (1104×784 px)</h3>
+      <canvas id="canvas-nw" width="1104" height="784" class="pix"></canvas>
+      <p style="color:var(--muted);margin:10px 0 0;">
+        <strong>Calques :</strong> <code>00 Ciel (00_ciel)</code> → <code>01 Cloud/nuage (16 phases)</code> (556 cases animées) →
+        <code>02 Mer animee (8 phases)</code> (6 209 cases animées) → <code>03 Falaises et promontoire</code> → <code>04 Chemins et cascade animee</code> (80 cases cascade 4 phases).
+      </p>
+    </div>
+    <div class="card">
+      <h3>cliffdaytest.rsground — 123×99 tuiles (984×792 px)</h3>
+      <canvas id="canvas-day" width="984" height="792" class="pix"></canvas>
+      <p style="color:var(--muted);margin:10px 0 0;">
+        <strong>Calques :</strong> <code>00 Ciel (00_ciel)</code> → <code>01 Mer animee (8 phases)</code> (7 503 cases animées) →
+        <code>02 Falaises et relief</code> → <code>03 Objets et vegetation</code> → <code>04 Cascades et eau animee</code> (520 cases nettoyées) →
+        <code>Cloud/nuage (16 phases)</code> (774 cases animées, 600 tuiles phase 0 préservées) → <code>06 Objets Decor (ex-Cloud/nuage)</code> (325 décors isolés).
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>2. Aperçus WebP Animés &amp; Planche des 8 Phases de Mer / 16 Phases de Nuages</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Aperçu WebP animé — cliffnordouesttest1</h3>
+      <img class="pix" src="renders/cliff_nord_jour_anime_v1/review/cliffnordouesttest1_scene_animee.webp" alt="cliffnordouesttest1 animé">
+    </div>
+    <div class="card">
+      <h3>Aperçu WebP animé — cliffdaytest</h3>
+      <img class="pix" src="renders/cliff_nord_jour_anime_v1/review/cliffdaytest_scene_animee.webp" alt="cliffdaytest animé">
+    </div>
+  </div>
+  <div class="card" style="margin-top:20px;">
+    <h3>Planche de contrôle des 8 phases de mer (`v2_promontoire_jour_03`) et 16 phases de nuages (`01_long_cap_jour_02`)</h3>
+    <img class="pix" src="renders/cliff_nord_jour_anime_v1/review/planche_phases_mer_nuages.png" alt="Planche phases mer et nuages">
+  </div>
+</section>
+
+<section>
+  <h2>3. Récapitulatif Technique &amp; Installation dans votre Mod PMDO 0.8.12</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Carte `.rsground`</th>
+        <th>Dimensions</th>
+        <th>Mer animée (`v2_promontoire_jour_03`)</th>
+        <th>Nuages animés (`01_long_cap_jour_02`)</th>
+        <th>Cascades Métano (`Metano_Town_Animation_Tileset`)</th>
+        <th>Décors isolés</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>cliffnordouesttest1.rsground</code></td>
+        <td><code>138 × 98</code> cases (<code>1104 × 784</code> px)</td>
+        <td><strong>6 209 cases</strong> × 8 phases (<code>FrameLength = 10</code>, cycle 80 ticks)</td>
+        <td><strong>556 cases</strong> × 16 phases sur 3 bandes d'altitude (<code>FrameLength = 10</code>, cycle 160 ticks)</td>
+        <td><strong>80 cases</strong> (`x=90..97, y=88..97`) passées de 1 frame statique à <strong>4 phases</strong> (`dx=9, FrameLength=10`)</td>
+        <td>Ciel haut (`y=0..25`) complété et dégradé harmonisé avec `cliffdaytest`</td>
+      </tr>
+      <tr>
+        <td><code>cliffdaytest.rsground</code></td>
+        <td><code>123 × 99</code> cases (<code>984 × 792</code> px)</td>
+        <td><strong>7 503 cases</strong> × 8 phases (<code>FrameLength = 10</code>, cycle 80 ticks)</td>
+        <td><strong>774 cases</strong> × 16 phases (100 % des <strong>600 tuiles</strong> d'origine conservées en phase 0)</td>
+        <td><strong>520 cases</strong> nettoyées (0 frame vide `""`, phases intermédiaires `dx=4/6/8/9` restaurées, `FrameLength=10`)</td>
+        <td><strong>325 tuiles</strong> d'objets extraites de `Cloud/nuage` vers le calque `06 Objets Decor`</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:18px;">Installation en 1 commande (sans écraser vos feuilles `.tile` personnalisées)</h3>
+  <pre>python renders/cliff_nord_jour_anime_v1/INSTALLER.py "CHEMIN/VERS/PMDO/MODS/VOTRE_MOD"</pre>
+</section>
+
+<script>
+(function() {
+  const SEA_N = 8, CLOUD_N = 16;
+  const pad = n => String(n).padStart(2, '0');
+  const loadImg = src => new Promise(res => {
+    const im = new Image();
+    im.onload = () => res(im);
+    im.onerror = () => res(null);
+    im.src = src;
+  });
+
+  const state = {
+    playing: true,
+    step: 0,
+    vis: { ciel: true, nuages: true, mer: true, terrain: true, decor: true },
+    nw: null,
+    day: null
+  };
+
+  async function init() {
+    const nwMer = await Promise.all(Array.from({length: SEA_N}, (_, i) => loadImg(`renders/cliff_nord_jour_anime_v1/cliffnordouesttest1/mer/mer_${pad(i)}.png`)));
+    const nwNuages = await Promise.all(Array.from({length: CLOUD_N}, (_, i) => loadImg(`renders/cliff_nord_jour_anime_v1/cliffnordouesttest1/nuages/nuages_${pad(i)}.png`)));
+    const nwCiel = await loadImg('renders/cliff_nord_jour_anime_v1/cliffnordouesttest1/calques/00_ciel.png');
+    const nwTer = await loadImg('renders/cliff_nord_jour_anime_v1/cliffnordouesttest1/calques/03_falaises_promontoire.png');
+    const nwDec = await loadImg('renders/cliff_nord_jour_anime_v1/cliffnordouesttest1/calques/04_chemins_cascade.png');
+
+    const dayMer = await Promise.all(Array.from({length: SEA_N}, (_, i) => loadImg(`renders/cliff_nord_jour_anime_v1/cliffdaytest/mer/mer_${pad(i)}.png`)));
+    const dayNuages = await Promise.all(Array.from({length: CLOUD_N}, (_, i) => loadImg(`renders/cliff_nord_jour_anime_v1/cliffdaytest/nuages/nuages_${pad(i)}.png`)));
+    const dayCiel = await loadImg('renders/cliff_nord_jour_anime_v1/cliffdaytest/calques/00_ciel.png');
+    const dayTer = await loadImg('renders/cliff_nord_jour_anime_v1/cliffdaytest/calques/02_falaises_relief.png');
+    const dayObj = await loadImg('renders/cliff_nord_jour_anime_v1/cliffdaytest/calques/03_objets_vegetation.png');
+    const dayCasc = await loadImg('renders/cliff_nord_jour_anime_v1/cliffdaytest/calques/04_cascades_eau.png');
+    const dayProps = await loadImg('renders/cliff_nord_jour_anime_v1/cliffdaytest/calques/06_objets_decor.png');
+
+    state.nw = { ciel: nwCiel, nuages: nwNuages, mer: nwMer, terrain: nwTer, decor: nwDec };
+    state.day = { ciel: dayCiel, nuages: dayNuages, mer: dayMer, terrain: dayTer, obj: dayObj, casc: dayCasc, props: dayProps };
+    render();
+    setInterval(() => {
+      if (state.playing) {
+        state.step = (state.step + 1) % CLOUD_N;
+        document.getElementById('phase-slider').value = state.step;
+        render();
+      }
+    }, 167);
+  }
+
+  function render() {
+    const sp = state.step % SEA_N;
+    const cp = state.step % CLOUD_N;
+    document.getElementById('phase-label').textContent = `Phase ${pad(state.step)} (Mer ${pad(sp)} / Nuages ${pad(cp)})`;
+
+    if (state.nw) {
+      const c = document.getElementById('canvas-nw');
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      if (state.vis.ciel && state.nw.ciel) ctx.drawImage(state.nw.ciel, 0, 0);
+      if (state.vis.nuages && state.nw.nuages[cp]) ctx.drawImage(state.nw.nuages[cp], 0, 0);
+      if (state.vis.mer && state.nw.mer[sp]) ctx.drawImage(state.nw.mer[sp], 0, 0);
+      if (state.vis.terrain && state.nw.terrain) ctx.drawImage(state.nw.terrain, 0, 0);
+      if (state.vis.decor && state.nw.decor) ctx.drawImage(state.nw.decor, 0, 0);
+    }
+
+    if (state.day) {
+      const c = document.getElementById('canvas-day');
+      const ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      if (state.vis.ciel && state.day.ciel) ctx.drawImage(state.day.ciel, 0, 0);
+      if (state.vis.mer && state.day.mer[sp]) ctx.drawImage(state.day.mer[sp], 0, 0);
+      if (state.vis.terrain && state.day.terrain) ctx.drawImage(state.day.terrain, 0, 0);
+      if (state.vis.decor && state.day.obj) ctx.drawImage(state.day.obj, 0, 0);
+      if (state.vis.decor && state.day.casc) ctx.drawImage(state.day.casc, 0, 0);
+      if (state.vis.nuages && state.day.nuages[cp]) ctx.drawImage(state.day.nuages[cp], 0, 0);
+      if (state.vis.decor && state.day.props) ctx.drawImage(state.day.props, 0, 0);
+    }
+  }
+
+  document.getElementById('btn-play').addEventListener('click', e => {
+    state.playing = !state.playing;
+    e.target.textContent = state.playing ? '⏸ Pause' : '▶ Lecture';
+  });
+  document.getElementById('phase-slider').addEventListener('input', e => {
+    state.playing = false;
+    document.getElementById('btn-play').textContent = '▶ Lecture';
+    state.step = Number(e.target.value);
+    render();
+  });
+  document.querySelectorAll('.layer-toggle').forEach(cb => {
+    cb.addEventListener('change', e => {
+      state.vis[e.target.dataset.layer] = e.target.checked;
+      render();
+    });
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>

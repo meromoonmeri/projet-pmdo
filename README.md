@@ -1,5 +1,22 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Animation des nuages (16 phases) et de la mer (8 phases) — `cliffnordouesttest1.rsground` & `cliffdaytest.rsground` (3 octobre 2026)
+
+**Demande** : « Je veux que tu animes les nuages et la mer des layer du ground clifffnordrsground etc ». Animation des calques de mer (`v2_promontoire_jour_03.tile`, 8 phases canoniques `jour_mer_00..07.png`, `FrameLength = 10` ticks = `1,33 s`) et de nuages (`01_long_cap_jour_02.tile`, 16 phases de dérive éolienne multi-altitudes sans saut de boucle, `FrameLength = 10` ticks = `2,67 s`) pour les deux Grounds PMDO 0.8.12 fournis à la racine (`cliffnordouesttest1.rsground`, `138 × 98` cases = `1104 × 784` px, et `cliffdaytest.rsground`, `123 × 99` cases = `984 × 792` px), tout en gardant les deux fichiers racines immuables (SHA-256 vérifiés contre `exports/zones_bg_audit_v1/audit.json`).
+
+- **Sorties** : `renders/cliff_nord_jour_anime_v1/`, mod autonome `mod_cliff_nord_jour_pmdo_0812.zip`, archive complète `livrable_cliff_nord_jour_anime_v1.zip`, aperçu interactif `apercu_cliff_nord_jour_anime_v1.html`, script de mise à jour non destructif `renders/cliff_nord_jour_anime_v1/INSTALLER.py` (sauvegardes `.avant_anim.bak`), build `source/cliff_nord_jour_anime_v1/build.py`.
+- **`cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px)** :
+  - `00 Ciel (00_ciel)` : remplissage des 26 rangées hautes (`y = 0..25`) et harmonisation du dégradé bleu au-dessus de l'horizon marin (`y = 53`).
+  - `01 Cloud/nuage (16 phases)` (`01_long_cap_jour_02.tile`) : `556` cases animées sur 16 phases (`FrameLength = 10` ticks) réparties sur 3 bandes d'altitude (`y = 6..14`, `y = 22..30`, `y = 44..52`).
+  - `02 Mer animee (8 phases)` (`v2_promontoire_jour_03.tile`) : les `6 209` cases de mer passent de 1 frame statique aux 8 phases canoniques (`FrameLength = 10` ticks).
+  - `04 Chemins et cascade animee` (`Metano_Town_Animation_Tileset.tile`) : les `80` cases de cascade Métano (`x = 90..97, y = 88..97`) passent de 1 frame fixe à leurs 4 phases natives (`dx = 9, FrameLength = 10`).
+- **`cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px)** :
+  - `01 Mer animee (8 phases)` (`v2_promontoire_jour_03.tile`) : les `7 503` cases de mer passent de 1 frame statique aux 8 phases canoniques (`FrameLength = 10` ticks).
+  - `Cloud/nuage (16 phases)` (`01_long_cap_jour_02.tile`) : `774` cases animées sur 16 phases (`FrameLength = 10` ticks), conservant à 100 % les `600` tuiles de nuages d'origine en phase 0 (`y = 5..38`).
+  - `06 Objets Decor (ex-Cloud/nuage)` : séparation propre des `325` tuiles d'objets/décors (`Altere_Pond_Objects`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) qui étaient mélangées dans `Cloud/nuage`.
+  - `04 Cascades et eau animee` (`Metano_Town_Animation_Tileset.tile`) : nettoyage des `520` cases d'eau/cascades Métano (suppression des 12 frames vides `""`, restauration des phases intermédiaires `dx = 4 / 6 / 8 / 9`, `FrameLength = 10`).
+- **Contrôles** : **6/6 tests PASS** (`source/cliff_nord_jour_anime_v1/test_pipeline.py`), `art_approved: false`, `runtime_tested: false`.
+
 ## Mod PMDO 0.8.12 unique des 17 fins de donjon + FUL2 et FMF3 (3 octobre 2026)
 
 **Demande** : « alors ........... » (après FCV3, FMT3 et FJS4). Complétion sur cette branche des deux seules fins de donjon de la série d'entrées qui n'existaient que sur des branches sœurs non fusionnées — **Fin Underground Lake V2 (`FUL2`)** et **Fin Mystifying Forest V3 (`FMF3`)**, créées sans aucun emprunt aux branches sœurs —, puis assemblage du **mod PMDO 0.8.12 unique des 17 fins de donjon** (`guilde_fins_donjons_pmdo_0812.zip`, `28,6 Mo`, `164` banques de tuiles, galerie `apercu_mod_guilde_fins_v1.html`).

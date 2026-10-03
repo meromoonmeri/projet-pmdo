@@ -1,0 +1,85 @@
+{
+  "lot": "cliff_nord_jour_anime_v1",
+  "pmdo_version": "0.8.12.0",
+  "namespace": "cliff_nord_jour",
+  "art_approved": false,
+  "runtime_tested": false,
+  "originals_preserved_immutable": {
+    "cliffnordouesttest1.rsground": "2cb10918d6bfa8ed687c1412b2d2e7c4aebc545049b9d2d76eb7c16fdb632f19",
+    "cliffdaytest.rsground": "6567e19df7a073758d8d52ad1491460067a2dccc1c0d03aa0d1c72b5592e4d2f"
+  },
+  "sea_animation": {
+    "sheet": "v2_promontoire_jour_03",
+    "phases": 8,
+    "frame_length_ticks": 10,
+    "loop_ticks": 80,
+    "source_files": [
+      "sprites/cote_dix_zones/fonds/jour_mer_00.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_01.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_02.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_03.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_04.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_05.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_06.png",
+      "sprites/cote_dix_zones/fonds/jour_mer_07.png"
+    ],
+    "unique_tiles_in_bank": 18565
+  },
+  "cloud_animation": {
+    "sheet": "01_long_cap_jour_02",
+    "phases": 16,
+    "frame_length_ticks": 10,
+    "loop_ticks": 160,
+    "source_file": "sprites/cote_dix_zones/fonds/jour_nuages.png",
+    "motion": "derive eolienne sinusoidale multi-altitude sans saut de boucle (-10 px, +12 px, -8 px)",
+    "unique_tiles_in_bank": 1584
+  },
+  "maps": {
+    "cliffnordouesttest1": {
+      "grid_8px": [
+        138,
+        98
+      ],
+      "size_px": [
+        1104,
+        784
+      ],
+      "sea_animated_cells": 6209,
+      "cloud_animated_cells": 556,
+      "cascade_animated_cells": 80,
+      "layers": [
+        "00 Ciel (00_ciel)",
+        "01 Cloud/nuage (16 phases)",
+        "02 Mer animee (8 phases)",
+        "03 Falaises et promontoire",
+        "04 Chemins et cascade animee"
+      ],
+      "sha256": "3e662b3b7b1c544010950a73e17b2d4065d5ddd3d91877bb8bf0ee49bb5d4b3d"
+    },
+    "cliffdaytest": {
+      "grid_8px": [
+        123,
+        99
+      ],
+      "size_px": [
+        984,
+        792
+      ],
+      "sea_animated_cells": 7503,
+      "cloud_animated_cells": 774,
+      "cloud_phase0_preserved_tiles": 600,
+      "props_separated_from_cloud_layer": 325,
+      "cascade_animated_cells": 520,
+      "layers": [
+        "00 Ciel (00_ciel)",
+        "01 Mer animee (8 phases)",
+        "02 Falaises et relief",
+        "03 Objets et vegetation",
+        "04 Cascades et eau animee",
+        "Cloud/nuage (16 phases)",
+        "06 Objets Decor (ex-Cloud/nuage)"
+      ],
+      "sha256": "08dbb2dec5f11455dfc40fe6d8535b4a715c8bfcc843b8a98730a73d49b1f370"
+    }
+  }
+}
