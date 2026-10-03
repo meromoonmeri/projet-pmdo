@@ -1233,5 +1233,14 @@ Pas de runtime. Pas dans le mod unique.
 - **Recoloration de la jungle et comblement des coins sur le premier essai** : le premier jet (`bruts/ecartes/decor_magenta_essai1_jungle_sombre.png`) avait une jungle trop sombre (`dist = 46,8 > 35`) et quatre coins extérieurs en aplat vert sombre. Une passe d'édition à deux références (`[essai1, S01P03A]`) a garni les quatre coins de feuillage et ramené la jungle à `16,8 < 35` tout en conservant le layout exact.
 - **Séparation `tertre` / `autel` et regroupement `close_(diff > 26, 4)` des palmiers** : fermer de 4 px l'écart décor/témoin relie le houppier et le tronc du cocotier nord-est en une seule composante (`6` palmiers exacts), et isoler la boîte centrale `(y = 130..258, x = 552..648)` du massif rocheux nord place l'autel-sanctuaire de pierre sculptée sur son propre calque `autel`.
 
+## Fins Couloir violet V3 (FCV3), Mt. Thunder V3 (FMT3) et Jardin secret V2 (FJS4), ajouts à la recette
+
+- **Préfixes anti-collision** : `FCV3` (`FCV1`/`FCV2` pris sur `01a0eaca`/`01a0f7e8`), `FMT3` (`FMT1`/`FTN1` pris sur `01a0eaca`/`01a0f697`) et `FJS4` (`FJS3`/`FGS1` pris sur `01a0eaca`/`01a0ed06`).
+- **Réutilisation sans nouvelle génération des bruts constants d'entrée** :
+  - `FCV3` réutilise `sol_complet.png` et `poussiere_poses.png` d'`ECV1` (même `sha256`, un seul brut `decor.png` généré en éditant `ECV1/bruts/decor.png` + le rip `S05P03A` pour fermer l'arche nord par une paroi striée et un monolithe rocheux).
+  - `FMT3` réutilise `sol_complet.png` d'`EMT1` (même `sha256`, un seul brut `decor.png` généré en éditant `EMT1/bruts/decor.png` + la planche `Mt. Thunder` pour fermer la grotte nord par une couronne rocheuse à trois aiguilles `piton`, fidèle à la vraie salle de boss de la planche). Dans `FMT3`, exclure de `sandc` les flancs éclairés jaune-beige des deux pics latéraux de la couronne nord (`x = 485..548` et `652..715, y < 185`) pour que toute la couronne appartienne à `piton` (bloquée) et que le marqueur `objectif` reste centré (`[376, 128]`).
+  - `FJS4` réutilise par chemin les bruts d'`EJS1` (`decor.png`, `temoin_sans_objets.png`, `sol_complet.png`) et colle localement dans `WIN` la seule zone de la stèle sanctuaire fermée de Celebi issue de `decor_sanctuaire.png` (`8 185` px). Attention au rapport d'aspect quand la seconde image de référence est carrée (`secretgarden.png` `440 × 440`) : rappeler explicitement `Wide landscape 4:3 (1200x896)` en début et fin de prompt (le premier jet sorti en `1024 × 1024` est archivé dans `bruts/ecartes/`).
+
+
 
 

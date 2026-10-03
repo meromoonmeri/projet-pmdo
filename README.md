@@ -1,5 +1,40 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fins de donjon Couloir violet (FCV3), Mt. Thunder (FMT3) et Jardin secret (FJS4) (3 octobre 2026)
+
+**Demande** : « bon avance » (après FCT2). Réalisation des **trois dernières fins de donjon de la série** dans l'ordre du mod, prolongeant respectivement ECV1 (Couloir violet), EMT1 (Mt. Thunder) et EJS1/EJS2 (Jardin secret). Biomes et portées choisis par l'agent, **à confirmer**. Préfixes choisis sans aucune collision avec les branches sœurs : **FCV3** (`FCV1` et `FCV2` sont pris), **FMT3** (`FMT1` et `FTN1` sont pris) et **FJS4** (`FJS3` et `FGS1` sont pris).
+
+### 1. Fin Jardin secret V2 : stèle sanctuaire fermée de Celebi, FJS4
+
+- Sorties : `renders/fin_jardin_secret_v2/`, aperçu `apercu_fin_jardin_secret_v2.html`, build `source/fin_jardin_secret_v2/build.py`. Paquets : `FJS4_projet_pmdo_0812.zip` (`1,20 Mo`) et `FJS4_calques_png_8px.zip` (`4,22 Mo`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur le décor d'EJS1 et `secretgarden.png` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : arène 4:3 (`768 × 576` px, `96 × 72` cases de 8 px) ; arrivée au sud dans l'allée d'herbe (`entrance` à `[384, 560]`), grande prairie fleurie (`boss` à `[376, 280]`), et au nord, sur la souche dorée baignée par le rayon de lumière verte, une **stèle sanctuaire de pierre fermée** (sans trou ni porte) ornée d'un emblème de Celebi en relief (`objectif` à `[376, 128]` sur les marches au pied de la stèle) ; aucune sortie, aucun warp.
+- **Collage local** : un premier jet en `1024 × 1024` (`bruts/ecartes/decor_sanctuaire_essai1_1024x1024.png`) a été écarté ; le second jet en `1200 × 896` (`recalage` hors souche `3,94` à `(0, 0)`) fournit la seule zone de la stèle sanctuaire (`8 185` px collés sur le décor d'EJS1). Témoin et sol complet d'EJS1 réutilisés.
+- **Calques** : `sol_complet`, `prairie`, `herbe`, `ombres`, `fleurs`, `rochers`, `arbres`, `haies`, `souche`, `sanctuaire`, `marches`, `fond`, `embleme` (`24 × 5` ticks), `rayon` (`24 × 5` ticks), `lucioles` (`24 × 5` ticks), plus un Top vide (`Layer=4`). Pas de calque `profondeur`.
+- **Fidélité** (seuil 35) : fond `9,9` (final `11,7`), herbe claire `8,7` (final `30,5`), herbe `8,5` (final `8,1`, ombres `2,2`), roche `23,1` (final `23,0`), sol complet `11,0`.
+- **Contrôles** : 13 tests PASS.
+
+### 2. Fin Mt. Thunder V3 : sommet d'orage de l'aiguille rocheuse, FMT3
+
+- Sorties : `renders/fin_mt_thunder_v3/`, aperçu `apercu_fin_mt_thunder_v3.html`, build `source/fin_mt_thunder_v3/build.py`. Paquets : `FMT3_projet_pmdo_0812.zip` (`1,15 Mo`) et `FMT3_calques_png_8px.zip` (`2,65 Mo`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : sommet fermé 4:3 (`768 × 576` px) ; arrivée au sud sur la crête de sable (`entrance` à `[384, 560]`), plateau de sable à deux gradins (`boss` à `[376, 192]`), et au nord une **couronne rocheuse sommitale à trois aiguilles** (`piton`) dominant la mer d'orage sans grotte sombre (`objectif` à `[376, 128]` au pied de l'aiguille centrale), fidèle à la vraie salle de boss de Mt. Thunder Peak ; aucune sortie, aucun warp.
+- **Calques** : `sol_complet` (réutilisé d'EMT1, même `sha256`), `sable`, `cailloux`, `pics`, `falaise`, `piton`, `ciel`, `nuages`, `lueurs` (`48 × 5` ticks), `eclairs` (`48 × 5` ticks), plus un Top vide (`Layer=4`). Pas de `profondeur` ni de `seuil`.
+- **Cohérence avec l'entrée EMT1** : les 4 éclairs, l'arc « Flash » et les couleurs *Normal* / *Fading* sont relevés pixel par pixel au bas de la planche (fonctions d'EMT1 partagées via `loadmod`).
+- **Fidélité** (seuil 35) : sable `6,6` (final `7,6`), roche `16,2` (final `16,2`), ciel `10,7` (final `13,3`), nuages sombres `14,1` (final `13,2`), nuages clairs `14,2` (final `15,2`).
+- **Contrôles** : 10 tests PASS.
+
+### 3. Fin Couloir violet V3 : salle du monolithe rocheux, FCV3
+
+- Sorties : `renders/fin_couloir_violet_v3/`, aperçu `apercu_fin_couloir_violet_v3.html`, build `source/fin_couloir_violet_v3/build.py`. Paquets : `FCV3_projet_pmdo_0812.zip` (`1,92 Mo`) et `FCV3_calques_png_8px.zip` (`5,86 Mo`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `large.S05P03A.png.23718d3ffd2fd25e79ccfb3fbbe2fa73.png` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : salle souterraine fermée 4:3 (`768 × 576` px) ; arrivée au sud par un goulet rocheux (`entrance` à `[392, 560]`), grande salle ovale parsemée de six amas de rochers et de gravillons (`boss` à `[384, 312]`), et au nord un **monolithe rocheux dressé** sur son socle de pierre contre la falaise striée fermée, sans arche sombre (`objectif` à `[376, 120]` au pied du monolithe) ; aucune sortie, aucun warp.
+- **Calques** : `sol_complet` (réutilisé d'ECV1, même `sha256`), `sol`, `ombres`, `gravillons`, `blocs`, `rochers`, `falaise`, `vide`, `eboulis` (`24 × 5` ticks), `poussiere` (`24 × 5` ticks), plus un Top vide (`Layer=4`). Pas de `profondeur`.
+- **Cohérence avec l'entrée ECV1** : les 3 gravillons d'éboulis relevés sur le rip et la planche `poussiere_poses.png` d'ECV1 (même `sha256`) sont partagés via `loadmod`.
+- **Fidélité** (seuil 35) : sol `10,7` (final `14,3`), roche `11,2` (final rochers `14,0`, blocs `23,1`).
+- **Contrôles** : 12 tests PASS.
+- Toutes les fins de donjon de la série ouverte sur cette branche (`FSM1`, `FST1`, `FCT2`, `FCV3`, `FMT3`, `FJS4`, plus `FFB1`) sont désormais complètes.
+
 ## Fin Clairière tropicale V2 : arène du sanctuaire du lagon, FCT2 (3 octobre 2026)
 
 **Demande** : « passons a la suite » (après la trilogie Forêt Brumeuse EFB1/FFB1/ZFB1). Reprise de la série des fins de donjon restantes dans l'ordre du mod : **FCT2** prolonge l'entrée ETC1 (Clairière tropicale). Biome et portée choisis par l'agent, **à confirmer**. Préfixe **FCT2** (`FTC1`, `FCT1`, `FCL1` et `FCL2` sont déjà pris sur des branches sœurs non fusionnées).
