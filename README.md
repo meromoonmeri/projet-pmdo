@@ -1,5 +1,33 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Mod PMDO 0.8.12 unique des 17 fins de donjon + FUL2 et FMF3 (3 octobre 2026)
+
+**Demande** : « alors ........... » (après FCV3, FMT3 et FJS4). Complétion sur cette branche des deux seules fins de donjon de la série d'entrées qui n'existaient que sur des branches sœurs non fusionnées — **Fin Underground Lake V2 (`FUL2`)** et **Fin Mystifying Forest V3 (`FMF3`)**, créées sans aucun emprunt aux branches sœurs —, puis assemblage du **mod PMDO 0.8.12 unique des 17 fins de donjon** (`guilde_fins_donjons_pmdo_0812.zip`, `28,6 Mo`, `164` banques de tuiles, galerie `apercu_mod_guilde_fins_v1.html`).
+
+### 1. Mod unique des 17 fins de donjon (`mod_guilde_fins_v1`)
+
+- Sorties : `renders/mod_guilde_fins_v1/guilde_fins_donjons_pmdo_0812.zip` (`28,6 Mo`, reproductible à horodatage fixe), `renders/mod_guilde_fins_v1/planche_cartes.png`, `renders/mod_guilde_fins_v1/manifest.json`, galerie interactive `apercu_mod_guilde_fins_v1.html`, build `source/mod_guilde_fins_v1/build_mod.py`.
+- **Contenu** : regroupe dans un seul namespace `guilde_fins_donjons` les **17 Grounds 4:3 (`768 × 576` px)** de fin de donjon qui prolongent la série des entrées (`guilde_entrees_sud_nord` + `EFB1`) :
+  `FVS1`, `FCF1`, `FRP1`, `FGG1`, `FGG2`, `FBS1`, `FJS1`, `FWC1`, `FUL2`, `FMF3`, `FSM1`, `FST1`, `FCT2`, `FCV3`, `FMT3`, `FJS4` et `FFB1` (`FOC1`, arène sous-marine autonome, reste hors mod unique comme indiqué dans sa section).
+- **Méthode** : chaque banque `.tile` (`164` banques au total) et chaque Ground `.rsground` sont copiés **octet pour octet** depuis le ZIP projet versionné de son lot (`renders/<lot>/<PFX>_projet_pmdo_0812.zip`) ; `Content/Tile/index.idx` fusionne les 164 nœuds ; `INSTALLER.py` permet l'installation dans un mod existant avec `--dry-run` et fusion d'index.
+- **Contrôles** : **6/6 tests PASS** (`source.mod_guilde_fins_v1.test_mod`).
+
+### 2. Fin Underground Lake V2 : sanctuaire du lac souterrain, FUL2
+
+- Sorties : `renders/fin_underground_lake_v2/`, aperçu `apercu_fin_underground_lake_v2.html`, build `source/fin_underground_lake_v2/build.py`. Paquets : `FUL2_projet_pmdo_0812.zip` et `FUL2_calques_png_8px.zip`. Préfixe **FUL2** (`FUL1` étant pris sur `01a0ea8f` et `01a0eaca`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Underground_Lake_shore_TDS.png` et `EUL1` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : caverne lacustre fermée 4:3 (`768 × 576` px) ; arrivée au sud sur la plage de sable (`entrance` à `[384, 560]`), chaussée de sable centrale (`boss` à `[376, 336]`) traversant le lac souterrain entre les deux grands piliers et les stalagmites jusqu'à un **autel-sanctuaire de pierre sculptée d'une spirale** adossé à la paroi nord fermée, sans tunnel sombre (`objectif` à `[376, 128]`).
+- **Calques & animations (120 ticks = 2 s)** : `sol_complet` et `gouttes_ronds_poses.png` d'EUL1 réutilisés ; `sable`, `ombres`, `berge`, `roche`, `piliers`, `sanctuaire`, `eau` (`4 × 10` ticks, couleurs exactes du rip sans liseré clair), `lueur` (`12 × 10` ticks, 9 couleurs exactes du rip), `scintillements` (`4 × 10` ticks), `gouttes` (`24 × 5` ticks).
+- **Fidélité** (seuil 35) : sable `9,6`, roche `6,2` ; **13/13 tests PASS**.
+
+### 3. Fin Mystifying Forest V3 : sanctuaire sylvestre, FMF3
+
+- Sorties : `renders/fin_mystifying_forest_v3/`, aperçu `apercu_fin_mystifying_forest_v3.html`, build `source/fin_mystifying_forest_v3/build.py`. Paquets : `FMF3_projet_pmdo_0812.zip` et `FMF3_calques_png_8px.zip`. Préfixe **FMF3** (`FMF1` et `FMF2` étant pris sur `01a0eaca`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Mystifying_Forest_entrance_TDS.png` et `EMF1` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : clairière fermée 4:3 (`768 × 576` px) ; arrivée au sud sur le chemin de terre (`entrance` à `[384, 560]`), chemin dédoublé autour du grand arbre central (`boss` à `[376, 280]`), mare à l'ouest, et au nord une **stèle-sanctuaire moussue gravée** devant le rideau d'arbres géants fermé, sans trou noir (`objectif` à `[376, 136]`).
+- **Calques & animations (240 ticks = 4 s)** : `sol_complet` et `feuilles_lucioles_poses.png` d'EMF1 réutilisés ; `herbe`, `chemin`, `herbes_hautes`, `rochers`, `sanctuaire`, `arbres`, `eau` (`4 × 10` ticks, Métano exacte sans liseré), `scintillements` (`4 × 10` ticks), `feuilles` (`48 × 5` ticks), `lucioles` (`48 × 5` ticks).
+- **Fidélité** (seuil 35) : herbe `7,2`, chemin `9,5`, feuillage sombre `2,5`, roche/racines `13,8` ; **12/12 tests PASS**.
+
 ## Fins de donjon Couloir violet (FCV3), Mt. Thunder (FMT3) et Jardin secret (FJS4) (3 octobre 2026)
 
 **Demande** : « bon avance » (après FCT2). Réalisation des **trois dernières fins de donjon de la série** dans l'ordre du mod, prolongeant respectivement ECV1 (Couloir violet), EMT1 (Mt. Thunder) et EJS1/EJS2 (Jardin secret). Biomes et portées choisis par l'agent, **à confirmer**. Préfixes choisis sans aucune collision avec les branches sœurs : **FCV3** (`FCV1` et `FCV2` sont pris), **FMT3** (`FMT1` et `FTN1` sont pris) et **FJS4** (`FJS3` et `FGS1` sont pris).
