@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
-"""Installe ou met a jour les calques animes de nuages et de mer pour
-cliffnordouesttest1.rsground et cliffdaytest.rsground dans un mod PMDO 0.8.12 existant.
-
-- Sauvegarde automatiquement (.avant_anim.bak) les fichiers .rsground, .tile et index.idx
-  existants avant de les mettre a jour.
-- Ne remplace JAMAIS vos autres feuilles .tile personnalisees (terrain, INVERSEPATHWAY, etc.).
-- Reconstruit Content/Tile/index.idx avec les nouvelles banques animees.
-
-Usage :
-  python INSTALLER.py "CHEMIN/VERS/PMDO/MODS/VOTRE_MOD" --dry-run
-  python INSTALLER.py "CHEMIN/VERS/PMDO/MODS/VOTRE_MOD"
+"""Installer standard-library-only. Never overwrites maps/graphics with different bytes.
+Merges the native tile index; backs up an existing index before changing it.
+Close PMDO first. Usage: python INSTALLER.py /path/to/PMDO/MODS/my_mod
 """
 import argparse
+import io
+import os
 from pathlib import Path
+import re
 import shutil
 import struct
-
-CORE_TILES = {'00_ciel.tile', '01_long_cap_jour_02.tile', 'v2_promontoire_jour_03.tile'}
-CORE_GROUNDS = {'cliffnordouesttest1.rsground', 'cliffdaytest.rsground'}
+import tempfile
+import xml.etree.ElementTree as ET
 
 
 def exact(stream, size):
@@ -59,10 +53,14 @@ def read_index(path):
         return {}
     with path.open('rb') as f:
         count = struct.unpack('<i', exact(f, 4))[0]
+        if not 0 <= count <= 100_000:
+            raise ValueError('Index PMDO invalide')
         nodes = {}
         for _ in range(count):
             name = read_string(f)
             nodes[name] = read_node(f)
+        if f.read(1):
+            raise ValueError('Format index inattendu : installation annulee')
         return nodes
 
 
@@ -70,65 +68,73 @@ def encode_index(nodes):
     return struct.pack('<i', len(nodes)) + b''.join(write_string(k) + nodes[k] for k in sorted(nodes))
 
 
-def install(source, target, dry_run=False):
-    source, target = Path(source).resolve(), Path(target).resolve()
-    if not (target / 'Mod.xml').is_file():
-        raise ValueError('Choisir la racine du mod contenant Mod.xml.')
-
-    updates = []
-    for tname in sorted(CORE_TILES):
-        src = source / 'Content/Tile' / tname
-        if src.is_file():
-            updates.append((src, target / 'Content/Tile' / tname, True))
-    for src in sorted((source / 'Content/Tile').glob('*.tile')):
-        if src.name not in CORE_TILES:
-            dst = target / 'Content/Tile' / src.name
-            if not dst.exists():
-                updates.append((src, dst, False))
-    for src in sorted((source / 'Content/BG').glob('*.dir')):
-        updates.append((src, target / 'Content/BG' / src.name, True))
-    for gname in sorted(CORE_GROUNDS):
-        src = source / 'Data/Ground' / gname
-        if not src.is_file():
-            src = source / gname
-        if src.is_file():
-            updates.append((src, target / 'Data/Ground' / gname, True))
-
-    print(f'{len(updates)} fichiers a installer/mettre a jour dans {target}')
-    if dry_run:
-        for src, dst, _ in updates:
-            print('  [DRY-RUN]', dst.relative_to(target))
-        return
-
-    for src, dst, overwrite in updates:
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        if dst.exists():
-            if not overwrite:
+def install(source, target, dry_run=False, namespace=None):
+    source, target = source.resolve(), target.resolve()
+    header = target / 'Mod.xml'
+    if not header.is_file():
+        raise ValueError('Choisir la racine du mod contenant Mod.xml, pas la racine de PMDO.')
+    if namespace is None:
+        namespace = ET.parse(header).getroot().findtext('Namespace')
+    if namespace and not re.fullmatch(r'[A-Za-z0-9_]+', namespace):
+        raise ValueError('Namespace invalide : utiliser --namespace avec le nom Lua du mod.')
+    copies = {}
+    for top in ['Data', 'Content']:
+        for src in (source / top).rglob('*'):
+            if not src.is_file():
                 continue
-            if dst.read_bytes() != src.read_bytes():
-                bak = dst.with_suffix(dst.suffix + '.avant_anim.bak')
-                if not bak.exists():
-                    shutil.copy2(dst, bak)
-        shutil.copy2(src, dst)
-
-    idx_path = target / 'Content/Tile/index.idx'
-    nodes = read_index(idx_path)
+            relative = src.relative_to(source)
+            # Keep legacy scripts and provide a namespaced copy for recent PMDO.
+            copies[target / relative] = src
+            if namespace and relative.parts[:3] == ('Data', 'Script', 'ground'):
+                copies[target / 'Data/Script' / namespace / Path(*relative.parts[2:])] = src
+    if not copies or not list((source / 'Data/Ground').glob('*.rsground')):
+        raise ValueError('Extraire tout le ZIP avant de lancer INSTALLER.py.')
+    conflicts = [str(dst) for dst, src in copies.items()
+                 if dst.exists() and (not dst.is_file() or dst.read_bytes() != src.read_bytes())]
+    if conflicts:
+        raise ValueError('Aucun fichier copie. Conflits (cartes editees protegees) :\n' + '\n'.join(conflicts))
+    index = target / 'Content/Tile/index.idx'
+    nodes = read_index(index)  # Validate before copying anything.
     for tile in sorted((target / 'Content/Tile').glob('*.tile')):
         with tile.open('rb') as f:
             nodes[tile.stem] = read_node(f)
-    new_idx = encode_index(nodes)
-    if idx_path.exists() and idx_path.read_bytes() != new_idx:
-        bak = idx_path.with_suffix('.idx.avant_anim.bak')
-        if not bak.exists():
-            shutil.copy2(idx_path, bak)
-    idx_path.parent.mkdir(parents=True, exist_ok=True)
-    idx_path.write_bytes(new_idx)
-    print(f'Installation terminee : index.idx mis a jour ({len(nodes)} feuilles .tile).')
+    for src in sorted((source / 'Content/Tile').glob('*.tile')):
+        with src.open('rb') as f:
+            nodes[src.stem] = read_node(f)
+    new_index = encode_index(nodes)
+    print(f'{len(copies)} fichiers proposes; index fusionne : {len(nodes)} tilesets.')
+    print('Namespace :', namespace or 'aucun explicite (scripts legacy; voir README)')
+    if dry_run:
+        print('Simulation terminee : aucun fichier modifie.')
+        return
+    for dst, src in copies.items():
+        if not dst.exists():
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            # Exclusive creation also protects against changes during installation.
+            with dst.open('xb') as f, src.open('rb') as incoming:
+                shutil.copyfileobj(incoming, f)
+    index.parent.mkdir(parents=True, exist_ok=True)
+    if index.exists() and index.read_bytes() != new_index:
+        with tempfile.NamedTemporaryFile(prefix='index.avant_cote_v2.', suffix='.bak',
+                                         dir=index.parent, delete=False) as backup:
+            backup.write(index.read_bytes())
+            print('Sauvegarde index :', backup.name)
+    if not index.exists() or index.read_bytes() != new_index:
+        with tempfile.NamedTemporaryFile(prefix='index.cote_v2.', suffix='.tmp',
+                                         dir=index.parent, delete=False) as f:
+            f.write(new_index)
+            tmp = f.name
+        os.replace(tmp, index)
+    print('Installation terminee. Relancer PMDO, activer ce mod, puis ouvrir les Ground maps.')
 
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument('target', help='Chemin du mod PMDO cible (dossier contenant Mod.xml)')
-    ap.add_argument('--dry-run', action='store_true')
-    args = ap.parse_args()
-    install(Path(__file__).resolve().parent, Path(args.target), args.dry_run)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('mod', type=Path)
+    parser.add_argument('--namespace', help='Namespace Lua si absent de Mod.xml (PMDO recent)')
+    parser.add_argument('--dry-run', action='store_true')
+    args = parser.parse_args()
+    try:
+        install(Path(__file__).resolve().parent, args.mod, args.dry_run, args.namespace)
+    except (ValueError, OSError, ET.ParseError) as exc:
+        parser.exit(1, f'Installation arretee : {exc}\n')

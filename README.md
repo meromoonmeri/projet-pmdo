@@ -1,21 +1,22 @@
 # Guilde Treehouse — passages ouverts PMD
 
-## Animation des nuages (16 phases) et de la mer (8 phases) — `cliffnordouesttest1.rsground` & `cliffdaytest.rsground` (3 octobre 2026)
+## Animation canonique PMD Sky Port de la mer (10 phases) & Wrap Nuages — `cliffnordouesttest1.rsground` & `cliffdaytest.rsground` (4 octobre 2026)
 
-**Demande** : « Je veux que tu animes les nuages et la mer des layer du ground clifffnordrsground etc ». Animation des calques de mer (`v2_promontoire_jour_03.tile`, 8 phases canoniques `jour_mer_00..07.png`, `FrameLength = 10` ticks = `1,33 s`) et de nuages (`01_long_cap_jour_02.tile`, 16 phases de dérive éolienne multi-altitudes sans saut de boucle, `FrameLength = 10` ticks = `2,67 s`) pour les deux Grounds PMDO 0.8.12 fournis à la racine (`cliffnordouesttest1.rsground`, `138 × 98` cases = `1104 × 784` px, et `cliffdaytest.rsground`, `123 × 99` cases = `984 × 792` px), tout en gardant les deux fichiers racines immuables (SHA-256 vérifiés contre `exports/zones_bg_audit_v1/audit.json`).
+**Demande** : « non fallait pas toucher au layer qui constitue le cliff et les objet et leurs animation seulement les nuage activé le wrap overlay et animée la mer c'est tout canoniquement a pmd sky recommence (pour lanimation de la mer regarde dans pmd sky portà ». Reprise complète de l'animation de `cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px) et `cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px) :
 
-- **Sorties** : `renders/cliff_nord_jour_anime_v1/`, mod autonome `mod_cliff_nord_jour_pmdo_0812.zip`, archive complète `livrable_cliff_nord_jour_anime_v1.zip`, aperçu interactif `apercu_cliff_nord_jour_anime_v1.html`, script de mise à jour non destructif `renders/cliff_nord_jour_anime_v1/INSTALLER.py` (sauvegardes `.avant_anim.bak`), build `source/cliff_nord_jour_anime_v1/build.py`.
-- **`cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px)** :
-  - `00 Ciel (00_ciel)` : remplissage des 26 rangées hautes (`y = 0..25`) et harmonisation du dégradé bleu au-dessus de l'horizon marin (`y = 53`).
-  - `01 Cloud/nuage (16 phases)` (`01_long_cap_jour_02.tile`) : `556` cases animées sur 16 phases (`FrameLength = 10` ticks) réparties sur 3 bandes d'altitude (`y = 6..14`, `y = 22..30`, `y = 44..52`).
-  - `02 Mer animee (8 phases)` (`v2_promontoire_jour_03.tile`) : les `6 209` cases de mer passent de 1 frame statique aux 8 phases canoniques (`FrameLength = 10` ticks).
-  - `04 Chemins et cascade animee` (`Metano_Town_Animation_Tileset.tile`) : les `80` cases de cascade Métano (`x = 90..97, y = 88..97`) passent de 1 frame fixe à leurs 4 phases natives (`dx = 9, FrameLength = 10`).
-- **`cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px)** :
-  - `01 Mer animee (8 phases)` (`v2_promontoire_jour_03.tile`) : les `7 503` cases de mer passent de 1 frame statique aux 8 phases canoniques (`FrameLength = 10` ticks).
-  - `Cloud/nuage (16 phases)` (`01_long_cap_jour_02.tile`) : `774` cases animées sur 16 phases (`FrameLength = 10` ticks), conservant à 100 % les `600` tuiles de nuages d'origine en phase 0 (`y = 5..38`).
-  - `06 Objets Decor (ex-Cloud/nuage)` : séparation propre des `325` tuiles d'objets/décors (`Altere_Pond_Objects`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) qui étaient mélangées dans `Cloud/nuage`.
-  - `04 Cascades et eau animee` (`Metano_Town_Animation_Tileset.tile`) : nettoyage des `520` cases d'eau/cascades Métano (suppression des 12 frames vides `""`, restauration des phases intermédiaires `dx = 4 / 6 / 8 / 9`, `FrameLength = 10`).
-- **Contrôles** : **6/6 tests PASS** (`source/cliff_nord_jour_anime_v1/test_pipeline.py`), `art_approved: false`, `runtime_tested: false`.
+- **Sorties** : `renders/cliff_nord_jour_anime_v1/`, archive PMDO `renders/cliff_nord_jour_anime_v1/cliff_nord_jour_anime_pmdo_0812.zip` (copiée à la racine sous `livrable_cliff_nord_jour_anime_v1.zip`), aperçu interactif `apercu_cliff_nord_jour_anime_v1.html`, fusionneur d'index non destructif `renders/cliff_nord_jour_anime_v1/INSTALLER.py`, build `source/cliff_nord_jour_anime_v1/build.py`.
+- **Calques de falaise, d'objets et d'animations 100 % intacts (`assert out == orig`)** :
+  - Dans `cliffnordouesttest1.rsground` : `Layers[2]` (`New Layer`) et `Layers[3]` (`Layer 3`) sont **strictement identiques octet pour octet** à l'original (ainsi que la case `Altere_Pond_Cliffs` sur `Layers[1]`), sans aucun renommage ni ajout de calque.
+  - Dans `cliffdaytest.rsground` : `Layers[2]` (`Layer 2`), `Layers[3]` (`Layer 4`), `Layers[4]` (`Layer 3`), les `5` cases `Altere_Pond_Cliffs` / `CanyonCamp` sur `Layers[0]` et les **`325` cases d'objets** (`Altere_Pond_Objects`, `Altere_Pond_Objects_Under`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) sur `Layers[5]` (`Cloud/nuage`) restent **strictement identiques octet pour octet** à leur place d'origine.
+  - Aucune banque `.tile` proxy/factice n'est générée pour les falaises ou les objets : seule `Content/Tile/v2_promontoire_jour_03.tile` est livrée.
+- **Nuages : uniquement le wrap overlay activé (`LayeredBG` / `MapBG`)** :
+  - `Object["Background"]` est configuré en `RogueEssence.Dungeon.LayeredBG, RogueEssence` avec le ciel fixe (`CLIFF_NORD_OUEST_CIEL` / `CLIFF_DAY_CIEL`, `RepeatX = false`, `BGMovement = (0, 0)`, `Parallax = "1, 1"`) suivi du calque de nuages en wrap horizontal (`CLIFF_NORD_OUEST_NUAGES` / `CLIFF_DAY_NUAGES`, `RepeatX = true`, `RepeatY = false`, `BGMovement = (-4, 0)`, `Parallax = "1, 1"`).
+  - Les tuiles statiques `00_ciel` sur `Layers[0]` et `01_long_cap_jour_02` sur `Layers[5]` sont vidées pour que le `LayeredBG` soit visible derrière les calques de tuiles sans doublon statique.
+- **Mer (`Layers[1]`) : animation canonique PMD Sky Port (`source/falaises_cotieres_nues/reference_ciel_mer.png`, Pelipper Post Office)** :
+  - Extrait les **5 bandes `far_sea`** (`(544+56*f, 224, 592+56*f, 352)`, `48 × 128` px) et les **10 bandes `near_sea`** (`(824+56*f, 224, 872+56*f, 392)`, `48 × 168` px) de `reference_ciel_mer.png`.
+  - Reconstruit les **10 phases canoniques `1312 × 1024` px** dans le repère exact de `v2_promontoire_jour_03` (`0` pixel d'écart en phase 0 face à `sprites/cote_dix_zones/fonds/jour_mer_00.png`).
+  - Encode `Content/Tile/v2_promontoire_jour_03.tile` au format binaire natif `TileSheet` de RogueEssence (Phase 0 conservée aux coordonnées `(tx, ty)` exactes dans `ty = 0..127`, phases `1..9` dédupliquées dans `ty >= 128`, `534` motifs `8 × 8` uniques) et anime les `6 209` cases de mer de `cliffnordouesttest1.rsground` et les `7 503` cases de mer de `cliffdaytest.rsground` sur 10 phases (`FrameLength = 10` ticks à 60 Hz).
+- **Contrôles** : **7/7 tests PASS** (`source/cliff_nord_jour_anime_v1/test_pipeline.py`), `art_approved: false`, `runtime_tested: false`.
 
 ## Mod PMDO 0.8.12 unique des 17 fins de donjon + FUL2 et FMF3 (3 octobre 2026)
 

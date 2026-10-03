@@ -1,1035 +1,1193 @@
 #!/usr/bin/env python3
-"""Animate the clouds (nuages) and the sea (mer) on the Ground layers of
-cliffnordouesttest1.rsground and cliffdaytest.rsground for PMDO 0.8.12.
-
-- Keeps the root cliffnordouesttest1.rsground and cliffdaytest.rsground byte-identical
-  to commit 3d801c76 (as required by source/zones_bg_audit_v1/audit.py).
-- Animates the Sea layer (sheet 'v2_promontoire_jour_03') across all 8 canonical
-  palette-cycled ocean phases (jour_mer_00..07.png, FrameLength=10 ticks = 1.33s loop).
-- Animates the Clouds layer ('Cloud/nuage', sheet '01_long_cap_jour_02') across 16
-  seamless multi-altitude wind-drift phases (FrameLength=10 ticks = 2.67s loop),
-  preserving 100% of the user's cloud tiles at phase 0 in cliffdaytest and adding
-  a 3-tier canonical Guild/Sharpedo cloud layer above the horizon in cliffnordouesttest1.
-- Cleanly separates the 325 prop/object tiles that were mixed into 'Cloud/nuage'
-  in cliffdaytest onto their own 'Objets Decor (ex-Cloud/nuage)' layer so zero props
-  are lost.
-- Also animates the static/incomplete Metano_Town_Animation_Tileset cascade/water
-  tiles on Layer 3 of cliffnordouesttest1 (80 tiles -> 4 phases, FrameLength=10)
-  and Layer 4 of cliffdaytest (520 tiles -> clean 3/4-phase loops, FrameLength=10),
-  and configures LayeredBG (CLIFF_JOUR_CIEL, CLIFF_JOUR_ASTRES, CLIFF_JOUR_NUAGES).
 """
-from pathlib import Path
+Rebuild the canonical PMD Sky Port sea animation and cloud wrap overlay for:
+  - cliffnordouesttest1.rsground (138x98 cells = 1104x784 px)
+  - cliffdaytest.rsground        (123x99 cells = 984x792 px)
+
+Strict constraints enforced by this script:
+1. Root files `/cliffnordouesttest1.rsground` and `/cliffdaytest.rsground` remain
+   100% untouched (verified by SHA-256 before and after).
+2. NO cliff layer, object layer, or existing object/waterfall animation is modified,
+   renamed, split, or re-ordered:
+   - In `cliffnordouesttest1.rsground`:
+     * `Layers[2]` (`New Layer`: `terrain`, `Metano_Altere_Transition_Base`,
+       `terrain (4)`, `terrain (3)`, `terrain (2)`, `INVERSEPATHWAY`) is 100% untouched.
+     * `Layers[3]` (`Layer 3`: `INVERSEPATHWAY`, `Metano_Town_Animation_Tileset`) is 100% untouched.
+     * `Layers[1]` (`Layer 1`): the 1 cell `(10, 86)` referencing `Altere_Pond_Cliffs` is 100% untouched.
+   - In `cliffdaytest.rsground`:
+     * `Layers[2]` (`Layer 2`: `13_avancee_basse_gauche_terrain`, `Metano_Town_Cliffs`,
+       `INVERSEPATHWAY`, `CLIFF MIROR-Photoroom`) is 100% untouched.
+     * `Layers[3]` (`Layer 4`: `Metano_Town_Objects`) is 100% untouched.
+     * `Layers[4]` (`Layer 3`: `P01P01A_layer1`, `Metano_Town_Animation_Tileset`,
+       `CanyonCamp`, `Metano_Town_Animated`, `Metano_Town_Objects`) is 100% untouched.
+     * `Layers[0]` (`New Layer`): the 1 cell of `Altere_Pond_Cliffs` and 4 cells of
+       `CanyonCamp` are 100% untouched.
+     * `Layers[5]` (`Cloud/nuage`): all 325 object cells (`Altere_Pond_Objects`,
+       `Altere_Pond_Objects_Under`, `Metano_Town_Objects`, `Metano_Town_Trimmed`,
+       `Metano_Inn_Objects`) remain 100% untouched in place on `Layers[5]`.
+   - No `.tile` files are generated for cliff/terrain/object sheets: ONLY
+     `Content/Tile/v2_promontoire_jour_03.tile` (the animated sea bank) is shipped.
+3. Cloud wrap overlay:
+   - Configured natively in `Object["Background"]` as `RogueEssence.Dungeon.LayeredBG, RogueEssence`
+     with static sky (`CLIFF_NORD_OUEST_CIEL` / `CLIFF_DAY_CIEL`, `RepeatX = False`,
+     `BGMovement = {"X": 0, "Y": 0}`) followed by the wrapping cloud overlay
+     (`CLIFF_NORD_OUEST_NUAGES` / `CLIFF_DAY_NUAGES`, `RepeatX = True`, `RepeatY = False`,
+     `BGMovement = {"X": -4, "Y": 0}`, `Parallax = "1, 1"`).
+   - Static `00_ciel` cells on `Layers[0]` and static `01_long_cap_jour_02` cloud cells
+     on `Layers[5]` are cleared so `LayeredBG` is visible behind the tile layers without
+     static cloud duplication.
+4. Canonical PMD Sky Port (`source/falaises_cotieres_nues/reference_ciel_mer.png`,
+   Pelipper Post Office) sea animation on `Layers[1]`:
+   - Extracts all 5 canonical `far_sea` wave strips (`(544+56*f, 224, 592+56*f, 352)`,
+     `48x128` px) and all 10 canonical `near_sea` wave strips (`(824+56*f, 224, 872+56*f, 392)`,
+     `48x168` px) from `reference_ciel_mer.png`.
+   - Reconstructs the 10-frame canonical `1312x1024` px sea sheet series (`f = 0..9`,
+     where frame 0 is pixel-identical across all `1312x1024` pixels to
+     `sprites/cote_dix_zones/fonds/jour_mer_00.png` = `v2_promontoire_jour_03`).
+   - Encodes `Content/Tile/v2_promontoire_jour_03.tile` in native RogueEssence `TileSheet`
+     binary format (via `source/pmdo_cote/build.py`), keeping Phase 0 at its exact `(tx, ty)`
+     coordinates in `ty = 0..127` and deduplicating Phases `1..9` at `ty >= 128`, and
+     animates every `v2_promontoire_jour_03` cell on `Layers[1]` across the 10 frames
+     (`FrameLength = 10` ticks = 166.7 ms/phase at 60 Hz).
+"""
+
+from __future__ import annotations
+
+import base64
 import copy
 import hashlib
 import importlib.util
 import io
 import json
-import math
 import shutil
 import struct
-import time
-import uuid
 import zipfile
+from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw
-from scipy import ndimage
 
-R = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
-OUT = R / 'renders' / 'cliff_nord_jour_anime_v1'
-STAGE = Path('/tmp/stage_cliff_nord_jour_anime_v1')
-NAMESPACE = 'cliff_nord_jour'
+RENDERS = ROOT / "renders/cliff_nord_jour_anime_v1"
 
-SEA_PHASES = 8
-SEA_TICKS = 10       # 8 * 10 = 80 ticks (1.33 s at 60 fps)
-CLOUD_PHASES = 16
-CLOUD_TICKS = 10     # 16 * 10 = 160 ticks (2.67 s at 60 fps, exact 2x sea loop)
-LOOP_TICKS = 160
+EXPECTED_ROOT_SHA256 = {
+    "cliffnordouesttest1.rsground": "2cb10918d6bfa8ed687c1412b2d2e7c4aebc545049b9d2d76eb7c16fdb632f19",
+    "cliffdaytest.rsground": "6567e19df7a073758d8d52ad1491460067a2dccc1c0d03aa0d1c72b5592e4d2f",
+}
+
+REF_PELIPPER_PATH = ROOT / "source/falaises_cotieres_nues/reference_ciel_mer.png"
+REF_PELIPPER_SHA256 = "f2de3cabdc6edafbdcebeeee1fd9cb3ee6f6bf2ffcf7ae1b6d3c749e13d1c456"
+MER00_PATH = ROOT / "sprites/cote_dix_zones/fonds/jour_mer_00.png"
+NUAGES_PATH = ROOT / "sprites/cote_dix_zones/fonds/jour_nuages.png"
+FALAISE_CIEL_PATH = ROOT / "source/cote_dix_zones/reference_autre_agent/source__falaise__ciel_jour_native.png"
+
+SEA_BANK_NAME = "v2_promontoire_jour_03"
+SEA_FRAME_COUNT = 10
+SEA_FRAME_LENGTH = 10  # 10 ticks at 60 Hz = 166.67 ms/frame (1.667 s per 10-frame loop)
+CLOUD_SPEED_PX_S = -4
 
 
-def loadmod(name, path):
+def loadmod(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
-def sha256(path):
+def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def premult_arr(arr):
-    """Premultiply RGBA uint8 array in-place-compatible numpy manner."""
+def verify_root_immutability() -> None:
+    for filename, expected in EXPECTED_ROOT_SHA256.items():
+        actual = sha256_file(ROOT / filename)
+        assert actual == expected, f"Root file {filename} modified: {actual} != {expected}"
+
+
+def premult_arr(arr: np.ndarray) -> np.ndarray:
     a = arr.astype(np.uint16)
     a[:, :, :3] = (a[:, :, :3] * a[:, :, 3:4]) // 255
     return a.astype(np.uint8)
 
 
-def load_tile_coords(path):
-    """Return dict {(tx, ty): file_offset} from a PMDO .tile file without decoding PNGs."""
-    with path.open('rb') as f:
-        ts, cnt = struct.unpack('<ii', f.read(8))
-        return {(x, y): off for x, y, off in (struct.unpack('<iiq', f.read(16)) for _ in range(cnt))}
+def save_png_bytes(image: Image.Image) -> bytes:
+    buf = io.BytesIO()
+    image.convert("RGBA").save(buf, format="PNG", optimize=True)
+    return buf.getvalue()
 
 
-def load_tile_subset(path, wanted_coords=None):
-    """Decode only wanted_coords (or all if None) from a PMDO .tile file -> {(tx, ty): ndarray(8,8,4)}."""
-    with path.open('rb') as f:
-        ts, cnt = struct.unpack('<ii', f.read(8))
-        entries = [struct.unpack('<iiq', f.read(16)) for _ in range(cnt)]
-        tiles = {}
+def save_png(image: Image.Image, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(save_png_bytes(image))
+
+
+def load_tile_subset(path: Path, wanted_coords: set[tuple[int, int]] | None = None) -> dict[tuple[int, int], np.ndarray]:
+    """Decode only `wanted_coords` from a native PMDO `.tile` file -> {(tx, ty): ndarray(8,8,4)}."""
+    with path.open("rb") as f:
+        ts, cnt = struct.unpack("<ii", f.read(8))
+        assert ts == 8, f"Unexpected tile size {ts} in {path}"
+        entries = [struct.unpack("<iiq", f.read(16)) for _ in range(cnt)]
+        tiles: dict[tuple[int, int], np.ndarray] = {}
         for x, y, off in entries:
             if wanted_coords is not None and (x, y) not in wanted_coords:
                 continue
             f.seek(off)
-            ln = struct.unpack('<q', f.read(8))[0]
-            im = Image.open(io.BytesIO(f.read(ln))).convert('RGBA')
+            (ln,) = struct.unpack("<q", f.read(8))
+            im = Image.open(io.BytesIO(f.read(ln))).convert("RGBA")
             tiles[(x, y)] = np.array(im)
     return tiles
 
 
-def write_ora(path, named_layers):
-    """Write an OpenRaster (.ora) archive from ordered (name, RGBA ndarray) pairs."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    first = next(iter(named_layers.values()))
-    h, w = first.shape[:2]
-    with zipfile.ZipFile(path, 'w') as z:
-        z.writestr('mimetype', 'image/openraster', compress_type=zipfile.ZIP_STORED)
-        stack_xml = []
-        merged = Image.new('RGBA', (w, h))
-        for i, (nm, arr) in enumerate(named_layers.items()):
-            im = Image.fromarray(arr)
-            merged.alpha_composite(im)
-            buf = io.BytesIO()
-            im.save(buf, format='PNG')
-            arc = f'data/{i:02d}_{nm}.png'
-            z.writestr(arc, buf.getvalue(), compress_type=zipfile.ZIP_DEFLATED)
-            stack_xml.append((nm, arc))
-        layers_str = '\n'.join(
-            f'    <layer name="{nm}" src="{arc}" x="0" y="0" opacity="1.0" visibility="visible"/>'
-            for nm, arc in reversed(stack_xml)
-        )
-        xml = f'''<?xml version="1.0" encoding="UTF-8"?>
-<image version="0.0.3" w="{w}" h="{h}">
-  <stack>
-{layers_str}
-  </stack>
-</image>'''
-        z.writestr('stack.xml', xml.encode('utf-8'), compress_type=zipfile.ZIP_DEFLATED)
-        mbuf = io.BytesIO()
-        merged.save(mbuf, format='PNG')
-        z.writestr('mergedimage.png', mbuf.getvalue(), compress_type=zipfile.ZIP_DEFLATED)
-        tbuf = io.BytesIO()
-        merged.resize((256, max(1, round(256 * h / w))), Image.Resampling.NEAREST).save(tbuf, format='PNG')
-        z.writestr('Thumbnails/thumbnail.png', tbuf.getvalue(), compress_type=zipfile.ZIP_DEFLATED)
+def build_canonical_pmdsky_sea_sheets() -> tuple[list[np.ndarray], dict]:
+    """
+    Build the 10 canonical 1312x1024 sea sheets from PMD Sky Pelipper Post Office
+    (`source/falaises_cotieres_nues/reference_ciel_mer.png`) in the exact coordinate
+    space of `v2_promontoire_jour_03` (`sprites/cote_dix_zones/fonds/jour_mer_00.png`).
+
+    - `far_sea` has 5 canonical 48x128 strips at (544+56*f, 224, 592+56*f, 352) -> placed at y=144..272 (ty=18..33)
+    - `near_sea` has 10 canonical 48x168 strips at (824+56*f, 224, 872+56*f, 392) -> placed at y=272..1024 (ty>=34)
+    - Frame 0 (`far_idx=0, near_idx=0`) is 100% pixel-identical to `jour_mer_00.png` (`v2_promontoire_jour_03`).
+    """
+    ref = Image.open(REF_PELIPPER_PATH).convert("RGBA")
+    fars = [ref.crop((544 + 56 * f, 224, 592 + 56 * f, 352)) for f in range(5)]
+    nears = [ref.crop((824 + 56 * f, 224, 872 + 56 * f, 392)) for f in range(10)]
+
+    w, h, out_h = 1312, 816, 1024
+    horizon_v1 = 208
+    sheets: list[np.ndarray] = []
+
+    for f in range(SEA_FRAME_COUNT):
+        far_strip = fars[f % 5]
+        near_strip = nears[f]
+        layer = Image.new("RGBA", (w, h))
+        for xx in range(0, w, 48):
+            layer.paste(far_strip, (xx, horizon_v1))
+        for yy in range(horizon_v1 + 128, h, 168):
+            for xx in range(0, w, 48):
+                layer.paste(near_strip, (xx, yy))
+
+        # Apply exact V2 promontoire shift (+152 px) and cote_dix_zones row mapping (+216 px)
+        sea_v2 = Image.new("RGBA", (w, h))
+        sea_v2.paste(layer, (0, 152))
+        a = np.array(sea_v2)
+        rows = np.arange(out_h) + 216
+        rows[rows >= h] = h - 256 + (rows[rows >= h] - h) % 256
+        moved = a[rows, :w].copy()
+        moved[:144] = 0
+        sheets.append(moved)
+
+    mer00 = np.array(Image.open(MER00_PATH).convert("RGBA"))
+    diff0 = int(np.max(np.abs(sheets[0].astype(int) - mer00.astype(int))))
+    assert diff0 == 0, f"Frame 0 differs from jour_mer_00.png by {diff0}"
+
+    far_hashes = {hashlib.sha256(sheets[f][144:272].tobytes()).hexdigest() for f in range(5)}
+    near_hashes = {hashlib.sha256(sheets[f][272:440].tobytes()).hexdigest() for f in range(10)}
+    assert len(far_hashes) == 5, f"Expected 5 distinct far_sea frames, got {len(far_hashes)}"
+    assert len(near_hashes) == 10, f"Expected 10 distinct near_sea frames, got {len(near_hashes)}"
+
+    info = {
+        "reference_path": "source/falaises_cotieres_nues/reference_ciel_mer.png",
+        "reference_sha256": sha256_file(REF_PELIPPER_PATH),
+        "far_sea_rects": [[544 + 56 * f, 224, 592 + 56 * f, 352] for f in range(5)],
+        "near_sea_rects": [[824 + 56 * f, 224, 872 + 56 * f, 392] for f in range(10)],
+        "far_sea_distinct_frames": len(far_hashes),
+        "near_sea_distinct_frames": len(near_hashes),
+        "total_animation_frames": SEA_FRAME_COUNT,
+        "frame_length_ticks_60hz": SEA_FRAME_LENGTH,
+        "frame_0_max_diff_vs_v2_promontoire_jour_03": diff0,
+    }
+    return sheets, info
 
 
-def build_sea_bank(gfx, sea_arrs):
-    """Build v2_promontoire_jour_03.tile preserving phase 0 at exact (tx, ty) in ty=0..127
-    and deduplicating phases 1..7 at ty>=128. Also return phase_locs[p][(tx, ty)]."""
-    bank = gfx.TileBank('v2_promontoire_jour_03', preserve_layout=True)
-    pm_arrs = [premult_arr(a) for a in sea_arrs]
-    a0 = pm_arrs[0]
-    th, tw = a0.shape[0] // 8, a0.shape[1] // 8
+def build_pmdo_sea_bank(gfx, sea_sheets: list[np.ndarray], needed_coords: set[tuple[int, int]]):
+    """
+    Build `v2_promontoire_jour_03.tile` using `source/pmdo_cote/build.py`'s native `TileBank`:
+    - Preserves Phase 0 at the exact `(tx, ty)` coordinates in `ty = 0..127` for every
+      `(tx, ty)` referenced by `cliffnordouesttest1` and `cliffdaytest`.
+    - Deduplicates Phases `1..9` at `ty >= 128` (`cols = 32`).
+    """
+    bank = gfx.TileBank(SEA_BANK_NAME, preserve_layout=True)
+    pm_sheets = [premult_arr(s) for s in sea_sheets]
 
-    p0_locs = {}
-    for ty in range(th):
-        row = a0[ty * 8:ty * 8 + 8]
-        for tx in range(tw):
-            blk = row[:, tx * 8:tx * 8 + 8]
-            if blk[:, :, 3].any():
-                raw = blk.tobytes()
-                bank.data[(tx, ty)] = raw
-                bank.ids.setdefault(raw, (tx, ty))
-                p0_locs[(tx, ty)] = {'Sheet': bank.name, 'TexLoc': {'X': tx, 'Y': ty}}
+    p0_locs: dict[tuple[int, int], dict] = {}
+    a0 = pm_sheets[0]
+    for tx, ty in sorted(needed_coords):
+        blk = a0[ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8]
+        assert blk[:, :, 3].any(), f"Empty sea tile at {(tx, ty)}"
+        raw = blk.tobytes()
+        bank.data[(tx, ty)] = raw
+        bank.ids.setdefault(raw, (tx, ty))
+        p0_locs[(tx, ty)] = {"Sheet": bank.name, "TexLoc": {"X": tx, "Y": ty}}
 
     next_idx = 0
-    phase_locs = [p0_locs]
-    for p in range(1, SEA_PHASES):
-        ap = pm_arrs[p]
-        ploc = {}
-        for ty in range(th):
-            row = ap[ty * 8:ty * 8 + 8]
-            for tx in range(tw):
-                blk = row[:, tx * 8:tx * 8 + 8]
-                if not blk[:, :, 3].any():
-                    continue
-                raw = blk.tobytes()
-                if raw not in bank.ids:
-                    loc = (next_idx % 32, 128 + next_idx // 32)
-                    next_idx += 1
-                    bank.ids[raw] = loc
-                    bank.data[loc] = raw
-                loc = bank.ids[raw]
-                ploc[(tx, ty)] = {'Sheet': bank.name, 'TexLoc': {'X': loc[0], 'Y': loc[1]}}
+    phase_locs: list[dict[tuple[int, int], dict]] = [p0_locs]
+    for f in range(1, SEA_FRAME_COUNT):
+        af = pm_sheets[f]
+        ploc: dict[tuple[int, int], dict] = {}
+        for tx, ty in sorted(needed_coords):
+            blk = af[ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8]
+            raw = blk.tobytes()
+            if raw not in bank.ids:
+                loc = (next_idx % 32, 128 + next_idx // 32)
+                next_idx += 1
+                bank.ids[raw] = loc
+                bank.data[loc] = raw
+            loc = bank.ids[raw]
+            ploc[(tx, ty)] = {"Sheet": bank.name, "TexLoc": {"X": loc[0], "Y": loc[1]}}
         phase_locs.append(ploc)
+
     return bank, phase_locs
 
 
-def build_cliffnordouest_cloud_base(w_tiles, h_tiles, nuages_arr):
-    """Build Phase 0 cloud canvas and exact (x, y) -> (tx, ty) tile map for
-    cliffnordouesttest1 (138x98 tiles = 1104x784 px, sea horizon at y=53 tiles = 424 px)."""
-    canvas = np.zeros((h_tiles * 8, w_tiles * 8, 4), dtype=np.uint8)
-    tile_map = {}
-    placements = [
-        # High-altitude band (y_tile = 6..14, y_px = 48..112)
-        (4, 5, 19, 6,   4,  7),
-        (145, 3, 19, 8, 44,  6),
-        (34, 2, 12, 8,  86,  7),
-        (4, 5, 19, 6,  115,  8),
-        # Mid-altitude band (y_tile = 22..30, y_px = 176..240)
-        (115, 10, 15, 7, 14, 22),
-        (63, 9, 12, 6,   58, 23),
-        (91, 4, 12, 6,   98, 22),
-        # Horizon band right above sea y=53 (y_tile = 44..52, y_px = 352..416)
-        (145, 3, 19, 8,   2, 44),
-        (115, 10, 15, 7, 36, 45),
-        (4, 5, 19, 6,    68, 46),
-        (34, 2, 12, 8,  102, 44),
-        (63, 9, 12, 6,  123, 46),
-    ]
-    for sx0, sy0, cw, ch, dx0, dy0 in placements:
-        for dy in range(ch):
-            for dx in range(cw):
-                tx, ty = sx0 + dx, sy0 + dy
-                mx, my = dx0 + dx, dy0 + dy
-                if 0 <= mx < w_tiles and 0 <= my < h_tiles:
-                    blk = nuages_arr[ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8]
-                    if blk[:, :, 3].any():
-                        canvas[my * 8:my * 8 + 8, mx * 8:mx * 8 + 8] = blk
-                        tile_map[(mx, my)] = (tx, ty)
-    return canvas, tile_map
-
-
-def extract_cliffdaytest_cloud_base(L_cloud, nuages_arr):
-    """Extract the exact 600 cloud tiles (Sheet=='01_long_cap_jour_02') and the 325 prop
-    tiles from Layer 5 ('Cloud/nuage') of cliffdaytest.rsground."""
-    w_tiles, h_tiles = len(L_cloud['Tiles']), len(L_cloud['Tiles'][0])
-    canvas = np.zeros((h_tiles * 8, w_tiles * 8, 4), dtype=np.uint8)
-    tile_map = {}
-    props_layer = copy.deepcopy(L_cloud)
-    props_layer['Name'] = 'Objets Decor (ex-Cloud/nuage)'
-
-    for x in range(w_tiles):
-        for y in range(h_tiles):
-            kept_trs = []
-            for tr in L_cloud['Tiles'][x][y]['Layers']:
-                cloud_frames = [f for f in tr['Frames'] if f['Sheet'] == '01_long_cap_jour_02']
-                other_frames = [f for f in tr['Frames'] if f['Sheet'] != '01_long_cap_jour_02']
-                if cloud_frames:
-                    tx, ty = cloud_frames[0]['TexLoc']['X'], cloud_frames[0]['TexLoc']['Y']
-                    canvas[y * 8:y * 8 + 8, x * 8:x * 8 + 8] = nuages_arr[ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8]
-                    tile_map[(x, y)] = (tx, ty)
-                if other_frames:
-                    tr_copy = copy.deepcopy(tr)
-                    tr_copy['Frames'] = other_frames
-                    kept_trs.append(tr_copy)
-            props_layer['Tiles'][x][y]['Layers'] = kept_trs
-            if not kept_trs:
-                props_layer['Tiles'][x][y]['NeighborCode'] = -1
-    return canvas, tile_map, props_layer
-
-
-def animate_cloud_canvas(base_rgba):
-    """Generate 16 seamless wind-drift cloud frames (RGBA ndarrays) from base_rgba.
-    Phase 0 is 100% pixel-identical to base_rgba."""
-    h, w = base_rgba.shape[:2]
-    alpha = base_rgba[:, :, 3] > 0
-    dilated = ndimage.binary_dilation(alpha, structure=np.ones((13, 13)))
-    lbl, num = ndimage.label(dilated)
-
-    clusters = []
-    ys_all = np.nonzero(alpha)[0]
-    y_min, y_max = int(ys_all.min()), int(ys_all.max())
-    span = max(1, y_max - y_min)
-
-    for c in range(1, num + 1):
-        mask = (lbl == c) & alpha
-        if not mask.any():
-            continue
-        ys, xs = np.nonzero(mask)
-        y_mean = float(ys.mean())
-        rel = (y_mean - y_min) / span
-        if rel < 0.36:
-            amp = -10.0
-        elif rel < 0.72:
-            amp = +12.0
-        else:
-            amp = -8.0
-        clusters.append((ys, xs, amp))
-
-    frames = []
-    for p in range(CLOUD_PHASES):
-        if p == 0:
-            frames.append(base_rgba.copy())
-            continue
-        s = math.sin(2.0 * math.pi * p / CLOUD_PHASES)
-        out = np.zeros_like(base_rgba)
-        for ys, xs, amp in clusters:
-            dx = round(amp * s)
-            nx = (xs + dx) % w
-            out[ys, nx] = base_rgba[ys, xs]
-        frames.append(out)
-    assert np.array_equal(frames[0], base_rgba)
-    return frames
-
-
-def init_cloud_bank(gfx, nuages_arr):
-    """Initialize 01_long_cap_jour_02.tile with (0, 0) = transparent 8x8 tile
-    and (tx, ty) in ty=0..25 = exact original tiles from jour_nuages.png."""
-    bank = gfx.TileBank('01_long_cap_jour_02', preserve_layout=True)
-    bank.data[(0, 0)] = bytes(256)
-    bank.ids[bytes(256)] = (0, 0)
-    pm = premult_arr(nuages_arr)
-    th, tw = pm.shape[0] // 8, pm.shape[1] // 8
-    assert (tw, th) == (180, 26)
-    for ty in range(th):
-        row = pm[ty * 8:ty * 8 + 8]
-        for tx in range(tw):
-            blk = row[:, tx * 8:tx * 8 + 8]
-            if blk[:, :, 3].any():
-                raw = blk.tobytes()
-                bank.data[(tx, ty)] = raw
-                bank.ids.setdefault(raw, (tx, ty))
-    bank._next_extra = 0
-    return bank
-
-
-def build_cloud_map_layer(gfx, bank, cloud_frames, p0_tile_map, name='Cloud/nuage'):
-    """Build a PMDO MapLayer for the 16-phase cloud animation using bank
-    ('01_long_cap_jour_02'). Vectorized tile extraction."""
-    pm_frames = [premult_arr(a) for a in cloud_frames]
-    h_px, w_px = pm_frames[0].shape[:2]
-    gw, gh = w_px // 8, h_px // 8
-    anim_cells = 0
-
-    def cell_frames(x, y):
-        nonlocal anim_cells
-        y0, x0 = y * 8, x * 8
-        # Quick check if any phase has non-zero alpha in this 8x8 block
-        if not any(pm[y0:y0 + 8, x0:x0 + 8, 3].any() for pm in pm_frames):
-            return []
-        fs = []
-        for p, pm in enumerate(pm_frames):
-            blk = pm[y0:y0 + 8, x0:x0 + 8]
-            if not blk[:, :, 3].any():
-                fs.append({'Sheet': bank.name, 'TexLoc': {'X': 0, 'Y': 0}})
-            elif p == 0 and (x, y) in p0_tile_map:
-                tx, ty = p0_tile_map[(x, y)]
-                fs.append({'Sheet': bank.name, 'TexLoc': {'X': tx, 'Y': ty}})
-            else:
-                raw = blk.tobytes()
-                if raw not in bank.ids:
-                    idx = bank._next_extra
-                    bank._next_extra += 1
-                    loc = (idx % 32, 26 + idx // 32)
-                    bank.ids[raw] = loc
-                    bank.data[loc] = raw
-                loc = bank.ids[raw]
-                fs.append({'Sheet': bank.name, 'TexLoc': {'X': loc[0], 'Y': loc[1]}})
-        anim_cells += 1
-        return fs
-
-    layer_obj = gfx.layer(name, gw, gh, cell_frames, CLOUD_TICKS)
-    return layer_obj, anim_cells
-
-
-def fix_metano_anim_tiles(layer_obj, anim_coords):
-    """Animate static or incomplete Metano_Town_Animation_Tileset cells on a layer
-    with clean 3- or 4-phase cycles and FrameLength=10."""
-    fixed_count = 0
-    for col in layer_obj['Tiles']:
-        for cell in col:
-            for tr in cell['Layers']:
-                if not any(f['Sheet'] == 'Metano_Town_Animation_Tileset' for f in tr['Frames']):
-                    continue
-                valid = [(f['TexLoc']['X'], f['TexLoc']['Y'])
-                         for f in tr['Frames']
-                         if f['Sheet'] == 'Metano_Town_Animation_Tileset']
-                if not valid:
-                    continue
-                bx, by = valid[0]
-                if 62 <= by <= 71 or 29 <= by <= 40:
-                    dx, n_phases = 9, 4
-                elif 22 <= by <= 28:
-                    dx, n_phases = 8, 4
-                elif 13 <= by <= 20:
-                    dx, n_phases = 6, 3
-                elif 1 <= by <= 4:
-                    dx, n_phases = 4, 3
-                else:
-                    xs = sorted(set(vx for vx, _ in valid))
-                    dx = (xs[1] - xs[0]) if len(xs) >= 2 else 9
-                    n_phases = 4
-                while bx - dx >= 1 and (bx - dx, by) in anim_coords:
-                    bx -= dx
-                seq = [
-                    {'Sheet': 'Metano_Town_Animation_Tileset', 'TexLoc': {'X': bx + k * dx, 'Y': by}}
-                    for k in range(n_phases)
-                    if (bx + k * dx, by) in anim_coords
-                ]
-                if len(seq) >= 2:
-                    tr['Frames'] = seq
-                    tr['FrameLength'] = 10
-                    fixed_count += 1
-    return fixed_count
-
-
-def add_arr_to_bank(bank, arr):
-    """Fast numpy population of a preserve_layout TileBank from an RGBA ndarray."""
-    pm = premult_arr(arr)
-    th, tw = pm.shape[0] // 8, pm.shape[1] // 8
-    for ty in range(th):
-        row = pm[ty * 8:ty * 8 + 8]
-        for tx in range(tw):
-            blk = row[:, tx * 8:tx * 8 + 8]
-            if blk[:, :, 3].any():
-                raw = blk.tobytes()
-                bank.data[(tx, ty)] = raw
-                bank.ids.setdefault(raw, (tx, ty))
-
-
-def render_static_layers_preview(doc, repo_sheets, fallback_fn):
-    """Render each layer of doc into RGBA ndarrays using numpy slicing."""
-    o = doc['Object']
-    gw, gh = len(o['Layers'][0]['Tiles']), len(o['Layers'][0]['Tiles'][0])
-    w, h = gw * 8, gh * 8
-    out = {}
-    for idx, L in enumerate(o['Layers']):
-        canvas = Image.new('RGBA', (w, h), (0, 0, 0, 0))
-        for x in range(gw):
-            for y in range(gh):
-                for tr in L['Tiles'][x][y]['Layers']:
-                    if not tr['Frames']:
-                        continue
-                    f0 = tr['Frames'][0]
-                    s = f0['Sheet']
-                    tx, ty = f0['TexLoc']['X'], f0['TexLoc']['Y']
-                    blk = None
-                    if s in repo_sheets:
-                        src = repo_sheets[s]
-                        if isinstance(src, dict):
-                            blk = src.get((tx, ty))
-                        else:
-                            if tx * 8 + 8 <= src.shape[1] and ty * 8 + 8 <= src.shape[0]:
-                                blk = src[ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8]
-                    if blk is None:
-                        blk = fallback_fn(s, x, y, tx, ty)
-                    if blk is not None and blk[:, :, 3].any():
-                        canvas.alpha_composite(Image.fromarray(blk), (x * 8, y * 8))
-        out[idx] = np.array(canvas)
+def build_sky_source_504x408() -> np.ndarray:
+    im = Image.open(FALAISE_CIEL_PATH).convert("RGBA")
+    arr = np.array(im)
+    assert arr.shape == (408, 480, 4)
+    col = arr[:, -1:, :]
+    pad = np.repeat(col, 504 - 480, axis=1)
+    out = np.concatenate([arr, pad], axis=1)
+    assert out.shape == (408, 504, 4)
     return out
 
 
-def build():
-    t0 = time.time()
-    gfx = loadmod('pmdo_codec', R / 'source/pmdo_cote/build.py')
-    tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
+def reconstruct_map_sky_from_layer0(doc: dict, sky_src: np.ndarray, fill_top_with_row0: bool = True) -> Image.Image:
+    l0 = doc["Object"]["Layers"][0]
+    w_cells, h_cells = len(l0["Tiles"]), len(l0["Tiles"][0])
+    canvas = np.zeros((h_cells * 8, w_cells * 8, 4), dtype=np.uint8)
+    if fill_top_with_row0:
+        canvas[: 26 * 8, :, :] = sky_src[0, 0]
+    for x in range(w_cells):
+        for y in range(h_cells):
+            for tl in l0["Tiles"][x][y]["Layers"]:
+                for f in tl["Frames"]:
+                    if f["Sheet"] == "00_ciel":
+                        tx, ty = f["TexLoc"]["X"], f["TexLoc"]["Y"]
+                        canvas[y * 8 : (y + 1) * 8, x * 8 : (x + 1) * 8] = sky_src[
+                            ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8
+                        ]
+    return Image.fromarray(canvas, "RGBA")
 
-    if OUT.exists():
-        shutil.rmtree(OUT)
-    if STAGE.exists():
-        shutil.rmtree(STAGE)
-    for sub in ['cliffnordouesttest1/mer', 'cliffnordouesttest1/nuages', 'cliffnordouesttest1/calques',
-                'cliffdaytest/mer', 'cliffdaytest/nuages', 'cliffdaytest/calques',
-                'Content/Tile', 'Content/BG', 'review']:
-        (OUT / sub).mkdir(parents=True, exist_ok=True)
-    for sub in ['Content/Tile', 'Content/BG', 'Data/Ground', f'Data/Script/{NAMESPACE}/ground']:
-        (STAGE / sub).mkdir(parents=True, exist_ok=True)
 
-    # 1. Load canonical sky, clouds, and 8-phase sea from sprites/cote_dix_zones/fonds/
-    sky_full = Image.open(R / 'sprites/cote_dix_zones/fonds/jour_ciel.png').convert('RGBA')
-    astres_full = Image.open(R / 'sprites/cote_dix_zones/fonds/jour_astres.png').convert('RGBA')
-    nuages_im = Image.open(R / 'sprites/cote_dix_zones/fonds/jour_nuages.png').convert('RGBA')
-    nuages_arr = np.array(nuages_im)
-    sea_imgs = [
-        Image.open(R / f'sprites/cote_dix_zones/fonds/jour_mer_{i:02d}.png').convert('RGBA')
-        for i in range(SEA_PHASES)
-    ]
-    sea_arrs = [np.array(im) for im in sea_imgs]
+def reconstruct_cliffdaytest_cloud_strip(doc: dict) -> Image.Image:
+    nuages_src = np.array(Image.open(NUAGES_PATH).convert("RGBA"))
+    l5 = doc["Object"]["Layers"][5]
+    w_cells = len(l5["Tiles"])
+    h_strip_cells = 39  # y=0..38 (312 px, right down to the horizon)
+    canvas = np.zeros((h_strip_cells * 8, w_cells * 8, 4), dtype=np.uint8)
+    count = 0
+    for x in range(w_cells):
+        for y in range(len(l5["Tiles"][0])):
+            for tl in l5["Tiles"][x][y]["Layers"]:
+                for f in tl["Frames"]:
+                    if f["Sheet"] == "01_long_cap_jour_02":
+                        assert y < h_strip_cells
+                        tx, ty = f["TexLoc"]["X"], f["TexLoc"]["Y"]
+                        canvas[y * 8 : (y + 1) * 8, x * 8 : (x + 1) * 8] = nuages_src[
+                            ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8
+                        ]
+                        count += 1
+    assert count == 600, f"Expected 600 cloud cells in cliffdaytest, got {count}"
+    assert int(np.sum(canvas[:, 0, 3])) == 0 and int(np.sum(canvas[:, -1, 3])) == 0
+    return Image.fromarray(canvas, "RGBA")
 
-    # Write LayeredBG .dir files
-    for kind, im in [('CIEL', sky_full), ('ASTRES', astres_full), ('NUAGES', nuages_im)]:
-        for base_dir in (OUT, STAGE):
-            gfx.write_dir(base_dir / f'Content/BG/CLIFF_JOUR_{kind}.dir', im)
 
-    # Build 00_ciel.tile (63x51 tiles = 504x408 px)
-    sky_504_arr = np.array(sky_full)[:51 * 8, :63 * 8]
-    sky_bank = gfx.TileBank('00_ciel', preserve_layout=True)
-    add_arr_to_bank(sky_bank, sky_504_arr)
-
-    # Build 8-phase sea bank v2_promontoire_jour_03.tile
-    sea_bank, sea_phase_locs = build_sea_bank(gfx, sea_arrs)
-
-    # Initialize 16-phase cloud bank 01_long_cap_jour_02.tile
-    cloud_bank = init_cloud_bank(gfx, nuages_arr)
-
-    # Load Metano_Town_Animation_Tileset coordinates
-    anim_coords = set(load_tile_coords(R / 'source/eau_metano/natifs/Metano_Town_Animation_Tileset.tile').keys())
-
-    # ---------------------------------------------------------
-    # Process Map 1: cliffnordouesttest1.rsground (138x98 tiles = 1104x784 px)
-    # ---------------------------------------------------------
-    orig_nw_path = R / 'cliffnordouesttest1.rsground'
-    doc_nw = json.loads(orig_nw_path.read_text(encoding='utf-8-sig'))
-    o_nw = doc_nw['Object']
-    gw_nw, gh_nw = len(o_nw['Layers'][0]['Tiles']), len(o_nw['Layers'][0]['Tiles'][0])
-    assert (gw_nw, gh_nw) == (138, 98)
-
-    L0_nw = o_nw['Layers'][0]
-    L0_nw['Name'] = '00 Ciel (00_ciel)'
-    # Fill top sky rows y=0..25 and harmonize sky gradient above sea horizon y=53
-    # (using Y=0..6 deep blue sky gradient like cliffdaytest so there is no cyan band above the sea)
-    for x in range(gw_nw):
-        for y in range(53):
-            ty_sky = max(0, y - 46)
-            L0_nw['Tiles'][x][y] = gfx.auto([{'Sheet': '00_ciel', 'TexLoc': {'X': x % 63, 'Y': ty_sky}}], 60)
-
-    nw_cloud_base, nw_cloud_p0_map = build_cliffnordouest_cloud_base(gw_nw, gh_nw, nuages_arr)
-    nw_cloud_frames = animate_cloud_canvas(nw_cloud_base)
-    nw_cloud_layer, nw_cloud_anim_cells = build_cloud_map_layer(
-        gfx, cloud_bank, nw_cloud_frames, nw_cloud_p0_map, name='01 Cloud/nuage (16 phases)'
-    )
-
-    L_sea_nw = o_nw['Layers'][1]
-    L_sea_nw['Name'] = '02 Mer animee (8 phases)'
-    nw_sea_anim_cells = 0
-    nw_sea_frames_rgba = [np.zeros((gh_nw * 8, gw_nw * 8, 4), dtype=np.uint8) for _ in range(SEA_PHASES)]
-    for x in range(gw_nw):
-        for y in range(gh_nw):
-            for tr in L_sea_nw['Tiles'][x][y]['Layers']:
-                if tr['Frames'] and tr['Frames'][0]['Sheet'] == 'v2_promontoire_jour_03':
-                    tx = tr['Frames'][0]['TexLoc']['X']
-                    ty = tr['Frames'][0]['TexLoc']['Y']
-                    tr['FrameLength'] = SEA_TICKS
-                    tr['Frames'] = [sea_phase_locs[p][(tx, ty)] for p in range(SEA_PHASES)]
-                    nw_sea_anim_cells += 1
-                    for p in range(SEA_PHASES):
-                        nw_sea_frames_rgba[p][y * 8:y * 8 + 8, x * 8:x * 8 + 8] = sea_arrs[p][ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8]
-
-    nw_cascade_fixed = fix_metano_anim_tiles(o_nw['Layers'][3], anim_coords)
-    o_nw['Layers'][2]['Name'] = '03 Falaises et promontoire'
-    o_nw['Layers'][3]['Name'] = '04 Chemins et cascade animee'
-    o_nw['Layers'] = [L0_nw, nw_cloud_layer, L_sea_nw, o_nw['Layers'][2], o_nw['Layers'][3]]
-    o_nw['Background'] = {
-        '$type': 'RogueEssence.Dungeon.LayeredBG, RogueEssence',
-        'Layers': [
-            {'BG': gfx.background('CLIFF_JOUR_CIEL')},
-            {'BG': gfx.background('CLIFF_JOUR_ASTRES')},
-            {'BG': gfx.background('CLIFF_JOUR_NUAGES', 0, -4, True)},
-        ],
-    }
-
-    # ---------------------------------------------------------
-    # Process Map 2: cliffdaytest.rsground (123x99 tiles = 984x792 px)
-    # ---------------------------------------------------------
-    orig_day_path = R / 'cliffdaytest.rsground'
-    doc_day = json.loads(orig_day_path.read_text(encoding='utf-8-sig'))
-    o_day = doc_day['Object']
-    gw_day, gh_day = len(o_day['Layers'][0]['Tiles']), len(o_day['Layers'][0]['Tiles'][0])
-    assert (gw_day, gh_day) == (123, 99)
-
-    o_day['Layers'][0]['Name'] = '00 Ciel (00_ciel)'
-    L_sea_day = o_day['Layers'][1]
-    L_sea_day['Name'] = '01 Mer animee (8 phases)'
-    day_sea_anim_cells = 0
-    day_sea_frames_rgba = [np.zeros((gh_day * 8, gw_day * 8, 4), dtype=np.uint8) for _ in range(SEA_PHASES)]
-    for x in range(gw_day):
-        for y in range(gh_day):
-            for tr in L_sea_day['Tiles'][x][y]['Layers']:
-                if tr['Frames'] and tr['Frames'][0]['Sheet'] == 'v2_promontoire_jour_03':
-                    tx = tr['Frames'][0]['TexLoc']['X']
-                    ty = tr['Frames'][0]['TexLoc']['Y']
-                    tr['FrameLength'] = SEA_TICKS
-                    tr['Frames'] = [sea_phase_locs[p][(tx, ty)] for p in range(SEA_PHASES)]
-                    day_sea_anim_cells += 1
-                    for p in range(SEA_PHASES):
-                        day_sea_frames_rgba[p][y * 8:y * 8 + 8, x * 8:x * 8 + 8] = sea_arrs[p][ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8]
-
-    day_cloud_base, day_cloud_p0_map, day_props_layer = extract_cliffdaytest_cloud_base(
-        o_day['Layers'][5], nuages_arr
-    )
-    assert len(day_cloud_p0_map) == 600
-    day_cloud_frames = animate_cloud_canvas(day_cloud_base)
-    day_cloud_layer, day_cloud_anim_cells = build_cloud_map_layer(
-        gfx, cloud_bank, day_cloud_frames, day_cloud_p0_map, name='Cloud/nuage (16 phases)'
-    )
-
-    day_cascade_fixed = fix_metano_anim_tiles(o_day['Layers'][4], anim_coords)
-    o_day['Layers'][2]['Name'] = '02 Falaises et relief'
-    o_day['Layers'][3]['Name'] = '03 Objets et vegetation'
-    o_day['Layers'][4]['Name'] = '04 Cascades et eau animee'
-    day_props_layer['Name'] = '06 Objets Decor (ex-Cloud/nuage)'
-
-    o_day['Layers'] = [
-        o_day['Layers'][0],
-        L_sea_day,
-        o_day['Layers'][2],
-        o_day['Layers'][3],
-        o_day['Layers'][4],
-        day_cloud_layer,
-        day_props_layer,
-    ]
-    o_day['Background'] = {
-        '$type': 'RogueEssence.Dungeon.LayeredBG, RogueEssence',
-        'Layers': [
-            {'BG': gfx.background('CLIFF_JOUR_CIEL')},
-            {'BG': gfx.background('CLIFF_JOUR_ASTRES')},
-            {'BG': gfx.background('CLIFF_JOUR_NUAGES', 0, -4, True)},
-        ],
-    }
-
-    print(f'[{time.time()-t0:.1f}s] Writing core .tile banks and .rsground files...', flush=True)
-    for b in (sky_bank, sea_bank, cloud_bank):
-        b.write(OUT / f'Content/Tile/{b.name}.tile')
-        b.write(STAGE / f'Content/Tile/{b.name}.tile')
-
-    for slug, doc in [('cliffnordouesttest1', doc_nw), ('cliffdaytest', doc_day)]:
-        raw_bytes = ('\ufeff' + json.dumps(doc, ensure_ascii=False, separators=(',', ':'))).encode('utf-8')
-        (OUT / f'{slug}.rsground').write_bytes(raw_bytes)
-        (STAGE / f'Data/Ground/{slug}.rsground').write_bytes(raw_bytes)
-        lua = f'-- {slug} : nuages et mer animes.\nlocal {slug} = {{}}\nreturn {slug}\n'.encode('utf-8')
-        (STAGE / f'Data/Script/{NAMESPACE}/ground/{slug}/init.lua').parent.mkdir(parents=True, exist_ok=True)
-        (STAGE / f'Data/Script/{NAMESPACE}/ground/{slug}/init.lua').write_bytes(lua)
-
-    for p in range(SEA_PHASES):
-        Image.fromarray(nw_sea_frames_rgba[p]).save(OUT / f'cliffnordouesttest1/mer/mer_{p:02d}.png')
-        Image.fromarray(day_sea_frames_rgba[p]).save(OUT / f'cliffdaytest/mer/mer_{p:02d}.png')
-    for p in range(CLOUD_PHASES):
-        Image.fromarray(nw_cloud_frames[p]).save(OUT / f'cliffnordouesttest1/nuages/nuages_{p:02d}.png')
-        Image.fromarray(day_cloud_frames[p]).save(OUT / f'cliffdaytest/nuages/nuages_{p:02d}.png')
-
-    print(f'[{time.time()-t0:.1f}s] Preparing standalone STAGE .tile banks...', flush=True)
-    # Collect exact (tx, ty) coordinates needed per sheet across both maps
-    needed_by_sheet = {}
-    for doc in (doc_nw, doc_day):
-        for L in doc['Object']['Layers']:
-            for col in L['Tiles']:
+def load_repo_preview_sheets(docs: list[dict]) -> dict[str, dict[tuple[int, int], np.ndarray] | np.ndarray]:
+    """
+    Load canonical `.tile` and `.png` sheets available in the repo ONLY in memory
+    for rendering preview images in `renders/` and `apercu_cliff_nord_jour_anime_v1.html`.
+    Never writes `.tile` files for cliff/terrain/object sheets.
+    """
+    needed_by_sheet: dict[str, set[tuple[int, int]]] = {}
+    for doc in docs:
+        for layer in doc["Object"]["Layers"]:
+            for col in layer["Tiles"]:
                 for cell in col:
-                    for tr in cell['Layers']:
-                        for f in tr['Frames']:
-                            needed_by_sheet.setdefault(f['Sheet'], set()).add((f['TexLoc']['X'], f['TexLoc']['Y']))
+                    for tl in cell["Layers"]:
+                        for f in tl["Frames"]:
+                            needed_by_sheet.setdefault(f["Sheet"], set()).add(
+                                (f["TexLoc"]["X"], f["TexLoc"]["Y"])
+                            )
 
     repo_tile_sources = {
-        'Altere_Pond_Cliffs': R / 'source/antre_harmonie_v3/references/Altere_Pond_Cliffs.tile',
-        'Altere_Pond_Objects': R / 'source/antre_harmonie_v3/references/Altere_Pond_Objects.tile',
-        'Altere_Pond_Objects_Under': R / 'source/antre_harmonie_v3/references/Altere_Pond_Objects_Under.tile',
-        'Metano_Inn_Objects': R / 'source/cafe_spinda_revisite_v7/references/Metano_Inn_Objects.tile',
-        'Metano_Town_Animation_Tileset': R / 'source/eau_metano/natifs/Metano_Town_Animation_Tileset.tile',
-        'Metano_Town_Cliffs': R / 'source/falaises_metano/natifs/Metano_Town_Cliffs.tile',
-        'Metano_Town_Objects': R / 'source/amp_plains_fleurie_v1/references/Metano_Town_Objects.tile',
+        "Altere_Pond_Cliffs": ROOT / "source/antre_harmonie_v3/references/Altere_Pond_Cliffs.tile",
+        "Altere_Pond_Objects": ROOT / "source/antre_harmonie_v3/references/Altere_Pond_Objects.tile",
+        "Altere_Pond_Objects_Under": ROOT / "source/antre_harmonie_v3/references/Altere_Pond_Objects_Under.tile",
+        "Metano_Inn_Objects": ROOT / "source/cafe_spinda_revisite_v7/references/Metano_Inn_Objects.tile",
+        "Metano_Town_Animation_Tileset": ROOT / "source/eau_metano/natifs/Metano_Town_Animation_Tileset.tile",
+        "Metano_Town_Cliffs": ROOT / "source/falaises_metano/natifs/Metano_Town_Cliffs.tile",
+        "Metano_Town_Objects": ROOT / "source/amp_plains_fleurie_v1/references/Metano_Town_Objects.tile",
     }
-    repo_sheets_preview = {
-        '00_ciel': sky_504_arr,
-        '01_long_cap_jour_02': nuages_arr,
-        'v2_promontoire_jour_03': sea_arrs[0],
-    }
+    sheets: dict[str, dict[tuple[int, int], np.ndarray] | np.ndarray] = {}
     for sname, spath in repo_tile_sources.items():
-        shutil.copyfile(spath, STAGE / f'Content/Tile/{sname}.tile')
-        repo_sheets_preview[sname] = load_tile_subset(spath, needed_by_sheet.get(sname, set()))
+        if spath.exists() and sname in needed_by_sheet:
+            sheets[sname] = load_tile_subset(spath, needed_by_sheet[sname])
 
     repo_png_sources = {
-        '13_avancee_basse_gauche_terrain': R / 'renders/caps_terrasses_v4/13_avancee_basse_gauche_terrain.png',
-        'terrain': R / 'renders/references_calques_v2/falaises/02/terrain.png',
-        'terrain (2)': R / 'renders/references_calques_v2/falaises/01/terrain.png',
-        'terrain (3)': R / 'renders/references_calques_v2/falaises/03/terrain.png',
-        'terrain (4)': R / 'renders/references_calques_v2/falaises/08/terrain.png',
+        "13_avancee_basse_gauche_terrain": ROOT / "renders/caps_terrasses_v4/13_avancee_basse_gauche_terrain.png",
+        "terrain": ROOT / "renders/references_calques_v2/falaises/02/terrain.png",
+        "terrain (2)": ROOT / "renders/references_calques_v2/falaises/01/terrain.png",
+        "terrain (3)": ROOT / "renders/references_calques_v2/falaises/03/terrain.png",
+        "terrain (4)": ROOT / "renders/references_calques_v2/falaises/08/terrain.png",
     }
     for sname, spath in repo_png_sources.items():
-        arr = np.array(Image.open(spath).convert('RGBA'))
-        repo_sheets_preview[sname] = arr
-        tb = gfx.TileBank(sname, preserve_layout=True)
-        for tx, ty in needed_by_sheet.get(sname, set()):
-            if ty * 8 + 8 <= arr.shape[0] and tx * 8 + 8 <= arr.shape[1]:
-                blk = premult_arr(arr[ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8])
-                if blk[:, :, 3].any():
-                    raw = blk.tobytes()
-                    tb.data[(tx, ty)] = raw
-                    tb.ids.setdefault(raw, (tx, ty))
-        tb.write(STAGE / f'Content/Tile/{sname}.tile')
+        if spath.exists():
+            sheets[sname] = np.array(Image.open(spath).convert("RGBA"))
+    return sheets
 
-    # Decode only the small 16x16 grass/cliff patch needed for proxy fallback in standalone STAGE
-    grass_patch = load_tile_subset(
-        R / 'source/falaises_metano/natifs/Metano_Town_Base.tile',
-        {(x, 80 + y) for x in range(16) for y in range(16)},
+
+def render_untouched_layers_preview(
+    doc: dict,
+    layer_indices: list[int],
+    repo_sheets: dict[str, dict[tuple[int, int], np.ndarray] | np.ndarray],
+) -> Image.Image:
+    layers = doc["Object"]["Layers"]
+    w_cells, h_cells = len(layers[0]["Tiles"]), len(layers[0]["Tiles"][0])
+    out = Image.new("RGBA", (w_cells * 8, h_cells * 8), (0, 0, 0, 0))
+    for li in layer_indices:
+        layer = layers[li]
+        layer_im = Image.new("RGBA", (w_cells * 8, h_cells * 8), (0, 0, 0, 0))
+        for x in range(w_cells):
+            for y in range(h_cells):
+                for tl in layer["Tiles"][x][y]["Layers"]:
+                    if not tl["Frames"]:
+                        continue
+                    f0 = tl["Frames"][0]
+                    sname = f0["Sheet"]
+                    tx, ty = f0["TexLoc"]["X"], f0["TexLoc"]["Y"]
+                    blk = None
+                    if sname in repo_sheets:
+                        src = repo_sheets[sname]
+                        if isinstance(src, dict):
+                            blk = src.get((tx, ty))
+                        else:
+                            if ty * 8 + 8 <= src.shape[0] and tx * 8 + 8 <= src.shape[1]:
+                                blk = src[ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8]
+                    if blk is not None and blk[:, :, 3].any():
+                        layer_im.alpha_composite(Image.fromarray(blk, "RGBA"), (x * 8, y * 8))
+        out = Image.alpha_composite(out, layer_im)
+    return out
+
+
+def render_sea_layer_frames(
+    orig_sea_layer: dict,
+    sea_sheets: list[np.ndarray],
+    repo_sheets: dict[str, dict[tuple[int, int], np.ndarray] | np.ndarray],
+) -> list[Image.Image]:
+    """Render all 10 frames of `Layers[1]` (the sea layer) in unpremultiplied RGBA."""
+    w_cells, h_cells = len(orig_sea_layer["Tiles"]), len(orig_sea_layer["Tiles"][0])
+    frames: list[Image.Image] = []
+    for f_idx in range(SEA_FRAME_COUNT):
+        canvas = np.zeros((h_cells * 8, w_cells * 8, 4), dtype=np.uint8)
+        sheet_arr = sea_sheets[f_idx]
+        for x in range(w_cells):
+            for y in range(h_cells):
+                for tl in orig_sea_layer["Tiles"][x][y]["Layers"]:
+                    if not tl["Frames"]:
+                        continue
+                    fr = tl["Frames"][0]
+                    sname = fr["Sheet"]
+                    tx, ty = fr["TexLoc"]["X"], fr["TexLoc"]["Y"]
+                    if sname == "v2_promontoire_jour_03":
+                        canvas[y * 8 : (y + 1) * 8, x * 8 : (x + 1) * 8] = sheet_arr[
+                            ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8
+                        ]
+                    elif sname in repo_sheets:
+                        src = repo_sheets[sname]
+                        blk = src.get((tx, ty)) if isinstance(src, dict) else src[ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8]
+                        if blk is not None:
+                            canvas[y * 8 : (y + 1) * 8, x * 8 : (x + 1) * 8] = blk
+        frames.append(Image.fromarray(canvas, "RGBA"))
+    return frames
+
+
+def render_cloud_wrap_at(strip: Image.Image, map_size: tuple[int, int], map_loc_y: int, shift_px: int) -> Image.Image:
+    w, h = map_size
+    out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    sw = strip.width
+    start_x = (shift_px % sw) - sw
+    for x in range(start_x, w, sw):
+        out.alpha_composite(strip, (x, map_loc_y))
+    return out
+
+
+def transform_rsground(
+    gfx,
+    map_slug: str,
+    orig_doc: dict,
+    phase_locs: list[dict[tuple[int, int], dict]],
+    sky_bg_name: str,
+    cloud_bg_name: str,
+    cloud_map_loc_y: int,
+) -> tuple[dict, dict]:
+    """
+    Transform a copy of `orig_doc`:
+    - Leave all cliff, object, and existing animation layers 100% untouched.
+    - Enable the `LayeredBG` cloud wrap overlay (`RepeatX = True`, `BGMovement = (-4, 0)`).
+    - Animate ONLY `v2_promontoire_jour_03` cells on `Layers[1]` using the 10-frame
+      canonical PMD Sky Port (`reference_ciel_mer.png`) sea animation.
+    """
+    doc = copy.deepcopy(orig_doc)
+    doc["Version"] = "0.8.12.0"
+    obj = doc["Object"]
+
+    # 1. Configure native LayeredBG (static sky + wrapping cloud overlay)
+    obj["Background"] = {
+        "$type": "RogueEssence.Dungeon.LayeredBG, RogueEssence",
+        "Layers": [
+            {"BG": gfx.background(sky_bg_name, 0, 0, False)},
+            {"BG": gfx.background(cloud_bg_name, cloud_map_loc_y, CLOUD_SPEED_PX_S, True)},
+        ],
+    }
+
+    # 2. Clear ONLY `00_ciel` cells on Layer 0 so Layer 0 does not occlude LayeredBG,
+    #    preserving any cliff/camp cells (`Altere_Pond_Cliffs`, `CanyonCamp`) on Layer 0.
+    l0 = obj["Layers"][0]
+    w_cells, h_cells = len(l0["Tiles"]), len(l0["Tiles"][0])
+    cleared_sky_cells = 0
+    preserved_l0_cells = 0
+    for x in range(w_cells):
+        for y in range(h_cells):
+            cell = l0["Tiles"][x][y]
+            new_tls = []
+            for tl in cell["Layers"]:
+                kept_frames = [f for f in tl["Frames"] if f["Sheet"] != "00_ciel"]
+                if len(kept_frames) < len(tl["Frames"]):
+                    cleared_sky_cells += len(tl["Frames"]) - len(kept_frames)
+                if kept_frames:
+                    tl_copy = copy.deepcopy(tl)
+                    tl_copy["Frames"] = kept_frames
+                    new_tls.append(tl_copy)
+                    preserved_l0_cells += len(kept_frames)
+            cell["Layers"] = new_tls
+
+    # 3. Animate ONLY `v2_promontoire_jour_03` cells on Layer 1 (mer), preserving any
+    #    other sheet references (such as `Altere_Pond_Cliffs` at (10, 86) in cliffnordouesttest1).
+    l1 = obj["Layers"][1]
+    animated_sea_cells = 0
+    preserved_l1_cells = 0
+    for x in range(w_cells):
+        for y in range(h_cells):
+            cell = l1["Tiles"][x][y]
+            for tl in cell["Layers"]:
+                if len(tl["Frames"]) == 1 and tl["Frames"][0]["Sheet"] == "v2_promontoire_jour_03":
+                    tx = tl["Frames"][0]["TexLoc"]["X"]
+                    ty = tl["Frames"][0]["TexLoc"]["Y"]
+                    tl["FrameLength"] = SEA_FRAME_LENGTH
+                    tl["Frames"] = [phase_locs[f][(tx, ty)] for f in range(SEA_FRAME_COUNT)]
+                    animated_sea_cells += 1
+                else:
+                    preserved_l1_cells += len(tl["Frames"])
+
+    # 4. In cliffdaytest, clear ONLY `01_long_cap_jour_02` static cloud cells on Layer 5 (`Cloud/nuage`),
+    #    preserving all 325 object cells (`Altere_Pond_Objects`, `Altere_Pond_Objects_Under`,
+    #    `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) untouched in place.
+    cleared_cloud_cells = 0
+    preserved_l5_object_cells = 0
+    if len(obj["Layers"]) > 5:
+        l5 = obj["Layers"][5]
+        for x in range(w_cells):
+            for y in range(h_cells):
+                cell = l5["Tiles"][x][y]
+                new_tls = []
+                for tl in cell["Layers"]:
+                    kept_frames = [f for f in tl["Frames"] if f["Sheet"] != "01_long_cap_jour_02"]
+                    if len(kept_frames) < len(tl["Frames"]):
+                        cleared_cloud_cells += len(tl["Frames"]) - len(kept_frames)
+                    if kept_frames:
+                        tl_copy = copy.deepcopy(tl)
+                        tl_copy["Frames"] = kept_frames
+                        new_tls.append(tl_copy)
+                        preserved_l5_object_cells += len(kept_frames)
+                cell["Layers"] = new_tls
+
+    # 5. Strictly assert that ALL cliff, object, and existing animation layers are 100% untouched!
+    untouched_indices = [2, 3] if map_slug == "cliffnordouesttest1" else [2, 3, 4]
+    for idx in untouched_indices:
+        assert obj["Layers"][idx] == orig_doc["Object"]["Layers"][idx], (
+            f"{map_slug} Layer {idx} ({obj['Layers'][idx]['Name']}) was modified!"
+        )
+    assert [l["Name"] for l in obj["Layers"]] == [l["Name"] for l in orig_doc["Object"]["Layers"]]
+    assert len(obj["Layers"]) == len(orig_doc["Object"]["Layers"])
+    assert obj["obstacles"] == orig_doc["Object"]["obstacles"]
+    assert obj["Entities"] == orig_doc["Object"]["Entities"]
+    assert obj["Decorations"] == orig_doc["Object"]["Decorations"]
+
+    stats = {
+        "map_slug": map_slug,
+        "dimensions_cells": [w_cells, h_cells],
+        "dimensions_px": [w_cells * 8, h_cells * 8],
+        "layer_count": len(obj["Layers"]),
+        "layer_names": [l["Name"] for l in obj["Layers"]],
+        "untouched_layer_indices": untouched_indices,
+        "cleared_static_sky_cells_layer0": cleared_sky_cells,
+        "preserved_non_sky_cells_layer0": preserved_l0_cells,
+        "animated_sea_cells_layer1": animated_sea_cells,
+        "preserved_non_sea_cells_layer1": preserved_l1_cells,
+        "cleared_static_cloud_cells_layer5": cleared_cloud_cells,
+        "preserved_object_cells_layer5": preserved_l5_object_cells,
+        "background_layers": [
+            {
+                "anim_index": entry["BG"]["BGAnim"]["AnimIndex"],
+                "map_loc": entry["BG"]["MapLoc"],
+                "movement": entry["BG"]["BGMovement"],
+                "repeat_x": entry["BG"]["RepeatX"],
+                "repeat_y": entry["BG"]["RepeatY"],
+                "parallax": entry["BG"]["Parallax"],
+            }
+            for entry in obj["Background"]["Layers"]
+        ],
+    }
+    return doc, stats
+
+
+def write_ora(path: Path, size: tuple[int, int], layers: list[tuple[str, Image.Image]]) -> None:
+    w, h = size
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
+        zf.writestr("mimetype", b"image/openraster", compress_type=zipfile.ZIP_STORED)
+        stack_xml = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            f'<image version="0.0.3" w="{w}" h="{h}" xres="72" yres="72">',
+            ' <stack name="root">',
+        ]
+        for idx, (name, im) in enumerate(reversed(layers)):
+            real_idx = len(layers) - 1 - idx
+            rel = f"data/{real_idx:02d}_{name}.png"
+            zf.writestr(rel, save_png_bytes(im))
+            stack_xml.append(
+                f'  <layer name="{name}" src="{rel}" x="0" y="0" opacity="1.0" visibility="visible" composite-op="svg:src-over"/>'
+            )
+        stack_xml.append(" </stack>")
+        stack_xml.append("</image>")
+        zf.writestr("stack.xml", "\n".join(stack_xml).encode("utf-8"))
+
+        merged = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        for _, im in layers:
+            merged = Image.alpha_composite(merged, im)
+        zf.writestr("mergedimage.png", save_png_bytes(merged))
+        thumb = merged.copy()
+        thumb.thumbnail((256, 256), Image.Resampling.NEAREST)
+        zf.writestr("Thumbnails/thumbnail.png", save_png_bytes(thumb))
+
+
+def image_to_webp_data_uri(im: Image.Image) -> str:
+    buf = io.BytesIO()
+    im.convert("RGBA").save(buf, format="WEBP", lossless=True, exact=True, method=4)
+    return "data:image/webp;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def build_viewer_html(viewer_path: Path, maps_payload: list[dict], sea_info: dict) -> None:
+    payload_json = json.dumps(
+        {
+            "maps": maps_payload,
+            "sea_info": sea_info,
+            "cloud_speed_px_s": CLOUD_SPEED_PX_S,
+            "sea_frame_count": SEA_FRAME_COUNT,
+            "sea_frame_length_ticks": SEA_FRAME_LENGTH,
+        },
+        ensure_ascii=False,
+        separators=(",", ":"),
     )
-    im02_flip = np.fliplr(repo_sheets_preview['terrain'])
+    html = f"""<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cliff Nord Jour Animé · Mer canonique PMD Sky Port & Wrap Nuages</title>
+<style>
+:root {{
+  color-scheme: dark;
+  --bg: #0b1420;
+  --panel: #132235;
+  --line: #29425c;
+  --text: #ebf1f5;
+  --muted: #9cb3c9;
+  --accent: #7fd4ff;
+  --ok: #9be28f;
+}}
+* {{ box-sizing: border-box; }}
+body {{
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, -apple-system, sans-serif;
+}}
+header {{
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}}
+h1 {{ font-size: 22px; margin: 2px 0; }}
+.eyebrow {{ font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--accent); }}
+.badge {{
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--ok);
+}}
+main {{
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: calc(100vh - 85px);
+}}
+aside {{
+  padding: 20px;
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}}
+.label {{
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}}
+select, button {{
+  font: inherit;
+  color: var(--text);
+  background: #1b314a;
+  border: 1px solid #355679;
+  border-radius: 6px;
+  padding: 8px 10px;
+}}
+select {{ width: 100%; }}
+button {{ cursor: pointer; }}
+button:hover, button.active {{ border-color: var(--accent); color: var(--accent); }}
+.row {{ display: flex; gap: 8px; }}
+.row > * {{ flex: 1; }}
+label.check {{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0;
+  font-size: 13px;
+  cursor: pointer;
+}}
+.stage {{ padding: 20px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }}
+.topbar {{ display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }}
+.topbar h2 {{ margin: 0; font-size: 18px; }}
+.viewport {{
+  overflow: auto;
+  max-height: 75vh;
+  background: repeating-conic-gradient(#1f2f3f 0% 25%, #162330 0% 50%) 50% / 16px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+}}
+canvas {{ display: block; image-rendering: pixelated; }}
+.card {{
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(11, 20, 32, 0.55);
+  font-size: 12.5px;
+}}
+.card h3 {{ margin: 0 0 6px; font-size: 13px; color: var(--accent); }}
+.card ul {{ margin: 6px 0 0; padding-left: 18px; }}
+code {{ color: var(--ok); }}
+@media (max-width: 860px) {{
+  main {{ grid-template-columns: 1fr; }}
+  aside {{ border-right: 0; border-bottom: 1px solid var(--line); }}
+}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">PMDO 0.8.12 · Animation Canonique Pelipper Post Office</div>
+    <h1>Cliff Nord Jour Animé — Mer PMD Sky Port (10 phases) & Wrap Nuages</h1>
+  </div>
+  <span class="badge">Calques falaise, objets & animations 100 % intacts · runtime_tested: false</span>
+</header>
+<main>
+  <aside>
+    <section>
+      <label class="label" for="mapSelect">Carte (.rsground)</label>
+      <select id="mapSelect"></select>
+      <p id="mapMeta" style="font-size:12px;color:var(--muted);margin:6px 0 0"></p>
+    </section>
+    <section>
+      <span class="label">Contrôle d'animation (60 Hz)</span>
+      <div class="row">
+        <button id="playBtn" class="active">Pause</button>
+        <button id="stepBtn">+1 phase mer</button>
+        <button id="resetBtn">Tick 0</button>
+      </div>
+      <p id="tickStatus" style="font-size:12px;color:var(--muted);margin:8px 0 0"></p>
+    </section>
+    <section>
+      <label class="label" for="zoomSelect">Zoom</label>
+      <select id="zoomSelect">
+        <option value="fit">Ajuster à la fenêtre</option>
+        <option value="1">1× (pixels natifs)</option>
+        <option value="2">2× (pixels doublés)</option>
+      </select>
+      <label class="check"><input type="checkbox" id="gridToggle">Grille 8×8 px</label>
+    </section>
+    <section>
+      <span class="label">Calques affichés</span>
+      <label class="check"><input type="checkbox" id="showSky" checked>LayeredBG 0 · Ciel fixe</label>
+      <label class="check"><input type="checkbox" id="showClouds" checked>LayeredBG 1 · Nuages wrap (−4 px/s, RepeatX)</label>
+      <label class="check"><input type="checkbox" id="showSea" checked>Layer 1 · Mer canonique PMD Sky Port (10 phases)</label>
+      <label class="check"><input type="checkbox" id="showCliffs" checked>Layers 2..N · Falaise & objets (100 % intacts)</label>
+    </section>
+    <section class="card">
+      <h3>Intégrité garantie</h3>
+      <ul>
+        <li><strong>Falaise & objets :</strong> aucun calque de falaise, d'objet ou d'animation existante n'est modifié, renommé ou déplacé (<code>assert out == orig</code>).</li>
+        <li><strong>Nuages :</strong> uniquement activés en <code>LayeredBG</code> / <code>MapBG</code> (<code>RepeatX: true</code>, <code>BGMovement: (-4, 0)</code>).</li>
+        <li><strong>Mer :</strong> animée canoniquement depuis <code>reference_ciel_mer.png</code> (Pelipper Post Office : 5 phases <code>far_sea</code> + 10 phases <code>near_sea</code>, <code>FrameLength: 10</code>).</li>
+      </ul>
+    </section>
+  </aside>
+  <div class="stage">
+    <div class="topbar">
+      <h2 id="stageTitle">Chargement…</h2>
+      <a href="renders/cliff_nord_jour_anime_v1/cliff_nord_jour_anime_pmdo_0812.zip" download style="color:var(--accent)">Télécharger cliff_nord_jour_anime_pmdo_0812.zip ↓</a>
+    </div>
+    <div class="viewport" id="viewport">
+      <canvas id="sceneCanvas"></canvas>
+    </div>
+    <div class="card" id="layerSummary"></div>
+  </div>
+</main>
+<script>
+const DATA = {payload_json};
+const el = id => document.getElementById(id);
+const canvas = el('sceneCanvas');
+const ctx = canvas.getContext('2d');
 
-    def proxy_tile_arr(sheet, x, y, tx, ty):
-        if sheet in ('INVERSEPATHWAY', 'CLIFF MIROR-Photoroom'):
-            if y >= 76:
-                return grass_patch.get((x % 16, 80 + (y % 16)))
-            if ty * 8 + 8 <= im02_flip.shape[0] and tx * 8 + 8 <= im02_flip.shape[1]:
-                blk = im02_flip[ty * 8:ty * 8 + 8, tx * 8:tx * 8 + 8]
-                if blk[:, :, 3].any():
-                    return blk
-        return grass_patch.get((x % 16, 80 + (y % 16)))
+let selectedMap = 0;
+let tick = 0;
+let playing = true;
+let lastTime = null;
+const loaded = {{}};
 
-    user_local_sheets = [
-        'Metano_Altere_Transition_Base',
-        'INVERSEPATHWAY',
-        'CLIFF MIROR-Photoroom',
-        'Metano_Town_Trimmed',
-        'Metano_Town_Animated',
-        'CanyonCamp',
-        'P01P01A_layer1',
+function loadImage(src) {{
+  return new Promise((resolve, reject) => {{
+    const im = new Image();
+    im.onload = () => resolve(im);
+    im.onerror = reject;
+    im.src = src;
+  }});
+}}
+
+async function ensureMapLoaded(idx) {{
+  if (loaded[idx]) return loaded[idx];
+  const m = DATA.maps[idx];
+  const sky = await loadImage(m.sky_webp);
+  const clouds = await loadImage(m.cloud_strip_webp);
+  const cliffs = await loadImage(m.untouched_cliffs_webp);
+  const sea = await Promise.all(m.sea_frames_webp.map(loadImage));
+  loaded[idx] = {{ sky, clouds, cliffs, sea }};
+  return loaded[idx];
+}}
+
+function applyZoom() {{
+  const m = DATA.maps[selectedMap];
+  const z = el('zoomSelect').value;
+  const vp = el('viewport');
+  const scale = z === 'fit'
+    ? Math.min(1, (vp.clientWidth - 24) / m.width, (window.innerHeight * 0.72) / m.height)
+    : Number(z);
+  canvas.style.width = Math.round(m.width * scale) + 'px';
+  canvas.style.height = Math.round(m.height * scale) + 'px';
+}}
+
+function render() {{
+  const m = DATA.maps[selectedMap];
+  const assets = loaded[selectedMap];
+  if (!assets) return;
+  if (canvas.width !== m.width || canvas.height !== m.height) {{
+    canvas.width = m.width;
+    canvas.height = m.height;
+  }}
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0, 0, m.width, m.height);
+
+  if (el('showSky').checked) {{
+    ctx.drawImage(assets.sky, 0, 0);
+  }}
+  if (el('showClouds').checked) {{
+    const sw = assets.clouds.width;
+    const shift = Math.floor((DATA.cloud_speed_px_s * tick) / 60);
+    const startX = ((shift % sw) + sw) % sw - sw;
+    for (let x = startX; x < m.width; x += sw) {{
+      ctx.drawImage(assets.clouds, x, m.cloud_map_loc_y);
+    }}
+  }}
+  const seaPhase = Math.floor(tick / DATA.sea_frame_length_ticks) % DATA.sea_frame_count;
+  if (el('showSea').checked) {{
+    ctx.drawImage(assets.sea[seaPhase], 0, 0);
+  }}
+  if (el('showCliffs').checked) {{
+    ctx.drawImage(assets.cliffs, 0, 0);
+  }}
+  if (el('gridToggle').checked) {{
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 0.5; x < m.width; x += 8) {{ ctx.moveTo(x, 0); ctx.lineTo(x, m.height); }}
+    for (let y = 0.5; y < m.height; y += 8) {{ ctx.moveTo(0, y); ctx.lineTo(m.width, y); }}
+    ctx.stroke();
+  }}
+  const shiftPx = Math.floor((-DATA.cloud_speed_px_s * tick) / 60) % assets.clouds.width;
+  el('tickStatus').textContent = `Tick ${{tick}} (60 Hz) · Mer phase ${{seaPhase + 1}}/10 (far_sea ${{(seaPhase % 5) + 1}}/5, near_sea ${{seaPhase + 1}}/10) · Nuages wrap ${{shiftPx}}/${{assets.clouds.width}} px`;
+}}
+
+async function selectMap(idx) {{
+  selectedMap = idx;
+  const m = DATA.maps[idx];
+  el('stageTitle').textContent = `${{m.slug}}.rsground (${{m.width}} × ${{m.height}} px · ${{m.width / 8}} × ${{m.height / 8}} cases)`;
+  el('mapMeta').textContent = `${{m.animated_sea_cells}} cases de mer animées · Calques falaise/objets (${{m.untouched_layers.join(', ')}}) 100 % intacts`;
+  el('layerSummary').innerHTML = `<h3>Structure de <code>${{m.slug}}.rsground</code></h3>` +
+    `<p><strong>Background (LayeredBG) :</strong> <code>${{m.sky_bg}}</code> (fixe) + <code>${{m.cloud_bg}}</code> (<code>RepeatX: true</code>, <code>BGMovement: (-4, 0)</code>, <code>MapLoc.Y: ${{m.cloud_map_loc_y}}</code>).</p>` +
+    `<p><strong>Layer 1 (mer) :</strong> <code>${{m.animated_sea_cells}}</code> cases <code>v2_promontoire_jour_03</code> animées sur 10 phases canoniques Pelipper Post Office (<code>FrameLength: 10</code>, Phase 0 conservée aux coordonnées exactes <code>(tx, ty)</code>).</p>` +
+    `<p><strong>Calques falaise, objets et animations (${{m.untouched_layers.join(', ')}}) :</strong> strictement identiques à l'original octet pour octet.</p>`;
+  await ensureMapLoaded(idx);
+  applyZoom();
+  render();
+}}
+
+DATA.maps.forEach((m, i) => {{
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = `${{m.slug}}.rsground (${{m.width}}×${{m.height}} px)`;
+  el('mapSelect').appendChild(opt);
+}});
+
+el('mapSelect').onchange = e => selectMap(Number(e.target.value));
+el('zoomSelect').onchange = applyZoom;
+window.addEventListener('resize', applyZoom);
+['gridToggle', 'showSky', 'showClouds', 'showSea', 'showCliffs'].forEach(id => {{
+  el(id).onchange = render;
+}});
+el('playBtn').onclick = () => {{
+  playing = !playing;
+  el('playBtn').textContent = playing ? 'Pause' : 'Lecture';
+  el('playBtn').classList.toggle('active', playing);
+}};
+el('stepBtn').onclick = () => {{
+  playing = false;
+  el('playBtn').textContent = 'Lecture';
+  el('playBtn').classList.remove('active');
+  tick += DATA.sea_frame_length_ticks;
+  render();
+}};
+el('resetBtn').onclick = () => {{
+  tick = 0;
+  render();
+}};
+
+selectMap(0);
+function loop(ts) {{
+  if (lastTime !== null && playing) {{
+    const dt = Math.min((ts - lastTime) / 1000, 0.1);
+    tick += Math.max(1, Math.round(dt * 60));
+    render();
+  }}
+  lastTime = ts;
+  requestAnimationFrame(loop);
+}}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
+"""
+    viewer_path.write_text(html, encoding="utf-8")
+
+
+def main() -> None:
+    verify_root_immutability()
+
+    gfx = loadmod("pmdo_codec", ROOT / "source/pmdo_cote/build.py")
+
+    if RENDERS.exists():
+        shutil.rmtree(RENDERS)
+    RENDERS.mkdir(parents=True, exist_ok=True)
+
+    # 1. Load both original .rsground documents
+    nw_orig_raw = (ROOT / "cliffnordouesttest1.rsground").read_bytes()
+    day_orig_raw = (ROOT / "cliffdaytest.rsground").read_bytes()
+    nw_orig = json.loads(nw_orig_raw.decode("utf-8-sig"))
+    day_orig = json.loads(day_orig_raw.decode("utf-8-sig"))
+
+    # Collect exact (tx, ty) coordinates referenced on `v2_promontoire_jour_03` across both maps
+    needed_sea_coords: set[tuple[int, int]] = set()
+    for doc in (nw_orig, day_orig):
+        l1 = doc["Object"]["Layers"][1]
+        for col in l1["Tiles"]:
+            for cell in col:
+                for tl in cell["Layers"]:
+                    for f in tl["Frames"]:
+                        if f["Sheet"] == "v2_promontoire_jour_03":
+                            needed_sea_coords.add((f["TexLoc"]["X"], f["TexLoc"]["Y"]))
+
+    # 2. Build the 10 canonical PMD Sky Port (`reference_ciel_mer.png`) sea sheets (1312x1024)
+    #    and encode `Content/Tile/v2_promontoire_jour_03.tile` in native RogueEssence TileSheet format
+    sea_sheets, sea_info = build_canonical_pmdsky_sea_sheets()
+    sea_bank, phase_locs = build_pmdo_sea_bank(gfx, sea_sheets, needed_sea_coords)
+
+    tile_dir = RENDERS / "Content/Tile"
+    tile_dir.mkdir(parents=True, exist_ok=True)
+    sea_bank.write(tile_dir / f"{SEA_BANK_NAME}.tile")
+
+    # 3. Build sky and cloud wrap .dir assets for both maps using native `gfx.write_dir`
+    sky_src = build_sky_source_504x408()
+    nw_sky_im = reconstruct_map_sky_from_layer0(nw_orig, sky_src, fill_top_with_row0=True)
+    nw_cloud_strip = Image.open(NUAGES_PATH).convert("RGBA")  # 1440x208 canonical cloud wrap strip
+    nw_cloud_map_loc_y = 216  # Places the 208px cloud band at y=216..424 right above the y=424 sea horizon
+
+    day_sky_im = reconstruct_map_sky_from_layer0(day_orig, sky_src, fill_top_with_row0=False)
+    day_cloud_strip = reconstruct_cliffdaytest_cloud_strip(day_orig)  # 984x312 exact user cloud placement
+    day_cloud_map_loc_y = 0
+
+    bg_dir = RENDERS / "Content/BG"
+    bg_dir.mkdir(parents=True, exist_ok=True)
+    gfx.write_dir(bg_dir / "CLIFF_NORD_OUEST_CIEL.dir", nw_sky_im)
+    gfx.write_dir(bg_dir / "CLIFF_NORD_OUEST_NUAGES.dir", nw_cloud_strip)
+    gfx.write_dir(bg_dir / "CLIFF_DAY_CIEL.dir", day_sky_im)
+    gfx.write_dir(bg_dir / "CLIFF_DAY_NUAGES.dir", day_cloud_strip)
+
+    # 4. Transform both .rsground documents (leaving all cliff/object/animation layers untouched)
+    nw_doc, nw_stats = transform_rsground(
+        gfx,
+        "cliffnordouesttest1",
+        nw_orig,
+        phase_locs,
+        sky_bg_name="CLIFF_NORD_OUEST_CIEL",
+        cloud_bg_name="CLIFF_NORD_OUEST_NUAGES",
+        cloud_map_loc_y=nw_cloud_map_loc_y,
+    )
+    day_doc, day_stats = transform_rsground(
+        gfx,
+        "cliffdaytest",
+        day_orig,
+        phase_locs,
+        sky_bg_name="CLIFF_DAY_CIEL",
+        cloud_bg_name="CLIFF_DAY_NUAGES",
+        cloud_map_loc_y=day_cloud_map_loc_y,
+    )
+
+    # 5. Write updated .rsground files with UTF-8 BOM
+    ground_dir = RENDERS / "Data/Ground"
+    ground_dir.mkdir(parents=True, exist_ok=True)
+    for slug, doc in [("cliffnordouesttest1", nw_doc), ("cliffdaytest", day_doc)]:
+        encoded = "\ufeff" + json.dumps(doc, ensure_ascii=False, indent=2) + "\n"
+        raw_bytes = encoded.encode("utf-8")
+        (ground_dir / f"{slug}.rsground").write_bytes(raw_bytes)
+        (RENDERS / f"{slug}.rsground").write_bytes(raw_bytes)
+
+    # 6. Load in-memory repo tilesets ONLY for preview images/HTML
+    repo_sheets = load_repo_preview_sheets([nw_orig, day_orig])
+
+    viewer_maps = []
+    map_configs = [
+        (
+            "cliffnordouesttest1",
+            nw_orig,
+            nw_doc,
+            nw_stats,
+            nw_sky_im,
+            nw_cloud_strip,
+            nw_cloud_map_loc_y,
+            [2, 3],
+        ),
+        (
+            "cliffdaytest",
+            day_orig,
+            day_doc,
+            day_stats,
+            day_sky_im,
+            day_cloud_strip,
+            day_cloud_map_loc_y,
+            [0, 2, 3, 4, 5],
+        ),
     ]
-    for sname in user_local_sheets:
-        tb = gfx.TileBank(sname, preserve_layout=True)
-        tb.data[(0, 0)] = bytes(256)
-        tb.ids[bytes(256)] = (0, 0)
-        for tx, ty in needed_by_sheet.get(sname, set()):
-            blk = proxy_tile_arr(sname, tx, ty, tx, ty)
-            if blk is not None:
-                pm_blk = premult_arr(blk)
-                raw = pm_blk.tobytes()
-                tb.data[(tx, ty)] = raw
-                tb.ids.setdefault(raw, (tx, ty))
-        tb.write(STAGE / f'Content/Tile/{sname}.tile')
 
-    stage_nodes = {}
-    for p in sorted((STAGE / 'Content/Tile').glob('*.tile')):
-        with p.open('rb') as f:
-            stage_nodes[p.stem] = tools.read_node(f)
-    (STAGE / 'Content/Tile/index.idx').write_bytes(tools.encode_index(stage_nodes))
+    for slug, orig_doc, doc, stats, sky_im, cloud_strip, cloud_y, preview_layer_indices in map_configs:
+        mdir = RENDERS / slug
+        w_px, h_px = stats["dimensions_px"]
+        sea_frames = render_sea_layer_frames(orig_doc["Object"]["Layers"][1], sea_sheets, repo_sheets)
+        untouched_preview = render_untouched_layers_preview(doc, preview_layer_indices, repo_sheets)
+        cloud_t0 = render_cloud_wrap_at(cloud_strip, (w_px, h_px), cloud_y, 0)
 
-    out_nodes = {}
-    for p in sorted((OUT / 'Content/Tile').glob('*.tile')):
-        with p.open('rb') as f:
-            out_nodes[p.stem] = tools.read_node(f)
-    (OUT / 'Content/Tile/index.idx').write_bytes(tools.encode_index(out_nodes))
+        save_png(sky_im, mdir / "calques/00_ciel_bg.png")
+        save_png(cloud_strip, mdir / "calques/01_nuages_wrap_strip.png")
+        save_png(cloud_t0, mdir / "calques/01_nuages_wrap_t000.png")
+        save_png(untouched_preview, mdir / "calques/03_falaise_objets_intacts_apercu.png")
+        for f_idx, sf in enumerate(sea_frames):
+            save_png(sf, mdir / f"mer/mer_{f_idx:02d}.png")
+        save_png(sea_frames[0], mdir / "calques/02_mer_pmdsky_f00.png")
 
-    print(f'[{time.time()-t0:.1f}s] Rendering layer previews, WebP animations, and ORA...', flush=True)
-    nw_layers_rgba = render_static_layers_preview(doc_nw, repo_sheets_preview, proxy_tile_arr)
-    day_layers_rgba = render_static_layers_preview(doc_day, repo_sheets_preview, proxy_tile_arr)
+        write_ora(
+            RENDERS / f"{slug}_calques.ora",
+            (w_px, h_px),
+            [
+                ("00_ciel_bg", sky_im),
+                ("01_nuages_wrap_t000", cloud_t0),
+                ("02_mer_pmdsky_f00", sea_frames[0]),
+                ("03_falaise_objets_intacts_apercu", untouched_preview),
+            ],
+        )
 
-    nw_ora_dict = {
-        '00_ciel': nw_layers_rgba[0],
-        '01_nuages_f00': nw_cloud_frames[0],
-        '02_mer_f00': nw_sea_frames_rgba[0],
-        '03_falaises_promontoire': nw_layers_rgba[3],
-        '04_chemins_cascade': nw_layers_rgba[4],
-    }
-    for k, arr in nw_ora_dict.items():
-        Image.fromarray(arr).save(OUT / f'cliffnordouesttest1/calques/{k}.png')
-    write_ora(OUT / 'cliffnordouesttest1_calques.ora', nw_ora_dict)
+        anim_frames: list[Image.Image] = []
+        for f_idx in range(SEA_FRAME_COUNT):
+            tick = f_idx * SEA_FRAME_LENGTH
+            shift = (CLOUD_SPEED_PX_S * tick) // 60
+            cloud_frame = render_cloud_wrap_at(cloud_strip, (w_px, h_px), cloud_y, shift)
+            scene = Image.alpha_composite(sky_im, cloud_frame)
+            scene = Image.alpha_composite(scene, sea_frames[f_idx])
+            scene = Image.alpha_composite(scene, untouched_preview)
+            if f_idx == 0:
+                save_png(scene, RENDERS / f"review/{slug}_scene_t000.png")
+            anim_frames.append(scene)
 
-    day_ora_dict = {
-        '00_ciel': day_layers_rgba[0],
-        '01_mer_f00': day_sea_frames_rgba[0],
-        '02_falaises_relief': day_layers_rgba[2],
-        '03_objets_vegetation': day_layers_rgba[3],
-        '04_cascades_eau': day_layers_rgba[4],
-        '05_nuages_f00': day_cloud_frames[0],
-        '06_objets_decor': day_layers_rgba[6],
-    }
-    for k, arr in day_ora_dict.items():
-        Image.fromarray(arr).save(OUT / f'cliffdaytest/calques/{k}.png')
-    write_ora(OUT / 'cliffdaytest_calques.ora', day_ora_dict)
+        webp_path = RENDERS / f"review/{slug}_scene_animee.webp"
+        webp_path.parent.mkdir(parents=True, exist_ok=True)
+        anim_frames[0].save(
+            webp_path,
+            save_all=True,
+            append_images=anim_frames[1:],
+            duration=167,
+            loop=0,
+            lossless=True,
+            method=4,
+        )
 
-    nw_scenes, day_scenes = [], []
-    for step_idx in range(CLOUD_PHASES):
-        sea_p = step_idx % SEA_PHASES
-        cloud_p = step_idx % CLOUD_PHASES
+        viewer_maps.append(
+            {
+                "slug": slug,
+                "width": w_px,
+                "height": h_px,
+                "sky_bg": stats["background_layers"][0]["anim_index"],
+                "cloud_bg": stats["background_layers"][1]["anim_index"],
+                "cloud_map_loc_y": cloud_y,
+                "animated_sea_cells": stats["animated_sea_cells_layer1"],
+                "untouched_layers": [
+                    f"Layer {i} ({doc['Object']['Layers'][i]['Name']})"
+                    for i in stats["untouched_layer_indices"]
+                ],
+                "sky_webp": image_to_webp_data_uri(sky_im),
+                "cloud_strip_webp": image_to_webp_data_uri(cloud_strip),
+                "untouched_cliffs_webp": image_to_webp_data_uri(untouched_preview),
+                "sea_frames_webp": [image_to_webp_data_uri(im) for im in sea_frames],
+            }
+        )
 
-        im_nw = Image.fromarray(nw_layers_rgba[0].copy())
-        im_nw.alpha_composite(Image.fromarray(nw_cloud_frames[cloud_p]))
-        im_nw.alpha_composite(Image.fromarray(nw_sea_frames_rgba[sea_p]))
-        im_nw.alpha_composite(Image.fromarray(nw_layers_rgba[3]))
-        im_nw.alpha_composite(Image.fromarray(nw_layers_rgba[4]))
-        nw_scenes.append(im_nw)
-
-        im_day = Image.fromarray(day_layers_rgba[0].copy())
-        im_day.alpha_composite(Image.fromarray(day_sea_frames_rgba[sea_p]))
-        im_day.alpha_composite(Image.fromarray(day_layers_rgba[2]))
-        im_day.alpha_composite(Image.fromarray(day_layers_rgba[3]))
-        im_day.alpha_composite(Image.fromarray(day_layers_rgba[4]))
-        im_day.alpha_composite(Image.fromarray(day_cloud_frames[cloud_p]))
-        im_day.alpha_composite(Image.fromarray(day_layers_rgba[6]))
-        day_scenes.append(im_day)
-
-    nw_scenes[0].save(OUT / 'review/cliffnordouesttest1_scene_t000.png')
-    nw_scenes[0].save(
-        OUT / 'review/cliffnordouesttest1_scene_animee.webp',
-        save_all=True, append_images=nw_scenes[1:], duration=167, loop=0, lossless=True
+    # 7. Build contact sheet of the 10 canonical PMD Sky Port sea frames
+    board = Image.new("RGB", (1240, 520), "#0e1a28")
+    draw = ImageDraw.Draw(board)
+    draw.text(
+        (16, 12),
+        "PMD Sky Port (Pelipper Post Office) - 10 phases canoniques de mer (5 far_sea + 10 near_sea) & wrap nuages",
+        fill="#ebf1f5",
     )
-    day_scenes[0].save(OUT / 'review/cliffdaytest_scene_t000.png')
-    day_scenes[0].save(
-        OUT / 'review/cliffdaytest_scene_animee.webp',
-        save_all=True, append_images=day_scenes[1:], duration=167, loop=0, lossless=True
-    )
+    for f_idx in range(SEA_FRAME_COUNT):
+        col = f_idx % 5
+        row = f_idx // 5
+        x0 = 16 + col * 244
+        y0 = 42 + row * 230
+        crop = Image.fromarray(sea_sheets[f_idx][144:384, :240], "RGBA")
+        bg_tile = Image.new("RGBA", crop.size, (18, 34, 53, 255))
+        comp = Image.alpha_composite(bg_tile, crop).convert("RGB")
+        board.paste(comp, (x0, y0 + 18))
+        draw.text(
+            (x0, y0),
+            f"Phase {f_idx:02d} (far {f_idx % 5 + 1}/5, near {f_idx + 1}/10)",
+            fill="#9be28f",
+        )
+    save_png(board, RENDERS / "review/planche_10_phases_mer_pmdsky.png")
 
-    pose_sheet = Image.new('RGBA', (960, 560), (14, 24, 38, 255))
-    dr = ImageDraw.Draw(pose_sheet)
-    dr.text((16, 12), 'MER ANIMEE (v2_promontoire_jour_03) — 8 phases cycle palette (FrameLength=10 ticks)', fill=(184, 221, 154, 255))
-    for p in range(SEA_PHASES):
-        crop = sea_imgs[p].crop((0, 144, 220, 320)).resize((110, 88), Image.Resampling.NEAREST)
-        pose_sheet.alpha_composite(crop, (16 + p * 116, 36))
-        dr.text((16 + p * 116, 128), f'Mer phase {p:02d}', fill=(220, 230, 240, 255))
+    # 8. Copy canonical PMDO index merger INSTALLER.py and write README.md + manifest.json
+    shutil.copyfile(ROOT / "source/pmdo_cote/INSTALLER.py", RENDERS / "INSTALLER.py")
+    readme_text = """# Cliff Nord Jour Animé (`cliffnordouesttest1` & `cliffdaytest`) — Mer canonique PMD Sky Port & Wrap Nuages
 
-    dr.text((16, 156), 'NUAGES ANIMES (01_long_cap_jour_02) — 16 phases derive eolienne multi-altitude (FrameLength=10 ticks)', fill=(184, 221, 154, 255))
-    for p in range(CLOUD_PHASES):
-        col_i = p % 4
-        row_i = p // 4
-        crop = Image.fromarray(day_cloud_frames[p]).crop((0, 32, 960, 304)).resize((224, 68), Image.Resampling.NEAREST)
-        bg_box = Image.new('RGBA', (224, 68), (52, 122, 198, 255))
-        bg_box.alpha_composite(crop)
-        pose_sheet.alpha_composite(bg_box, (16 + col_i * 234, 182 + row_i * 90))
-        dr.text((22 + col_i * 234, 186 + row_i * 90), f'Nuages {p:02d}', fill=(255, 255, 255, 255))
-    pose_sheet.save(OUT / 'review/planche_phases_mer_nuages.png')
+Ce lot applique **uniquement** les deux animations demandées sur `cliffnordouesttest1.rsground` et `cliffdaytest.rsground` :
 
-    ident = uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/meromoonmeri/projet-pmdo/' + NAMESPACE)
-    mod_xml = f'''<?xml version="1.0" encoding="utf-8"?>
-<Header>
-  <Name>Cliff Nord-Ouest et Cliff Day - Nuages et Mer Animes (0.8.12)</Name>
-  <Author>meromoonmeri</Author>
-  <Description>Animation des calques de nuages (16 phases) et de mer (8 phases) pour cliffnordouesttest1.rsground et cliffdaytest.rsground sous PMDO 0.8.12.</Description>
-  <Namespace>{NAMESPACE}</Namespace>
-  <UUID>{ident}</UUID>
-  <Version>1.0.0.0</Version>
-  <GameVersion>0.8.12.0</GameVersion>
-  <ModType>Quest</ModType>
-  <Relationships />
-</Header>
-'''
-    (STAGE / 'Mod.xml').write_text(mod_xml, encoding='utf-8')
+1. **Aucun calque de falaise, d'objet ou d'animation existante n'est touché, renommé ou déplacé** :
+   - Dans `cliffnordouesttest1.rsground` : `Layers[2]` (`New Layer`) et `Layers[3]` (`Layer 3`) sont **100 % identiques octet pour octet** à l'original (ainsi que la case `Altere_Pond_Cliffs` sur `Layers[1]`).
+   - Dans `cliffdaytest.rsground` : `Layers[2]` (`Layer 2`), `Layers[3]` (`Layer 4`), `Layers[4]` (`Layer 3`), les 5 cases `Altere_Pond_Cliffs` / `CanyonCamp` sur `Layers[0]` et les **325 cases d'objets** (`Altere_Pond_Objects`, `Altere_Pond_Objects_Under`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) sur `Layers[5]` (`Cloud/nuage`) sont **100 % identiques octet pour octet** à l'original.
+   - Aucune banque `.tile` factice/proxy n'est générée pour les falaises ou les objets : seule `Content/Tile/v2_promontoire_jour_03.tile` est livrée.
 
-    installer_code = '''#!/usr/bin/env python3
-"""Installe ou met a jour les calques animes de nuages et de mer pour
-cliffnordouesttest1.rsground et cliffdaytest.rsground dans un mod PMDO 0.8.12 existant.
+2. **Nuages : uniquement le wrap overlay activé (`LayeredBG` / `MapBG`)** :
+   - `Object["Background"]` est configuré en `RogueEssence.Dungeon.LayeredBG, RogueEssence` avec :
+     - Ciel fixe (`CLIFF_NORD_OUEST_CIEL` / `CLIFF_DAY_CIEL`, `RepeatX = false`, `BGMovement = (0, 0)`, `Parallax = "1, 1"`).
+     - Nuages en wrap horizontal (`CLIFF_NORD_OUEST_NUAGES` / `CLIFF_DAY_NUAGES`, `RepeatX = true`, `RepeatY = false`, `BGMovement = (-4, 0)`, `Parallax = "1, 1"`).
+   - Les tuiles statiques `00_ciel` sur `Layers[0]` et `01_long_cap_jour_02` sur `Layers[5]` sont vidées pour que le `LayeredBG` soit visible derrière les calques de tuiles sans doublon statique.
 
-- Sauvegarde automatiquement (.avant_anim.bak) les fichiers .rsground, .tile et index.idx
-  existants avant de les mettre a jour.
-- Ne remplace JAMAIS vos autres feuilles .tile personnalisees (terrain, INVERSEPATHWAY, etc.).
-- Reconstruit Content/Tile/index.idx avec les nouvelles banques animees.
+3. **Mer (`Layers[1]`) : animation canonique PMD Sky Port (`reference_ciel_mer.png`, Pelipper Post Office)** :
+   - Extrait les **5 bandes `far_sea`** (`(544+56*f, 224, 592+56*f, 352)`, `48×128` px) et les **10 bandes `near_sea`** (`(824+56*f, 224, 872+56*f, 392)`, `48×168` px) de `source/falaises_cotieres_nues/reference_ciel_mer.png`.
+   - Construit les 10 phases canoniques `1312×1024` px dans le repère exact de `v2_promontoire_jour_03` (`0` pixel d'écart sur la phase 0 face à `sprites/cote_dix_zones/fonds/jour_mer_00.png`).
+   - Encode `Content/Tile/v2_promontoire_jour_03.tile` au format binaire natif `TileSheet` de RogueEssence (Phase 0 conservée aux coordonnées `(tx, ty)` exactes dans `ty = 0..127`, phases `1..9` dédupliquées dans `ty >= 128`) et anime les `6209` cases de mer de `cliffnordouesttest1.rsground` et les `7503` cases de mer de `cliffdaytest.rsground` sur 10 phases (`FrameLength = 10` ticks à 60 Hz).
 
-Usage :
-  python INSTALLER.py "CHEMIN/VERS/PMDO/MODS/VOTRE_MOD" --dry-run
-  python INSTALLER.py "CHEMIN/VERS/PMDO/MODS/VOTRE_MOD"
+## Limites honnêtes
+- `art_approved: false`
+- `runtime_tested: false` (aucun test d'ouverture dans l'exécutable PMDO n'a été effectué dans cet environnement).
 """
-import argparse
-from pathlib import Path
-import shutil
-import struct
-
-CORE_TILES = {'00_ciel.tile', '01_long_cap_jour_02.tile', 'v2_promontoire_jour_03.tile'}
-CORE_GROUNDS = {'cliffnordouesttest1.rsground', 'cliffdaytest.rsground'}
-
-
-def exact(stream, size):
-    data = stream.read(size)
-    if len(data) != size:
-        raise ValueError('Fichier binaire tronque')
-    return data
-
-
-def read_string(stream):
-    size = 0
-    for shift in range(0, 35, 7):
-        byte = exact(stream, 1)[0]
-        size |= (byte & 127) << shift
-        if byte < 128:
-            return exact(stream, size).decode('utf-8')
-    raise ValueError('Longueur .NET invalide')
-
-
-def write_string(value):
-    raw = value.encode('utf-8')
-    size, header = len(raw), bytearray()
-    while size >= 128:
-        header.append((size & 127) | 128)
-        size >>= 7
-    return bytes(header) + bytes([size]) + raw
-
-
-def read_node(stream):
-    header = exact(stream, 8)
-    tile_size, count = struct.unpack('<ii', header)
-    if tile_size <= 0 or not 0 <= count <= 10_000_000:
-        raise ValueError('En-tete TileIndexNode invalide')
-    return header + exact(stream, count * 16)
-
-
-def read_index(path):
-    if not path.exists():
-        return {}
-    with path.open('rb') as f:
-        count = struct.unpack('<i', exact(f, 4))[0]
-        nodes = {}
-        for _ in range(count):
-            name = read_string(f)
-            nodes[name] = read_node(f)
-        return nodes
-
-
-def encode_index(nodes):
-    return struct.pack('<i', len(nodes)) + b''.join(write_string(k) + nodes[k] for k in sorted(nodes))
-
-
-def install(source, target, dry_run=False):
-    source, target = Path(source).resolve(), Path(target).resolve()
-    if not (target / 'Mod.xml').is_file():
-        raise ValueError('Choisir la racine du mod contenant Mod.xml.')
-
-    updates = []
-    for tname in sorted(CORE_TILES):
-        src = source / 'Content/Tile' / tname
-        if src.is_file():
-            updates.append((src, target / 'Content/Tile' / tname, True))
-    for src in sorted((source / 'Content/Tile').glob('*.tile')):
-        if src.name not in CORE_TILES:
-            dst = target / 'Content/Tile' / src.name
-            if not dst.exists():
-                updates.append((src, dst, False))
-    for src in sorted((source / 'Content/BG').glob('*.dir')):
-        updates.append((src, target / 'Content/BG' / src.name, True))
-    for gname in sorted(CORE_GROUNDS):
-        src = source / 'Data/Ground' / gname
-        if not src.is_file():
-            src = source / gname
-        if src.is_file():
-            updates.append((src, target / 'Data/Ground' / gname, True))
-
-    print(f'{len(updates)} fichiers a installer/mettre a jour dans {target}')
-    if dry_run:
-        for src, dst, _ in updates:
-            print('  [DRY-RUN]', dst.relative_to(target))
-        return
-
-    for src, dst, overwrite in updates:
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        if dst.exists():
-            if not overwrite:
-                continue
-            if dst.read_bytes() != src.read_bytes():
-                bak = dst.with_suffix(dst.suffix + '.avant_anim.bak')
-                if not bak.exists():
-                    shutil.copy2(dst, bak)
-        shutil.copy2(src, dst)
-
-    idx_path = target / 'Content/Tile/index.idx'
-    nodes = read_index(idx_path)
-    for tile in sorted((target / 'Content/Tile').glob('*.tile')):
-        with tile.open('rb') as f:
-            nodes[tile.stem] = read_node(f)
-    new_idx = encode_index(nodes)
-    if idx_path.exists() and idx_path.read_bytes() != new_idx:
-        bak = idx_path.with_suffix('.idx.avant_anim.bak')
-        if not bak.exists():
-            shutil.copy2(idx_path, bak)
-    idx_path.parent.mkdir(parents=True, exist_ok=True)
-    idx_path.write_bytes(new_idx)
-    print(f'Installation terminee : index.idx mis a jour ({len(nodes)} feuilles .tile).')
-
-
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument('target', help='Chemin du mod PMDO cible (dossier contenant Mod.xml)')
-    ap.add_argument('--dry-run', action='store_true')
-    args = ap.parse_args()
-    install(Path(__file__).resolve().parent, Path(args.target), args.dry_run)
-'''
-    (STAGE / 'INSTALLER.py').write_text(installer_code, encoding='utf-8')
-    (OUT / 'INSTALLER.py').write_text(installer_code, encoding='utf-8')
-
-    readme_text = """# Cliff Nord-Ouest & Cliff Day — Nuages et Mer Animés (PMDO 0.8.12)
-
-## Ce qui a été animé
-1. **`cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px)** :
-   - **Calque `01 Cloud/nuage (16 phases)`** (`01_long_cap_jour_02.tile`) : 16 phases de dérive éolienne multi-altitude sans saut de boucle (`FrameLength = 10` ticks = `2,67 s`), placé au-dessus du ciel `00_ciel` et derrière la mer/falaise. Le haut du ciel (`y = 0..25`) a également été complété avec `00_ciel`.
-   - **Calque `02 Mer animee (8 phases)`** (`v2_promontoire_jour_03.tile`) : les `6 209` cases de mer passent de 1 frame fixe aux **8 phases canoniques** (`jour_mer_00..07.png`, `FrameLength = 10` ticks = `1,33 s`).
-   - **Calque `04 Chemins et cascade animee`** (`Metano_Town_Animation_Tileset.tile`) : les `80` cases d'eau/cascade Métano en bas à droite (`x = 90..97, y = 88..97`) passent de 1 frame fixe à leurs **4 phases natives** (`FrameLength = 10`).
-   - **`Background` (`LayeredBG`)** : configuré avec `CLIFF_JOUR_CIEL`, `CLIFF_JOUR_ASTRES` et `CLIFF_JOUR_NUAGES` (`RepeatX = true`, `-4 px/s`).
-
-2. **`cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px)** :
-   - **Calque `01 Mer animee (8 phases)`** (`v2_promontoire_jour_03.tile`) : les `7 503` cases de mer passent de 1 frame fixe aux **8 phases canoniques** (`FrameLength = 10` ticks = `1,33 s`).
-   - **Calque `Cloud/nuage (16 phases)`** (`01_long_cap_jour_02.tile`) : la phase 0 conserve à 100 % les `600` tuiles de nuages posées sur la carte (`y = 5..38`), animées sur **16 phases** fluides multi-altitudes (`FrameLength = 10` ticks = `2,67 s`).
-   - **Calque `06 Objets Decor (ex-Cloud/nuage)`** : les `325` tuiles d'objets/décors (`Altere_Pond_Objects`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) qui étaient mélangées dans `Cloud/nuage` sont isolées proprement sur leur propre calque au-dessus afin qu'aucun décor ne bouge avec les nuages ni ne soit perdu.
-   - **Calque `04 Cascades et eau animee`** (`Metano_Town_Animation_Tileset.tile`) : les `520` tuiles d'eau/cascades Métano ont été nettoyées (suppression des frames vides `""` qui faisaient clignoter l'eau, restauration des phases intermédiaires `dx = 6 / 8 / 9`, cadence ramenée de `60` à `10` ticks).
-
-## Installation dans votre projet PMDO 0.8.12 existant
-Fermez PMDO, puis lancez :
-```bash
-python INSTALLER.py "CHEMIN/VERS/PMDO/MODS/VOTRE_MOD"
-```
-Le script met à jour `cliffnordouesttest1.rsground`, `cliffdaytest.rsground`, `00_ciel.tile`, `01_long_cap_jour_02.tile`, `v2_promontoire_jour_03.tile` et reconstruit `Content/Tile/index.idx` sans toucher à vos autres feuilles `.tile` (`INVERSEPATHWAY.tile`, `terrain.tile`, etc.), avec sauvegarde automatique `.avant_anim.bak`.
-"""
-    (STAGE / 'README.md').write_text(readme_text, encoding='utf-8')
-    (OUT / 'README.md').write_text(readme_text, encoding='utf-8')
+    (RENDERS / "README.md").write_text(readme_text, encoding="utf-8")
 
     manifest = {
-        'lot': 'cliff_nord_jour_anime_v1',
-        'pmdo_version': '0.8.12.0',
-        'namespace': NAMESPACE,
-        'art_approved': False,
-        'runtime_tested': False,
-        'originals_preserved_immutable': {
-            'cliffnordouesttest1.rsground': sha256(orig_nw_path),
-            'cliffdaytest.rsground': sha256(orig_day_path),
+        "id": "cliff_nord_jour_anime_v1",
+        "pmdo_version": "0.8.12.0",
+        "art_approved": False,
+        "runtime_tested": False,
+        "root_originals_untouched": EXPECTED_ROOT_SHA256,
+        "sea_animation": {
+            **sea_info,
+            "tile_bank": f"Content/Tile/{SEA_BANK_NAME}.tile",
+            "total_encoded_8x8_tiles": len(sea_bank.data),
+            "unique_8x8_patterns": len(sea_bank.ids),
         },
-        'sea_animation': {
-            'sheet': 'v2_promontoire_jour_03',
-            'phases': SEA_PHASES,
-            'frame_length_ticks': SEA_TICKS,
-            'loop_ticks': SEA_PHASES * SEA_TICKS,
-            'source_files': [f'sprites/cote_dix_zones/fonds/jour_mer_{p:02d}.png' for p in range(SEA_PHASES)],
-            'unique_tiles_in_bank': len(sea_bank.data),
-        },
-        'cloud_animation': {
-            'sheet': '01_long_cap_jour_02',
-            'phases': CLOUD_PHASES,
-            'frame_length_ticks': CLOUD_TICKS,
-            'loop_ticks': CLOUD_PHASES * CLOUD_TICKS,
-            'source_file': 'sprites/cote_dix_zones/fonds/jour_nuages.png',
-            'motion': 'derive eolienne sinusoidale multi-altitude sans saut de boucle (-10 px, +12 px, -8 px)',
-            'unique_tiles_in_bank': len(cloud_bank.data),
-        },
-        'maps': {
-            'cliffnordouesttest1': {
-                'grid_8px': [gw_nw, gh_nw],
-                'size_px': [gw_nw * 8, gh_nw * 8],
-                'sea_animated_cells': nw_sea_anim_cells,
-                'cloud_animated_cells': nw_cloud_anim_cells,
-                'cascade_animated_cells': nw_cascade_fixed,
-                'layers': [L['Name'] for L in o_nw['Layers']],
-                'sha256': sha256(OUT / 'cliffnordouesttest1.rsground'),
-            },
-            'cliffdaytest': {
-                'grid_8px': [gw_day, gh_day],
-                'size_px': [gw_day * 8, gh_day * 8],
-                'sea_animated_cells': day_sea_anim_cells,
-                'cloud_animated_cells': day_cloud_anim_cells,
-                'cloud_phase0_preserved_tiles': len(day_cloud_p0_map),
-                'props_separated_from_cloud_layer': 325,
-                'cascade_animated_cells': day_cascade_fixed,
-                'layers': [L['Name'] for L in o_day['Layers']],
-                'sha256': sha256(OUT / 'cliffdaytest.rsground'),
-            },
+        "maps": {
+            "cliffnordouesttest1": nw_stats,
+            "cliffdaytest": day_stats,
         },
     }
-    for base_dir in (OUT, STAGE, HERE):
-        (base_dir / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    manifest_bytes = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    (HERE / "manifest.json").write_bytes(manifest_bytes)
+    (RENDERS / "manifest.json").write_bytes(manifest_bytes)
 
-    print(f'[{time.time()-t0:.1f}s] Packaging ZIPs...', flush=True)
-    mod_zip_paths = [
-        OUT / 'mod_cliff_nord_jour_pmdo_0812.zip',
-        R / 'mod_cliff_nord_jour_pmdo_0812.zip',
-    ]
-    with zipfile.ZipFile(mod_zip_paths[0], 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
-        for p in sorted(STAGE.rglob('*')):
-            if p.is_file():
-                z.write(p, f'{NAMESPACE}/{p.relative_to(STAGE).as_posix()}')
-    shutil.copyfile(mod_zip_paths[0], mod_zip_paths[1])
+    zip_path = RENDERS / "cliff_nord_jour_anime_pmdo_0812.zip"
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
+        for rel in [
+            "Data/Ground/cliffnordouesttest1.rsground",
+            "Data/Ground/cliffdaytest.rsground",
+            f"Content/Tile/{SEA_BANK_NAME}.tile",
+            "Content/BG/CLIFF_NORD_OUEST_CIEL.dir",
+            "Content/BG/CLIFF_NORD_OUEST_NUAGES.dir",
+            "Content/BG/CLIFF_DAY_CIEL.dir",
+            "Content/BG/CLIFF_DAY_NUAGES.dir",
+            "INSTALLER.py",
+            "README.md",
+            "manifest.json",
+        ]:
+            p = RENDERS / rel
+            info = zipfile.ZipInfo(rel, (2026, 10, 4, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o100644 << 16
+            zf.writestr(info, p.read_bytes(), compresslevel=6)
 
-    livrable_zip = R / 'livrable_cliff_nord_jour_anime_v1.zip'
-    with zipfile.ZipFile(livrable_zip, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
-        for p in sorted(OUT.rglob('*')):
-            if p.is_file() and p.name != 'mod_cliff_nord_jour_pmdo_0812.zip':
-                z.write(p, f'cliff_nord_jour_anime_v1/{p.relative_to(OUT).as_posix()}')
+    shutil.copyfile(zip_path, ROOT / "livrable_cliff_nord_jour_anime_v1.zip")
+    build_viewer_html(ROOT / "apercu_cliff_nord_jour_anime_v1.html", viewer_maps, manifest["sea_animation"])
 
-    print(f'[{time.time()-t0:.1f}s] BUILD OK:', json.dumps(manifest['maps'], indent=2))
+    verify_root_immutability()
+    print(
+        f"Build complete: {len(sea_bank.data)} tiles ({len(sea_bank.ids)} unique) in {SEA_BANK_NAME}.tile, "
+        f"nw={nw_stats['animated_sea_cells_layer1']} sea cells, day={day_stats['animated_sea_cells_layer1']} sea cells."
+    )
 
 
-if __name__ == '__main__':
-    build()
+if __name__ == "__main__":
+    main()

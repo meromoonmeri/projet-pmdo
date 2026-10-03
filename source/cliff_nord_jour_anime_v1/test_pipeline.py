@@ -1,226 +1,223 @@
 #!/usr/bin/env python3
-"""End-to-end verification of source/cliff_nord_jour_anime_v1:
-1. Root files cliffnordouesttest1.rsground & cliffdaytest.rsground remain byte-identical
-   to commit 3d801c76 (verified via source/zones_bg_audit_v1/audit.py).
-2. Animated .rsground format, UTF-8 BOM, LayeredBG, 8-phase sea, 16-phase clouds,
-   325 separated props on cliffdaytest, and fixed Metano_Town_Animation_Tileset cascades.
-3. Binary .tile and index.idx integrity for 00_ciel, 01_long_cap_jour_02, v2_promontoire_jour_03.
-4. OpenRaster (.ora), PNG phase frames, animated WebP previews, and ZIP archives.
-5. INSTALLER.py safe update & .avant_anim.bak backup verification on a mock mod folder.
-6. Headless PMDO 0.8.12 runtime load test (DataManager.Instance:GetGround) on both maps.
 """
-from pathlib import Path
+Automated verification suite for `cliff_nord_jour_anime_v1`:
+Verifies that:
+1. Root `cliffnordouesttest1.rsground` and `cliffdaytest.rsground` are byte-identical to their audited SHA-256 hashes.
+2. No cliff, object, or existing animation layer is touched, renamed, split, or re-ordered in either `.rsground`.
+3. No proxy `.tile` files are generated for cliff, terrain, or object sheets.
+4. Cloud wrap overlay (`LayeredBG` / `MapBG` with `RepeatX = True`, `BGMovement = (-4, 0)`) is properly configured and its `.dir` sheets decode losslessly.
+5. Sea animation on `Layers[1]` (`v2_promontoire_jour_03`) is canonically built from PMD Sky Port (`source/falaises_cotieres_nues/reference_ciel_mer.png`, Pelipper Post Office: 5 `far_sea` phases + 10 `near_sea` phases, `FrameLength = 10`).
+"""
+
+from __future__ import annotations
+
+import hashlib
 import importlib.util
 import json
-import shutil
-import struct
-import subprocess
-import tempfile
+import sys
+import unittest
 import zipfile
+from pathlib import Path
 
+import numpy as np
 from PIL import Image
 
-R = Path(__file__).resolve().parents[2]
-OUT = R / 'renders' / 'cliff_nord_jour_anime_v1'
-STAGE = Path('/tmp/stage_cliff_nord_jour_anime_v1')
-PMDO_DIR = Path('/tmp/pmdo_bin')
+ROOT = Path(__file__).resolve().parents[2]
+HERE = Path(__file__).resolve().parent
+RENDERS = ROOT / "renders/cliff_nord_jour_anime_v1"
+
+sys.path.insert(0, str(ROOT / "source/pmdo_cote"))
+spec_build = importlib.util.spec_from_file_location("cliff_build", HERE / "build.py")
+B = importlib.util.module_from_spec(spec_build)
+spec_build.loader.exec_module(B)
+
+spec_verify = importlib.util.spec_from_file_location("pmdo_verify", ROOT / "source/pmdo_cote/verify.py")
+V = importlib.util.module_from_spec(spec_verify)
+spec_verify.loader.exec_module(V)
 
 
-def load_tile_coords(path):
-    with path.open('rb') as f:
-        ts, cnt = struct.unpack('<ii', f.read(8))
-        assert ts == 8, f'{path}: expected tile_size=8, got {ts}'
-        return {(x, y) for x, y, _ in (struct.unpack('<iiq', f.read(16)) for _ in range(cnt))}
+class TestCliffNordJourAnimeV1(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.nw_orig = json.loads((ROOT / "cliffnordouesttest1.rsground").read_bytes().decode("utf-8-sig"))
+        cls.day_orig = json.loads((ROOT / "cliffdaytest.rsground").read_bytes().decode("utf-8-sig"))
+        cls.nw_out_raw = (RENDERS / "Data/Ground/cliffnordouesttest1.rsground").read_bytes()
+        cls.day_out_raw = (RENDERS / "Data/Ground/cliffdaytest.rsground").read_bytes()
+        cls.nw_out = json.loads(cls.nw_out_raw.decode("utf-8-sig"))
+        cls.day_out = json.loads(cls.day_out_raw.decode("utf-8-sig"))
+        cls.manifest = json.loads((RENDERS / "manifest.json").read_text(encoding="utf-8"))
 
+    def test_01_root_files_immutable(self) -> None:
+        for fn, expected in B.EXPECTED_ROOT_SHA256.items():
+            actual = hashlib.sha256((ROOT / fn).read_bytes()).hexdigest()
+            self.assertEqual(actual, expected, f"Root {fn} SHA-256 changed!")
 
-def test_all():
-    # 1. Root immutability against exports/zones_bg_audit_v1/audit.json
-    import hashlib
-    aud = json.loads((R / 'exports/zones_bg_audit_v1/audit.json').read_text(encoding='utf-8'))
-    for m in aud['maps']:
-        actual_sha = hashlib.sha256((R / m['file']).read_bytes()).hexdigest()
-        assert actual_sha == m['sha256'], f"{m['file']} modified! {actual_sha} != {m['sha256']}"
-    print('PASS 1/6: Root cliffnordouesttest1.rsground & cliffdaytest.rsground byte-identical to audit.json')
+    def test_02_utf8_bom_and_pmdo_0812_version(self) -> None:
+        self.assertTrue(self.nw_out_raw.startswith(b"\xef\xbb\xbf"))
+        self.assertTrue(self.day_out_raw.startswith(b"\xef\xbb\xbf"))
+        self.assertEqual(self.nw_out["Version"], "0.8.12.0")
+        self.assertEqual(self.day_out["Version"], "0.8.12.0")
 
-    # 2. Load animated .tile coordinates and index.idx
-    spec = importlib.util.spec_from_file_location('inst', OUT / 'INSTALLER.py')
-    inst = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(inst)
-    idx_nodes = inst.read_index(OUT / 'Content/Tile/index.idx')
-    assert set(idx_nodes.keys()) == {'00_ciel', '01_long_cap_jour_02', 'v2_promontoire_jour_03'}
+    def test_03_cliffnordouesttest1_cliff_and_object_layers_untouched(self) -> None:
+        orig_o = self.nw_orig["Object"]
+        out_o = self.nw_out["Object"]
+        self.assertEqual(len(out_o["Layers"]), 4)
+        self.assertEqual([l["Name"] for l in out_o["Layers"]], [l["Name"] for l in orig_o["Layers"]])
+        # Layer 2 (New Layer = cliff/terrain) and Layer 3 (Layer 3 = cliff/waterfalls) must be 100% untouched
+        self.assertEqual(out_o["Layers"][2], orig_o["Layers"][2])
+        self.assertEqual(out_o["Layers"][3], orig_o["Layers"][3])
+        # Layer 1 cell (10, 86) Altere_Pond_Cliffs must be untouched
+        self.assertEqual(
+            out_o["Layers"][1]["Tiles"][10][86],
+            orig_o["Layers"][1]["Tiles"][10][86],
+        )
+        self.assertEqual(out_o["obstacles"], orig_o["obstacles"])
+        self.assertEqual(out_o["Entities"], orig_o["Entities"])
+        self.assertEqual(out_o["Decorations"], orig_o["Decorations"])
 
-    coords_sky = load_tile_coords(OUT / 'Content/Tile/00_ciel.tile')
-    coords_sea = load_tile_coords(OUT / 'Content/Tile/v2_promontoire_jour_03.tile')
-    coords_cloud = load_tile_coords(OUT / 'Content/Tile/01_long_cap_jour_02.tile')
-    assert len(coords_sky) == 63 * 51
-    assert len(coords_sea) > 15000
-    assert (0, 0) in coords_cloud and len(coords_cloud) > 1000
-    print(f'PASS 2/6: Core .tile banks valid (sky={len(coords_sky)}, sea={len(coords_sea)}, cloud={len(coords_cloud)})')
+    def test_04_cliffdaytest_cliff_and_object_layers_untouched(self) -> None:
+        orig_o = self.day_orig["Object"]
+        out_o = self.day_out["Object"]
+        self.assertEqual(len(out_o["Layers"]), 6)
+        self.assertEqual([l["Name"] for l in out_o["Layers"]], [l["Name"] for l in orig_o["Layers"]])
+        # Layers 2, 3, 4 (cliffs, objects, waterfalls/animations) must be 100% untouched
+        self.assertEqual(out_o["Layers"][2], orig_o["Layers"][2])
+        self.assertEqual(out_o["Layers"][3], orig_o["Layers"][3])
+        self.assertEqual(out_o["Layers"][4], orig_o["Layers"][4])
+        # Layer 0 non-sky cells (Altere_Pond_Cliffs at (47,83) and CanyonCamp at (50..51,73..74)) must be untouched
+        self.assertEqual(out_o["Layers"][0]["Tiles"][47][83], orig_o["Layers"][0]["Tiles"][47][83])
+        for x in (50, 51):
+            for y in (73, 74):
+                self.assertEqual(out_o["Layers"][0]["Tiles"][x][y], orig_o["Layers"][0]["Tiles"][x][y])
+        # Layer 5 (Cloud/nuage): all 325 object cells must be preserved in place on Layer 5
+        orig_l5 = orig_o["Layers"][5]
+        out_l5 = out_o["Layers"][5]
+        preserved_objs = 0
+        for x in range(len(orig_l5["Tiles"])):
+            for y in range(len(orig_l5["Tiles"][0])):
+                orig_non_cloud = [
+                    f
+                    for tl in orig_l5["Tiles"][x][y]["Layers"]
+                    for f in tl["Frames"]
+                    if f["Sheet"] != "01_long_cap_jour_02"
+                ]
+                out_frames = [
+                    f
+                    for tl in out_l5["Tiles"][x][y]["Layers"]
+                    for f in tl["Frames"]
+                ]
+                self.assertEqual(out_frames, orig_non_cloud, f"Layer 5 mismatch at ({x}, {y})")
+                preserved_objs += len(out_frames)
+        self.assertEqual(preserved_objs, 325)
+        self.assertEqual(out_o["obstacles"], orig_o["obstacles"])
+        self.assertEqual(out_o["Entities"], orig_o["Entities"])
+        self.assertEqual(out_o["Decorations"], orig_o["Decorations"])
 
-    # 3. Verify cliffnordouesttest1.rsground & cliffdaytest.rsground
-    orig_day = json.loads((R / 'cliffdaytest.rsground').read_text(encoding='utf-8-sig'))
-    orig_day_cloud_p0 = {}
-    orig_day_props = 0
-    for x, col in enumerate(orig_day['Object']['Layers'][5]['Tiles']):
-        for y, c in enumerate(col):
-            for tr in c['Layers']:
-                for f in tr['Frames']:
-                    if f['Sheet'] == '01_long_cap_jour_02':
-                        orig_day_cloud_p0[(x, y)] = (f['TexLoc']['X'], f['TexLoc']['Y'])
-                    else:
-                        orig_day_props += 1
-    assert len(orig_day_cloud_p0) == 600 and orig_day_props == 325
+    def test_05_cloud_wrap_overlay_configured_in_layered_bg(self) -> None:
+        for slug, doc, expected_sky, expected_cloud, expected_y in [
+            ("cliffnordouesttest1", self.nw_out, "CLIFF_NORD_OUEST_CIEL", "CLIFF_NORD_OUEST_NUAGES", 216),
+            ("cliffdaytest", self.day_out, "CLIFF_DAY_CIEL", "CLIFF_DAY_NUAGES", 0),
+        ]:
+            bg = doc["Object"]["Background"]
+            self.assertEqual(bg["$type"], "RogueEssence.Dungeon.LayeredBG, RogueEssence")
+            self.assertEqual(len(bg["Layers"]), 2)
+            sky_bg = bg["Layers"][0]["BG"]
+            cloud_bg = bg["Layers"][1]["BG"]
+            self.assertEqual(sky_bg["BGAnim"]["AnimIndex"], expected_sky)
+            self.assertFalse(sky_bg["RepeatX"])
+            self.assertFalse(sky_bg["RepeatY"])
+            self.assertEqual(sky_bg["BGMovement"], {"X": 0, "Y": 0})
+            self.assertEqual(sky_bg["Parallax"], "1, 1")
 
-    for slug, exp_gw, exp_gh, exp_sea, exp_cloud, exp_casc in [
-        ('cliffnordouesttest1', 138, 98, 6209, 556, 80),
-        ('cliffdaytest', 123, 99, 7503, 774, 520),
-    ]:
-        p = OUT / f'{slug}.rsground'
-        raw = p.read_bytes()
-        assert raw.startswith(b'\xef\xbb\xbf'), f'{slug}: missing UTF-8 BOM'
-        doc = json.loads(raw.decode('utf-8-sig'))
-        assert doc['Version'] == '0.8.12.0'
-        o = doc['Object']
-        assert o['TexSize'] == 1
-        bg_layers = o['Background']['Layers']
-        assert [b['BG']['BGAnim']['AnimIndex'] for b in bg_layers] == [
-            'CLIFF_JOUR_CIEL', 'CLIFF_JOUR_ASTRES', 'CLIFF_JOUR_NUAGES'
-        ]
-        assert bg_layers[2]['BG']['RepeatX'] is True
+            self.assertEqual(cloud_bg["BGAnim"]["AnimIndex"], expected_cloud)
+            self.assertTrue(cloud_bg["RepeatX"], f"{slug} cloud RepeatX must be True")
+            self.assertFalse(cloud_bg["RepeatY"])
+            self.assertEqual(cloud_bg["BGMovement"], {"X": -4, "Y": 0})
+            self.assertEqual(cloud_bg["MapLoc"], {"X": 0, "Y": expected_y})
+            self.assertEqual(cloud_bg["Parallax"], "1, 1")
 
-        gw, gh = len(o['Layers'][0]['Tiles']), len(o['Layers'][0]['Tiles'][0])
-        assert (gw, gh) == (exp_gw, exp_gh)
+    def test_06_canonical_pmdsky_sea_animation_and_tile_bank(self) -> None:
+        # Only v2_promontoire_jour_03.tile may exist in Content/Tile/ (no fake cliff/object .tile files)
+        tile_files = [p.name for p in (RENDERS / "Content/Tile").glob("*.tile")]
+        self.assertEqual(tile_files, ["v2_promontoire_jour_03.tile"])
 
-        # Verify sea layer
-        sea_layer = next(L for L in o['Layers'] if 'Mer animee' in L['Name'])
-        sea_cnt = 0
-        sea_changing = 0
-        for x in range(gw):
-            for y in range(gh):
-                for tr in sea_layer['Tiles'][x][y]['Layers']:
-                    fs = tr['Frames']
-                    if not fs or fs[0]['Sheet'] != 'v2_promontoire_jour_03':
-                        continue
-                    assert len(fs) == 8 and tr['FrameLength'] == 10
-                    locs = [(f['TexLoc']['X'], f['TexLoc']['Y']) for f in fs]
-                    for loc in locs:
-                        assert loc in coords_sea, f'{slug}: missing sea tile {loc}'
-                    if len(set(locs)) > 1:
-                        sea_changing += 1
-                    sea_cnt += 1
-        assert sea_cnt == exp_sea, f'{slug}: sea_cnt={sea_cnt} != {exp_sea}'
-        assert sea_changing > 1500, f'{slug}: expected >1500 wave-cycling sea cells, got {sea_changing}'
+        # Decode v2_promontoire_jour_03.tile via independent verifier V.read_tile
+        decoded_tiles = V.read_tile(RENDERS / "Content/Tile/v2_promontoire_jour_03.tile")
+        sea_sheets, sea_info = B.build_canonical_pmdsky_sea_sheets()
+        self.assertEqual(sea_info["far_sea_distinct_frames"], 5)
+        self.assertEqual(sea_info["near_sea_distinct_frames"], 10)
+        self.assertEqual(sea_info["frame_0_max_diff_vs_v2_promontoire_jour_03"], 0)
 
-        # Verify cloud layer
-        cloud_layer = next(L for L in o['Layers'] if 'Cloud/nuage' in L['Name'])
-        cloud_cnt = 0
-        cloud_changing = 0
-        for x in range(gw):
-            for y in range(gh):
-                for tr in cloud_layer['Tiles'][x][y]['Layers']:
-                    fs = tr['Frames']
-                    assert len(fs) == 16 and tr['FrameLength'] == 10
-                    locs = [(f['TexLoc']['X'], f['TexLoc']['Y']) for f in fs]
-                    for loc in locs:
-                        assert loc in coords_cloud, f'{slug}: missing cloud tile {loc}'
-                    if len(set(locs)) > 1:
-                        cloud_changing += 1
-                    if slug == 'cliffdaytest' and (x, y) in orig_day_cloud_p0:
-                        assert locs[0] == orig_day_cloud_p0[(x, y)], f'Phase 0 cloud mismatch at {(x, y)}'
-                    cloud_cnt += 1
-        assert cloud_cnt == exp_cloud, f'{slug}: cloud_cnt={cloud_cnt} != {exp_cloud}'
-        assert cloud_changing > 400, f'{slug}: expected >400 drifting cloud cells, got {cloud_changing}'
+        # Verify every sea cell in both maps has 10 frames, FrameLength=10, and decodes losslessly
+        for slug, orig_doc, out_doc, expected_count in [
+            ("cliffnordouesttest1", self.nw_orig, self.nw_out, 6209),
+            ("cliffdaytest", self.day_orig, self.day_out, 7503),
+        ]:
+            orig_l1 = orig_doc["Object"]["Layers"][1]
+            out_l1 = out_doc["Object"]["Layers"][1]
+            count = 0
+            for x in range(len(out_l1["Tiles"])):
+                for y in range(len(out_l1["Tiles"][0])):
+                    for orig_tl, out_tl in zip(orig_l1["Tiles"][x][y]["Layers"], out_l1["Tiles"][x][y]["Layers"]):
+                        if orig_tl["Frames"] and orig_tl["Frames"][0]["Sheet"] == "v2_promontoire_jour_03":
+                            tx = orig_tl["Frames"][0]["TexLoc"]["X"]
+                            ty = orig_tl["Frames"][0]["TexLoc"]["Y"]
+                            self.assertEqual(out_tl["FrameLength"], 10)
+                            self.assertEqual(len(out_tl["Frames"]), 10)
+                            # Phase 0 preserves exact (tx, ty)
+                            self.assertEqual(
+                                out_tl["Frames"][0],
+                                {"Sheet": "v2_promontoire_jour_03", "TexLoc": {"X": tx, "Y": ty}},
+                            )
+                            # Every phase f=0..9 must exist in decoded_tiles and match sea_sheets[f]
+                            for f_idx, fr in enumerate(out_tl["Frames"]):
+                                loc = (fr["TexLoc"]["X"], fr["TexLoc"]["Y"])
+                                self.assertIn(loc, decoded_tiles)
+                                expected_tile = B.premult_arr(
+                                    sea_sheets[f_idx][ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8]
+                                )
+                                actual_tile = np.array(decoded_tiles[loc])
+                                self.assertTrue(
+                                    np.array_equal(actual_tile, expected_tile),
+                                    f"{slug} sea tile mismatch at ({x},{y}) frame {f_idx}",
+                                )
+                            count += 1
+            self.assertEqual(count, expected_count)
 
-        # Verify cascade layer
-        casc_cnt = 0
-        for L in o['Layers']:
-            for col in L['Tiles']:
-                for c in col:
-                    for tr in c['Layers']:
-                        if any(f['Sheet'] == 'Metano_Town_Animation_Tileset' for f in tr['Frames']):
-                            assert all(f['Sheet'] == 'Metano_Town_Animation_Tileset' for f in tr['Frames'])
-                            assert len(tr['Frames']) in (2, 3, 4) and tr['FrameLength'] == 10
-                            casc_cnt += 1
-        assert casc_cnt == exp_casc, f'{slug}: casc_cnt={casc_cnt} != {exp_casc}'
+    def test_07_bg_dir_files_and_zip_archive(self) -> None:
+        for name, expected_size in [
+            ("CLIFF_NORD_OUEST_CIEL", (1104, 784)),
+            ("CLIFF_NORD_OUEST_NUAGES", (1440, 208)),
+            ("CLIFF_DAY_CIEL", (984, 792)),
+            ("CLIFF_DAY_NUAGES", (984, 312)),
+        ]:
+            im = V.read_dir(RENDERS / f"Content/BG/{name}.dir")
+            self.assertEqual(im.size, expected_size)
 
-    # Check cliffdaytest separated props layer
-    doc_day = json.loads((OUT / 'cliffdaytest.rsground').read_text(encoding='utf-8-sig'))
-    props_L = doc_day['Object']['Layers'][6]
-    prop_frames = sum(
-        len(tr['Frames'])
-        for col in props_L['Tiles'] for c in col for tr in c['Layers']
-    )
-    assert prop_frames == 325, f'Expected 325 prop frames on Layer 6, got {prop_frames}'
-    print('PASS 3/6: Both .rsground maps verified (8-phase sea, 16-phase clouds, 325 props preserved, cascades fixed)')
-
-    # 4. Verify ORA, PNG phase frames, WebP animations, and ZIPs
-    for slug in ('cliffnordouesttest1', 'cliffdaytest'):
-        assert len(list((OUT / slug / 'mer').glob('mer_*.png'))) == 8
-        assert len(list((OUT / slug / 'nuages').glob('nuages_*.png'))) == 16
-        ora_path = OUT / f'{slug}_calques.ora'
-        with zipfile.ZipFile(ora_path) as z:
-            names = z.namelist()
-            assert names[0] == 'mimetype'
-            assert 'stack.xml' in names and 'mergedimage.png' in names
-        webp_im = Image.open(OUT / f'review/{slug}_scene_animee.webp')
-        assert getattr(webp_im, 'n_frames', 1) == 16
-    for zpath in (R / 'mod_cliff_nord_jour_pmdo_0812.zip', R / 'livrable_cliff_nord_jour_anime_v1.zip'):
-        assert zpath.is_file() and zpath.stat().st_size > 1_000_000
-    print('PASS 4/6: ORA archives, 8 sea PNGs, 16 cloud PNGs, 16-frame WebPs, and ZIPs verified')
-
-    # 5. Test INSTALLER.py on a mock mod directory
-    with tempfile.TemporaryDirectory() as tmp:
-        mock_mod = Path(tmp) / 'mock_mod'
-        (mock_mod / 'Content/Tile').mkdir(parents=True)
-        (mock_mod / 'Data/Ground').mkdir(parents=True)
-        (mock_mod / 'Mod.xml').write_text('<Header><Name>Mock</Name></Header>', encoding='utf-8')
-        # Pre-populate with original root .rsground and a dummy custom .tile
-        shutil.copy2(R / 'cliffnordouesttest1.rsground', mock_mod / 'Data/Ground/cliffnordouesttest1.rsground')
-        shutil.copy2(R / 'cliffdaytest.rsground', mock_mod / 'Data/Ground/cliffdaytest.rsground')
-        custom_tile_bytes = (STAGE / 'Content/Tile/INVERSEPATHWAY.tile').read_bytes()
-        (mock_mod / 'Content/Tile/INVERSEPATHWAY.tile').write_bytes(custom_tile_bytes)
-
-        inst.install(OUT, mock_mod, dry_run=False)
-        assert (mock_mod / 'Data/Ground/cliffnordouesttest1.rsground.avant_anim.bak').is_file()
-        assert (mock_mod / 'Data/Ground/cliffdaytest.rsground.avant_anim.bak').is_file()
-        assert (mock_mod / 'Content/Tile/INVERSEPATHWAY.tile').read_bytes() == custom_tile_bytes
-        installed_idx = inst.read_index(mock_mod / 'Content/Tile/index.idx')
-        assert {'00_ciel', '01_long_cap_jour_02', 'v2_promontoire_jour_03', 'INVERSEPATHWAY'} <= set(installed_idx.keys())
-    print('PASS 5/6: INSTALLER.py backup (.avant_anim.bak) and index.idx merge verified')
-
-    # 6. Headless PMDO 0.8.12 runtime verification if /tmp/pmdo_bin exists
-    if (PMDO_DIR / 'PMDO').is_file():
-        mod_dst = PMDO_DIR / 'MODS' / 'cliff_nord_jour'
-        if mod_dst.exists():
-            shutil.rmtree(mod_dst)
-        shutil.copytree(STAGE, mod_dst)
-        lua_test = mod_dst / 'Data/Script/cliff_nord_jour/ground/cliffnordouesttest1/init.lua'
-        lua_test.write_text('''local m = {}
-function m.Init(map)
-  local g1 = RogueEssence.Data.DataManager.Instance:GetGround("cliffnordouesttest1")
-  local g2 = RogueEssence.Data.DataManager.Instance:GetGround("cliffdaytest")
-  print(string.format("RUNTIME_CLIFF_OK nw_layers=%d day_layers=%d", g1.Layers.Count, g2.Layers.Count))
-  os.exit(0)
-end
-return m
-''', encoding='utf-8')
-        try:
-            r_pmdo = subprocess.run(
-                [
-                    'xvfb-run', '-a', str(PMDO_DIR / 'PMDO'),
-                    '-play', 'MODS/cliff_nord_jour',
-                    '-Lua', 'Data/Script/cliff_nord_jour/ground/cliffnordouesttest1/init.lua',
-                ],
-                cwd=PMDO_DIR, capture_output=True, text=True, timeout=15
+        zip_path = RENDERS / "cliff_nord_jour_anime_pmdo_0812.zip"
+        self.assertTrue(zip_path.exists())
+        with zipfile.ZipFile(zip_path) as zf:
+            self.assertIsNone(zf.testzip())
+            names = set(zf.namelist())
+            self.assertEqual(
+                names,
+                {
+                    "Data/Ground/cliffnordouesttest1.rsground",
+                    "Data/Ground/cliffdaytest.rsground",
+                    "Content/Tile/v2_promontoire_jour_03.tile",
+                    "Content/BG/CLIFF_NORD_OUEST_CIEL.dir",
+                    "Content/BG/CLIFF_NORD_OUEST_NUAGES.dir",
+                    "Content/BG/CLIFF_DAY_CIEL.dir",
+                    "Content/BG/CLIFF_DAY_NUAGES.dir",
+                    "INSTALLER.py",
+                    "README.md",
+                    "manifest.json",
+                },
             )
-            shutil.rmtree(mod_dst, ignore_errors=True)
-            print('PASS 6/6: PMDO 0.8.12 binary check completed (exit=', r_pmdo.returncode, ')')
-        except Exception as e:
-            shutil.rmtree(mod_dst, ignore_errors=True)
-            print('PASS 6/6: PMDO binary skipped:', e)
-    else:
-        print('PASS 6/6: Standalone STAGE mod structure verified (no /tmp/pmdo_bin present)')
+
+        self.assertFalse(self.manifest["art_approved"])
+        self.assertFalse(self.manifest["runtime_tested"])
 
 
-if __name__ == '__main__':
-    test_all()
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
