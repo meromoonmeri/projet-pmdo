@@ -116,7 +116,7 @@ La branche parente `arena/01a0da3c` est toujours à `0eaa002c`, mais cela ne pro
 Points d'attention :
 
 - **Trois entrées Waterfall Cave en doublon** (EGC1, EWN1, ECN2, plus ECN1 native). L'utilisateur a tranché : reprendre seulement de la branche parente, et refaire Waterfall ici (EWC1). Les branches sœurs restent telles quelles, non fusionnées.
-- **Le préfixe `ECN1` est pris deux fois** : par l'Entrée Cratère (ici) et par la Cascade V1 (`01a0dc9b`). Les banques `.tile` sont distinctes, mais des PNG `ECN1_*` de deux lots différents sont ambigus pour « PNG to Tileset », qui nomme par basename. Préfixes déjà pris, toutes branches confondues : ESN1, ESN2, ECN1, ERN1, EGN1, EBN1, EJN1, EGC1, EAN1, EHN1, EWN1, ECN2, EWC1, EWC2, EMF1, EWC3, EUL1.
+- **Le préfixe `ECN1` est pris deux fois** : par l'Entrée Cratère (ici) et par la Cascade V1 (`01a0dc9b`). Les banques `.tile` sont distinctes, mais des PNG `ECN1_*` de deux lots différents sont ambigus pour « PNG to Tileset », qui nomme par basename. Préfixes déjà pris, toutes branches confondues : ESN1, ESN2, ECN1, ERN1, EGN1, EBN1, EJN1, EGC1, EAN1, EHN1, EWN1, ECN2, EWC1, EWC2, EMF1, EWC3, EUL1, EQS1, ESC1, EJS1, ETC1, ECV1, EMT1, FSM1, FST1, EFB1, FFB1, ZFB1 (ainsi que sur les branches sœurs non fusionnées : FUL1, ATF1, FMF1, FMF2, FCV1, FJS3, FMT1, FQS1, FSC1, FTC1, BZF1, EGH1, FGH1, FGH2, ZGH1, FCL1, FCL2, FDC1).
 - Une fusion toucherait `README.md` (insertions en tête), `AGENTS.md` (ajouts en fin) et ce fichier. Ce sont des conflits purement documentaires, à résoudre par union ; les lots sont des dossiers nouveaux, sans chevauchement.
 
 ## Règle « textures canoniques » — état consolidé

@@ -1,5 +1,29 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Trilogie Forêt Brumeuse (Foggy Forest) en 4:3 : EFB1, FFB1 et ZFB1 (3 octobre 2026)
+
+**Demande** : nouvelle map / nouveau biome en 4:3, puis sélection par l'utilisateur de **Forêt brumeuse (`D08P11A` / `P21P02A`)** et **« les 3 »** layouts :
+1. **EFB1** — Entrée de donjon (sud → nord) : `renders/entree_foret_brumeuse_sud_nord_v1/`, aperçu `apercu_entree_foret_brumeuse_sud_nord_v1.html`, paquets `livrable_entree_foret_brumeuse_sud_nord_v1.zip` et `mod_entree_foret_brumeuse_sud_nord_pmdo_0812.zip`.
+2. **FFB1** — Fin de donjon / Arène de boss : `renders/fin_foret_brumeuse_v1/`, aperçu `apercu_fin_foret_brumeuse_v1.html`, paquets `livrable_fin_foret_brumeuse_v1.zip` et `mod_fin_foret_brumeuse_pmdo_0812.zip`.
+3. **ZFB1** — Zone ouverte / Camp de base & panorama : `renders/zone_foret_brumeuse_camp_v1/`, aperçu `apercu_zone_foret_brumeuse_camp_v1.html`, paquets `livrable_zone_foret_brumeuse_camp_v1.zip` et `mod_zone_foret_brumeuse_camp_pmdo_0812.zip`.
+
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Foggy_Forest_Base_Camp_TDS.png` (`D08P11A`, *PMD Explorers of Sky*). Ce ne sont pas des tuiles natives certifiées (`art_approved: false`, `runtime_tested: false`).
+- **Bruts et contrôle de fidélité** (seuil `< 35`) :
+  - **EFB1** : le premier jet `bruts/ecartes/decor_herbe_pale_v0.png` avait une herbe de clairière trop pâle (`dist_rip = 47,3 > 35`) ; il a été conservé dans `bruts/ecartes/` (statut `ecarte` dans `manifest.json`, jamais lu par `build.py`) et recoloré avec `Foggy_Forest_Base_Camp_TDS.png` en seconde référence pour produire `bruts/decor_magenta.png` (`herbe = 18,5`, `chemin = 6,8`, `feuillage = 5,5` ; calques finaux : `18,8`, `18,4`, `12,4`).
+  - **FFB1** : `herbe = 2,3`, `chemin = 7,0`, `feuillage = 5,2` (calques finaux : `4,9`, `5,9`, `13,2`).
+  - **ZFB1** : `herbe = 4,9`, `chemin = 8,6`, `feuillage = 2,3`, `tentes = 5,5` (calques finaux : `7,6`, `4,2`, `8,5`, `6,5`).
+  - **Sol complet et planche de poses** : `sol_complet.png` (`dist_rip = 7,9`) et `poses_foret_brumeuse.png` (6 poses de feuille 10 × 10 px + 6 poses de luciole 6 × 6 px sans frange magenta).
+- **Architecture multicalque (768 × 576 px, 96 × 72 cases de 8 px)** :
+  - **EFB1** (14 calques + Top `Layer=4`) : `eau`, `scintillements`, `sol_complet`, `herbe`, `chemin`, `fleurs`, `rochers`, `buissons`, `herbes_hautes`, `parois` (arche rocheuse moussue), `arbres`, `profondeur` (ouverture sombre au nord), `feuilles`, `lucioles`. Marqueurs `entrance` (`[384, 560]`) et `donjon_seuil` (`[376, 104]`).
+  - **FFB1** (13 calques + Top `Layer=4`) : `eau`, `scintillements`, `sol_complet`, `herbe`, `chemin` (chemin sud + anneau de dalles), `fleurs`, `rochers`, `buissons`, `herbes_hautes`, `stele` (monument ancien moussu au nord), `arbres`, `feuilles`, `lucioles`. Aucune ouverture sombre ni sortie au nord ; bords nord, ouest et est fermés. Marqueurs `entrance` (`[384, 560]`), `boss` (`[376, 312]`), `objectif` (`[376, 200]`).
+  - **ZFB1** (13 calques + Top `Layer=4`) : `eau`, `scintillements`, `sol_complet`, `herbe`, `chemin`, `fleurs`, `rochers`, `buissons`, `herbes_hautes`, `tentes` (3 tentes d'expédition rose corail / orange à rayures beiges), `arbres`, `feuilles`, `lucioles`. Marqueurs `entrance` (`[384, 560]`), `camp` (`[432, 296]`), `sortie_nord` (`[384, 0]`).
+- **Animations (boucle fermée 240 ticks = 4 s)** :
+  - **eau** : façon rivière Métano, couleurs Métano exactes, sans liseré clair contre la rive (`water_phases` d'EWC2), 4 × 10 ticks ;
+  - **scintillements** : `Metano_Town_River_Sparkles.tile` natifs, 4 × 10 ticks ;
+  - **feuilles** : 8 départs sous les houppiers, chute et balancement sur 48 × 5 ticks ;
+  - **lucioles** : 14 points en lisière ombragée, pulsation et boucles de Lissajous sur 48 × 5 ticks.
+- **Contrôles** : 13/13 tests PASS sur chacun des 3 lots (39 tests unitaires au total) + 9 mutations vérifiées (alpha intermédiaire, liseré clair dans l'eau, teinte magenta dans les lucioles).
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
