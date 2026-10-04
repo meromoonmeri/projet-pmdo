@@ -9,6 +9,15 @@
 - **Fidélité RGB** (<35) : sol `4,79`, murs `4,78`, décors `9,48`, scène complète `5,62` ; 10 324 tuiles PMDO.
 - **Validation** : 6 tests FAC1 PASS ; 25 tests avec EAC1 et la trilogie Bassin Chauffant PASS. `art_approved: false`, `runtime_tested: false` ; aucun test moteur effectué.
 
+## Entrée du Sentier des Ruines (EPR1, 4 octobre 2026)
+
+- **Sorties** : `source/entree_passage_ruines_v1/`, `renders/entree_passage_ruines_v1/`, aperçu `apercu_entree_passage_ruines_v1.html`, ORA `EPR1_entree_passage_ruines.ora`, projet PMDO `mod_entree_passage_ruines_pmdo_0812.zip` et pack complet `livrable_entree_passage_ruines_v1.zip`.
+- **Méthode** : composition générée guidée par le rendu canonique `P22P01A` (408×408 RGBA, 109 couleurs) ; normalisée à 768×576, segmentation du décor sur magenta et quantification vers la palette du rip. Pixels proposés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,540]`, clairière centrale `[384,330]`, objectif sous l'arche nord `[384,140]` ; **2 136 cellules marchables**, les trois points étant reliés par le masque de collision.
+- **Calques/animation** : sol, murs, ombres, ruines, végétation/rochers, stèles, débris ; pollen doré calculé séparément en 24 phases × 8 ticks (boucle 192 ticks).
+- **Fidélité RGB** (<35) : sol `6,89`, murs `5,63`, décors `10,34`, scène complète `8,26` ; **6 869 tuiles PMDO**.
+- **Validation** : 6 tests EPR1 PASS ; `art_approved: false`, `runtime_tested: false` ; aucune validation dans le moteur PMDO.
+
 ## Animation canonique PMD Sky Port de la mer (10 phases) & Wrap Nuages — `cliffnordouesttest1.rsground` & `cliffdaytest.rsground` (4 octobre 2026)
 
 **Demande** : « non fallait pas toucher au layer qui constitue le cliff et les objet et leurs animation seulement les nuage activé le wrap overlay et animée la mer c'est tout canoniquement a pmd sky recommence (pour lanimation de la mer regarde dans pmd sky portà ». Reprise complète de l'animation de `cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px) et `cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px) :
