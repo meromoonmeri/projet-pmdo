@@ -11,7 +11,7 @@ os.chdir(ROOT)
 class PreviewHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/", "/index.html"):
-            self.path = "/renders/zone_guilde_treehouse_v3/index.html"
+            self.path = "/apercu_zone_guilde_treehouse_v2.html"
         return super().do_GET()
 
 
