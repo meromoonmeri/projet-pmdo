@@ -113,21 +113,46 @@ class TestCliffNordJourAnimeV1(unittest.TestCase):
         self.assertEqual(out_o["Entities"], orig_o["Entities"])
         self.assertEqual(out_o["Decorations"], orig_o["Decorations"])
 
-    def test_05_cloud_wrap_overlay_configured_in_layered_bg(self) -> None:
-        for slug, doc, expected_sky, expected_cloud, expected_y in [
-            ("cliffnordouesttest1", self.nw_out, "CLIFF_NORD_OUEST_CIEL", "CLIFF_NORD_OUEST_NUAGES", 216),
-            ("cliffdaytest", self.day_out, "CLIFF_DAY_CIEL", "CLIFF_DAY_NUAGES", 0),
+    def test_05_cloud_wrap_and_starry_night_configured_in_layered_bg(self) -> None:
+        for slug, doc, expected_sky, expected_stars, expected_cloud, expected_y in [
+            (
+                "cliffnordouesttest1",
+                self.nw_out,
+                "CLIFF_NORD_OUEST_CIEL",
+                "CLIFF_NORD_OUEST_ETOILES",
+                "CLIFF_NORD_OUEST_NUAGES",
+                216,
+            ),
+            (
+                "cliffdaytest",
+                self.day_out,
+                "CLIFF_DAY_CIEL",
+                "CLIFF_DAY_ETOILES",
+                "CLIFF_DAY_NUAGES",
+                0,
+            ),
         ]:
             bg = doc["Object"]["Background"]
             self.assertEqual(bg["$type"], "RogueEssence.Dungeon.LayeredBG, RogueEssence")
-            self.assertEqual(len(bg["Layers"]), 2)
+            self.assertEqual(len(bg["Layers"]), 3)
             sky_bg = bg["Layers"][0]["BG"]
-            cloud_bg = bg["Layers"][1]["BG"]
+            star_bg = bg["Layers"][1]["BG"]
+            cloud_bg = bg["Layers"][2]["BG"]
+
             self.assertEqual(sky_bg["BGAnim"]["AnimIndex"], expected_sky)
+            self.assertEqual(sky_bg["BGAnim"]["FrameTime"], 1)
             self.assertFalse(sky_bg["RepeatX"])
             self.assertFalse(sky_bg["RepeatY"])
             self.assertEqual(sky_bg["BGMovement"], {"X": 0, "Y": 0})
             self.assertEqual(sky_bg["Parallax"], "1, 1")
+
+            self.assertEqual(star_bg["BGAnim"]["AnimIndex"], expected_stars)
+            self.assertEqual(star_bg["BGAnim"]["FrameTime"], 5)
+            self.assertFalse(star_bg["RepeatX"])
+            self.assertFalse(star_bg["RepeatY"])
+            self.assertEqual(star_bg["BGMovement"], {"X": 0, "Y": 0})
+            self.assertEqual(star_bg["MapLoc"], {"X": 0, "Y": 0})
+            self.assertEqual(star_bg["Parallax"], "1, 1")
 
             self.assertEqual(cloud_bg["BGAnim"]["AnimIndex"], expected_cloud)
             self.assertTrue(cloud_bg["RepeatX"], f"{slug} cloud RepeatX must be True")
@@ -206,8 +231,10 @@ class TestCliffNordJourAnimeV1(unittest.TestCase):
                     "Data/Ground/cliffdaytest.rsground",
                     "Content/Tile/v2_promontoire_jour_03.tile",
                     "Content/BG/CLIFF_NORD_OUEST_CIEL.dir",
+                    "Content/BG/CLIFF_NORD_OUEST_ETOILES.dir",
                     "Content/BG/CLIFF_NORD_OUEST_NUAGES.dir",
                     "Content/BG/CLIFF_DAY_CIEL.dir",
+                    "Content/BG/CLIFF_DAY_ETOILES.dir",
                     "Content/BG/CLIFF_DAY_NUAGES.dir",
                     "INSTALLER.py",
                     "README.md",
@@ -217,6 +244,50 @@ class TestCliffNordJourAnimeV1(unittest.TestCase):
 
         self.assertFalse(self.manifest["art_approved"])
         self.assertFalse(self.manifest["runtime_tested"])
+
+    def test_08_awakening_night_sky_moon_and_twinkling_stars(self) -> None:
+        import io
+        import struct
+
+        z2_astre = np.array(Image.open(B.ZRV2_MOON_PATH).convert("RGBA"))
+        ays, axs = np.where(z2_astre[:, :, 3] > 0)
+        expected_moon = z2_astre[ays.min() : ays.max() + 1, axs.min() : axs.max() + 1]
+        self.assertEqual(expected_moon.shape, (64, 64, 4))
+
+        for slug, star_dir_name, expected_w, expected_star_h, moon_center in [
+            ("cliffnordouesttest1", "CLIFF_NORD_OUEST_ETOILES", 1104, 344, (552, 110)),
+            ("cliffdaytest", "CLIFF_DAY_ETOILES", 984, 272, (480, 80)),
+        ]:
+            # Verify moon sprite on 00_ciel_bg.png matches ZRV2N_03_astre.png
+            sky_arr = np.array(Image.open(RENDERS / f"{slug}/calques/00_ciel_bg.png").convert("RGBA"))
+            mcx, mcy = moon_center
+            mx0, my0 = mcx - 32, mcy - 32
+            moon_crop = sky_arr[my0 : my0 + 64, mx0 : mx0 + 64]
+            moon_mask = expected_moon[:, :, 3] == 255
+            self.assertTrue(
+                np.array_equal(moon_crop[moon_mask, :3], expected_moon[moon_mask, :3]),
+                f"{slug} moon pixels do not match ZRV2N_03_astre.png",
+            )
+            # Verify top sky row matches ZRV2N_01_ciel.png night navy [0, 0, 78]
+            self.assertEqual(sky_arr[0, 10, :3].tolist(), [0, 0, 78])
+
+            # Verify 24-frame DirSheet binary structure of CLIFF_*_ETOILES.dir
+            raw_dir = (RENDERS / f"Content/BG/{star_dir_name}.dir").read_bytes()
+            png_len = struct.unpack("<q", raw_dir[:8])[0]
+            atlas = Image.open(io.BytesIO(raw_dir[8 : 8 + png_len])).convert("RGBA")
+            tile_w, tile_h, dirs, total_frames = struct.unpack("<4i", raw_dir[8 + png_len :])
+            self.assertEqual((tile_w, tile_h, dirs, total_frames), (expected_w, expected_star_h, 0, 24))
+            self.assertEqual(atlas.size, (expected_w * 3, expected_star_h * 8))
+            self.assertLessEqual(atlas.size[0], 4096)
+            self.assertLessEqual(atlas.size[1], 4096)
+
+            # Verify all 24 exported star PNG frames exist and vary across the twinkling cycle
+            star_pngs = [
+                np.array(Image.open(RENDERS / f"{slug}/etoiles/etoiles_{i:02d}.png").convert("RGBA"))
+                for i in range(24)
+            ]
+            distinct_hashes = {hashlib.sha256(a.tobytes()).hexdigest() for a in star_pngs}
+            self.assertGreaterEqual(len(distinct_hashes), 20)
 
 
 if __name__ == "__main__":

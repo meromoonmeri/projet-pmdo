@@ -144,6 +144,22 @@
       "background_layers": [
         {
           "anim_index": "CLIFF_NORD_OUEST_CIEL",
+          "frame_time": 1,
+          "map_loc": {
+            "X": 0,
+            "Y": 0
+          },
+          "movement": {
+            "X": 0,
+            "Y": 0
+          },
+          "repeat_x": false,
+          "repeat_y": false,
+          "parallax": "1, 1"
+        },
+        {
+          "anim_index": "CLIFF_NORD_OUEST_ETOILES",
+          "frame_time": 5,
           "map_loc": {
             "X": 0,
             "Y": 0
@@ -158,6 +174,7 @@
         },
         {
           "anim_index": "CLIFF_NORD_OUEST_NUAGES",
+          "frame_time": 1,
           "map_loc": {
             "X": 0,
             "Y": 216
@@ -170,7 +187,29 @@
           "repeat_y": false,
           "parallax": "1, 1"
         }
-      ]
+      ],
+      "night_sky": {
+        "source_sky_gradient": "renders/zone_reveil_prairie_horizon_v2/calques/nuit/ZRV2N_01_ciel.png",
+        "source_moon_sprite": "renders/zone_reveil_prairie_horizon_v2/calques/nuit/ZRV2N_03_astre.png",
+        "source_zrv1_stars": "renders/zone_reveil_prairie_horizon_v1/manifest.json",
+        "source_pmdsky_night_ref": "bgnightbackgroundpmdskyda.png",
+        "moon_center_px": [
+          552,
+          110
+        ],
+        "moon_size_px": [
+          64,
+          64
+        ],
+        "sea_horizon_y_px": 424,
+        "star_band_height_px": 344,
+        "zrv1_stars_included": 9,
+        "total_twinkling_stars": 56,
+        "static_background_stars": 55,
+        "star_frame_count": 24,
+        "star_frame_length_ticks": 5,
+        "star_cycle_ticks": 120
+      }
     },
     "cliffdaytest": {
       "map_slug": "cliffdaytest",
@@ -205,6 +244,22 @@
       "background_layers": [
         {
           "anim_index": "CLIFF_DAY_CIEL",
+          "frame_time": 1,
+          "map_loc": {
+            "X": 0,
+            "Y": 0
+          },
+          "movement": {
+            "X": 0,
+            "Y": 0
+          },
+          "repeat_x": false,
+          "repeat_y": false,
+          "parallax": "1, 1"
+        },
+        {
+          "anim_index": "CLIFF_DAY_ETOILES",
+          "frame_time": 5,
           "map_loc": {
             "X": 0,
             "Y": 0
@@ -219,6 +274,7 @@
         },
         {
           "anim_index": "CLIFF_DAY_NUAGES",
+          "frame_time": 1,
           "map_loc": {
             "X": 0,
             "Y": 0
@@ -231,7 +287,29 @@
           "repeat_y": false,
           "parallax": "1, 1"
         }
-      ]
+      ],
+      "night_sky": {
+        "source_sky_gradient": "renders/zone_reveil_prairie_horizon_v2/calques/nuit/ZRV2N_01_ciel.png",
+        "source_moon_sprite": "renders/zone_reveil_prairie_horizon_v2/calques/nuit/ZRV2N_03_astre.png",
+        "source_zrv1_stars": "renders/zone_reveil_prairie_horizon_v1/manifest.json",
+        "source_pmdsky_night_ref": "bgnightbackgroundpmdskyda.png",
+        "moon_center_px": [
+          480,
+          80
+        ],
+        "moon_size_px": [
+          64,
+          64
+        ],
+        "sea_horizon_y_px": 304,
+        "star_band_height_px": 272,
+        "zrv1_stars_included": 9,
+        "total_twinkling_stars": 56,
+        "static_background_stars": 55,
+        "star_frame_count": 24,
+        "star_frame_length_ticks": 5,
+        "star_cycle_ticks": 120
+      }
     }
   }
 }

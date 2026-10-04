@@ -86,6 +86,14 @@ SEA_BANK_NAME = "v2_promontoire_jour_03"
 SEA_FRAME_COUNT = 10
 SEA_FRAME_LENGTH = 10  # 10 ticks at 60 Hz = 166.67 ms/frame (1.667 s per 10-frame loop)
 CLOUD_SPEED_PX_S = -4
+STAR_FRAME_COUNT = 24  # Canonical ZRV1/ZRV2 awakening scene twinkling cycle (24 phases)
+STAR_FRAME_LENGTH = 5  # 5 ticks per phase at 60 Hz (120 ticks = 2.0 s cycle)
+STAR_ATLAS_TILES_X = 3  # 3x8 DirSheet grid (keeps width <= 3312 and height <= 2752, < 4096 GPU limit)
+
+ZRV1_MANIFEST_PATH = ROOT / "renders/zone_reveil_prairie_horizon_v1/manifest.json"
+ZRV2_NIGHT_SKY_PATH = ROOT / "renders/zone_reveil_prairie_horizon_v2/calques/nuit/ZRV2N_01_ciel.png"
+ZRV2_MOON_PATH = ROOT / "renders/zone_reveil_prairie_horizon_v2/calques/nuit/ZRV2N_03_astre.png"
+PMDSKY_NIGHT_BG_PATH = ROOT / "bgnightbackgroundpmdskyda.png"
 
 
 def loadmod(name: str, path: Path):
@@ -269,6 +277,297 @@ def reconstruct_map_sky_from_layer0(doc: dict, sky_src: np.ndarray, fill_top_wit
     return Image.fromarray(canvas, "RGBA")
 
 
+def write_animated_dir(gfx, path: Path, frames: list[Image.Image], tiles_x: int = STAR_ATLAS_TILES_X) -> None:
+    """
+    Encode a multi-frame DirSheet (.dir) in native RogueEssence binary format:
+    - Packs `frames` (all of identical size `(tile_w, tile_h)`) into a `tiles_x * tiles_y` grid
+      where `TotalX = tiles_x` and `DrawDir` indexes `(frame % TotalX, frame // TotalX)`.
+    - Binary layout: `<q` PNG byte length + premultiplied PNG payload + `<4i` `(tile_w, tile_h, 0, len(frames))`.
+    """
+    assert len(frames) > 0
+    tile_w, tile_h = frames[0].size
+    total_frames = len(frames)
+    tiles_y = (total_frames + tiles_x - 1) // tiles_x
+    atlas = Image.new("RGBA", (tiles_x * tile_w, tiles_y * tile_h), (0, 0, 0, 0))
+    for idx, im in enumerate(frames):
+        assert im.size == (tile_w, tile_h)
+        xx = idx % tiles_x
+        yy = idx // tiles_x
+        atlas.paste(im, (xx * tile_w, yy * tile_h))
+    raw = gfx.png_bytes(gfx.premult(atlas))
+    gfx.save(path, struct.pack("<q", len(raw)) + raw + struct.pack("<4i", tile_w, tile_h, 0, total_frames))
+
+
+def background_anim(name: str, y: int = 0, movement: int = 0, wrap: bool = False, frame_time: int = 1) -> dict:
+    return {
+        "$type": "RogueEssence.Dungeon.MapBG, RogueEssence",
+        "MapLoc": {"X": 0, "Y": y},
+        "BGAnim": {
+            "AnimIndex": name,
+            "FrameTime": frame_time,
+            "StartFrame": -1,
+            "EndFrame": -1,
+            "AnimDir": -1,
+            "Alpha": 255,
+            "AnimFlip": 0,
+        },
+        "BGMovement": {"X": movement, "Y": 0},
+        "Parallax": "1, 1",
+        "RepeatX": wrap,
+        "RepeatY": False,
+    }
+
+
+def sparkle_state(off: int, t: int) -> str:
+    """Exact twinkling law from `source/zone_reveil_prairie_horizon_v1/build.py` (`sparkle_state`)."""
+    u = (t + off) % STAR_FRAME_COUNT
+    return "plein" if 4 <= u <= 11 else ("coeur" if u in (2, 3, 12, 13) else "eteint")
+
+
+def _extract_canonical_star_motifs() -> list[tuple[list[tuple[int, int, int, int, int]], list[tuple[int, int, int, int, int]]]]:
+    """
+    Extract canonical relative star motifs `(rel_px, rel_core)` from:
+      1. `renders/zone_reveil_prairie_horizon_v1/manifest.json` (`ambiances['nuit']['scintillements']`)
+      2. `bgnightbackgroundpmdskyda.png` (canonical PMD Sky night background used as `REFS['nuit']` in ZRV1/ZRV2)
+    Each motif is centered at `(dy=0, dx=0)`.
+    """
+    from scipy import ndimage as nd
+
+    motifs: list[tuple[list[tuple[int, int, int, int, int]], list[tuple[int, int, int, int, int]]]] = []
+    v1m = json.loads(ZRV1_MANIFEST_PATH.read_text(encoding="utf-8"))
+    sc = v1m["ambiances"]["nuit"]["scintillements"]
+    for px, core in zip(sc["pixels"], sc["coeurs"]):
+        cy = int(round(np.mean([p[0] for p in px])))
+        cx = int(round(np.mean([p[1] for p in px])))
+        rel_px = [(int(p[0] - cy), int(p[1] - cx), int(p[2]), int(p[3]), int(p[4])) for p in px]
+        rel_core = [(int(p[0] - cy), int(p[1] - cx), int(p[2]), int(p[3]), int(p[4])) for p in core]
+        motifs.append((rel_px, rel_core))
+
+    bg = np.array(Image.open(PMDSKY_NIGHT_BG_PATH).convert("RGBA"))
+    rgb = bg[:92, :, :3].astype(int)
+    lum = 0.299 * rgb[:, :, 0] + 0.587 * rgb[:, :, 1] + 0.114 * rgb[:, :, 2]
+    med = nd.median_filter(lum, 7)
+    mask = (lum - med > 35) & (med < 45)
+    mask[15:90, 115:190] = False  # Exclude full moon disk
+    lab, n = nd.label(nd.binary_dilation(mask, iterations=1) & (lum - med > 15) & (med < 45))
+    for i in range(1, n + 1):
+        ys, xs = np.where(lab == i)
+        if len(xs) < 4 or len(xs) > 26:
+            continue
+        w_m, h_m = int(xs.max() - xs.min() + 1), int(ys.max() - ys.min() + 1)
+        if w_m > 9 or h_m > 9:
+            continue
+        cy, cx = int(round(ys.mean())), int(round(xs.mean()))
+        lvals = [float(lum[y, x]) for y, x in zip(ys, xs)]
+        if max(lvals) < 185:
+            continue
+        thr = float(np.percentile(lvals, 68))
+        rel_px = [(int(y - cy), int(x - cx), int(rgb[y, x, 0]), int(rgb[y, x, 1]), int(rgb[y, x, 2])) for y, x in zip(ys, xs)]
+        rel_core = [p for p, lv in zip(rel_px, lvals) if lv >= thr]
+        motifs.append((rel_px, rel_core))
+    return motifs
+
+
+def build_awakening_night_sky_and_stars(
+    doc: dict,
+    sky_src: np.ndarray,
+    fill_top_with_row0: bool,
+    sea_horizon_y: int,
+    star_band_h: int,
+    moon_center: tuple[int, int],
+) -> tuple[Image.Image, list[Image.Image], Image.Image, dict]:
+    """
+    Construct the starry night sky of the awakening scene (`ZRV1`/`ZRV2`) for a cliff map:
+      1. Vertical night sky gradient from `ZRV2N_01_ciel.png` (`[0, 0, 78]` at top to `[0, 37, 127]`
+         at `sea_horizon_y`), restricted to the exact `00_ciel` mask from `Layer 0`.
+      2. Stepped concentric royal-blue moon halo from `ZRV1N_06_panorama.png` around `moon_center`.
+      3. Full 64x64 pale-yellow cratered moon sprite from `ZRV2N_03_astre.png` centered at `moon_center`.
+      4. Faint static constellation dots on `00_ciel_bg.png` (as in `ZRV1N_06_panorama.png`) PLUS
+         24-frame animated twinkling stars (`STAR_FRAME_COUNT = 24`, `STAR_FRAME_LENGTH = 5` ticks)
+          combining the 9 `ZRV1`/`ZRV2` twinkling stars and the canonical `bgnightbackgroundpmdskyda.png`
+         4-pointed cross sparkles and diamond stars across the entire open night sky.
+    Returns `(sky_im, star_frames_cropped, star_full_t0, sky_meta)`.
+    """
+    day_sky_im = reconstruct_map_sky_from_layer0(doc, sky_src, fill_top_with_row0=fill_top_with_row0)
+    day_arr = np.array(day_sky_im)
+    h_px, w_px = day_arr.shape[:2]
+    sky_mask = day_arr[:, :, 3] > 0
+
+    # 1. Night sky vertical gradient from ZRV2N_01_ciel.png (rows 0..115)
+    z2_sky = np.array(Image.open(ZRV2_NIGHT_SKY_PATH).convert("RGBA"))
+    prof = z2_sky[:116, 0, :3]  # shape (116, 3), from [0,0,78] to [0,37,127]
+    canvas = np.zeros((h_px, w_px, 4), dtype=np.uint8)
+    for y in range(h_px):
+        if y < sea_horizon_y:
+            idx = min(115, int(round(y * 115 / max(1, sea_horizon_y - 1))))
+            col = prof[idx]
+        else:
+            col = prof[115]
+        canvas[y, :, :3] = col
+    canvas[:, :, 3] = np.where(sky_mask, 255, 0).astype(np.uint8)
+
+    # 2. Concentric stepped royal-blue halo around the full moon (measured from ZRV1N_06_panorama.png)
+    mcx, mcy = moon_center
+    yy, xx = np.mgrid[:h_px, :w_px]
+    rr = np.hypot(xx - mcx, yy - mcy)
+    halo_rings = [
+        (118.0, np.array([0, 3, 91], dtype=np.uint8)),
+        (110.0, np.array([1, 7, 96], dtype=np.uint8)),
+        (100.0, np.array([0, 22, 103], dtype=np.uint8)),
+        (88.0, np.array([0, 23, 114], dtype=np.uint8)),
+        (78.0, np.array([0, 32, 121], dtype=np.uint8)),
+        (72.0, np.array([6, 29, 120], dtype=np.uint8)),
+        (62.0, np.array([20, 41, 144], dtype=np.uint8)),
+    ]
+    above_sea = (yy < sea_horizon_y) & sky_mask
+    for radius, hcol in halo_rings:
+        rm = (rr <= radius) & above_sea
+        canvas[rm, :3] = np.maximum(canvas[rm, :3], hcol)
+
+    # 3. Extract the 64x64 full moon sprite from ZRV2N_03_astre.png and place at moon_center
+    z2_astre = np.array(Image.open(ZRV2_MOON_PATH).convert("RGBA"))
+    ays, axs = np.where(z2_astre[:, :, 3] > 0)
+    moon_sprite = z2_astre[ays.min() : ays.max() + 1, axs.min() : axs.max() + 1]
+    mh, mw = moon_sprite.shape[:2]
+    assert (mw, mh) == (64, 64)
+    mx0, my0 = mcx - mw // 2, mcy - mh // 2
+
+    # 4. Build twinkling stars (9 ZRV1 stars + canonical PMD Sky night star motifs across the sky)
+    motifs = _extract_canonical_star_motifs()
+    v1m = json.loads(ZRV1_MANIFEST_PATH.read_text(encoding="utf-8"))
+    sc = v1m["ambiances"]["nuit"]["scintillements"]
+
+    rng_hash = lambda y, x: int((x * 73856093) ^ (y * 19349663)) % STAR_FRAME_COUNT
+    placed_centers: list[tuple[int, int]] = []
+    stars: list[tuple[list[tuple[int, int, int, int, int]], list[tuple[int, int, int, int, int]], int]] = []
+
+    def can_place(cy: int, cx: int, min_dist: float = 28.0) -> bool:
+        if not (8 <= cy < star_band_h - 12 and 12 <= cx < w_px - 12):
+            return False
+        if np.hypot(cx - mcx, cy - mcy) < 68.0:
+            return False
+        for py, px_ in placed_centers:
+            if np.hypot(cx - px_, cy - py) < min_dist:
+                return False
+        return True
+
+    def add_star_at(cy: int, cx: int, rel_px, rel_core, off: int) -> None:
+        abs_px = []
+        for dy, dx, r, g, b in rel_px:
+            ny, nx = cy + dy, cx + dx
+            if 0 <= ny < star_band_h and 0 <= nx < w_px and sky_mask[ny, nx]:
+                abs_px.append((ny, nx, r, g, b))
+        abs_core = []
+        for dy, dx, r, g, b in rel_core:
+            ny, nx = cy + dy, cx + dx
+            if 0 <= ny < star_band_h and 0 <= nx < w_px and sky_mask[ny, nx]:
+                abs_core.append((ny, nx, r, g, b))
+        if abs_px and abs_core:
+            stars.append((abs_px, abs_core, off))
+            placed_centers.append((cy, cx))
+            # Paint resting silver-blue star core on static sky so every twinkling star stays visible
+            # during its resting phase and blooms into its bright core / 4-pointed cross when twinkling
+            for ny, nx, r, g, b in abs_core:
+                rest_col = np.array(
+                    [int(r * 0.58), int(g * 0.65), min(255, int(b * 0.78 + 25))],
+                    dtype=np.uint8,
+                )
+                canvas[ny, nx, :3] = np.maximum(canvas[ny, nx, :3], rest_col)
+
+    # Sort motifs so the largest 4-pointed cross stars (from ZRV1 and bgnightbackgroundpmdskyda.png) are easily accessible
+    cross_motifs = [m for m in motifs if len(m[0]) >= 12]
+    all_motifs = motifs
+
+    # 4a. Place the 9 ZRV1/ZRV2 awakening scene stars mapped across the upper sky
+    for idx in range(len(sc["pixels"])):
+        orig_px = sc["pixels"][idx]
+        orig_cy = float(np.mean([p[0] for p in orig_px]))
+        orig_cx = float(np.mean([p[1] for p in orig_px]))
+        tx = int(round(orig_cx * w_px / 768.0))
+        ty = int(round(8 + (orig_cy / 30.0) * (star_band_h * 0.42)))
+        if np.hypot(tx - mcx, ty - mcy) < 70.0:
+            tx = mcx + (82 if tx >= mcx else -82)
+        rel_px, rel_core = all_motifs[idx]
+        add_star_at(ty, tx, rel_px, rel_core, int(sc["decalages"][idx]) % STAR_FRAME_COUNT)
+
+    # 4b. Populate the rest of the wide cliff night sky with canonical PMD Sky star motifs
+    #     using deterministic Poisson-disk sampling (zero collinear/diagonal artifacts)
+    rng = np.random.RandomState(20261004 + w_px)
+    for k in range(1, 500):
+        cx = int(rng.randint(14, w_px - 14))
+        cy = int(round(8 + (rng.uniform(0.0, 1.0) ** 1.15) * (star_band_h - 20)))
+        if not can_place(cy, cx, min_dist=28.0):
+            continue
+        if len(stars) % 3 == 0 and cross_motifs:
+            rel_px, rel_core = cross_motifs[(len(stars) // 3) % len(cross_motifs)]
+        else:
+            rel_px, rel_core = all_motifs[(len(stars) * 5) % len(all_motifs)]
+        add_star_at(cy, cx, rel_px, rel_core, rng_hash(cy, cx))
+        if len(stars) >= 56:
+            break
+
+    # 4c. Add subtle static background stars (1x1 and 2x2 slate/indigo/silver pinpoints from ZRV1N_06_panorama.png)
+    static_star_colors = [
+        np.array([72, 107, 165], dtype=np.uint8),
+        np.array([91, 122, 184], dtype=np.uint8),
+        np.array([121, 143, 202], dtype=np.uint8),
+        np.array([159, 183, 231], dtype=np.uint8),
+    ]
+    static_count = 0
+    for k in range(500):
+        cx = int(rng.randint(10, w_px - 10))
+        cy = int(rng.randint(6, star_band_h - 10))
+        if not can_place(cy, cx, min_dist=15.0):
+            continue
+        placed_centers.append((cy, cx))
+        scol = static_star_colors[static_count % len(static_star_colors)]
+        canvas[cy, cx, :3] = np.maximum(canvas[cy, cx, :3], scol)
+        if static_count % 3 == 0 and cx + 1 < w_px and cy + 1 < star_band_h:
+            dim_col = static_star_colors[0]
+            canvas[cy, cx + 1, :3] = np.maximum(canvas[cy, cx + 1, :3], dim_col)
+            canvas[cy + 1, cx, :3] = np.maximum(canvas[cy + 1, cx, :3], dim_col)
+        static_count += 1
+        if static_count >= 55:
+            break
+
+    # Composite the 64x64 full moon onto the static night sky image
+    sky_im = Image.fromarray(canvas, "RGBA")
+    sky_im.alpha_composite(Image.fromarray(moon_sprite, "RGBA"), (mx0, my0))
+
+    # 5. Render the 24 twinkling star frames (cropped to `star_band_h` for compact DirSheet)
+    star_frames: list[Image.Image] = []
+    for t in range(STAR_FRAME_COUNT):
+        fr = np.zeros((star_band_h, w_px, 4), dtype=np.uint8)
+        for px, core, off in stars:
+            st = sparkle_state(off, t)
+            pts = px if st == "plein" else (core if st == "coeur" else [])
+            for y, x, r, g, b in pts:
+                fr[y, x] = (r, g, b, 255)
+        star_frames.append(Image.fromarray(fr, "RGBA"))
+
+    star_full_t0 = Image.new("RGBA", (w_px, h_px), (0, 0, 0, 0))
+    star_full_t0.alpha_composite(star_frames[0], (0, 0))
+
+    sky_meta = {
+        "source_sky_gradient": str(ZRV2_NIGHT_SKY_PATH.relative_to(ROOT)),
+        "source_moon_sprite": str(ZRV2_MOON_PATH.relative_to(ROOT)),
+        "source_zrv1_stars": str(ZRV1_MANIFEST_PATH.relative_to(ROOT)),
+        "source_pmdsky_night_ref": str(PMDSKY_NIGHT_BG_PATH.relative_to(ROOT)),
+        "moon_center_px": [mcx, mcy],
+        "moon_size_px": [mw, mh],
+        "sea_horizon_y_px": sea_horizon_y,
+        "star_band_height_px": star_band_h,
+        "zrv1_stars_included": len(sc["pixels"]),
+        "total_twinkling_stars": len(stars),
+        "static_background_stars": static_count,
+        "star_frame_count": STAR_FRAME_COUNT,
+        "star_frame_length_ticks": STAR_FRAME_LENGTH,
+        "star_cycle_ticks": STAR_FRAME_COUNT * STAR_FRAME_LENGTH,
+    }
+    return sky_im, star_frames, star_full_t0, sky_meta
+
+
+
 def reconstruct_cliffdaytest_cloud_strip(doc: dict) -> Image.Image:
     nuages_src = np.array(Image.open(NUAGES_PATH).convert("RGBA"))
     l5 = doc["Object"]["Layers"][5]
@@ -417,13 +716,17 @@ def transform_rsground(
     orig_doc: dict,
     phase_locs: list[dict[tuple[int, int], dict]],
     sky_bg_name: str,
+    star_bg_name: str,
     cloud_bg_name: str,
     cloud_map_loc_y: int,
 ) -> tuple[dict, dict]:
     """
     Transform a copy of `orig_doc`:
     - Leave all cliff, object, and existing animation layers 100% untouched.
-    - Enable the `LayeredBG` cloud wrap overlay (`RepeatX = True`, `BGMovement = (-4, 0)`).
+    - Configure `LayeredBG` with:
+      * Layer 0: Starry night sky + full moon + concentric blue halo (`sky_bg_name`).
+      * Layer 1: 24-phase twinkling stars from the awakening scene (`star_bg_name`, `FrameTime = 5`).
+      * Layer 2: Horizontal cloud wrap overlay (`cloud_bg_name`, `RepeatX = True`, `BGMovement = (-4, 0)`).
     - Animate ONLY `v2_promontoire_jour_03` cells on `Layers[1]` using the 10-frame
       canonical PMD Sky Port (`reference_ciel_mer.png`) sea animation.
     """
@@ -431,12 +734,13 @@ def transform_rsground(
     doc["Version"] = "0.8.12.0"
     obj = doc["Object"]
 
-    # 1. Configure native LayeredBG (static sky + wrapping cloud overlay)
+    # 1. Configure native LayeredBG (static starry night sky + moon, 24-phase twinkling stars, wrapping cloud overlay)
     obj["Background"] = {
         "$type": "RogueEssence.Dungeon.LayeredBG, RogueEssence",
         "Layers": [
-            {"BG": gfx.background(sky_bg_name, 0, 0, False)},
-            {"BG": gfx.background(cloud_bg_name, cloud_map_loc_y, CLOUD_SPEED_PX_S, True)},
+            {"BG": background_anim(sky_bg_name, 0, 0, False, 1)},
+            {"BG": background_anim(star_bg_name, 0, 0, False, STAR_FRAME_LENGTH)},
+            {"BG": background_anim(cloud_bg_name, cloud_map_loc_y, CLOUD_SPEED_PX_S, True, 1)},
         ],
     }
 
@@ -529,6 +833,7 @@ def transform_rsground(
         "background_layers": [
             {
                 "anim_index": entry["BG"]["BGAnim"]["AnimIndex"],
+                "frame_time": entry["BG"]["BGAnim"]["FrameTime"],
                 "map_loc": entry["BG"]["MapLoc"],
                 "movement": entry["BG"]["BGMovement"],
                 "repeat_x": entry["BG"]["RepeatX"],
@@ -585,6 +890,8 @@ def build_viewer_html(viewer_path: Path, maps_payload: list[dict], sea_info: dic
             "cloud_speed_px_s": CLOUD_SPEED_PX_S,
             "sea_frame_count": SEA_FRAME_COUNT,
             "sea_frame_length_ticks": SEA_FRAME_LENGTH,
+            "star_frame_count": STAR_FRAME_COUNT,
+            "star_frame_length_ticks": STAR_FRAME_LENGTH,
         },
         ensure_ascii=False,
         separators=(",", ":"),
@@ -594,7 +901,7 @@ def build_viewer_html(viewer_path: Path, maps_payload: list[dict], sea_info: dic
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cliff Nord Jour Animé · Mer canonique PMD Sky Port & Wrap Nuages</title>
+<title>Cliff Nord · Ciel Nuit Étoilé (Scène du Réveil), Lune, Étoiles Scintillantes, Wrap Nuages & Mer PMD Sky Port</title>
 <style>
 :root {{
   color-scheme: dark;
@@ -705,8 +1012,8 @@ code {{ color: var(--ok); }}
 <body>
 <header>
   <div>
-    <div class="eyebrow">PMDO 0.8.12 · Animation Canonique Pelipper Post Office</div>
-    <h1>Cliff Nord Jour Animé — Mer PMD Sky Port (10 phases) & Wrap Nuages</h1>
+    <div class="eyebrow">PMDO 0.8.12 · Ciel Nuit Étoilé (Scène du Réveil ZRV1/ZRV2) & Mer Pelipper Post Office</div>
+    <h1>Cliff Nord — Ciel Nuit Étoilé, Pleine Lune, Étoiles Scintillantes (24 phases), Wrap Nuages & Mer (10 phases)</h1>
   </div>
   <span class="badge">Calques falaise, objets & animations 100 % intacts · runtime_tested: false</span>
 </header>
@@ -721,7 +1028,7 @@ code {{ color: var(--ok); }}
       <span class="label">Contrôle d'animation (60 Hz)</span>
       <div class="row">
         <button id="playBtn" class="active">Pause</button>
-        <button id="stepBtn">+1 phase mer</button>
+        <button id="stepBtn">+1 phase étoiles</button>
         <button id="resetBtn">Tick 0</button>
       </div>
       <p id="tickStatus" style="font-size:12px;color:var(--muted);margin:8px 0 0"></p>
@@ -737,8 +1044,9 @@ code {{ color: var(--ok); }}
     </section>
     <section>
       <span class="label">Calques affichés</span>
-      <label class="check"><input type="checkbox" id="showSky" checked>LayeredBG 0 · Ciel fixe</label>
-      <label class="check"><input type="checkbox" id="showClouds" checked>LayeredBG 1 · Nuages wrap (−4 px/s, RepeatX)</label>
+      <label class="check"><input type="checkbox" id="showSky" checked>LayeredBG 0 · Ciel nuit étoilé & pleine lune (ZRV1/ZRV2)</label>
+      <label class="check"><input type="checkbox" id="showStars" checked>LayeredBG 1 · Étoiles scintillantes (24 phases × 5 ticks)</label>
+      <label class="check"><input type="checkbox" id="showClouds" checked>LayeredBG 2 · Nuages wrap (−4 px/s, RepeatX)</label>
       <label class="check"><input type="checkbox" id="showSea" checked>Layer 1 · Mer canonique PMD Sky Port (10 phases)</label>
       <label class="check"><input type="checkbox" id="showCliffs" checked>Layers 2..N · Falaise & objets (100 % intacts)</label>
     </section>
@@ -746,7 +1054,8 @@ code {{ color: var(--ok); }}
       <h3>Intégrité garantie</h3>
       <ul>
         <li><strong>Falaise & objets :</strong> aucun calque de falaise, d'objet ou d'animation existante n'est modifié, renommé ou déplacé (<code>assert out == orig</code>).</li>
-        <li><strong>Nuages :</strong> uniquement activés en <code>LayeredBG</code> / <code>MapBG</code> (<code>RepeatX: true</code>, <code>BGMovement: (-4, 0)</code>).</li>
+        <li><strong>Ciel nuit étoilé (Scène du Réveil) :</strong> dégradé nocturne <code>ZRV2N_01_ciel.png</code>, halo lunaire concentrique <code>ZRV1N_06_panorama.png</code>, pleine lune cratérisée <code>ZRV2N_03_astre.png</code> (<code>64×64</code> px) et étoiles scintillantes sur 24 phases (<code>FrameTime: 5</code> ticks) dans <code>LayeredBG</code>.</li>
+        <li><strong>Nuages :</strong> activés en <code>LayeredBG</code> / <code>MapBG</code> (<code>RepeatX: true</code>, <code>BGMovement: (-4, 0)</code>) devant le ciel étoilé et la lune.</li>
         <li><strong>Mer :</strong> animée canoniquement depuis <code>reference_ciel_mer.png</code> (Pelipper Post Office : 5 phases <code>far_sea</code> + 10 phases <code>near_sea</code>, <code>FrameLength: 10</code>).</li>
       </ul>
     </section>
@@ -787,10 +1096,11 @@ async function ensureMapLoaded(idx) {{
   if (loaded[idx]) return loaded[idx];
   const m = DATA.maps[idx];
   const sky = await loadImage(m.sky_webp);
+  const stars = await Promise.all(m.star_frames_webp.map(loadImage));
   const clouds = await loadImage(m.cloud_strip_webp);
   const cliffs = await loadImage(m.untouched_cliffs_webp);
   const sea = await Promise.all(m.sea_frames_webp.map(loadImage));
-  loaded[idx] = {{ sky, clouds, cliffs, sea }};
+  loaded[idx] = {{ sky, stars, clouds, cliffs, sea }};
   return loaded[idx];
 }}
 
@@ -819,6 +1129,10 @@ function render() {{
   if (el('showSky').checked) {{
     ctx.drawImage(assets.sky, 0, 0);
   }}
+  const starPhase = Math.floor(tick / DATA.star_frame_length_ticks) % DATA.star_frame_count;
+  if (el('showStars').checked) {{
+    ctx.drawImage(assets.stars[starPhase], 0, 0);
+  }}
   if (el('showClouds').checked) {{
     const sw = assets.clouds.width;
     const shift = Math.floor((DATA.cloud_speed_px_s * tick) / 60);
@@ -843,16 +1157,16 @@ function render() {{
     ctx.stroke();
   }}
   const shiftPx = Math.floor((-DATA.cloud_speed_px_s * tick) / 60) % assets.clouds.width;
-  el('tickStatus').textContent = `Tick ${{tick}} (60 Hz) · Mer phase ${{seaPhase + 1}}/10 (far_sea ${{(seaPhase % 5) + 1}}/5, near_sea ${{seaPhase + 1}}/10) · Nuages wrap ${{shiftPx}}/${{assets.clouds.width}} px`;
+  el('tickStatus').textContent = `Tick ${{tick}} (60 Hz) · Étoiles phase ${{starPhase + 1}}/24 · Mer phase ${{seaPhase + 1}}/10 · Nuages wrap ${{shiftPx}}/${{assets.clouds.width}} px`;
 }}
 
 async function selectMap(idx) {{
   selectedMap = idx;
   const m = DATA.maps[idx];
   el('stageTitle').textContent = `${{m.slug}}.rsground (${{m.width}} × ${{m.height}} px · ${{m.width / 8}} × ${{m.height / 8}} cases)`;
-  el('mapMeta').textContent = `${{m.animated_sea_cells}} cases de mer animées · Calques falaise/objets (${{m.untouched_layers.join(', ')}}) 100 % intacts`;
+  el('mapMeta').textContent = `${{m.twinkling_stars_count}} étoiles scintillantes (24 phases) · Lune (${{m.moon_center[0]}}, ${{m.moon_center[1]}}) · ${{m.animated_sea_cells}} cases mer`;
   el('layerSummary').innerHTML = `<h3>Structure de <code>${{m.slug}}.rsground</code></h3>` +
-    `<p><strong>Background (LayeredBG) :</strong> <code>${{m.sky_bg}}</code> (fixe) + <code>${{m.cloud_bg}}</code> (<code>RepeatX: true</code>, <code>BGMovement: (-4, 0)</code>, <code>MapLoc.Y: ${{m.cloud_map_loc_y}}</code>).</p>` +
+    `<p><strong>Background (LayeredBG) :</strong> <code>${{m.sky_bg}}</code> (ciel nuit étoilé + pleine lune <code>64×64</code> + halo ZRV1/ZRV2) + <code>${{m.star_bg}}</code> (<code>${{m.twinkling_stars_count}}</code> étoiles scintillantes, <code>24 phases × 5 ticks</code>) + <code>${{m.cloud_bg}}</code> (<code>RepeatX: true</code>, <code>BGMovement: (-4, 0)</code>, <code>MapLoc.Y: ${{m.cloud_map_loc_y}}</code>).</p>` +
     `<p><strong>Layer 1 (mer) :</strong> <code>${{m.animated_sea_cells}}</code> cases <code>v2_promontoire_jour_03</code> animées sur 10 phases canoniques Pelipper Post Office (<code>FrameLength: 10</code>, Phase 0 conservée aux coordonnées exactes <code>(tx, ty)</code>).</p>` +
     `<p><strong>Calques falaise, objets et animations (${{m.untouched_layers.join(', ')}}) :</strong> strictement identiques à l'original octet pour octet.</p>`;
   await ensureMapLoaded(idx);
@@ -870,7 +1184,7 @@ DATA.maps.forEach((m, i) => {{
 el('mapSelect').onchange = e => selectMap(Number(e.target.value));
 el('zoomSelect').onchange = applyZoom;
 window.addEventListener('resize', applyZoom);
-['gridToggle', 'showSky', 'showClouds', 'showSea', 'showCliffs'].forEach(id => {{
+['gridToggle', 'showSky', 'showStars', 'showClouds', 'showSea', 'showCliffs'].forEach(id => {{
   el(id).onchange = render;
 }});
 el('playBtn').onclick = () => {{
@@ -882,7 +1196,7 @@ el('stepBtn').onclick = () => {{
   playing = false;
   el('playBtn').textContent = 'Lecture';
   el('playBtn').classList.remove('active');
-  tick += DATA.sea_frame_length_ticks;
+  tick += DATA.star_frame_length_ticks;
   render();
 }};
 el('resetBtn').onclick = () => {{
@@ -943,21 +1257,38 @@ def main() -> None:
     tile_dir.mkdir(parents=True, exist_ok=True)
     sea_bank.write(tile_dir / f"{SEA_BANK_NAME}.tile")
 
-    # 3. Build sky and cloud wrap .dir assets for both maps using native `gfx.write_dir`
+    # 3. Build awakening scene starry night sky + full moon + 24-phase twinkling stars + cloud wrap .dir assets
     sky_src = build_sky_source_504x408()
-    nw_sky_im = reconstruct_map_sky_from_layer0(nw_orig, sky_src, fill_top_with_row0=True)
+    nw_sky_im, nw_star_frames, nw_star_full_t0, nw_sky_meta = build_awakening_night_sky_and_stars(
+        nw_orig,
+        sky_src,
+        fill_top_with_row0=True,
+        sea_horizon_y=424,
+        star_band_h=344,
+        moon_center=(552, 110),
+    )
     nw_cloud_strip = Image.open(NUAGES_PATH).convert("RGBA")  # 1440x208 canonical cloud wrap strip
     nw_cloud_map_loc_y = 216  # Places the 208px cloud band at y=216..424 right above the y=424 sea horizon
 
-    day_sky_im = reconstruct_map_sky_from_layer0(day_orig, sky_src, fill_top_with_row0=False)
+    day_sky_im, day_star_frames, day_star_full_t0, day_sky_meta = build_awakening_night_sky_and_stars(
+        day_orig,
+        sky_src,
+        fill_top_with_row0=False,
+        sea_horizon_y=304,
+        star_band_h=272,
+        moon_center=(480, 80),
+    )
     day_cloud_strip = reconstruct_cliffdaytest_cloud_strip(day_orig)  # 984x312 exact user cloud placement
     day_cloud_map_loc_y = 0
 
     bg_dir = RENDERS / "Content/BG"
     bg_dir.mkdir(parents=True, exist_ok=True)
     gfx.write_dir(bg_dir / "CLIFF_NORD_OUEST_CIEL.dir", nw_sky_im)
+    write_animated_dir(gfx, bg_dir / "CLIFF_NORD_OUEST_ETOILES.dir", nw_star_frames)
     gfx.write_dir(bg_dir / "CLIFF_NORD_OUEST_NUAGES.dir", nw_cloud_strip)
+
     gfx.write_dir(bg_dir / "CLIFF_DAY_CIEL.dir", day_sky_im)
+    write_animated_dir(gfx, bg_dir / "CLIFF_DAY_ETOILES.dir", day_star_frames)
     gfx.write_dir(bg_dir / "CLIFF_DAY_NUAGES.dir", day_cloud_strip)
 
     # 4. Transform both .rsground documents (leaving all cliff/object/animation layers untouched)
@@ -967,18 +1298,23 @@ def main() -> None:
         nw_orig,
         phase_locs,
         sky_bg_name="CLIFF_NORD_OUEST_CIEL",
+        star_bg_name="CLIFF_NORD_OUEST_ETOILES",
         cloud_bg_name="CLIFF_NORD_OUEST_NUAGES",
         cloud_map_loc_y=nw_cloud_map_loc_y,
     )
+    nw_stats["night_sky"] = nw_sky_meta
+
     day_doc, day_stats = transform_rsground(
         gfx,
         "cliffdaytest",
         day_orig,
         phase_locs,
         sky_bg_name="CLIFF_DAY_CIEL",
+        star_bg_name="CLIFF_DAY_ETOILES",
         cloud_bg_name="CLIFF_DAY_NUAGES",
         cloud_map_loc_y=day_cloud_map_loc_y,
     )
+    day_stats["night_sky"] = day_sky_meta
 
     # 5. Write updated .rsground files with UTF-8 BOM
     ground_dir = RENDERS / "Data/Ground"
@@ -1000,6 +1336,8 @@ def main() -> None:
             nw_doc,
             nw_stats,
             nw_sky_im,
+            nw_star_frames,
+            nw_star_full_t0,
             nw_cloud_strip,
             nw_cloud_map_loc_y,
             [2, 3],
@@ -1010,13 +1348,26 @@ def main() -> None:
             day_doc,
             day_stats,
             day_sky_im,
+            day_star_frames,
+            day_star_full_t0,
             day_cloud_strip,
             day_cloud_map_loc_y,
             [0, 2, 3, 4, 5],
         ),
     ]
 
-    for slug, orig_doc, doc, stats, sky_im, cloud_strip, cloud_y, preview_layer_indices in map_configs:
+    for (
+        slug,
+        orig_doc,
+        doc,
+        stats,
+        sky_im,
+        star_frames,
+        star_full_t0,
+        cloud_strip,
+        cloud_y,
+        preview_layer_indices,
+    ) in map_configs:
         mdir = RENDERS / slug
         w_px, h_px = stats["dimensions_px"]
         sea_frames = render_sea_layer_frames(orig_doc["Object"]["Layers"][1], sea_sheets, repo_sheets)
@@ -1024,9 +1375,12 @@ def main() -> None:
         cloud_t0 = render_cloud_wrap_at(cloud_strip, (w_px, h_px), cloud_y, 0)
 
         save_png(sky_im, mdir / "calques/00_ciel_bg.png")
+        save_png(star_full_t0, mdir / "calques/00b_etoiles_scintillantes_t000.png")
         save_png(cloud_strip, mdir / "calques/01_nuages_wrap_strip.png")
         save_png(cloud_t0, mdir / "calques/01_nuages_wrap_t000.png")
         save_png(untouched_preview, mdir / "calques/03_falaise_objets_intacts_apercu.png")
+        for s_idx, st_im in enumerate(star_frames):
+            save_png(st_im, mdir / f"etoiles/etoiles_{s_idx:02d}.png")
         for f_idx, sf in enumerate(sea_frames):
             save_png(sf, mdir / f"mer/mer_{f_idx:02d}.png")
         save_png(sea_frames[0], mdir / "calques/02_mer_pmdsky_f00.png")
@@ -1036,21 +1390,26 @@ def main() -> None:
             (w_px, h_px),
             [
                 ("00_ciel_bg", sky_im),
+                ("00b_etoiles_scintillantes_t000", star_full_t0),
                 ("01_nuages_wrap_t000", cloud_t0),
                 ("02_mer_pmdsky_f00", sea_frames[0]),
                 ("03_falaise_objets_intacts_apercu", untouched_preview),
             ],
         )
 
+        # Render 24-frame animated WebP preview showing both the 24-phase twinkling stars and sea/cloud motion
         anim_frames: list[Image.Image] = []
-        for f_idx in range(SEA_FRAME_COUNT):
-            tick = f_idx * SEA_FRAME_LENGTH
+        for s_idx in range(STAR_FRAME_COUNT):
+            tick = s_idx * STAR_FRAME_LENGTH
             shift = (CLOUD_SPEED_PX_S * tick) // 60
             cloud_frame = render_cloud_wrap_at(cloud_strip, (w_px, h_px), cloud_y, shift)
-            scene = Image.alpha_composite(sky_im, cloud_frame)
-            scene = Image.alpha_composite(scene, sea_frames[f_idx])
+            sea_idx = (tick // SEA_FRAME_LENGTH) % SEA_FRAME_COUNT
+            scene = sky_im.copy()
+            scene.alpha_composite(star_frames[s_idx], (0, 0))
+            scene = Image.alpha_composite(scene, cloud_frame)
+            scene = Image.alpha_composite(scene, sea_frames[sea_idx])
             scene = Image.alpha_composite(scene, untouched_preview)
-            if f_idx == 0:
+            if s_idx == 0:
                 save_png(scene, RENDERS / f"review/{slug}_scene_t000.png")
             anim_frames.append(scene)
 
@@ -1060,7 +1419,7 @@ def main() -> None:
             webp_path,
             save_all=True,
             append_images=anim_frames[1:],
-            duration=167,
+            duration=83,
             loop=0,
             lossless=True,
             method=4,
@@ -1072,14 +1431,18 @@ def main() -> None:
                 "width": w_px,
                 "height": h_px,
                 "sky_bg": stats["background_layers"][0]["anim_index"],
-                "cloud_bg": stats["background_layers"][1]["anim_index"],
+                "star_bg": stats["background_layers"][1]["anim_index"],
+                "cloud_bg": stats["background_layers"][2]["anim_index"],
                 "cloud_map_loc_y": cloud_y,
+                "moon_center": stats["night_sky"]["moon_center_px"],
+                "twinkling_stars_count": stats["night_sky"]["total_twinkling_stars"],
                 "animated_sea_cells": stats["animated_sea_cells_layer1"],
                 "untouched_layers": [
                     f"Layer {i} ({doc['Object']['Layers'][i]['Name']})"
                     for i in stats["untouched_layer_indices"]
                 ],
                 "sky_webp": image_to_webp_data_uri(sky_im),
+                "star_frames_webp": [image_to_webp_data_uri(im) for im in star_frames],
                 "cloud_strip_webp": image_to_webp_data_uri(cloud_strip),
                 "untouched_cliffs_webp": image_to_webp_data_uri(untouched_preview),
                 "sea_frames_webp": [image_to_webp_data_uri(im) for im in sea_frames],
@@ -1112,19 +1475,20 @@ def main() -> None:
 
     # 8. Copy canonical PMDO index merger INSTALLER.py and write README.md + manifest.json
     shutil.copyfile(ROOT / "source/pmdo_cote/INSTALLER.py", RENDERS / "INSTALLER.py")
-    readme_text = """# Cliff Nord Jour Animé (`cliffnordouesttest1` & `cliffdaytest`) — Mer canonique PMD Sky Port & Wrap Nuages
+    readme_text = """# Cliff Nord (`cliffnordouesttest1` & `cliffdaytest`) — Ciel Nuit Étoilé (Scène du Réveil), Lune, Étoiles Scintillantes, Wrap Nuages & Mer PMD Sky Port
 
-Ce lot applique **uniquement** les deux animations demandées sur `cliffnordouesttest1.rsground` et `cliffdaytest.rsground` :
+Ce lot applique sur `cliffnordouesttest1.rsground` et `cliffdaytest.rsground` :
 
 1. **Aucun calque de falaise, d'objet ou d'animation existante n'est touché, renommé ou déplacé** :
    - Dans `cliffnordouesttest1.rsground` : `Layers[2]` (`New Layer`) et `Layers[3]` (`Layer 3`) sont **100 % identiques octet pour octet** à l'original (ainsi que la case `Altere_Pond_Cliffs` sur `Layers[1]`).
    - Dans `cliffdaytest.rsground` : `Layers[2]` (`Layer 2`), `Layers[3]` (`Layer 4`), `Layers[4]` (`Layer 3`), les 5 cases `Altere_Pond_Cliffs` / `CanyonCamp` sur `Layers[0]` et les **325 cases d'objets** (`Altere_Pond_Objects`, `Altere_Pond_Objects_Under`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) sur `Layers[5]` (`Cloud/nuage`) sont **100 % identiques octet pour octet** à l'original.
    - Aucune banque `.tile` factice/proxy n'est générée pour les falaises ou les objets : seule `Content/Tile/v2_promontoire_jour_03.tile` est livrée.
 
-2. **Nuages : uniquement le wrap overlay activé (`LayeredBG` / `MapBG`)** :
-   - `Object["Background"]` est configuré en `RogueEssence.Dungeon.LayeredBG, RogueEssence` avec :
-     - Ciel fixe (`CLIFF_NORD_OUEST_CIEL` / `CLIFF_DAY_CIEL`, `RepeatX = false`, `BGMovement = (0, 0)`, `Parallax = "1, 1"`).
-     - Nuages en wrap horizontal (`CLIFF_NORD_OUEST_NUAGES` / `CLIFF_DAY_NUAGES`, `RepeatX = true`, `RepeatY = false`, `BGMovement = (-4, 0)`, `Parallax = "1, 1"`).
+2. **Ciel nuit étoilé de la Scène du Réveil (`ZRV1`/`ZRV2`), pleine lune, étoiles scintillantes & wrap nuages (`LayeredBG` / `MapBG`)** :
+   - `Object["Background"]` est configuré en `RogueEssence.Dungeon.LayeredBG, RogueEssence` avec 3 calques `MapBG` :
+     - **Calque BG 0 (`CLIFF_NORD_OUEST_CIEL` / `CLIFF_DAY_CIEL`)** : dégradé nocturne de la scène du réveil (`ZRV2N_01_ciel.png`), halo bleu concentrique (`ZRV1N_06_panorama.png`) et pleine lune cratérisée `64×64` px (`ZRV2N_03_astre.png`).
+     - **Calque BG 1 (`CLIFF_NORD_OUEST_ETOILES` / `CLIFF_DAY_ETOILES`)** : `DirSheet` animé sur **24 phases** (`FrameTime = 5` ticks, cycle de 120 ticks = 2,0 s) reprenant la loi de scintillement (`eteint -> coeur -> plein -> coeur -> eteint`) et les motifs d'étoiles de `ZRV1`/`ZRV2` et `bgnightbackgroundpmdskyda.png`.
+     - **Calque BG 2 (`CLIFF_NORD_OUEST_NUAGES` / `CLIFF_DAY_NUAGES`)** : nuages en wrap horizontal (`RepeatX = true`, `RepeatY = false`, `BGMovement = (-4, 0)`, `Parallax = "1, 1"`), passant devant la lune et les étoiles scintillantes.
    - Les tuiles statiques `00_ciel` sur `Layers[0]` et `01_long_cap_jour_02` sur `Layers[5]` sont vidées pour que le `LayeredBG` soit visible derrière les calques de tuiles sans doublon statique.
 
 3. **Mer (`Layers[1]`) : animation canonique PMD Sky Port (`reference_ciel_mer.png`, Pelipper Post Office)** :
@@ -1166,8 +1530,10 @@ Ce lot applique **uniquement** les deux animations demandées sur `cliffnordoues
             "Data/Ground/cliffdaytest.rsground",
             f"Content/Tile/{SEA_BANK_NAME}.tile",
             "Content/BG/CLIFF_NORD_OUEST_CIEL.dir",
+            "Content/BG/CLIFF_NORD_OUEST_ETOILES.dir",
             "Content/BG/CLIFF_NORD_OUEST_NUAGES.dir",
             "Content/BG/CLIFF_DAY_CIEL.dir",
+            "Content/BG/CLIFF_DAY_ETOILES.dir",
             "Content/BG/CLIFF_DAY_NUAGES.dir",
             "INSTALLER.py",
             "README.md",
@@ -1180,12 +1546,14 @@ Ce lot applique **uniquement** les deux animations demandées sur `cliffnordoues
             zf.writestr(info, p.read_bytes(), compresslevel=6)
 
     shutil.copyfile(zip_path, ROOT / "livrable_cliff_nord_jour_anime_v1.zip")
+    shutil.copyfile(zip_path, ROOT / "mod_cliff_nord_jour_pmdo_0812.zip")
     build_viewer_html(ROOT / "apercu_cliff_nord_jour_anime_v1.html", viewer_maps, manifest["sea_animation"])
 
     verify_root_immutability()
     print(
         f"Build complete: {len(sea_bank.data)} tiles ({len(sea_bank.ids)} unique) in {SEA_BANK_NAME}.tile, "
-        f"nw={nw_stats['animated_sea_cells_layer1']} sea cells, day={day_stats['animated_sea_cells_layer1']} sea cells."
+        f"nw={nw_stats['animated_sea_cells_layer1']} sea cells ({nw_sky_meta['total_twinkling_stars']} stars), "
+        f"day={day_stats['animated_sea_cells_layer1']} sea cells ({day_sky_meta['total_twinkling_stars']} stars)."
     )
 
 
