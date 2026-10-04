@@ -113,6 +113,10 @@ def verify_root_immutability() -> None:
         assert actual == expected, f"Root file {filename} modified: {actual} != {expected}"
 
 
+_abyss_mod = loadmod("abyss_night_filter", ROOT / "source/cote_v4_abyss/night.py")
+abyss_night = _abyss_mod.night
+
+
 def premult_arr(arr: np.ndarray) -> np.ndarray:
     a = arr.astype(np.uint16)
     a[:, :, :3] = (a[:, :, :3] * a[:, :, 3:4]) // 255
@@ -695,7 +699,9 @@ def render_sea_layer_frames(
                         src = repo_sheets[sname]
                         blk = src.get((tx, ty)) if isinstance(src, dict) else src[ty * 8 : (ty + 1) * 8, tx * 8 : (tx + 1) * 8]
                         if blk is not None:
-                            canvas[y * 8 : (y + 1) * 8, x * 8 : (x + 1) * 8] = blk
+                            canvas[y * 8 : (y + 1) * 8, x * 8 : (x + 1) * 8] = np.array(
+                                abyss_night(Image.fromarray(blk, "RGBA"))
+                            )
         frames.append(Image.fromarray(canvas, "RGBA"))
     return frames
 
@@ -1248,16 +1254,19 @@ def main() -> None:
                         if f["Sheet"] == "v2_promontoire_jour_03":
                             needed_sea_coords.add((f["TexLoc"]["X"], f["TexLoc"]["Y"]))
 
-    # 2. Build the 10 canonical PMD Sky Port (`reference_ciel_mer.png`) sea sheets (1312x1024)
+    # 2. Build the 10 canonical PMD Sky Port (`reference_ciel_mer.png`) sea sheets (1312x1024),
+    #    apply the exact Abyss V4 night filter (`source/cote_v4_abyss/night.py`, blob `438383f4`) once,
     #    and encode `Content/Tile/v2_promontoire_jour_03.tile` in native RogueEssence TileSheet format
-    sea_sheets, sea_info = build_canonical_pmdsky_sea_sheets()
+    sea_sheets_day, sea_info = build_canonical_pmdsky_sea_sheets()
+    sea_sheets = [np.array(abyss_night(Image.fromarray(s, "RGBA"))) for s in sea_sheets_day]
+    sea_info["night_filter"] = "Abyss V4 tools/tile_night.py (blob 438383f4)"
     sea_bank, phase_locs = build_pmdo_sea_bank(gfx, sea_sheets, needed_sea_coords)
 
     tile_dir = RENDERS / "Content/Tile"
     tile_dir.mkdir(parents=True, exist_ok=True)
     sea_bank.write(tile_dir / f"{SEA_BANK_NAME}.tile")
 
-    # 3. Build awakening scene starry night sky + full moon + 24-phase twinkling stars + cloud wrap .dir assets
+    # 3. Build awakening scene starry night sky + full moon + 24-phase twinkling stars + Abyss night cloud wrap .dir assets
     sky_src = build_sky_source_504x408()
     nw_sky_im, nw_star_frames, nw_star_full_t0, nw_sky_meta = build_awakening_night_sky_and_stars(
         nw_orig,
@@ -1267,7 +1276,7 @@ def main() -> None:
         star_band_h=344,
         moon_center=(552, 110),
     )
-    nw_cloud_strip = Image.open(NUAGES_PATH).convert("RGBA")  # 1440x208 canonical cloud wrap strip
+    nw_cloud_strip = abyss_night(Image.open(NUAGES_PATH).convert("RGBA"))  # 1440x208 cloud wrap strip with Abyss night filter
     nw_cloud_map_loc_y = 216  # Places the 208px cloud band at y=216..424 right above the y=424 sea horizon
 
     day_sky_im, day_star_frames, day_star_full_t0, day_sky_meta = build_awakening_night_sky_and_stars(
@@ -1278,7 +1287,7 @@ def main() -> None:
         star_band_h=272,
         moon_center=(480, 80),
     )
-    day_cloud_strip = reconstruct_cliffdaytest_cloud_strip(day_orig)  # 984x312 exact user cloud placement
+    day_cloud_strip = abyss_night(reconstruct_cliffdaytest_cloud_strip(day_orig))  # 984x312 cloud strip with Abyss night filter
     day_cloud_map_loc_y = 0
 
     bg_dir = RENDERS / "Content/BG"
@@ -1371,7 +1380,7 @@ def main() -> None:
         mdir = RENDERS / slug
         w_px, h_px = stats["dimensions_px"]
         sea_frames = render_sea_layer_frames(orig_doc["Object"]["Layers"][1], sea_sheets, repo_sheets)
-        untouched_preview = render_untouched_layers_preview(doc, preview_layer_indices, repo_sheets)
+        untouched_preview = abyss_night(render_untouched_layers_preview(doc, preview_layer_indices, repo_sheets))
         cloud_t0 = render_cloud_wrap_at(cloud_strip, (w_px, h_px), cloud_y, 0)
 
         save_png(sky_im, mdir / "calques/00_ciel_bg.png")

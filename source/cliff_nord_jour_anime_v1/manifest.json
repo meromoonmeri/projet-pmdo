@@ -109,6 +109,7 @@
     "total_animation_frames": 10,
     "frame_length_ticks_60hz": 10,
     "frame_0_max_diff_vs_v2_promontoire_jour_03": 0,
+    "night_filter": "Abyss V4 tools/tile_night.py (blob 438383f4)",
     "tile_bank": "Content/Tile/v2_promontoire_jour_03.tile",
     "total_encoded_8x8_tiles": 8389,
     "unique_8x8_patterns": 534

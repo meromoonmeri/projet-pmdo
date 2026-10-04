@@ -168,7 +168,8 @@ class TestCliffNordJourAnimeV1(unittest.TestCase):
 
         # Decode v2_promontoire_jour_03.tile via independent verifier V.read_tile
         decoded_tiles = V.read_tile(RENDERS / "Content/Tile/v2_promontoire_jour_03.tile")
-        sea_sheets, sea_info = B.build_canonical_pmdsky_sea_sheets()
+        sea_sheets_day, sea_info = B.build_canonical_pmdsky_sea_sheets()
+        sea_sheets = [np.array(B.abyss_night(Image.fromarray(s, "RGBA"))) for s in sea_sheets_day]
         self.assertEqual(sea_info["far_sea_distinct_frames"], 5)
         self.assertEqual(sea_info["near_sea_distinct_frames"], 10)
         self.assertEqual(sea_info["frame_0_max_diff_vs_v2_promontoire_jour_03"], 0)
