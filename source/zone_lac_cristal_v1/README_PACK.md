@@ -1,35 +1,26 @@
-# Zone Lac Cristallin — Carrefour & Belvédères (4:3) — projet PMDO 0.8.12
+# Zone Lac Cristallin — Carrefour Zone Zéro 4:3 (ZLC1, PMDO 0.8.12)
 
-Projet d'édition autonome `zone_lac_cristal`. Il contient un Ground `zlc1_zone_lac_cristal` au **format 4:3 vaste** : 768 × 576 px, soit 96 × 72 cases de 8 px (`TexSize=1`), environ 2,4 × 2,4 écrans PMDO.
+Zone d'exploration / Carrefour & Belvédères sud <-> nord au format **4:3 vaste** (`768 x 576 px`, `96 x 72` cases de 8 px), construite à partir du rip canonique `lakecrystalpmdsky.png` (`D17P34A`, *Crystal Lake / Crystal Crossing*, PMD Explorers of Sky) avec :
+- **Cristaux Zone Zéro (*Area Zero*, Pokémon Écarlate et Violet)** : base en cristal blanc nacré / opale / quartz-améthyste (`CRISTAL_TONS`) et reflets irisés arc-en-ciel Téra animés (`reflets_tera`, `24 x 10 ticks = 240 ticks`) ;
+- **Eau abyssale et effet reflet de profondeur (`reflet_profondeur`)** : dégradé de profondeur en 5 paliers sans aucun liseré clair aux rives et reflet vertical immergé des cristaux plongeant dans l'eau (`24 x 10 ticks = 240 ticks`).
 
-Biome choisi par l'utilisateur : **Lac Cristallin / Crystal Crossing (`lakecrystalpmdsky.png`, `D17P34A`)**, décliné en trilogie complète de 3 layouts (`ELC1` entrée, `FLC1` fin/sanctuaire, `ZLC1` zone ouverte).
+## Calques (13 calques : 7 fixes + 6 animés, boucle de 240 ticks = 4 s)
+1. `00 eau` — 4 phases x 10 ticks (dégradé abyssal en 5 paliers + onde de rive sans liseré clair)
+2. `01 reflet_profondeur` — 24 phases x 10 ticks (reflet vertical immergé des cristaux dans la profondeur de l'eau)
+3. `02 scintillements` — 4 phases x 10 ticks (`Metano_Town_River_Sparkles` natifs)
+4. `03 gouttes` — 24 phases x 5 ticks (gouttes cristallines et ronds d'eau)
+5. `04 sol_complet` — fixe (fond de dalles nacrées sous toute la plateforme)
+6. `05 dalles` — fixe (chaussée et esplanade centrale praticables)
+7. `06 reflets` — fixe (motifs géométriques nacrés sur les dalles)
+8. `07 rebords` — fixe (margelles biseautées du plateau)
+9. `08 cristaux` — fixe (amas de pointes de quartz-améthyste)
+10. `09 ilots` — fixe (îlots et piliers émergeant du lac)
+11. `10 piliers` — fixe (colonnes et piédestaux des belvédères latéraux)
+12. `11 reflets_tera` — 24 phases x 10 ticks (reflets irisés arc-en-ciel Téra sur les cristaux)
+13. `12 eclats` — 48 phases x 5 ticks (éclats prismatiques flottants)
 
-## Installer
-
-- **Projet séparé** : copier `zone_lac_cristal` dans `PMDO/MODS/`, l'activer, puis ouvrir le Ground.
-- **Dans un mod existant** : lancer `python INSTALLER.py /chemin/PMDO/MODS/mon_mod --dry-run`, puis relancer sans `--dry-run`.
-
-## Calques (bas → haut)
-
-| # | Calque | Animation |
-|---|---|---|
-| 00 | Eau du lac souterrain, façon Métano (couleurs exactes du rip `lakecrystalpmdsky.png`, sans liseré clair) | 4 × 10 ticks |
-| 01 | Lueur cristalline sous-marine (9 couleurs cyan/bleu exactes du rip) | 12 × 10 ticks |
-| 02 | Scintillements Métano natifs | 4 × 10 ticks |
-| 03 | Gouttes cristallines et ronds dans l'eau (générés) | 24 × 5 ticks |
-| 04 | Sol complet (dalles cristallines cyan) | fixe |
-| 05 | Dalles cristallines de l'esplanade traversante (praticables) | fixe |
-| 06 | Reflets aqua en croix sur les dalles (praticables) | fixe |
-| 07 | Rebords biseautés de la plateforme | fixe |
-| 08 | Cristaux sombres bleu-sarcelle en bordure | fixe |
-| 09 | Îlots et piliers hexagonaux isolés dans le lac | fixe |
-| 10 | Piliers d'épaule au nord et piédestaux hexagonaux des alcôves | fixe |
-| 11 | Éclats prismatiques flottants (générés) | 48 × 5 ticks |
-| 12 | Vide, `Layer=4` (Top) | — |
-
-La scène complète boucle en 240 ticks (4 s).
-
-## Marqueurs et collisions
-
-- `entrance_sud` est au sud, `sortie_nord` est au bord nord de la chaussée cristalline ouverte. **Aucun warp.**
-- Sont praticables les dalles et reflets cristallins de l'esplanade et des alcôves latérales. Un chemin libre de 16 × 16 px a été vérifié du sud au nord. **À contrôler en jeu.**
+## Installation
+```bash
+python3 INSTALLER.py /chemin/vers/PMDO
+```
+Nom de la carte dans l'éditeur PMDO : **`zlc1_zone_lac_cristal`**.

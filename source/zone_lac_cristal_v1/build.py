@@ -1,25 +1,20 @@
-"""Zone Lac Cristallin V1 (ZLC1) — carrefour et belvédères des îlots au format 4:3 vaste (768 x 576 px, 96 x 72 cases).
+"""Zone Lac Cristallin — Zone Zéro V1 (ZLC1) — carrefour et belvédères au format 4:3 vaste (768 x 576 px, 96 x 72 cases).
 
-Biome choisi par l'utilisateur : Lac Cristallin / Crystal Crossing (`lakecrystalpmdsky.png`, `D17P34A`), décliné en
+Biome choisi par l'utilisateur : Lac Cristallin (`lakecrystalpmdsky.png`, `D17P34A`) recoloré et animé façon
+**Zone Zéro (Area Zero, Pokémon Écarlate et Violet)** avec **effet reflet de profondeur dans l'eau**, décliné en
 trilogie complète de 3 cartes :
 - ELC1 : Entrée de donjon sud -> nord ;
-- FLC1 : Fin de donjon / Sanctuaire & Arène de boss ;
+- FLC1 : Fin de donjon / Sanctuaire & Arène de boss (avec runes du monolithe pulsantes) ;
 - ZLC1 : Zone ouverte / Carrefour & Belvédères des Îlots Cristallins (ce lot).
 
-Méthode « textures canoniques » = rendu généré RÉFÉRENCÉ : le rip `lakecrystalpmdsky.png` (D17P34A)
-est passé au générateur comme image de référence.
-Bruts (voir manifest.json -> generation, prompts complets) :
-- decor_magenta.png : décor complet 4:3 (1200 x 896), lac souterrain en magenta #FF00FF, esplanade octogonale
-  traversante du sud au nord avec deux alcôves-belvédères latérales à piédestaux de cristal et îlots hexagonaux
-  dans le lac (fidélité au rip : dalles = 7,4 ; cristaux sombres = 15,6 ; piliers = 0,9 ; seuil 35) ;
-- sol_complet.png et poses_lac_cristal.png : partagés avec ELC1 (même sha256).
 Calques fixes (7) : sol_complet, dalles, reflets, rebords, cristaux, ilots, piliers. Aucun calque `profondeur`.
-Animations, chacune sur son calque (5), partagées avec ELC1 (boucle 240 ticks = 4 s) :
-- eau du lac souterrain « façon rivière Métano », couleurs exactes du rip sans liseré clair, 4 x 10 ticks ;
-- lueur cristalline sous-marine (9 couleurs cyan/bleu exactes du rip), 12 x 10 ticks ;
-- scintillements `Metano_Town_River_Sparkles` natifs, 4 x 10 ticks ;
-- gouttes cristallines et ronds dans l'eau, 24 x 5 ticks ;
-- éclats prismatiques flottants, 48 x 5 ticks.
+Animations, chacune sur son calque (6) (boucle fermée 240 ticks = 4 s) :
+- `eau` : dégradé abyssal en 5 paliers et onde de rive sans liseré clair, 4 x 10 ticks ;
+- `reflet_profondeur` : reflet vertical immergé des cristaux plongeant dans la profondeur de l'eau, 24 x 10 ticks ;
+- `scintillements` : `Metano_Town_River_Sparkles` natifs, 4 x 10 ticks ;
+- `gouttes` : gouttes cristallines et ronds dans l'eau, 24 x 5 ticks ;
+- `reflets_tera` : reflets irisés arc-en-ciel Téra (Zone Zéro) sur les cristaux blancs nacrés, 24 x 10 ticks ;
+- `eclats` : éclats prismatiques flottants, 48 x 5 ticks.
 Marqueurs : `entrance_sud` (sud) et `sortie_nord` (nord).
 Lancer : .venv/bin/python source/zone_lac_cristal_v1/build.py
 """
@@ -43,7 +38,8 @@ PFX = 'ZLC1'
 W, H = 768, 576
 SRC = (1200, 896)
 WATER_PHASES, WATER_TICKS = 4, 10
-GLOW_PHASES, GLOW_TICKS = 12, 10
+DEPTH_PHASES, DEPTH_TICKS = 24, 10
+TERA_PHASES, TERA_TICKS = 24, 10
 DROP_PHASES, DROP_TICKS = 24, 5
 ANIM_PHASES, ANIM_TICKS = 48, 5
 LOOP_TICKS = 240
@@ -101,15 +97,18 @@ keep_large, place, cell_grid = ELC.keep_large, ELC.place, ELC.cell_grid
 down_class, down_full, rgba = ELC.down_class, ELC.down_full, ELC.rgba
 sha, quantize_group, rgb, close_, write_ora = ELC.sha, ELC.quantize_group, ELC.rgb, ELC.close_, ELC.write_ora
 materials, fidelity, repair_ground = ELC.materials, ELC.fidelity, ELC.repair_ground
-lake_water, glow_centres, glow_frames, extract_crystal_poses, drop_frames, firefly_frames = (
-    ELC.lake_water, ELC.glow_centres, ELC.glow_frames, ELC.extract_crystal_poses, ELC.drop_frames, ELC.firefly_frames)
-WPAL, GLOW, GLOW_RING_PX, DROP_WINS, MOTE_WINS, DROP_SEQ, FLY_PULSE, RIP_WATER_COLS, _REF_ARR = (
-    ELC.WPAL, ELC.GLOW, ELC.GLOW_RING_PX, ELC.DROP_WINS, ELC.MOTE_WINS, ELC.DROP_SEQ, ELC.FLY_PULSE, ELC.RIP_WATER_COLS, ELC._REF_ARR)
+apply_area_zero_crystals, tera_prism_frames, lake_water, crystal_depth_reflection_frames = (
+    ELC.apply_area_zero_crystals, ELC.tera_prism_frames, ELC.lake_water, ELC.crystal_depth_reflection_frames)
+extract_crystal_poses, drop_frames, firefly_frames = ELC.extract_crystal_poses, ELC.drop_frames, ELC.firefly_frames
+WPAL, REFLET_EAU_TONS, REFLET_MAX_DY, CRISTAL_TONS, CRISTAL_SOMBRE_TONS, DALLE_ZERO_TONS, CRISTAL_CONTOUR, ARC_EN_CIEL = (
+    ELC.WPAL, ELC.REFLET_EAU_TONS, ELC.REFLET_MAX_DY, ELC.CRISTAL_TONS, ELC.CRISTAL_SOMBRE_TONS,
+    ELC.DALLE_ZERO_TONS, ELC.CRISTAL_CONTOUR, ELC.ARC_EN_CIEL)
+DROP_WINS, MOTE_WINS, DROP_SEQ, FLY_PULSE = ELC.DROP_WINS, ELC.MOTE_WINS, ELC.DROP_SEQ, ELC.FLY_PULSE
 
 PALETTE_GROUPS = {
-    'plateforme': (['sol_complet', 'dalles', 'reflets', 'rebords'], 96),
-    'piliers': (['piliers', 'ilots'], 48),
-    'cristaux': (['cristaux'], 32),
+    'plateforme': (['sol_complet', 'dalles', 'reflets', 'rebords'], 64),
+    'piliers': (['piliers', 'ilots'], 32),
+    'cristaux': (['cristaux'], 24),
 }
 STATIC = ['dalles', 'reflets', 'rebords', 'cristaux', 'ilots', 'piliers']
 
@@ -129,7 +128,6 @@ def classify(a):
     main_plat = (lbl == (int(np.argmax(sizes)) + 1))
     ilots = non_w & ~main_plat
 
-    # Piliers d'épaule au nord + 6 petits piédestaux hexagonaux dans les alcôves latérales
     pillar_sh = main_plat & (yy >= 130) & (yy <= 248) & ((xx < 512) | (xx > 688)) & (lum > 140)
     ped_boxes = [
         (345, 405, 195, 255), (415, 480, 110, 175), (470, 535, 195, 255),
@@ -166,26 +164,38 @@ def ground_project(stack, blocked, entry_px, exit_px, gfx, tools):
     for i, (title, frames, ticks) in enumerate(stack):
         bank = gfx.TileBank(f'{PFX}_{i:02d}_{title.split()[0].upper()}')
         bank.ids[bytes(256)] = (0, 0); bank.data[(0, 0)] = bytes(256)
+        f_has = [a[..., 3].reshape(gh, 8, gw, 8).any(axis=(1, 3)) for a in frames]
+        any_cell = np.any(f_has, axis=0)
+        empty_ref = {'Sheet': bank.name, 'TexLoc': {'X': 0, 'Y': 0}}
 
-        def cell(x, y, frames=frames, bank=bank):
-            fs = []
-            for a in frames:
-                f = bank.add(Image.fromarray(a[y*8:y*8+8, x*8:x*8+8]), x, y)
-                fs.append(f if f else {'Sheet': bank.name, 'TexLoc': {'X': 0, 'Y': 0}})
-            if all(f['TexLoc'] == {'X': 0, 'Y': 0} for f in fs):
+        def cell(x, y, frames=frames, bank=bank, f_has=f_has, any_cell=any_cell, empty_ref=empty_ref):
+            if not any_cell[y, x]:
                 return []
+            if len(frames) == 1:
+                f = bank.add(Image.fromarray(frames[0][y*8:y*8+8, x*8:x*8+8]), x, y)
+                return [f] if f else []
+            p0 = frames[0][y*8:y*8+8, x*8:x*8+8]
+            if all(np.array_equal(a[y*8:y*8+8, x*8:x*8+8], p0) for a in frames[1:]):
+                f = bank.add(Image.fromarray(p0), x, y)
+                return [f] if f else []
+            fs = []
+            for t_i, a in enumerate(frames):
+                if not f_has[t_i][y, x]:
+                    fs.append(empty_ref)
+                else:
+                    f = bank.add(Image.fromarray(a[y*8:y*8+8, x*8:x*8+8]), x, y)
+                    fs.append(f if f else empty_ref)
             return [fs[0]] if all(f == fs[0] for f in fs) else fs
         layers.append(gfx.layer(f'{i:02d} {title}', gw, gh, cell, ticks)); banks.append(bank)
     layers.append(gfx.layer(f'{len(layers):02d} Vos elements avant-plan (Top)', gw, gh, draw=4))
     for bank in banks:
         bank.write(STAGE / f'Content/Tile/{bank.name}.tile')
-    o.update(Name={'DefaultText': 'Zone Lac Cristallin - Carrefour (4:3)', 'LocalTexts': {}}, AssetName=ASSET,
+    o.update(Name={'DefaultText': 'Zone Lac Cristallin Zone Zero - Carrefour (4:3)', 'LocalTexts': {}}, AssetName=ASSET,
              Released=False, TexSize=1, Music='', EdgeView=1, ViewCenter=None, ViewOffset={'X': 0, 'Y': 0},
              ActiveChar=None, Status={}, Layers=layers,
              Background={'$type': 'RogueEssence.Dungeon.LayeredBG, RogueEssence', 'Layers': []},
-             Comment='PMDO 0.8.12. Zone ouverte / Carrefour du Lac Cristallin au format 4:3 reference sur le rip '
-                     'Crystal Lake / Crystal Crossing (lakecrystalpmdsky.png, D17P34A) ; lac facon Metano sans lisere '
-                     '(couleurs exactes du rip), lueur sous-marine, scintillements Metano natifs, gouttes et eclats generes.')
+             Comment='PMDO 0.8.12. Zone ouverte / Carrefour du Lac Cristallin au format 4:3, cristaux blancs nacres '
+                     'et reflets arc-en-ciel Tera de la Zone Zero (Pokemon Ecarlate/Violet), eau abyssale et reflet de profondeur.')
     o['obstacles'] = [[{'Bounds': {'X': x*8, 'Y': y*8, 'Width': 8, 'Height': 8}, 'Tags': int(blocked[y, x])}
                        for y in range(gh)] for x in range(gw)]
     mk = lambda n, p: {'EntName': n, 'Direction': 4, 'EntEnabled': True, 'triggerType': 0,
@@ -205,9 +215,9 @@ def ground_project(stack, blocked, entry_px, exit_px, gfx, tools):
     ident = uuid.uuid5(uuid.NAMESPACE_URL, 'https://github.com/meromoonmeri/guilde-treehouse-pmd/' + NAMESPACE)
     (STAGE / 'Mod.xml').write_text(f'''<?xml version="1.0" encoding="utf-8"?>
 <Header>
-  <Name>Zone Lac Cristallin 4:3 - Atelier 0.8.12</Name>
+  <Name>Zone Lac Cristallin Zone Zero 4:3 - Atelier 0.8.12</Name>
   <Author>meromoonmeri</Author>
-  <Description>Projet d'edition : zone ouverte / carrefour du Lac Cristallin au format 4:3 (ref. rip Crystal Lake D17P34A), lac facon Metano aux couleurs du rip, lueur, gouttes et eclats cristallins animes. Pas une aventure jouable.</Description>
+  <Description>Projet d'edition : carrefour du Lac Cristallin au format 4:3, cristaux blancs nacres et reflets Tera de la Zone Zero (Pokemon Ecarlate/Violet), eau abyssale et reflet de profondeur des cristaux.</Description>
   <Namespace>{NAMESPACE}</Namespace>
   <UUID>{ident}</UUID>
   <Version>1.0.0.0</Version>
@@ -229,7 +239,7 @@ def build():
     gfx = loadmod('pmdo_codec', R / 'source/pmdo_cote/build.py')
     tools = loadmod('index_tools', R / 'source/pmdo_cote/INSTALLER.py')
     v1 = loadmod('esn1', R / 'source/entree_sud_nord_generee_v1/build.py')
-    ANIMS = ['eau', 'lueur', 'scintillements', 'gouttes', 'eclats']
+    ANIMS = ['eau', 'reflet_profondeur', 'scintillements', 'gouttes', 'reflets_tera', 'eclats']
     if OUT.exists():
         for d in ['calques', 'animation', 'poses', 'masques', 'review']:
             shutil.rmtree(OUT / d, ignore_errors=True)
@@ -242,9 +252,10 @@ def build():
     order = ['water', 'piliers', 'ilots', 'cristaux', 'rebords', 'reflets', 'dalles']
     ex, cols = down_class(a, m, order)
     water = ex['water']
-    layers = {'sol_complet': rgba(down_full(f), ~water)}
+    raw_layers = {'sol_complet': rgba(down_full(f), ~water)}
     for k in STATIC:
-        layers[k] = rgba(cols[k], ex[k])
+        raw_layers[k] = rgba(cols[k], ex[k])
+    layers = apply_area_zero_crystals(raw_layers)
     q = {}
     for keys, n in PALETTE_GROUPS.values():
         q.update(quantize_group({k: layers[k] for k in keys}, n))
@@ -257,8 +268,8 @@ def build():
         land |= layers[k][..., 3] == 255
     visible = water & ~land
     wf, dist = lake_water(water, visible)
-    centres = glow_centres(visible)
-    gf = glow_frames(visible, centres)
+    rf_depth = crystal_depth_reflection_frames(layers, visible)
+    tf_tera = tera_prism_frames(layers)
 
     fams = BM.sparkle_families(); taken = np.zeros((H, W), bool)
     sf = [np.zeros((H, W, 4), 'uint8') for _ in range(WATER_PHASES)]; sparkles = []
@@ -298,12 +309,13 @@ def build():
 
     anim = {
         'eau': (wf, WATER_TICKS),
-        'lueur': (gf, GLOW_TICKS),
+        'reflet_profondeur': (rf_depth, DEPTH_TICKS),
         'scintillements': (sf, WATER_TICKS),
         'gouttes': (df, DROP_TICKS),
+        'reflets_tera': (tf_tera, TERA_TICKS),
         'eclats': (ef, ANIM_TICKS),
     }
-    order_names = ['eau', 'lueur', 'scintillements', 'gouttes', 'sol_complet'] + STATIC + ['eclats']
+    order_names = ['eau', 'reflet_profondeur', 'scintillements', 'gouttes', 'sol_complet'] + STATIC + ['reflets_tera', 'eclats']
     stack_named, layer_list = [], []
     for i, nm in enumerate(order_names):
         if nm in anim:
@@ -343,7 +355,7 @@ def build():
         dr.rectangle([qx, qy, qx + 15, qy + 15], outline=c, width=2)
     col.alpha_composite(ov); col.save(OUT / 'review' / f'{PFX}_collisions_marqueurs.png')
 
-    sheet = Image.new('RGBA', (6 * 68, 2 * 68), (35, 78, 110, 255))
+    sheet = Image.new('RGBA', (6 * 68, 2 * 68), (35, 52, 84, 255))
     drop_list = [drops[nm] for nm, _, _, _ in DROP_WINS]
     for r_, seq in enumerate((drop_list, motes)):
         for i, p in enumerate(seq):
@@ -357,56 +369,49 @@ def build():
                              for t, fr, tk in stack_named], blocked, entry_px, exit_px, gfx, tools)
 
     fid = fidelity(a, ref)
-    final_fid = {}
-    for k, nm in (('dalles_cristal', 'dalles'), ('cristaux_sombres', 'cristaux'), ('piliers_cristal', 'piliers')):
-        lay = layers[nm]; px = lay[lay[..., 3] == 255][:, :3].astype(float)
-        sel = materials(px.reshape(-1, 1, 3))[k][:, 0]
-        px = px[sel] if sel.sum() > 50 else px
-        final_fid[k] = {'calque': nm, 'rgb': [round(float(v), 1) for v in px.mean(0)],
-                        'distance_rip': round(float(np.linalg.norm(px.mean(0) - np.array(fid[k]['rip_rgb']))), 1)}
     raw_inputs = [{'file': f'source/zone_lac_cristal_v1/bruts/{g["file"]}', 'sha256': sha(RAW / g['file']),
                    'size': list(Image.open(RAW / g['file']).size), 'statut': 'retenu'} for g in GEN]
     manifest = {
         'lot': 'zone_lac_cristal_v1', 'prefix': PFX, 'format': '4:3 vaste', 'size_px': [W, H],
         'grid_8px': [W // 8, H // 8], 'base': 'branche de session (arena/01a1024d-projet-pmdo) ; aucun emprunt aux branches soeurs',
-        'biome': 'Lac Cristallin / Crystal Crossing (lakecrystalpmdsky.png, D17P34A), choisi par l utilisateur (trilogie 3 maps)',
-        'method': 'textures canoniques = rendu genere REFERENCE : rip lakecrystalpmdsky.png passe au generateur ; '
-                  'decor complet de zone traversante sur magenta (lac = magenta), sol cristallin complet et planche gouttes/eclats partages avec ELC1',
+        'biome': 'Lac Cristallin / Zone Zero (lakecrystalpmdsky.png + cristaux blancs nacres Area Zero Pokemon Ecarlate/Violet)',
+        'method': 'textures canoniques = rendu genere REFERENCE sur lakecrystalpmdsky.png + passe Cristaux Zone Zero '
+                  '(base blanche nacree/quartz-amethyste + reflets arc-en-ciel Tera) + reflet de profondeur dans l eau',
         'reference_da': {'file': REF.name, 'sha256': sha(REF), 'titre': 'Crystal Lake / Crystal Crossing (D17P34A, PMD Explorers of Sky)'},
         'generation': GEN,
         'raw_inputs': raw_inputs,
         'sol_complet_reparation': repair,
-        'fidelite_rip': {'methode': 'moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne',
-                         'brut': fid, 'calques_finaux': final_fid},
+        'fidelite_rip': {'methode': 'moyenne RGB par matiere sur le brut genere avant la passe Cristaux Zone Zero ; distance euclidienne < 35',
+                         'brut': fid},
+        'cristaux_zone_zero': {
+            'demande': 'les cristal faut pas qu il soit bleu mais comme celle de la zone zero dans pokemon scarlet et violet stp',
+            'tons_base': [list(t) for t in CRISTAL_TONS],
+            'tons_sombres': [list(t) for t in CRISTAL_SOMBRE_TONS],
+            'tons_dalles': [list(t) for t in DALLE_ZERO_TONS],
+            'contour': list(CRISTAL_CONTOUR),
+            'arc_en_ciel': {k: list(c) for k, c in ARC_EN_CIEL},
+            'phases': TERA_PHASES,
+            'frame_length_ticks': TERA_TICKS,
+        },
         'normalization': {'scale': JM.SCALE, 'scaled': [JM.SCALED_W, H], 'crop_x': [JM.CROP_X, JM.SCALED_W - W - JM.CROP_X],
                           'methode': 'moyenne ponderee par classe (BOX), attribution exclusive par poids maximal',
                           'palettes': {g: {'calques': k, 'couleurs': n} for g, (k, n) in PALETTE_GROUPS.items()}},
-        'segmentation': 'eau = magenta pur + frange dilatee 2 px ; piliers = piliers hexagonaux d epaule au nord et '
-                        '6 petits piedestaux hexagonaux dans les alcoves laterales ; ilots = piliers et dalles hexagonales '
-                        'isoles dans le lac ; cristaux = pointes de cristal bleu-sarcelle sombre ; rebords = dalles '
-                        'biseautees en bordure ; reflets = croix lumineuses aqua ; dalles = sol cristallin cyan praticable',
         'layers': layer_list,
         'water': {'phases': WATER_PHASES, 'frame_length_ticks': WATER_TICKS,
                   'couleurs': {k: list(v) for k, v in WPAL.items()},
-                  'modele': 'structure et cadence riviere Metano, couleurs EXACTES du rip lakecrystalpmdsky.png, sans lisere clair de rive',
-                  'origine': 'pixels recalcules aux couleurs canoniques du rip, pas de tuiles natives'},
-        'glow': {'phases': GLOW_PHASES, 'frame_length_ticks': GLOW_TICKS,
-                 'couleurs': [list(c) for c in GLOW], 'ring_px': GLOW_RING_PX, 'centres': centres,
-                 'origine': 'anneaux de lueur sous-marine aux 9 couleurs cyan/bleu exactes du rip'},
+                  'modele': 'degrade abyssal en 5 paliers + onde de rive sans lisere clair (bande sombre au contact)'},
+        'reflet_profondeur': {'phases': DEPTH_PHASES, 'frame_length_ticks': DEPTH_TICKS,
+                              'tons': [list(c) for c in REFLET_EAU_TONS], 'max_dy_px': REFLET_MAX_DY},
         'sparkles': {'source': 'source/eau_metano/natifs/Metano_Town_River_Sparkles.tile', 'placements': sparkles,
                      'origine': 'pixels et couleurs Metano NATIFS inchanges'},
         'gouttes': {'poses': len(DROP_WINS), 'sequence': [list(s) if s else None for s in DROP_SEQ],
-                    'emitters': emitters, 'phases': DROP_PHASES, 'frame_length_ticks': DROP_TICKS,
-                    'origine': 'dessin GENERE sur poses_lac_cristal.png (rangee 1), reduit x1/8'},
-        'eclats': {'poses': len(motes), 'taille_px': list(motes[0].shape[:2]), 'reduction': 'fenetre 176 px -> 11 px (x1/16)',
-                   'pulsation': FLY_PULSE, 'points': [list(s) for s in spots], 'phases': ANIM_PHASES, 'frame_length_ticks': ANIM_TICKS,
-                   'origine': 'dessin GENERE sur poses_lac_cristal.png (rangee 2) ; boucles de Lissajous et pulsation creees par nous'},
+                    'emitters': emitters, 'phases': DROP_PHASES, 'frame_length_ticks': DROP_TICKS},
+        'eclats': {'poses': len(motes), 'taille_px': list(motes[0].shape[:2]), 'pulsation': FLY_PULSE,
+                   'points': [list(s) for s in spots], 'phases': ANIM_PHASES, 'frame_length_ticks': ANIM_TICKS},
         'scene_loop_ticks': LOOP_TICKS,
         'access': {'entry_px': entry_px, 'exit_px': exit_px, 'threshold_px': exit_px,
                    'path_found_16x16': ok, 'cells_explored': explored,
-                   'blocked_cells': int(blocked.sum()), 'total_cells': int(blocked.size), 'walkable_cells': int((~blocked).sum()),
-                   'rule': 'case bloquee si > 25 % hors dalles et reflets cristallins de l esplanade traversante',
-                   'seuil': 'traversee ouverte sud -> nord avec deux alcoves-belvederes laterales'},
+                   'blocked_cells': int(blocked.sum()), 'total_cells': int(blocked.size), 'walkable_cells': int((~blocked).sum())},
         'pmdo': {'target': '0.8.12', 'asset': ASSET, 'namespace': NAMESPACE, 'tiles_per_bank': counts, 'banks': list(counts),
                  'runtime_tested': False, 'warp': 'aucun'},
         'art_approved': False,
@@ -414,9 +419,8 @@ def build():
     (OUT / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
     shutil.copyfile(OUT / 'manifest.json', STAGE / 'manifest.json')
     print(json.dumps({'sparkles': len(sparkles), 'entry': entry_px, 'exit': exit_px,
-                      'blocked': int(blocked.sum()), 'walkable': int((~blocked).sum()),
-                      'fidelite': {k: v['distance'] for k, v in fid.items()},
-                      'final': {k: v['distance_rip'] for k, v in final_fid.items()}, 'tiles': sum(counts.values())}, indent=1))
+                      'fidelite_brut': {k: v['distance'] for k, v in fid.items()},
+                      'tiles': sum(counts.values())}, indent=1))
 
 
 if __name__ == '__main__':

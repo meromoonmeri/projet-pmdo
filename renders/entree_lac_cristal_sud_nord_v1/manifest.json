@@ -11,8 +11,8 @@
     72
   ],
   "base": "branche de session (arena/01a1024d-projet-pmdo) ; aucun emprunt aux branches soeurs",
-  "biome": "Lac Cristallin / Crystal Crossing (lakecrystalpmdsky.png, D17P34A), choisi par l utilisateur (trilogie 3 maps)",
-  "method": "textures canoniques = rendu genere REFERENCE : rip lakecrystalpmdsky.png passe au generateur ; decor complet sur magenta (lac = magenta), sol cristallin complet et planche gouttes/eclats sur magenta",
+  "biome": "Lac Cristallin / Zone Zero (lakecrystalpmdsky.png + cristaux blancs nacres Area Zero Pokemon Ecarlate/Violet)",
+  "method": "textures canoniques = rendu genere REFERENCE sur lakecrystalpmdsky.png + passe Cristaux Zone Zero (base blanche nacree/quartz-amethyste + reflets arc-en-ciel Tera) + reflet de profondeur des cristaux dans l eau",
   "reference_da": {
     "file": "lakecrystalpmdsky.png",
     "sha256": "160aba8a222ae914d493385087795c1723c7dbf6f9fa2d6b460915b492a42c96",
@@ -80,7 +80,7 @@
     ]
   },
   "fidelite_rip": {
-    "methode": "moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne",
+    "methode": "moyenne RGB par matiere sur le brut genere avant la passe Cristaux Zone Zero ; distance euclidienne < 35",
     "brut": {
       "dalles_cristal": {
         "decor_rgb": [
@@ -127,36 +127,140 @@
         "pixels_decor": 51994,
         "pixels_rip": 11555
       }
-    },
-    "calques_finaux": {
-      "dalles_cristal": {
-        "calque": "dalles",
-        "rgb": [
-          112.3,
-          214.8,
-          241.2
-        ],
-        "distance_rip": 13.7
-      },
-      "cristaux_sombres": {
-        "calque": "cristaux",
-        "rgb": [
-          50.3,
-          114.6,
-          151.8
-        ],
-        "distance_rip": 9.2
-      },
-      "piliers_cristal": {
-        "calque": "piliers",
-        "rgb": [
-          71.7,
-          174.8,
-          206.0
-        ],
-        "distance_rip": 25.1
-      }
     }
+  },
+  "cristaux_zone_zero": {
+    "demande": "les cristal faut pas qu il soit bleu mais comme celle de la zone zero dans pokemon scarlet et violet stp",
+    "tons_base": [
+      [
+        150,
+        156,
+        196
+      ],
+      [
+        188,
+        194,
+        226
+      ],
+      [
+        220,
+        224,
+        244
+      ],
+      [
+        240,
+        242,
+        252
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "tons_sombres": [
+      [
+        68,
+        72,
+        114
+      ],
+      [
+        96,
+        100,
+        144
+      ],
+      [
+        138,
+        144,
+        186
+      ],
+      [
+        184,
+        190,
+        224
+      ],
+      [
+        232,
+        236,
+        250
+      ]
+    ],
+    "tons_dalles": [
+      [
+        168,
+        172,
+        206
+      ],
+      [
+        196,
+        200,
+        228
+      ],
+      [
+        220,
+        222,
+        244
+      ],
+      [
+        238,
+        238,
+        252
+      ],
+      [
+        252,
+        250,
+        255
+      ]
+    ],
+    "contour": [
+      92,
+      96,
+      140
+    ],
+    "arc_en_ciel": {
+      "rouge": [
+        255,
+        96,
+        120
+      ],
+      "orange": [
+        255,
+        164,
+        88
+      ],
+      "jaune": [
+        255,
+        232,
+        104
+      ],
+      "vert": [
+        128,
+        232,
+        140
+      ],
+      "cyan": [
+        104,
+        222,
+        255
+      ],
+      "bleu": [
+        122,
+        140,
+        255
+      ],
+      "mauve": [
+        192,
+        118,
+        255
+      ],
+      "rose": [
+        255,
+        120,
+        210
+      ]
+    },
+    "phases": 24,
+    "frame_length_ticks": 10
   },
   "normalization": {
     "scale": 0.6428571428571429,
@@ -177,20 +281,20 @@
           "reflets",
           "rebords"
         ],
-        "couleurs": 96
+        "couleurs": 64
       },
       "piliers": {
         "calques": [
           "piliers",
           "ilots"
         ],
-        "couleurs": 48
+        "couleurs": 32
       },
       "cristaux": {
         "calques": [
           "cristaux"
         ],
-        "couleurs": 32
+        "couleurs": 24
       },
       "profondeur": {
         "calques": [
@@ -200,7 +304,6 @@
       }
     }
   },
-  "segmentation": "eau = magenta pur + frange dilatee 2 px ; profondeur = ouverture sombre (lum<42) au nord ; piliers = arche cristalline et couronne de piliers hexagonaux au nord ; ilots = piliers et dalles hexagonales isoles dans le lac ; cristaux = pointes de cristal bleu-sarcelle sombre (lum<142) ; rebords = dalles biseautees en bordure de plateforme ; reflets = croix lumineuses aqua (lum>218) ; dalles = sol cristallin cyan praticable",
   "layers": [
     {
       "file": "animation/eau/ELC1_00_eau_fNN.png",
@@ -208,8 +311,8 @@
       "ticks": 10
     },
     {
-      "file": "animation/lueur/ELC1_01_lueur_fNN.png",
-      "phases": 12,
+      "file": "animation/reflet_profondeur/ELC1_01_reflet_profondeur_fNN.png",
+      "phases": 24,
       "ticks": 10
     },
     {
@@ -263,7 +366,12 @@
       "ticks": 60
     },
     {
-      "file": "animation/eclats/ELC1_12_eclats_fNN.png",
+      "file": "animation/reflets_tera/ELC1_12_reflets_tera_fNN.png",
+      "phases": 24,
+      "ticks": 10
+    },
+    {
+      "file": "animation/eclats/ELC1_13_eclats_fNN.png",
       "phases": 48,
       "ticks": 5
     }
@@ -272,91 +380,71 @@
     "phases": 4,
     "frame_length_ticks": 10,
     "couleurs": {
-      "surface": [
-        55,
-        111,
-        151
-      ],
       "bande": [
-        55,
-        103,
-        143
+        24,
+        44,
+        76
       ],
       "accent": [
-        47,
-        151,
-        191
+        72,
+        108,
+        152
+      ],
+      "talus": [
+        58,
+        92,
+        134
+      ],
+      "moyen": [
+        42,
+        72,
+        112
+      ],
+      "profond": [
+        28,
+        52,
+        88
+      ],
+      "abime": [
+        18,
+        34,
+        62
       ]
     },
-    "modele": "structure et cadence riviere Metano, couleurs EXACTES du rip lakecrystalpmdsky.png, sans lisere clair de rive",
-    "origine": "pixels recalcules aux couleurs canoniques du rip, pas de tuiles natives"
+    "modele": "degrade abyssal en 5 paliers + onde de rive sans lisere clair (bande sombre au contact)"
   },
-  "glow": {
-    "phases": 12,
+  "reflet_profondeur": {
+    "phases": 24,
     "frame_length_ticks": 10,
-    "couleurs": [
+    "tons": [
       [
-        135,
-        223,
-        239
+        118,
+        146,
+        196
       ],
       [
-        119,
-        207,
-        231
+        94,
+        122,
+        174
       ],
       [
-        103,
-        183,
-        215
+        72,
+        98,
+        150
       ],
       [
-        79,
-        167,
-        215
+        52,
+        76,
+        124
       ],
       [
-        63,
-        159,
-        191
-      ],
-      [
-        55,
-        135,
-        183
-      ],
-      [
-        47,
-        135,
-        183
-      ],
-      [
-        47,
-        127,
-        175
-      ],
-      [
-        47,
-        119,
-        167
+        34,
+        54,
+        96
       ]
     ],
-    "ring_px": 4,
-    "centres": [
-      [
-        0,
-        257,
-        54,
-        42
-      ],
-      [
-        767,
-        292,
-        54,
-        42
-      ]
-    ],
-    "origine": "anneaux de lueur sous-marine aux 9 couleurs cyan/bleu exactes du rip"
+    "max_dy_px": 48,
+    "modele": "projection verticale inversee et racines immergees des cristaux dans l eau avec ondulation sinusoïdale et tramage de Bayer"
   },
   "sparkles": {
     "source": "source/eau_metano/natifs/Metano_Town_River_Sparkles.tile",
@@ -549,8 +637,7 @@
       ]
     ],
     "phases": 24,
-    "frame_length_ticks": 5,
-    "origine": "dessin GENERE sur poses_lac_cristal.png (rangee 1), reduit x1/8"
+    "frame_length_ticks": 5
   },
   "eclats": {
     "poses": 6,
@@ -558,7 +645,6 @@
       11,
       11
     ],
-    "reduction": "fenetre 176 px -> 11 px (x1/16)",
     "pulsation": [
       0,
       1,
@@ -660,8 +746,7 @@
       ]
     ],
     "phases": 48,
-    "frame_length_ticks": 5,
-    "origine": "dessin GENERE sur poses_lac_cristal.png (rangee 2) ; boucles de Lissajous et pulsation creees par nous"
+    "frame_length_ticks": 5
   },
   "scene_loop_ticks": 240,
   "access": {
@@ -678,31 +763,31 @@
     "blocked_cells": 5554,
     "total_cells": 6912,
     "walkable_cells": 1358,
-    "rule": "case bloquee si > 25 % hors dalles et reflets cristallins de la plateforme centrale",
-    "seuil": "bout nord de la plateforme cristalline, au pied sec de l ouverture sombre sous l arche de cristal"
+    "rule": "case bloquee si > 25 % hors dalles et reflets cristallins de la plateforme centrale"
   },
   "pmdo": {
     "target": "0.8.12",
     "asset": "elc1_entree_lac_cristal",
     "namespace": "entree_lac_cristal_sud_nord",
     "tiles_per_bank": {
-      "ELC1_00_EAU": 2861,
-      "ELC1_01_LUEUR": 2357,
+      "ELC1_00_EAU": 5550,
+      "ELC1_01_REFLET": 14025,
       "ELC1_02_SCINTILLEMENTS": 52,
-      "ELC1_03_GOUTTES": 403,
-      "ELC1_04_SOL": 3488,
-      "ELC1_05_DALLES": 1611,
-      "ELC1_06_REFLETS": 562,
-      "ELC1_07_REBORDS": 339,
-      "ELC1_08_CRISTAUX": 838,
-      "ELC1_09_ILOTS": 445,
-      "ELC1_10_PILIERS": 776,
+      "ELC1_03_GOUTTES": 380,
+      "ELC1_04_SOL": 3163,
+      "ELC1_05_DALLES": 1471,
+      "ELC1_06_REFLETS": 548,
+      "ELC1_07_REBORDS": 327,
+      "ELC1_08_CRISTAUX": 831,
+      "ELC1_09_ILOTS": 411,
+      "ELC1_10_PILIERS": 691,
       "ELC1_11_PROFONDEUR": 83,
-      "ELC1_12_ECLATS": 543
+      "ELC1_12_REFLETS": 18065,
+      "ELC1_13_ECLATS": 490
     },
     "banks": [
       "ELC1_00_EAU",
-      "ELC1_01_LUEUR",
+      "ELC1_01_REFLET",
       "ELC1_02_SCINTILLEMENTS",
       "ELC1_03_GOUTTES",
       "ELC1_04_SOL",
@@ -713,7 +798,8 @@
       "ELC1_09_ILOTS",
       "ELC1_10_PILIERS",
       "ELC1_11_PROFONDEUR",
-      "ELC1_12_ECLATS"
+      "ELC1_12_REFLETS",
+      "ELC1_13_ECLATS"
     ],
     "runtime_tested": false,
     "warp": "aucun"
