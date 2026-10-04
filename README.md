@@ -1,6 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
-## Bosquet Mycélien — Clairière des Lanternes (BMF1, 5 octobre 2026)
+## Île Flottante du Zénith — Couronne des Vents (IFZ1, 5 octobre 2026)
+
+- **Sorties** : `source/ile_flottante_zenith_v1/`, `renders/ile_flottante_zenith_v1/`, aperçu `apercu_ile_flottante_zenith_v1.html`, ORA `IFZ1_ile_flottante_zenith.ora`, projet PMDO `mod_ile_flottante_zenith_pmdo_0812.zip` et pack complet `livrable_ile_flottante_zenith_v1.zip`.
+- **Méthode** : composition générée guidée par la capture canonique de `Final Island` (*Pokémon Mystery Dungeon: Red Rescue Team*, 480×312, 1 244 couleurs), route détourée sur magenta, segmentation multicalque et quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,552]`, couronne à deux branches autour du monolithe suspendu, sortie nord `[384,24]`, belvédères ouest `[104,280]` et est `[680,280]`. Le sceau `[384,382]` est décoratif et bloqué. **829 cellules marchables**, toutes reliées ; ouvertures nord et sud sans warp.
+- **Calques/animations** : fond de ciel, sol, ombres, ciel détaillé, nuages, falaises, végétation, pierres dressées, monolithe, îlots et premier plan ; courants ascendants et voiles de nuages calculés séparément, chacun en 24 phases × 8 ticks.
+- **Fidélité RGB** avant quantification (<35) : sol `27,32`, ciel `7,26`, roche hors contours `25,47`, végétation `25,15`, scène complète `25,38` ; **16 623 tuiles PMDO**.
+- **Validation** : 6 tests IFZ1 PASS. Cinq bruts refusés (palette trop vive, roche trop bleue, puis sol trop beige) sont archivés. `art_approved: false`, `runtime_tested: false` ; aucune approbation artistique ni validation dans le moteur PMDO n'est revendiquée.
+
+## Lot précédent — Bosquet Mycélien : Clairière des Lanternes (BMF1, 5 octobre 2026)
 
 - **Sorties** : `source/bosquet_mycelien_v1/`, `renders/bosquet_mycelien_v1/`, aperçu `apercu_bosquet_mycelien_v1.html`, ORA `BMF1_bosquet_mycelien.ora`, projet PMDO `mod_bosquet_mycelien_pmdo_0812.zip` et pack complet `livrable_bosquet_mycelien_v1.zip`.
 - **Méthode** : composition générée guidée par la capture canonique de `Mushroom Forest` (*Pokémon Mystery Dungeon: Red Rescue Team*, rip Toastypk, 456×336, 93 couleurs), route détourée sur magenta, segmentation multicalque et quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.

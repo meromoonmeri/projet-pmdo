@@ -1,0 +1,174 @@
+{
+  "map_id": "ile_flottante_zenith_v1",
+  "title": "Île Flottante du Zénith — Couronne des Vents",
+  "prefix": "IFZ1",
+  "reference": "Final Island (Red Rescue Team)",
+  "reference_file": "Final_Island_RRT.png",
+  "reference_sha256": "dae533b0cb304a3fbf93f272aa433b0f51b203c4c95008d422a4d2bfe84c3f12",
+  "reference_source": "Pokémon Mystery Dungeon: Red Rescue Team — Friend Area Final Island ; capture de jeu déjà archivée dans le dépôt",
+  "reference_dimensions_px": [
+    480,
+    312
+  ],
+  "reference_kind": "île d'herbe suspendue, falaises grises, ciel cyan et rochers flottants",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "layout": "entrée sud, couronne à deux branches autour d'un monolithe suspendu, deux belvédères latéraux et sortie nord",
+  "loop_ticks": 192,
+  "animation": {
+    "courants_vent": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    },
+    "voiles_nuages": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      552
+    ],
+    "couronne_vents": [
+      384,
+      430
+    ],
+    "sortie_nord": [
+      384,
+      24
+    ],
+    "belvedere_ouest": [
+      104,
+      280
+    ],
+    "belvedere_est": [
+      680,
+      280
+    ]
+  },
+  "blocked_marker": {
+    "sceau_vent": [
+      384,
+      382
+    ]
+  },
+  "walkable_cells": 829,
+  "obstacle_cells": 6083,
+  "reachable_cells_from_entry": 829,
+  "component_count": 8,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 27.32,
+      "p95": 43.31,
+      "pixels": 69350
+    },
+    "ciel": {
+      "rgb_distance": 7.26,
+      "p95": 13.04,
+      "pixels": 442368
+    },
+    "roche_hors_contours": {
+      "rgb_distance": 25.47,
+      "p95": 65.25,
+      "pixels": 83877
+    },
+    "vegetation": {
+      "rgb_distance": 25.15,
+      "p95": 52.32,
+      "pixels": 54613
+    },
+    "scene_complete": {
+      "rgb_distance": 25.38,
+      "p95": 68.8,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 1244,
+  "pmdo_banks": {
+    "IFZ1_00_FOND_CIEL": 6455,
+    "IFZ1_01_SOL": 710,
+    "IFZ1_02_OMBRES": 31,
+    "IFZ1_03_CIEL_DETAIL": 3877,
+    "IFZ1_04_NUAGES": 1235,
+    "IFZ1_05_FALAISES": 746,
+    "IFZ1_06_VEGETATION": 478,
+    "IFZ1_07_PIERRES": 569,
+    "IFZ1_08_MONOLITHE": 625,
+    "IFZ1_09_ILOTS_LATERAUX": 810,
+    "IFZ1_10_PREMIER_PLAN": 563,
+    "IFZ1_11_COURANTS_VENT": 482,
+    "IFZ1_12_VOILES_NUAGES": 42
+  },
+  "total_tiles": 16623,
+  "layers": [
+    "sol_complet",
+    "fond_ciel",
+    "sol",
+    "ombres",
+    "ciel_detail",
+    "nuages",
+    "falaises",
+    "vegetation",
+    "pierres",
+    "monolithe",
+    "ilots_lateraux",
+    "premier_plan",
+    "courants_vent",
+    "voiles_nuages"
+  ],
+  "raw_inputs": {
+    "decor_magenta.png": "136c1c2c7d6055967c32c279e300180b30f3e29ae1db4cb2486d539723876cc7",
+    "fond_sans_objets.png": "7f916d1633bdd4e09bbaf6b921189c731923a6bb978fe5b44b5487870aa5bbe5",
+    "sol_complet.png": "af43fa366a0b0ff4b3ed3d0b4329a5803757ace869fcf9b0009a1aae4fdac7ab"
+  },
+  "rejected_raws": [
+    {
+      "path": "bruts/ecartes/decor_magenta_palette_trop_vive.png",
+      "sha256": "b0c7f530e37581cd21bfde052461f57b45d204da1e117204ffd746217c95520b",
+      "reason": "premier décor : herbe néon et falaises trop saturées face à Final Island"
+    },
+    {
+      "path": "bruts/ecartes/sol_complet_palette_trop_vive.png",
+      "sha256": "50786ed70d4be173bb9b76869a3df8c22978be94b7a19516e7770df7453e69d1",
+      "reason": "premier sol complet : palette néon hors de la rampe de Final Island"
+    },
+    {
+      "path": "bruts/ecartes/decor_magenta_roche_trop_bleue.png",
+      "sha256": "d5f24c8269e56d48c2472f6ef2b6db24ab993188fd526c03d43edb13632ce0ff",
+      "reason": "seconde passe : roche encore trop bleu marine ; remplacée par une rampe grise"
+    },
+    {
+      "path": "bruts/ecartes/sol_complet_roche_trop_bleue.png",
+      "sha256": "e91eaf99d7ab93d802fb4cdf73cfad9936cdbe9fc10f3ceb0b52551a2a9b2c59",
+      "reason": "seconde passe complète : roche trop bleue avant correction ciblée"
+    },
+    {
+      "path": "bruts/ecartes/sol_complet_sol_trop_beige.png",
+      "sha256": "d31571abebf8f15e3c5664868fd77a0c2637952be6169efeece3690d999c7767",
+      "reason": "passe roche corrigée mais sol kaki trop distant ; remplacé par la rampe chartreuse canonique"
+    }
+  ],
+  "notes": [
+    "Composition générée avec Final Island RRT en référence ; surfaces praticables peintes sur magenta puis segmentées.",
+    "Tous les RGB statiques sont quantifiés vers les 1244 couleurs de la référence ; cela ne certifie pas des tuiles natives.",
+    "La fidélité roche est mesurée sur la matière hors contours très sombres (valeur > 65) ; tous les pixels sont néanmoins quantifiés.",
+    "Courants ascendants et voiles de nuages sont calculés pour IFZ1, pas récupérés comme cycles officiels.",
+    "Ouvertures sud et nord sans warp configuré ; chargement et gameplay PMDO non testés."
+  ]
+}
