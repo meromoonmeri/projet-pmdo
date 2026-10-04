@@ -1,0 +1,167 @@
+{
+  "map_id": "zone_guilde_treehouse_v2",
+  "prefix": "ZGT2",
+  "asset_name": "zgt2_village_arboricole_guilde",
+  "namespace": "zone_guilde_treehouse_v2",
+  "parent": {
+    "map_id": "zone_guilde_treehouse_v1",
+    "layout_approved": true,
+    "preserved": true,
+    "requested_changes": [
+      "connecter la maison droite",
+      "retirer les quatre panneaux",
+      "sprites transparents et variante nuit"
+    ]
+  },
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "reference": {
+    "code": "T00P01",
+    "path": "source/zone_guilde_treehouse_v1/reference/T00P01_canonique.png",
+    "sha256": "e1f0330b23ceb1767bcd82beab557b1c7f06ebd00ffc11f9ef129f50ad577496",
+    "role": "palette et échantillons directs de textures 8x8/eau"
+  },
+  "attachment_animation": {
+    "filename": "town_map.gif",
+    "status": "file not accessible; user will reattach",
+    "use": "grass/water animation to integrate after re-upload; not claimed in this build"
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "layers": [
+    "sol_residuel_genere",
+    "sol_T00P01_8x8",
+    "eau_T00P01",
+    "details",
+    "habitations_pont",
+    "maison_droite",
+    "canopee",
+    "liens_et_panneaux_T00P01"
+  ],
+  "canonical_ground": {
+    "path_atlas": "tilesheets/ZGT2_T00P01_textures_8px.png",
+    "path_sha256": "290d9635aa1aab92ccd59a5635c14310902ebd276396e4faf7ea433290ede379",
+    "source_tile_library": {
+      "path": 103,
+      "grass": 111
+    },
+    "pixels_in_canonical_ground_layer": 248021,
+    "source_tilemap": "tilesheets/ZGT2_terrain_source_tiles.npz",
+    "note": "sols et nouveau lien faits avec des cellules exactes 8x8 du rendu T00P01; ce n'est pas une revendication d'ID BPC"
+  },
+  "water": {
+    "source": "T00P01 BPL/BPA sample atlas",
+    "frame_count": 36,
+    "frame_length": 2,
+    "loop_ticks": 72,
+    "mask_pixels": 22163,
+    "atlas_sha256": "134205bbd52a766dd8246ffbbc1af5553b1c52f2ad6ec3d6aa9fc56cfdf0c93b"
+  },
+  "palette_fit": {
+    "reference_colors": 134,
+    "rgb_mean_before_quantization": 13.07,
+    "rgb_p95_before_quantization": 24.6,
+    "exact_palette_ratio": 1.0
+  },
+  "signs_removed": [
+    "panneau_nord_ouest",
+    "panneau_nord_est",
+    "panneau_sud_ouest",
+    "panneau_sud_est"
+  ],
+  "right_house_connector": [
+    [
+      76,
+      30
+    ],
+    [
+      76,
+      31
+    ],
+    [
+      76,
+      32
+    ],
+    [
+      75,
+      33
+    ],
+    [
+      75,
+      34
+    ],
+    [
+      76,
+      35
+    ],
+    [
+      76,
+      36
+    ]
+  ],
+  "markers_px": {
+    "entree_sud": [
+      384,
+      548
+    ],
+    "place_centrale": [
+      408,
+      328
+    ],
+    "maison_guilde": [
+      384,
+      184
+    ],
+    "maison_droite": [
+      610,
+      210
+    ],
+    "pont_est": [
+      688,
+      286
+    ]
+  },
+  "collision": {
+    "water_cells": 425,
+    "canopy_cells": 2936,
+    "structure_cells": 736,
+    "walkable_cells": 3033,
+    "collision_note": "Blocage approximatif sur eau/canopée/bâtis; allées et pont clarifiés manuellement.",
+    "right_house_path_connected": true
+  },
+  "sprite_assets": {
+    "hq_source": "exports/guild_structures_v1/hq/GuildStructuresV1_hq_object.png",
+    "house_mask_pixels": 3922,
+    "night_filter": "source/cote_v4_abyss/night.py",
+    "night_filter_status": "proposition provisoire, non sélectionnée comme style final par l'utilisateur",
+    "atlas_sha256": "314f19f4f696ca24f40805aa73f2b07387a637f116f82281c38435e6a2c76aa0",
+    "atlas": "tilesheets/ZGT2_structures_sans_fond_8px.png"
+  },
+  "pmdo_tile_banks": {
+    "ZGT2_00_SOL_RESIDUEL": 2920,
+    "ZGT2_01_SOL_T00P01": 5035,
+    "ZGT2_02_EAU_T00P01": 396,
+    "ZGT2_03_DETAILS": 1384,
+    "ZGT2_04_HABITATIONS_PONT": 926,
+    "ZGT2_05_MAISON_DROITE": 78,
+    "ZGT2_06_CANOPEE": 5235,
+    "ZGT2_07_LIENS_PANNEAUX": 31
+  },
+  "total_tile_entries": 16005,
+  "limitations": [
+    "La scène décorée reste un rendu généré; seuls les échantillons de sol/eau et le nouveau raccord utilisent des pixels source T00P01.",
+    "Le GIF town_map.gif sera intégré après réattache; aucune phase d'herbe n'en est revendiquée ici.",
+    "Le QG isolé réutilise le sprite généré du lot guild_structures_v1; il n'est pas un détourage du QG central fondu avec sa canopée dans ZGT1.",
+    "La maison droite est une découpe manuelle du rendu généré; la variante nuit avec filtre Abyss V4 est une proposition provisoire, pas un style validé; collisions approximatives; runtime PMDO non testé."
+  ]
+}

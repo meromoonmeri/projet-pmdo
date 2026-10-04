@@ -1,0 +1,2580 @@
+{
+  "reference": "T00P01",
+  "reference_sha256": "e1f0330b23ceb1767bcd82beab557b1c7f06ebd00ffc11f9ef129f50ad577496",
+  "tile_px": 8,
+  "atlas_size_px": [
+    128,
+    112
+  ],
+  "items": [
+    {
+      "id": 0,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        0
+      ],
+      "source_xy_px": [
+        504,
+        0
+      ]
+    },
+    {
+      "id": 1,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        0
+      ],
+      "source_xy_px": [
+        512,
+        0
+      ]
+    },
+    {
+      "id": 2,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        0
+      ],
+      "source_xy_px": [
+        504,
+        8
+      ]
+    },
+    {
+      "id": 4,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        8
+      ]
+    },
+    {
+      "id": 5,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        0
+      ],
+      "source_xy_px": [
+        504,
+        16
+      ]
+    },
+    {
+      "id": 6,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        0
+      ],
+      "source_xy_px": [
+        512,
+        16
+      ]
+    },
+    {
+      "id": 7,
+      "material": "path",
+      "atlas_xy_px": [
+        56,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        16
+      ]
+    },
+    {
+      "id": 8,
+      "material": "path",
+      "atlas_xy_px": [
+        64,
+        0
+      ],
+      "source_xy_px": [
+        512,
+        64
+      ]
+    },
+    {
+      "id": 9,
+      "material": "path",
+      "atlas_xy_px": [
+        72,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        64
+      ]
+    },
+    {
+      "id": 10,
+      "material": "path",
+      "atlas_xy_px": [
+        80,
+        0
+      ],
+      "source_xy_px": [
+        512,
+        128
+      ]
+    },
+    {
+      "id": 11,
+      "material": "path",
+      "atlas_xy_px": [
+        88,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        128
+      ]
+    },
+    {
+      "id": 12,
+      "material": "path",
+      "atlas_xy_px": [
+        96,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        184
+      ]
+    },
+    {
+      "id": 13,
+      "material": "path",
+      "atlas_xy_px": [
+        104,
+        0
+      ],
+      "source_xy_px": [
+        520,
+        192
+      ]
+    },
+    {
+      "id": 14,
+      "material": "path",
+      "atlas_xy_px": [
+        112,
+        0
+      ],
+      "source_xy_px": [
+        504,
+        240
+      ]
+    },
+    {
+      "id": 15,
+      "material": "path",
+      "atlas_xy_px": [
+        120,
+        0
+      ],
+      "source_xy_px": [
+        512,
+        240
+      ]
+    },
+    {
+      "id": 16,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        8
+      ],
+      "source_xy_px": [
+        504,
+        248
+      ]
+    },
+    {
+      "id": 17,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        8
+      ],
+      "source_xy_px": [
+        512,
+        248
+      ]
+    },
+    {
+      "id": 18,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        8
+      ],
+      "source_xy_px": [
+        496,
+        256
+      ]
+    },
+    {
+      "id": 19,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        8
+      ],
+      "source_xy_px": [
+        504,
+        256
+      ]
+    },
+    {
+      "id": 20,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        8
+      ],
+      "source_xy_px": [
+        480,
+        264
+      ]
+    },
+    {
+      "id": 21,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        8
+      ],
+      "source_xy_px": [
+        480,
+        272
+      ]
+    },
+    {
+      "id": 22,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        8
+      ],
+      "source_xy_px": [
+        488,
+        272
+      ]
+    },
+    {
+      "id": 23,
+      "material": "path",
+      "atlas_xy_px": [
+        56,
+        8
+      ],
+      "source_xy_px": [
+        496,
+        272
+      ]
+    },
+    {
+      "id": 24,
+      "material": "path",
+      "atlas_xy_px": [
+        64,
+        8
+      ],
+      "source_xy_px": [
+        504,
+        272
+      ]
+    },
+    {
+      "id": 25,
+      "material": "path",
+      "atlas_xy_px": [
+        72,
+        8
+      ],
+      "source_xy_px": [
+        528,
+        272
+      ]
+    },
+    {
+      "id": 26,
+      "material": "path",
+      "atlas_xy_px": [
+        80,
+        8
+      ],
+      "source_xy_px": [
+        536,
+        272
+      ]
+    },
+    {
+      "id": 27,
+      "material": "path",
+      "atlas_xy_px": [
+        88,
+        8
+      ],
+      "source_xy_px": [
+        544,
+        272
+      ]
+    },
+    {
+      "id": 28,
+      "material": "path",
+      "atlas_xy_px": [
+        96,
+        8
+      ],
+      "source_xy_px": [
+        480,
+        280
+      ]
+    },
+    {
+      "id": 29,
+      "material": "path",
+      "atlas_xy_px": [
+        104,
+        8
+      ],
+      "source_xy_px": [
+        496,
+        280
+      ]
+    },
+    {
+      "id": 30,
+      "material": "path",
+      "atlas_xy_px": [
+        112,
+        8
+      ],
+      "source_xy_px": [
+        504,
+        280
+      ]
+    },
+    {
+      "id": 31,
+      "material": "path",
+      "atlas_xy_px": [
+        120,
+        8
+      ],
+      "source_xy_px": [
+        528,
+        280
+      ]
+    },
+    {
+      "id": 32,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        16
+      ],
+      "source_xy_px": [
+        536,
+        280
+      ]
+    },
+    {
+      "id": 33,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        16
+      ],
+      "source_xy_px": [
+        552,
+        280
+      ]
+    },
+    {
+      "id": 34,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        16
+      ],
+      "source_xy_px": [
+        472,
+        288
+      ]
+    },
+    {
+      "id": 35,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        16
+      ],
+      "source_xy_px": [
+        504,
+        288
+      ]
+    },
+    {
+      "id": 36,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        16
+      ],
+      "source_xy_px": [
+        528,
+        288
+      ]
+    },
+    {
+      "id": 37,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        16
+      ],
+      "source_xy_px": [
+        560,
+        288
+      ]
+    },
+    {
+      "id": 38,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        16
+      ],
+      "source_xy_px": [
+        568,
+        288
+      ]
+    },
+    {
+      "id": 39,
+      "material": "path",
+      "atlas_xy_px": [
+        56,
+        16
+      ],
+      "source_xy_px": [
+        576,
+        288
+      ]
+    },
+    {
+      "id": 40,
+      "material": "path",
+      "atlas_xy_px": [
+        64,
+        16
+      ],
+      "source_xy_px": [
+        488,
+        296
+      ]
+    },
+    {
+      "id": 41,
+      "material": "path",
+      "atlas_xy_px": [
+        72,
+        16
+      ],
+      "source_xy_px": [
+        512,
+        296
+      ]
+    },
+    {
+      "id": 42,
+      "material": "path",
+      "atlas_xy_px": [
+        80,
+        16
+      ],
+      "source_xy_px": [
+        520,
+        296
+      ]
+    },
+    {
+      "id": 43,
+      "material": "path",
+      "atlas_xy_px": [
+        88,
+        16
+      ],
+      "source_xy_px": [
+        544,
+        296
+      ]
+    },
+    {
+      "id": 44,
+      "material": "path",
+      "atlas_xy_px": [
+        96,
+        16
+      ],
+      "source_xy_px": [
+        480,
+        304
+      ]
+    },
+    {
+      "id": 45,
+      "material": "path",
+      "atlas_xy_px": [
+        104,
+        16
+      ],
+      "source_xy_px": [
+        496,
+        304
+      ]
+    },
+    {
+      "id": 46,
+      "material": "path",
+      "atlas_xy_px": [
+        112,
+        16
+      ],
+      "source_xy_px": [
+        504,
+        304
+      ]
+    },
+    {
+      "id": 47,
+      "material": "path",
+      "atlas_xy_px": [
+        120,
+        16
+      ],
+      "source_xy_px": [
+        512,
+        304
+      ]
+    },
+    {
+      "id": 48,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        24
+      ],
+      "source_xy_px": [
+        520,
+        304
+      ]
+    },
+    {
+      "id": 49,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        24
+      ],
+      "source_xy_px": [
+        528,
+        304
+      ]
+    },
+    {
+      "id": 50,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        24
+      ],
+      "source_xy_px": [
+        536,
+        304
+      ]
+    },
+    {
+      "id": 51,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        24
+      ],
+      "source_xy_px": [
+        552,
+        304
+      ]
+    },
+    {
+      "id": 52,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        24
+      ],
+      "source_xy_px": [
+        576,
+        304
+      ]
+    },
+    {
+      "id": 53,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        24
+      ],
+      "source_xy_px": [
+        496,
+        312
+      ]
+    },
+    {
+      "id": 54,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        24
+      ],
+      "source_xy_px": [
+        504,
+        312
+      ]
+    },
+    {
+      "id": 55,
+      "material": "path",
+      "atlas_xy_px": [
+        56,
+        24
+      ],
+      "source_xy_px": [
+        528,
+        312
+      ]
+    },
+    {
+      "id": 56,
+      "material": "path",
+      "atlas_xy_px": [
+        64,
+        24
+      ],
+      "source_xy_px": [
+        536,
+        312
+      ]
+    },
+    {
+      "id": 57,
+      "material": "path",
+      "atlas_xy_px": [
+        72,
+        24
+      ],
+      "source_xy_px": [
+        576,
+        312
+      ]
+    },
+    {
+      "id": 58,
+      "material": "path",
+      "atlas_xy_px": [
+        80,
+        24
+      ],
+      "source_xy_px": [
+        720,
+        312
+      ]
+    },
+    {
+      "id": 59,
+      "material": "path",
+      "atlas_xy_px": [
+        88,
+        24
+      ],
+      "source_xy_px": [
+        728,
+        312
+      ]
+    },
+    {
+      "id": 60,
+      "material": "path",
+      "atlas_xy_px": [
+        96,
+        24
+      ],
+      "source_xy_px": [
+        944,
+        312
+      ]
+    },
+    {
+      "id": 61,
+      "material": "path",
+      "atlas_xy_px": [
+        104,
+        24
+      ],
+      "source_xy_px": [
+        288,
+        320
+      ]
+    },
+    {
+      "id": 62,
+      "material": "path",
+      "atlas_xy_px": [
+        112,
+        24
+      ],
+      "source_xy_px": [
+        296,
+        320
+      ]
+    },
+    {
+      "id": 63,
+      "material": "path",
+      "atlas_xy_px": [
+        120,
+        24
+      ],
+      "source_xy_px": [
+        496,
+        320
+      ]
+    },
+    {
+      "id": 64,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        32
+      ],
+      "source_xy_px": [
+        504,
+        320
+      ]
+    },
+    {
+      "id": 65,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        32
+      ],
+      "source_xy_px": [
+        528,
+        320
+      ]
+    },
+    {
+      "id": 66,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        32
+      ],
+      "source_xy_px": [
+        536,
+        320
+      ]
+    },
+    {
+      "id": 67,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        32
+      ],
+      "source_xy_px": [
+        720,
+        320
+      ]
+    },
+    {
+      "id": 68,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        32
+      ],
+      "source_xy_px": [
+        728,
+        320
+      ]
+    },
+    {
+      "id": 69,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        32
+      ],
+      "source_xy_px": [
+        944,
+        320
+      ]
+    },
+    {
+      "id": 70,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        32
+      ],
+      "source_xy_px": [
+        480,
+        328
+      ]
+    },
+    {
+      "id": 71,
+      "material": "path",
+      "atlas_xy_px": [
+        56,
+        32
+      ],
+      "source_xy_px": [
+        496,
+        328
+      ]
+    },
+    {
+      "id": 72,
+      "material": "path",
+      "atlas_xy_px": [
+        64,
+        32
+      ],
+      "source_xy_px": [
+        504,
+        328
+      ]
+    },
+    {
+      "id": 73,
+      "material": "path",
+      "atlas_xy_px": [
+        72,
+        32
+      ],
+      "source_xy_px": [
+        512,
+        328
+      ]
+    },
+    {
+      "id": 74,
+      "material": "path",
+      "atlas_xy_px": [
+        80,
+        32
+      ],
+      "source_xy_px": [
+        520,
+        328
+      ]
+    },
+    {
+      "id": 75,
+      "material": "path",
+      "atlas_xy_px": [
+        88,
+        32
+      ],
+      "source_xy_px": [
+        528,
+        328
+      ]
+    },
+    {
+      "id": 76,
+      "material": "path",
+      "atlas_xy_px": [
+        96,
+        32
+      ],
+      "source_xy_px": [
+        536,
+        328
+      ]
+    },
+    {
+      "id": 77,
+      "material": "path",
+      "atlas_xy_px": [
+        104,
+        32
+      ],
+      "source_xy_px": [
+        552,
+        328
+      ]
+    },
+    {
+      "id": 78,
+      "material": "path",
+      "atlas_xy_px": [
+        112,
+        32
+      ],
+      "source_xy_px": [
+        488,
+        336
+      ]
+    },
+    {
+      "id": 79,
+      "material": "path",
+      "atlas_xy_px": [
+        120,
+        32
+      ],
+      "source_xy_px": [
+        512,
+        336
+      ]
+    },
+    {
+      "id": 80,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        40
+      ],
+      "source_xy_px": [
+        520,
+        336
+      ]
+    },
+    {
+      "id": 81,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        40
+      ],
+      "source_xy_px": [
+        544,
+        336
+      ]
+    },
+    {
+      "id": 82,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        40
+      ],
+      "source_xy_px": [
+        472,
+        344
+      ]
+    },
+    {
+      "id": 83,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        40
+      ],
+      "source_xy_px": [
+        504,
+        344
+      ]
+    },
+    {
+      "id": 84,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        40
+      ],
+      "source_xy_px": [
+        528,
+        344
+      ]
+    },
+    {
+      "id": 85,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        40
+      ],
+      "source_xy_px": [
+        560,
+        344
+      ]
+    },
+    {
+      "id": 86,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        40
+      ],
+      "source_xy_px": [
+        480,
+        352
+      ]
+    },
+    {
+      "id": 87,
+      "material": "path",
+      "atlas_xy_px": [
+        56,
+        40
+      ],
+      "source_xy_px": [
+        496,
+        352
+      ]
+    },
+    {
+      "id": 88,
+      "material": "path",
+      "atlas_xy_px": [
+        64,
+        40
+      ],
+      "source_xy_px": [
+        504,
+        352
+      ]
+    },
+    {
+      "id": 89,
+      "material": "path",
+      "atlas_xy_px": [
+        72,
+        40
+      ],
+      "source_xy_px": [
+        528,
+        352
+      ]
+    },
+    {
+      "id": 90,
+      "material": "path",
+      "atlas_xy_px": [
+        80,
+        40
+      ],
+      "source_xy_px": [
+        536,
+        352
+      ]
+    },
+    {
+      "id": 91,
+      "material": "path",
+      "atlas_xy_px": [
+        88,
+        40
+      ],
+      "source_xy_px": [
+        552,
+        352
+      ]
+    },
+    {
+      "id": 92,
+      "material": "path",
+      "atlas_xy_px": [
+        96,
+        40
+      ],
+      "source_xy_px": [
+        488,
+        360
+      ]
+    },
+    {
+      "id": 93,
+      "material": "path",
+      "atlas_xy_px": [
+        104,
+        40
+      ],
+      "source_xy_px": [
+        496,
+        360
+      ]
+    },
+    {
+      "id": 94,
+      "material": "path",
+      "atlas_xy_px": [
+        112,
+        40
+      ],
+      "source_xy_px": [
+        504,
+        360
+      ]
+    },
+    {
+      "id": 95,
+      "material": "path",
+      "atlas_xy_px": [
+        120,
+        40
+      ],
+      "source_xy_px": [
+        528,
+        360
+      ]
+    },
+    {
+      "id": 96,
+      "material": "path",
+      "atlas_xy_px": [
+        0,
+        48
+      ],
+      "source_xy_px": [
+        536,
+        360
+      ]
+    },
+    {
+      "id": 97,
+      "material": "path",
+      "atlas_xy_px": [
+        8,
+        48
+      ],
+      "source_xy_px": [
+        544,
+        360
+      ]
+    },
+    {
+      "id": 98,
+      "material": "path",
+      "atlas_xy_px": [
+        16,
+        48
+      ],
+      "source_xy_px": [
+        512,
+        384
+      ]
+    },
+    {
+      "id": 99,
+      "material": "path",
+      "atlas_xy_px": [
+        24,
+        48
+      ],
+      "source_xy_px": [
+        520,
+        560
+      ]
+    },
+    {
+      "id": 100,
+      "material": "path",
+      "atlas_xy_px": [
+        32,
+        48
+      ],
+      "source_xy_px": [
+        528,
+        560
+      ]
+    },
+    {
+      "id": 101,
+      "material": "path",
+      "atlas_xy_px": [
+        40,
+        48
+      ],
+      "source_xy_px": [
+        520,
+        568
+      ]
+    },
+    {
+      "id": 102,
+      "material": "path",
+      "atlas_xy_px": [
+        48,
+        48
+      ],
+      "source_xy_px": [
+        528,
+        568
+      ]
+    },
+    {
+      "id": 103,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        48
+      ],
+      "source_xy_px": [
+        144,
+        0
+      ]
+    },
+    {
+      "id": 104,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        48
+      ],
+      "source_xy_px": [
+        448,
+        0
+      ]
+    },
+    {
+      "id": 105,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        48
+      ],
+      "source_xy_px": [
+        488,
+        0
+      ]
+    },
+    {
+      "id": 106,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        48
+      ],
+      "source_xy_px": [
+        920,
+        0
+      ]
+    },
+    {
+      "id": 107,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        48
+      ],
+      "source_xy_px": [
+        16,
+        8
+      ]
+    },
+    {
+      "id": 108,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        48
+      ],
+      "source_xy_px": [
+        144,
+        8
+      ]
+    },
+    {
+      "id": 109,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        48
+      ],
+      "source_xy_px": [
+        168,
+        8
+      ]
+    },
+    {
+      "id": 110,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        48
+      ],
+      "source_xy_px": [
+        448,
+        8
+      ]
+    },
+    {
+      "id": 111,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        48
+      ],
+      "source_xy_px": [
+        0,
+        16
+      ]
+    },
+    {
+      "id": 112,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        56
+      ],
+      "source_xy_px": [
+        8,
+        16
+      ]
+    },
+    {
+      "id": 113,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        56
+      ],
+      "source_xy_px": [
+        176,
+        16
+      ]
+    },
+    {
+      "id": 114,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        56
+      ],
+      "source_xy_px": [
+        184,
+        16
+      ]
+    },
+    {
+      "id": 115,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        56
+      ],
+      "source_xy_px": [
+        424,
+        16
+      ]
+    },
+    {
+      "id": 116,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        56
+      ],
+      "source_xy_px": [
+        440,
+        16
+      ]
+    },
+    {
+      "id": 117,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        56
+      ],
+      "source_xy_px": [
+        448,
+        16
+      ]
+    },
+    {
+      "id": 118,
+      "material": "grass",
+      "atlas_xy_px": [
+        48,
+        56
+      ],
+      "source_xy_px": [
+        488,
+        16
+      ]
+    },
+    {
+      "id": 119,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        56
+      ],
+      "source_xy_px": [
+        576,
+        16
+      ]
+    },
+    {
+      "id": 120,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        56
+      ],
+      "source_xy_px": [
+        592,
+        16
+      ]
+    },
+    {
+      "id": 121,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        56
+      ],
+      "source_xy_px": [
+        32,
+        24
+      ]
+    },
+    {
+      "id": 122,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        56
+      ],
+      "source_xy_px": [
+        424,
+        24
+      ]
+    },
+    {
+      "id": 123,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        56
+      ],
+      "source_xy_px": [
+        432,
+        24
+      ]
+    },
+    {
+      "id": 124,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        56
+      ],
+      "source_xy_px": [
+        440,
+        24
+      ]
+    },
+    {
+      "id": 125,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        56
+      ],
+      "source_xy_px": [
+        448,
+        24
+      ]
+    },
+    {
+      "id": 126,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        56
+      ],
+      "source_xy_px": [
+        576,
+        24
+      ]
+    },
+    {
+      "id": 127,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        56
+      ],
+      "source_xy_px": [
+        584,
+        24
+      ]
+    },
+    {
+      "id": 128,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        64
+      ],
+      "source_xy_px": [
+        592,
+        24
+      ]
+    },
+    {
+      "id": 129,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        64
+      ],
+      "source_xy_px": [
+        600,
+        24
+      ]
+    },
+    {
+      "id": 130,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        64
+      ],
+      "source_xy_px": [
+        24,
+        32
+      ]
+    },
+    {
+      "id": 131,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        64
+      ],
+      "source_xy_px": [
+        16,
+        40
+      ]
+    },
+    {
+      "id": 132,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        64
+      ],
+      "source_xy_px": [
+        24,
+        40
+      ]
+    },
+    {
+      "id": 133,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        64
+      ],
+      "source_xy_px": [
+        24,
+        48
+      ]
+    },
+    {
+      "id": 134,
+      "material": "grass",
+      "atlas_xy_px": [
+        48,
+        64
+      ],
+      "source_xy_px": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": 135,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        64
+      ],
+      "source_xy_px": [
+        488,
+        56
+      ]
+    },
+    {
+      "id": 136,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        64
+      ],
+      "source_xy_px": [
+        464,
+        64
+      ]
+    },
+    {
+      "id": 137,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        64
+      ],
+      "source_xy_px": [
+        560,
+        64
+      ]
+    },
+    {
+      "id": 138,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        64
+      ],
+      "source_xy_px": [
+        152,
+        88
+      ]
+    },
+    {
+      "id": 139,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        64
+      ],
+      "source_xy_px": [
+        464,
+        88
+      ]
+    },
+    {
+      "id": 140,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        64
+      ],
+      "source_xy_px": [
+        472,
+        88
+      ]
+    },
+    {
+      "id": 141,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        64
+      ],
+      "source_xy_px": [
+        488,
+        88
+      ]
+    },
+    {
+      "id": 142,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        64
+      ],
+      "source_xy_px": [
+        536,
+        88
+      ]
+    },
+    {
+      "id": 143,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        64
+      ],
+      "source_xy_px": [
+        624,
+        88
+      ]
+    },
+    {
+      "id": 144,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        72
+      ],
+      "source_xy_px": [
+        104,
+        112
+      ]
+    },
+    {
+      "id": 145,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        72
+      ],
+      "source_xy_px": [
+        480,
+        120
+      ]
+    },
+    {
+      "id": 146,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        72
+      ],
+      "source_xy_px": [
+        488,
+        120
+      ]
+    },
+    {
+      "id": 147,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        72
+      ],
+      "source_xy_px": [
+        248,
+        128
+      ]
+    },
+    {
+      "id": 148,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        72
+      ],
+      "source_xy_px": [
+        536,
+        128
+      ]
+    },
+    {
+      "id": 149,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        72
+      ],
+      "source_xy_px": [
+        888,
+        128
+      ]
+    },
+    {
+      "id": 150,
+      "material": "grass",
+      "atlas_xy_px": [
+        48,
+        72
+      ],
+      "source_xy_px": [
+        176,
+        136
+      ]
+    },
+    {
+      "id": 151,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        72
+      ],
+      "source_xy_px": [
+        360,
+        136
+      ]
+    },
+    {
+      "id": 152,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        72
+      ],
+      "source_xy_px": [
+        656,
+        136
+      ]
+    },
+    {
+      "id": 153,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        72
+      ],
+      "source_xy_px": [
+        808,
+        136
+      ]
+    },
+    {
+      "id": 154,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        72
+      ],
+      "source_xy_px": [
+        840,
+        136
+      ]
+    },
+    {
+      "id": 155,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        72
+      ],
+      "source_xy_px": [
+        360,
+        144
+      ]
+    },
+    {
+      "id": 156,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        72
+      ],
+      "source_xy_px": [
+        688,
+        144
+      ]
+    },
+    {
+      "id": 157,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        72
+      ],
+      "source_xy_px": [
+        776,
+        144
+      ]
+    },
+    {
+      "id": 158,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        72
+      ],
+      "source_xy_px": [
+        544,
+        152
+      ]
+    },
+    {
+      "id": 159,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        72
+      ],
+      "source_xy_px": [
+        624,
+        152
+      ]
+    },
+    {
+      "id": 160,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        80
+      ],
+      "source_xy_px": [
+        392,
+        160
+      ]
+    },
+    {
+      "id": 161,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        80
+      ],
+      "source_xy_px": [
+        552,
+        160
+      ]
+    },
+    {
+      "id": 162,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        80
+      ],
+      "source_xy_px": [
+        96,
+        168
+      ]
+    },
+    {
+      "id": 163,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        80
+      ],
+      "source_xy_px": [
+        104,
+        168
+      ]
+    },
+    {
+      "id": 164,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        80
+      ],
+      "source_xy_px": [
+        112,
+        168
+      ]
+    },
+    {
+      "id": 165,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        80
+      ],
+      "source_xy_px": [
+        160,
+        168
+      ]
+    },
+    {
+      "id": 166,
+      "material": "grass",
+      "atlas_xy_px": [
+        48,
+        80
+      ],
+      "source_xy_px": [
+        168,
+        168
+      ]
+    },
+    {
+      "id": 167,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        80
+      ],
+      "source_xy_px": [
+        176,
+        168
+      ]
+    },
+    {
+      "id": 168,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        80
+      ],
+      "source_xy_px": [
+        360,
+        168
+      ]
+    },
+    {
+      "id": 169,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        80
+      ],
+      "source_xy_px": [
+        400,
+        168
+      ]
+    },
+    {
+      "id": 170,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        80
+      ],
+      "source_xy_px": [
+        168,
+        176
+      ]
+    },
+    {
+      "id": 171,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        80
+      ],
+      "source_xy_px": [
+        240,
+        176
+      ]
+    },
+    {
+      "id": 172,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        80
+      ],
+      "source_xy_px": [
+        472,
+        176
+      ]
+    },
+    {
+      "id": 173,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        80
+      ],
+      "source_xy_px": [
+        704,
+        184
+      ]
+    },
+    {
+      "id": 174,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        80
+      ],
+      "source_xy_px": [
+        704,
+        192
+      ]
+    },
+    {
+      "id": 175,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        80
+      ],
+      "source_xy_px": [
+        712,
+        192
+      ]
+    },
+    {
+      "id": 176,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        88
+      ],
+      "source_xy_px": [
+        720,
+        192
+      ]
+    },
+    {
+      "id": 177,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        88
+      ],
+      "source_xy_px": [
+        744,
+        192
+      ]
+    },
+    {
+      "id": 178,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        88
+      ],
+      "source_xy_px": [
+        712,
+        200
+      ]
+    },
+    {
+      "id": 179,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        88
+      ],
+      "source_xy_px": [
+        720,
+        200
+      ]
+    },
+    {
+      "id": 180,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        88
+      ],
+      "source_xy_px": [
+        744,
+        200
+      ]
+    },
+    {
+      "id": 181,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        88
+      ],
+      "source_xy_px": [
+        752,
+        200
+      ]
+    },
+    {
+      "id": 182,
+      "material": "grass",
+      "atlas_xy_px": [
+        48,
+        88
+      ],
+      "source_xy_px": [
+        48,
+        208
+      ]
+    },
+    {
+      "id": 183,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        88
+      ],
+      "source_xy_px": [
+        440,
+        208
+      ]
+    },
+    {
+      "id": 184,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        88
+      ],
+      "source_xy_px": [
+        448,
+        208
+      ]
+    },
+    {
+      "id": 185,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        88
+      ],
+      "source_xy_px": [
+        720,
+        208
+      ]
+    },
+    {
+      "id": 186,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        88
+      ],
+      "source_xy_px": [
+        728,
+        208
+      ]
+    },
+    {
+      "id": 187,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        88
+      ],
+      "source_xy_px": [
+        736,
+        208
+      ]
+    },
+    {
+      "id": 188,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        88
+      ],
+      "source_xy_px": [
+        744,
+        208
+      ]
+    },
+    {
+      "id": 189,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        88
+      ],
+      "source_xy_px": [
+        472,
+        224
+      ]
+    },
+    {
+      "id": 190,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        88
+      ],
+      "source_xy_px": [
+        368,
+        256
+      ]
+    },
+    {
+      "id": 191,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        88
+      ],
+      "source_xy_px": [
+        352,
+        272
+      ]
+    },
+    {
+      "id": 192,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        96
+      ],
+      "source_xy_px": [
+        128,
+        344
+      ]
+    },
+    {
+      "id": 193,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        96
+      ],
+      "source_xy_px": [
+        176,
+        344
+      ]
+    },
+    {
+      "id": 194,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        96
+      ],
+      "source_xy_px": [
+        648,
+        344
+      ]
+    },
+    {
+      "id": 195,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        96
+      ],
+      "source_xy_px": [
+        176,
+        352
+      ]
+    },
+    {
+      "id": 196,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        96
+      ],
+      "source_xy_px": [
+        384,
+        368
+      ]
+    },
+    {
+      "id": 197,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        96
+      ],
+      "source_xy_px": [
+        240,
+        376
+      ]
+    },
+    {
+      "id": 198,
+      "material": "grass",
+      "atlas_xy_px": [
+        48,
+        96
+      ],
+      "source_xy_px": [
+        296,
+        376
+      ]
+    },
+    {
+      "id": 199,
+      "material": "grass",
+      "atlas_xy_px": [
+        56,
+        96
+      ],
+      "source_xy_px": [
+        360,
+        376
+      ]
+    },
+    {
+      "id": 200,
+      "material": "grass",
+      "atlas_xy_px": [
+        64,
+        96
+      ],
+      "source_xy_px": [
+        872,
+        376
+      ]
+    },
+    {
+      "id": 201,
+      "material": "grass",
+      "atlas_xy_px": [
+        72,
+        96
+      ],
+      "source_xy_px": [
+        272,
+        408
+      ]
+    },
+    {
+      "id": 202,
+      "material": "grass",
+      "atlas_xy_px": [
+        80,
+        96
+      ],
+      "source_xy_px": [
+        80,
+        432
+      ]
+    },
+    {
+      "id": 203,
+      "material": "grass",
+      "atlas_xy_px": [
+        88,
+        96
+      ],
+      "source_xy_px": [
+        88,
+        432
+      ]
+    },
+    {
+      "id": 204,
+      "material": "grass",
+      "atlas_xy_px": [
+        96,
+        96
+      ],
+      "source_xy_px": [
+        800,
+        432
+      ]
+    },
+    {
+      "id": 205,
+      "material": "grass",
+      "atlas_xy_px": [
+        104,
+        96
+      ],
+      "source_xy_px": [
+        248,
+        448
+      ]
+    },
+    {
+      "id": 206,
+      "material": "grass",
+      "atlas_xy_px": [
+        112,
+        96
+      ],
+      "source_xy_px": [
+        256,
+        448
+      ]
+    },
+    {
+      "id": 207,
+      "material": "grass",
+      "atlas_xy_px": [
+        120,
+        96
+      ],
+      "source_xy_px": [
+        624,
+        448
+      ]
+    },
+    {
+      "id": 208,
+      "material": "grass",
+      "atlas_xy_px": [
+        0,
+        104
+      ],
+      "source_xy_px": [
+        688,
+        448
+      ]
+    },
+    {
+      "id": 209,
+      "material": "grass",
+      "atlas_xy_px": [
+        8,
+        104
+      ],
+      "source_xy_px": [
+        776,
+        448
+      ]
+    },
+    {
+      "id": 210,
+      "material": "grass",
+      "atlas_xy_px": [
+        16,
+        104
+      ],
+      "source_xy_px": [
+        152,
+        592
+      ]
+    },
+    {
+      "id": 211,
+      "material": "grass",
+      "atlas_xy_px": [
+        24,
+        104
+      ],
+      "source_xy_px": [
+        152,
+        600
+      ]
+    },
+    {
+      "id": 212,
+      "material": "grass",
+      "atlas_xy_px": [
+        32,
+        104
+      ],
+      "source_xy_px": [
+        160,
+        600
+      ]
+    },
+    {
+      "id": 213,
+      "material": "grass",
+      "atlas_xy_px": [
+        40,
+        104
+      ],
+      "source_xy_px": [
+        304,
+        704
+      ]
+    }
+  ],
+  "note": "Chaque cellule de 8x8 est un échantillon direct du rendu canonique T00P01; ce n'est pas l'index BPC d'origine."
+}

@@ -1,0 +1,182 @@
+{
+  "map_id": "zone_guilde_treehouse_v1",
+  "prefix": "ZGT1",
+  "asset_name": "zgt1_village_arboricole_guilde",
+  "namespace": "zone_guilde_treehouse",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "reference": {
+    "code": "T00P01",
+    "path": "source/zone_guilde_treehouse_v1/reference/T00P01_canonique.png",
+    "sha256": "e1f0330b23ceb1767bcd82beab557b1c7f06ebd00ffc11f9ef129f50ad577496",
+    "render_size_px": [
+      960,
+      720
+    ],
+    "role": "reference visuelle/palette et source d'échantillons d'eau; le layout n'est pas repris"
+  },
+  "generated_sources": {
+    "decor_magenta": {
+      "path": "source/zone_guilde_treehouse_v1/bruts/decor_magenta.png",
+      "sha256": "b46fd7c66adc241caeb57d996c6c40a5f144af7d2b0d4c906ce78455c9fdc73b",
+      "pixels_native_rip": false
+    },
+    "sol_complet": {
+      "path": "source/zone_guilde_treehouse_v1/bruts/sol_complet.png",
+      "sha256": "81c8e1f0ceda82b058d1af002d2ad55b77b0d8b9f7e409ff0e42f4ecefb71b44",
+      "pixels_native_rip": false
+    }
+  },
+  "art_approved": true,
+  "art_approval_scope": "Composition V1 validée par l'utilisateur le 2026-10-04; le défaut de liaison de la maison droite et le retrait des panneaux sont des corrections V2, sans écrasement de V1.",
+  "runtime_tested": false,
+  "water": {
+    "method": "Masque magenta issu du rendu généré; motifs 8x8 directs du canal T00P01, réassemblés dans une géométrie générée.",
+    "atlas_path": "source/zone_guilde_treehouse_v1/reference/T00P01_eau_atlas.npz",
+    "atlas_sha256": "134205bbd52a766dd8246ffbbc1af5553b1c52f2ad6ec3d6aa9fc56cfdf0c93b",
+    "frame_count": 36,
+    "frame_length": 2,
+    "loop_ticks": 72,
+    "source_sample_coordinates_px": [
+      [
+        56,
+        0
+      ],
+      [
+        72,
+        0
+      ],
+      [
+        64,
+        32
+      ],
+      [
+        56,
+        48
+      ],
+      [
+        72,
+        176
+      ],
+      [
+        72,
+        184
+      ],
+      [
+        80,
+        184
+      ],
+      [
+        152,
+        192
+      ],
+      [
+        136,
+        208
+      ],
+      [
+        152,
+        280
+      ],
+      [
+        144,
+        296
+      ]
+    ],
+    "mask": {
+      "components": [
+        {
+          "pixels": 12702,
+          "bbox_xyxy": [
+            654,
+            0,
+            730,
+            274
+          ]
+        },
+        {
+          "pixels": 9461,
+          "bbox_xyxy": [
+            652,
+            302,
+            744,
+            576
+          ]
+        }
+      ],
+      "pixels": 22163
+    }
+  },
+  "palette_fit": {
+    "reference_palette_colors": 134,
+    "rgb_mean": 13.07,
+    "rgb_median": 12.37,
+    "rgb_p95": 24.6,
+    "rgb_max": 124.08,
+    "exact_palette_ratio": 1.0,
+    "metric_note": "Distance RGB du rendu généré réduit à la couleur T00P01 la plus proche, avant quantification; ce n'est pas une comparaison de layout."
+  },
+  "layers": [
+    "sol_residuel",
+    "eau_T00P01",
+    "details",
+    "habitations_pont",
+    "canopee_top"
+  ],
+  "layer_partition_pixels": {
+    "canopy": 91339,
+    "structures": 28284,
+    "details": 12620,
+    "base": 287962
+  },
+  "markers_px": {
+    "entree_sud": [
+      384,
+      548
+    ],
+    "place_centrale": [
+      408,
+      328
+    ],
+    "maison_guilde": [
+      384,
+      184
+    ],
+    "pont_est": [
+      688,
+      286
+    ]
+  },
+  "collision": {
+    "water_cells": 425,
+    "canopy_cells": 2936,
+    "structure_cells": 736,
+    "walkable_cells": 3032,
+    "collision_note": "Blocage approximatif sur eau/canopée/bâtis; allées et pont clarifiés manuellement."
+  },
+  "pmdo_tile_banks": {
+    "ZGT1_00_SOL_RESIDUEL": 6037,
+    "ZGT1_01_EAU_T00P01": 396,
+    "ZGT1_02_DETAILS": 1440,
+    "ZGT1_03_HABITATIONS_PONT": 972,
+    "ZGT1_04_CANOPEE": 5291
+  },
+  "total_unique_tiles": 14136,
+  "limitations": [
+    "Les bruts de scène et de sol sont générés et ne sont pas des extractions natives.",
+    "Le contenu des couches de décor est une segmentation de travail, pas un détourage certifié de sprites.",
+    "Les collisions et repères sont approximatifs; aucun warp, spawn ou gameplay n'est configuré.",
+    "Aucun lancement dans PMDO n'a encore été effectué; validation artistique en attente."
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "reference": "T00P01",
+  "source_repository": "pret/pmd-sky",
+  "source_commit": "c8073235b39746a7ee74e6cea16c730bd91a1e67",
+  "source_files_sha256": {
+    "t00p01.bma": "217adca1d5a6d2f915d5b376b422893ade4f9d86fe714dfff5b06dc7eb8ff98e",
+    "t00p01.bpc": "a4131259da7408f6667469cf749b8b29ef386065babdab45117086382035beee",
+    "t00p01.bpl": "431d77f943a807b15fd24085d6f4e52b6d8631274703d887972f3d3c69dc5d03",
+    "t00p011.bpa": "aaef366c5202d51dc287c4f5c4448dd006a780d4ea23bfad0b1273f3bf3ca691"
+  },
+  "reference_png": "T00P01_canonique.png",
+  "source_animation": {
+    "palette_index": 2,
+    "palette_frames": 6,
+    "palette_duration_ticks": 4,
+    "bpa_frames": 6,
+    "bpa_duration_ticks": 6,
+    "loop_ticks": 72,
+    "sample_ticks": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46,
+      48,
+      50,
+      52,
+      54,
+      56,
+      58,
+      60,
+      62,
+      64,
+      66,
+      68,
+      70
+    ],
+    "pmdo_frame_length": 2,
+    "timing_note": "Les changements BPL/BPA tombent tous sur des ticks pairs; 36 phases x 2 ticks reproduisent la boucle de 72 ticks."
+  },
+  "selection": {
+    "method": "Tuiles 8x8 entièrement dans les deux composantes bleues du canal; séquences de 36 phases dédupliquées.",
+    "source_tile_coordinates_px": [
+      [
+        56,
+        0
+      ],
+      [
+        72,
+        0
+      ],
+      [
+        64,
+        32
+      ],
+      [
+        56,
+        48
+      ],
+      [
+        72,
+        176
+      ],
+      [
+        72,
+        184
+      ],
+      [
+        80,
+        184
+      ],
+      [
+        152,
+        192
+      ],
+      [
+        136,
+        208
+      ],
+      [
+        152,
+        280
+      ],
+      [
+        144,
+        296
+      ]
+    ],
+    "unique_sequences": 11,
+    "candidate_tiles": 333,
+    "pixels_are_direct_source_samples": true
+  },
+  "atlas_sha256": "134205bbd52a766dd8246ffbbc1af5553b1c52f2ad6ec3d6aa9fc56cfdf0c93b"
+}
