@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Aperçu EBC1 — Entrée Bassin Chauffant (768×576, 4:3)</title>
+<style>
+  body { background:#111318; color:#e9ecf2; font-family:system-ui,sans-serif; margin:0; padding:20px; }
+  h1 { margin:0 0 6px; font-size:20px; color:#ffd479; }
+  .meta { color:#9aa4b8; font-size:13px; margin-bottom:14px; }
+  .toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  button, label { background:#1e232d; color:#e9ecf2; border:1px solid #343d4f; border-radius:6px; padding:6px 12px; font-size:13px; cursor:pointer; }
+  .stage-wrap { display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
+  .stage { position:relative; width:768px; height:576px; border:2px solid #3a4254; background:#000; image-rendering:pixelated; overflow:hidden; }
+  .stage img { position:absolute; inset:0; width:768px; height:576px; image-rendering:pixelated; }
+  .panel { background:#181c24; border:1px solid #2d3546; border-radius:8px; padding:12px; max-width:360px; font-size:13px; }
+  .layer-list { display:grid; grid-template-columns:1fr; gap:5px; margin-top:8px; }
+</style>
+</head>
+<body>
+  <h1>Entrée Bassin Chauffant sud → nord (EBC1) — 768×576 (4:3, 96×72 tuiles 8×8)</h1>
+  <div class="meta">Référence canonique : <code>bassinchauffantpmdsky.png</code> (P01P04A) · Boucle 240 ticks (4,0 s) · Eau thermale minérale dorée, feuilles flottantes & vapeur</div>
+  <div class="toolbar">
+    <button id="playBtn">⏸ Pause</button>
+    <label><input type="checkbox" id="walkToggle"> Walkability / Marqueurs</label>
+    <span id="tickInfo">Tick 000 / 240</span>
+  </div>
+  <div class="stage-wrap">
+    <div class="stage">
+      <img id="sceneImg" src="renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t000.png" alt="scene">
+      <img id="walkImg" src="renders/entree_bassin_chauffant_sud_nord_v1/EBC1_walkability.png" alt="walk" style="display:none; opacity:0.65;">
+    </div>
+    <div class="panel">
+      <strong>Calques séparés (PNG 8 px / ORA / PMDO)</strong>
+      <div class="layer-list" id="layerList"></div>
+      <hr style="border-color:#2d3546; margin:12px 0;">
+      <div><strong>Fidélité RGB vs rip :</strong><br>
+        Verdure : 12.65 px<br>
+        Chemin : 13.72 px<br>
+        Rochers : 2.69 px
+      </div>
+    </div>
+  </div>
+<script>
+const frames = ["renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t000.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t010.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t020.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t030.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t040.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t050.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t060.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t070.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t080.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t090.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t100.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t110.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t120.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t130.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t140.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t150.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t160.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t170.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t180.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t190.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t200.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t210.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t220.png", "renders/entree_bassin_chauffant_sud_nord_v1/EBC1_scene_t230.png"];
+const layers = [{"id": "eau_thermale", "label": "1. Eau thermale (4\u00d710t)", "src": "renders/entree_bassin_chauffant_sud_nord_v1/anim/EBC1_01_eau_thermale_f00.png"}, {"id": "remous", "label": "2. Remous (4\u00d712t)", "src": "renders/entree_bassin_chauffant_sud_nord_v1/anim/EBC1_02_remous_f00.png"}, {"id": "feuilles", "label": "3. Feuilles flottantes (24\u00d710t)", "src": "renders/entree_bassin_chauffant_sud_nord_v1/anim/EBC1_03_feuilles_f00.png"}, {"id": "herbe", "label": "5. Herbe foresti\u00e8re", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_05_herbe.png"}, {"id": "chemin", "label": "6. Sentier sableux & dalles", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_06_chemin.png"}, {"id": "bordures", "label": "7. Bordures herbeuses", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_07_bordures.png"}, {"id": "rochers", "label": "8. Rochers & chemin\u00e9es", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_08_rochers.png"}, {"id": "arbres", "label": "9. Arbres & sous-bois", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_09_arbres.png"}, {"id": "profondeur", "label": "10. Seuil caverne geyser", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_10_profondeur.png"}, {"id": "vapeur", "label": "11. Vapeur thermale (24\u00d710t)", "src": "renders/entree_bassin_chauffant_sud_nord_v1/anim/EBC1_11_vapeur_f00.png"}, {"id": "brume_thermale", "label": "12. Brume chaude (24\u00d710t)", "src": "renders/entree_bassin_chauffant_sud_nord_v1/anim/EBC1_12_brume_thermale_f00.png"}, {"id": "canopee", "label": "13. Canop\u00e9e (Top)", "src": "renders/entree_bassin_chauffant_sud_nord_v1/layers/EBC1_13_canopee.png"}];
+let idx = 0, playing = true;
+const sceneImg = document.getElementById('sceneImg');
+const walkImg = document.getElementById('walkImg');
+const tickInfo = document.getElementById('tickInfo');
+setInterval(() => {
+  if (!playing) return;
+  idx = (idx + 1) % frames.length;
+  sceneImg.src = frames[idx];
+  tickInfo.textContent = `Tick ${String(idx*10).padStart(3,'0')} / 240`;
+}, 166);
+document.getElementById('playBtn').onclick = (e) => {
+  playing = !playing;
+  e.target.textContent = playing ? '⏸ Pause' : '▶ Lecture';
+};
+document.getElementById('walkToggle').onchange = (e) => {
+  walkImg.style.display = e.target.checked ? 'block' : 'none';
+};
+const list = document.getElementById('layerList');
+layers.forEach(l => {
+  const a = document.createElement('a');
+  a.href = l.src; a.target = '_blank'; a.style.color = '#9ecbff';
+  a.textContent = l.label;
+  list.appendChild(a);
+});
+</script>
+</body>
+</html>
