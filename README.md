@@ -1,5 +1,14 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin Château Ancien — Salle du Trésor (FAC1, 4 octobre 2026)
+
+- **Sorties** : `source/fin_chateau_ancien_v1/`, `renders/fin_chateau_ancien_v1/`, aperçu `apercu_fin_chateau_ancien_v1.html`, ORA `FAC1_fin_chateau_ancien.ora`, projet PMDO `mod_fin_chateau_ancien_pmdo_0812.zip` et pack complet `livrable_fin_chateau_ancien_v1.zip`.
+- **Méthode** : rendu généré référencé sur le rip canonique `oldcastlepmd.png` (408×408), ramené à 768×576 avec segmentation et détourage magenta ; les pixels générés sont des propositions, pas des tuiles natives certifiées.
+- **Layout** : grande arène dorée au médaillon central, entrée sud `[384,520]`, boss `[384,280]`, trésor/dais et objectif nord `[384,165]`. 2 934 cases de marche accessibles et reliées par BFS.
+- **Calques et animation** : sol, murs, ombres, ornements, coffres, statues/rails, appliques ; reflets d'or calculés sur un calque indépendant (24 images × 10 ticks). Export ORA, PNG 8 px et Ground/Tile PMDO 0.8.12.
+- **Fidélité RGB** (<35) : sol `4,79`, murs `4,78`, décors `9,48`, scène complète `5,62` ; 10 324 tuiles PMDO.
+- **Validation** : 6 tests FAC1 PASS ; 25 tests avec EAC1 et la trilogie Bassin Chauffant PASS. `art_approved: false`, `runtime_tested: false` ; aucun test moteur effectué.
+
 ## Animation canonique PMD Sky Port de la mer (10 phases) & Wrap Nuages — `cliffnordouesttest1.rsground` & `cliffdaytest.rsground` (4 octobre 2026)
 
 **Demande** : « non fallait pas toucher au layer qui constitue le cliff et les objet et leurs animation seulement les nuage activé le wrap overlay et animée la mer c'est tout canoniquement a pmd sky recommence (pour lanimation de la mer regarde dans pmd sky portà ». Reprise complète de l'animation de `cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px) et `cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px) :

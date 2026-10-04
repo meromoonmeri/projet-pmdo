@@ -1,6 +1,10 @@
 # Reprise des maps — 20 septembre 2026
 
-## Dernier lot — 04 octobre 2026 : Entrée Château Ancien (EAC1)
+## Dernier lot — 04 octobre 2026 : Fin Château Ancien (FAC1)
+
+Sur « la suite ! », FAC1 complète EAC1 avec une **Salle du Trésor** : grande arène dorée et médaillon central, entrée au sud, boss au centre, coffres et dais/objectif au nord. Référence canonique `oldcastlepmd.png` (408×408), sans reprise de travail de branche sœur ; le préfixe FAC1 a été vérifié libre. Résultat : `source/fin_chateau_ancien_v1/`, `renders/fin_chateau_ancien_v1/`, aperçu `apercu_fin_chateau_ancien_v1.html`, ORA `FAC1_fin_chateau_ancien.ora`, ZIP `mod_fin_chateau_ancien_pmdo_0812.zip` et `livrable_fin_chateau_ancien_v1.zip`. Format 768×576 (96×72 cases) ; marqueurs entrée `[384,520]`, boss `[384,280]`, objectif nord `[384,165]` ; 2 934 cases marchables reliées par BFS. Reflets d'or calculés, 24 images × 10 ticks. Fidélité RGB : sol 4,79, murs 4,78, décors 9,48, scène complète 5,62 (<35) ; 10 324 tuiles PMDO. 6 tests FAC1 PASS ; 25 tests avec EAC1 et la trilogie Bassin Chauffant PASS. Les pixels générés ne sont pas certifiés natifs ; `art_approved: false`, `runtime_tested: false`.
+
+## Lot précédent — 04 octobre 2026 : Entrée Château Ancien (EAC1)
 
 Sur « Poursuis la création de map », la capture `oldcastlepmd.png` (408×408, salle dorée / ancien château) a été retenue : c'était la seule capture du lot d'audit qui n'avait pas servi de référence d'une entrée. Les têtes sœurs ont été vérifiées par `git ls-remote` et recherche des préfixes EAC1 ; aucune collision n'a été trouvée et aucun travail de branche sœur n'a été repris. Résultat : `source/entree_chateau_ancien_sud_nord_v1/`, `renders/entree_chateau_ancien_sud_nord_v1/`, aperçu `apercu_entree_chateau_ancien_sud_nord_v1.html`. EAC1 fait 768×576 (96×72 cases), avec passage sud→nord, galerie dorée, coffres, médaillon, ornements et reflets d'or calculés en 24×10 ticks. 6 tests propres et 19 tests avec la trilogie Bassin Chauffant passent. Tuiles proposées non certifiées ; `art_approved: false`, `runtime_tested: false`.
 

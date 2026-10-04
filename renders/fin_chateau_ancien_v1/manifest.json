@@ -1,0 +1,103 @@
+{
+  "map_id": "fin_chateau_ancien_v1",
+  "title": "Fin Château Ancien — Salle du Trésor",
+  "prefix": "FAC1",
+  "reference": "oldcastlepmd.png",
+  "reference_sha256": "809f27543260614c133b892cae9572d85dfedc0b2ed28deac5b689805bf20b88",
+  "reference_dimensions_px": [
+    408,
+    408
+  ],
+  "reference_kind": "intérieur, salle dorée / ancien château",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "loop_ticks": 240,
+  "animation": {
+    "reflets_or": {
+      "frames": 24,
+      "ticks_per_frame": 10,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      520
+    ],
+    "boss": [
+      384,
+      280
+    ],
+    "objectif_nord": [
+      384,
+      165
+    ]
+  },
+  "walkable_cells": 2934,
+  "obstacle_cells": 3978,
+  "component_count": 15,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 4.79,
+      "p95": 8.19,
+      "pixels": 253916
+    },
+    "murs": {
+      "rgb_distance": 4.78,
+      "p95": 7.87,
+      "pixels": 188452
+    },
+    "decors": {
+      "rgb_distance": 9.48,
+      "p95": 33.97,
+      "pixels": 166158
+    },
+    "scene_complete": {
+      "rgb_distance": 5.62,
+      "p95": 12.69,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 118,
+  "pmdo_banks": {
+    "FAC1_00_SOL": 4043,
+    "FAC1_01_MURS": 3079,
+    "FAC1_02_OMBRES": 2,
+    "FAC1_03_ORNEMENTS": 2922,
+    "FAC1_04_COFFRES": 219,
+    "FAC1_05_STATUES_RAILS": 1,
+    "FAC1_06_APPLIQUES": 1,
+    "FAC1_07_AUTRES": 1,
+    "FAC1_08_REFLETS_OR": 56
+  },
+  "total_tiles": 10324,
+  "layers": [
+    "sol",
+    "murs",
+    "ombres",
+    "porte_medaille",
+    "coffres",
+    "statues_rails",
+    "appliques",
+    "autres",
+    "reflets_or"
+  ],
+  "notes": [
+    "Composition générée référencée, détourage des objets par fond magenta.",
+    "Couleurs ramenées à la palette RGB du rip ; métriques calculées avant quantification.",
+    "Textures et géométrie proposées, non certifiées natives ; runtime PMDO non testé."
+  ]
+}
