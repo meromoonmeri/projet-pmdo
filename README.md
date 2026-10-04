@@ -1,5 +1,14 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Fin du Passage des Ruines — Sanctuaire du Cadran (FPR1, 4 octobre 2026)
+
+- **Sorties** : `source/fin_passage_ruines_v1/`, `renders/fin_passage_ruines_v1/`, aperçu `apercu_fin_passage_ruines_v1.html`, ORA `FPR1_fin_passage_ruines.ora`, projet PMDO `mod_fin_passage_ruines_pmdo_0812.zip` et pack complet `livrable_fin_passage_ruines_v1.zip`.
+- **Méthode** : composition générée guidée par le rendu canonique `P22P01A` (408×408, 109 couleurs), décor détouré sur magenta, segmentation multicalque puis quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,548]`, arène ovale au cadran brisé et boss `[384,340]`, grand escalier puis sanctuaire fermé au nord `[384,152]`. **1 528 cellules marchables**, toutes reliées depuis l'entrée ; aucun warp ni autre sortie.
+- **Calques/animations** : sol, murs, ombres, relief, ruines, végétation, sanctuaire et débris ; lueur du cadran et pollen doré calculés séparément, chacun en 24 phases × 8 ticks (boucle 192 ticks).
+- **Fidélité RGB** avant quantification (<35) : sol `13,10`, relief `20,70`, ruines/sanctuaire `11,32`, végétation `10,92`, scène complète `14,61` ; **14 098 tuiles PMDO**.
+- **Validation** : 6 tests FPR1 PASS. `art_approved: false`, `runtime_tested: false` ; aucune approbation artistique ni validation dans le moteur PMDO n'est revendiquée.
+
 ## Fin Château Ancien — Salle du Trésor (FAC1, 4 octobre 2026)
 
 - **Sorties** : `source/fin_chateau_ancien_v1/`, `renders/fin_chateau_ancien_v1/`, aperçu `apercu_fin_chateau_ancien_v1.html`, ORA `FAC1_fin_chateau_ancien.ora`, projet PMDO `mod_fin_chateau_ancien_pmdo_0812.zip` et pack complet `livrable_fin_chateau_ancien_v1.zip`.

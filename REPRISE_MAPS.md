@@ -1,6 +1,10 @@
 # Reprise des maps — 20 septembre 2026
 
-## Dernier lot — 04 octobre 2026 : Fin Château Ancien (FAC1)
+## Dernier lot — 04 octobre 2026 : Fin du Passage des Ruines (FPR1)
+
+Sur la poursuite du projet, **FPR1 — Fin du Passage des Ruines : Sanctuaire du Cadran** complète EPR1 sans reprendre de création d'une branche sœur. Référence canonique `P22P01A` ; préfixe FPR1 vérifié libre. Résultat : `source/fin_passage_ruines_v1/`, `renders/fin_passage_ruines_v1/`, aperçu `apercu_fin_passage_ruines_v1.html`, ORA `FPR1_fin_passage_ruines.ora`, ZIP `mod_fin_passage_ruines_pmdo_0812.zip` et `livrable_fin_passage_ruines_v1.zip`. Format 768×576 (96×72 cellules), entrée `[384,548]`, boss `[384,340]`, objectif du cadran `[384,152]`, 1 528 cellules marchables reliées. Décor généré sur magenta puis segmenté ; lueur du cadran et pollen calculés, chacun en 24×8 ticks. Une première silhouette trop proche d'EPR1 et une texture d'herbe trop vive (`46,76 >= 35`) sont archivées dans `bruts/ecartes/`. Fidélité retenue : sol 13,10, relief 20,70, ruines 11,32, végétation 10,92, scène complète 14,61 ; 14 098 tuiles PMDO. 6 tests FPR1 PASS. Pixels générés non certifiés natifs ; `art_approved: false`, `runtime_tested: false`.
+
+## Lot précédent — 04 octobre 2026 : Fin Château Ancien (FAC1)
 
 Sur « la suite ! », FAC1 complète EAC1 avec une **Salle du Trésor** : grande arène dorée et médaillon central, entrée au sud, boss au centre, coffres et dais/objectif au nord. Référence canonique `oldcastlepmd.png` (408×408), sans reprise de travail de branche sœur ; le préfixe FAC1 a été vérifié libre. Résultat : `source/fin_chateau_ancien_v1/`, `renders/fin_chateau_ancien_v1/`, aperçu `apercu_fin_chateau_ancien_v1.html`, ORA `FAC1_fin_chateau_ancien.ora`, ZIP `mod_fin_chateau_ancien_pmdo_0812.zip` et `livrable_fin_chateau_ancien_v1.zip`. Format 768×576 (96×72 cases) ; marqueurs entrée `[384,520]`, boss `[384,280]`, objectif nord `[384,165]` ; 2 934 cases marchables reliées par BFS. Reflets d'or calculés, 24 images × 10 ticks. Fidélité RGB : sol 4,79, murs 4,78, décors 9,48, scène complète 5,62 (<35) ; 10 324 tuiles PMDO. 6 tests FAC1 PASS ; 25 tests avec EAC1 et la trilogie Bassin Chauffant PASS. Les pixels générés ne sont pas certifiés natifs ; `art_approved: false`, `runtime_tested: false`.
 
