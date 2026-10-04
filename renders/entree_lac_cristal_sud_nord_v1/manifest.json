@@ -1,0 +1,722 @@
+{
+  "lot": "entree_lac_cristal_sud_nord_v1",
+  "prefix": "ELC1",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "branche de session (arena/01a1024d-projet-pmdo) ; aucun emprunt aux branches soeurs",
+  "biome": "Lac Cristallin / Crystal Crossing (lakecrystalpmdsky.png, D17P34A), choisi par l utilisateur (trilogie 3 maps)",
+  "method": "textures canoniques = rendu genere REFERENCE : rip lakecrystalpmdsky.png passe au generateur ; decor complet sur magenta (lac = magenta), sol cristallin complet et planche gouttes/eclats sur magenta",
+  "reference_da": {
+    "file": "lakecrystalpmdsky.png",
+    "sha256": "160aba8a222ae914d493385087795c1723c7dbf6f9fa2d6b460915b492a42c96",
+    "titre": "Crystal Lake / Crystal Crossing (D17P34A, PMD Explorers of Sky)"
+  },
+  "generation": [
+    {
+      "file": "decor_magenta.png",
+      "images": [
+        "lakecrystalpmdsky.png"
+      ],
+      "prompt": "Use EXACTLY the same 2D Nintendo DS pixel-art style, palette, and textures as the reference image (Pokemon Mystery Dungeon Explorers of Sky, Crystal Lake / Crystal Crossing): same glowing cyan-blue geometric crystal floor tiles with bright aqua cross-shaped light reflections (around RGB 120, 223, 248), same jagged dark-teal and slate-blue pointed crystal clusters lining the platform edges (around RGB 42, 106, 144), and same tall hexagonal ice-blue and white-highlighted crystal pillars and flat hexagonal crystal slabs emerging from the water. Make a NEW top-down WIDE 4:3 landscape map (1200x896) for a DUNGEON ENTRANCE (south to north): the player arrives at the SOUTH (bottom center) on a glowing cyan crystal causeway bordered by jagged dark-teal crystal spikes; the causeway opens into a wide central crystal platform; at the NORTH (top center) of the platform stands a grand archway carved into giant hexagonal cyan crystal pillars with a pitch-black cavern doorway (RGB 8, 12, 20) in the center, and the walkable crystal floor reaches the dark doorway completely dry with NO water in front of it. To the left and right of the central crystal platform, a vast underground lake fills the cavern — IMPORTANT: fill the ENTIRE lake water surface with flat solid pure magenta #FF00FF (RGB 255, 0, 255) with crisp pixel edges, no ripples, no caustics, and no gradients on the magenta, while placing several isolated hexagonal cyan crystal pillars and flat hexagonal crystal islets standing inside the magenta lake on both sides. No characters, no text, no UI, no border."
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "lakecrystalpmdsky.png"
+      ],
+      "prompt": "Use EXACTLY the same 2D Nintendo DS pixel-art style, palette, and textures as the central walkable floor of the reference image (Pokemon Mystery Dungeon Explorers of Sky, Crystal Lake / Crystal Crossing): make a WIDE 4:3 image (1200x896) covered edge-to-edge ONLY with the flat walkable glowing cyan-blue geometric crystal tile floor texture with repeating aqua diamond/cross light reflections (around RGB 120, 223, 248) and subtle darker cyan tile seams. Remove all water, all dark crystal spikes, and all pillars — only the seamless flat walkable glowing cyan crystal floor across the entire 1200x896 frame. No characters, no text, no UI, no border."
+    },
+    {
+      "file": "poses_lac_cristal.png",
+      "images": [
+        "lakecrystalpmdsky.png"
+      ],
+      "prompt": "2D Nintendo DS pixel-art sprite sheet on a flat solid pure magenta #FF00FF (RGB 255, 0, 255) background, matching the exact cyan and ice-blue pixel-art palette of the reference image (Pokemon Mystery Dungeon Explorers of Sky, Crystal Lake). 2 rows x 6 columns of small isolated sprites with wide pure magenta spacing between every sprite: Row 1 (top row): 6 poses of a pale cyan water drop falling and then expanding into a thin cyan concentric ripple ring on water (drop, stretched drop, tiny splash crown, small ring, medium ring, large thin ring). Row 2 (bottom row): 6 poses of a floating luminescent ice-cyan crystal spark / diamond light mote pulsing softly (tiny cyan dot, small diamond spark, medium 4-pointed crystal star, bright white-cyan cross sparkle, fading diamond, tiny glint). Crisp pixel art, no anti-aliasing against the #FF00FF magenta background, no grid lines, no text, no borders."
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/entree_lac_cristal_sud_nord_v1/bruts/decor_magenta.png",
+      "sha256": "a8959db7023fa5d0f2f9503819fd43d4e9075275048dfac5ea3ecaaa29530279",
+      "size": [
+        1200,
+        896
+      ],
+      "statut": "retenu"
+    },
+    {
+      "file": "source/entree_lac_cristal_sud_nord_v1/bruts/sol_complet.png",
+      "sha256": "012a03d2f1cbef60495821e2b66e68e8d33dfaaac696a832ee8d40282272bca8",
+      "size": [
+        1200,
+        896
+      ],
+      "statut": "retenu"
+    },
+    {
+      "file": "source/entree_lac_cristal_sud_nord_v1/bruts/poses_lac_cristal.png",
+      "sha256": "c3ae3c2aba254927de1f61231d0a2fc09e3dc0c04d6317b207bba5a1ad4414f6",
+      "size": [
+        1456,
+        720
+      ],
+      "statut": "retenu"
+    }
+  ],
+  "sol_complet_reparation": {
+    "pixels_remplaces": 551,
+    "patch_source": [
+      360,
+      280,
+      840,
+      620
+    ]
+  },
+  "fidelite_rip": {
+    "methode": "moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne",
+    "brut": {
+      "dalles_cristal": {
+        "decor_rgb": [
+          129.1,
+          222.0,
+          241.8
+        ],
+        "rip_rgb": [
+          122.3,
+          222.8,
+          245.9
+        ],
+        "distance": 8.0,
+        "pixels_decor": 335570,
+        "pixels_rip": 121232
+      },
+      "cristaux_sombres": {
+        "decor_rgb": [
+          53.0,
+          119.0,
+          158.7
+        ],
+        "rip_rgb": [
+          42.7,
+          110.6,
+          148.5
+        ],
+        "distance": 16.7,
+        "pixels_decor": 113441,
+        "pixels_rip": 29062
+      },
+      "piliers_cristal": {
+        "decor_rgb": [
+          96.3,
+          165.4,
+          204.8
+        ],
+        "rip_rgb": [
+          94.9,
+          165.2,
+          204.2
+        ],
+        "distance": 1.5,
+        "pixels_decor": 51994,
+        "pixels_rip": 11555
+      }
+    },
+    "calques_finaux": {
+      "dalles_cristal": {
+        "calque": "dalles",
+        "rgb": [
+          112.3,
+          214.8,
+          241.2
+        ],
+        "distance_rip": 13.7
+      },
+      "cristaux_sombres": {
+        "calque": "cristaux",
+        "rgb": [
+          50.3,
+          114.6,
+          151.8
+        ],
+        "distance_rip": 9.2
+      },
+      "piliers_cristal": {
+        "calque": "piliers",
+        "rgb": [
+          71.7,
+          174.8,
+          206.0
+        ],
+        "distance_rip": 25.1
+      }
+    }
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "methode": "moyenne ponderee par classe (BOX), attribution exclusive par poids maximal",
+    "palettes": {
+      "plateforme": {
+        "calques": [
+          "sol_complet",
+          "dalles",
+          "reflets",
+          "rebords"
+        ],
+        "couleurs": 96
+      },
+      "piliers": {
+        "calques": [
+          "piliers",
+          "ilots"
+        ],
+        "couleurs": 48
+      },
+      "cristaux": {
+        "calques": [
+          "cristaux"
+        ],
+        "couleurs": 32
+      },
+      "profondeur": {
+        "calques": [
+          "profondeur"
+        ],
+        "couleurs": 12
+      }
+    }
+  },
+  "segmentation": "eau = magenta pur + frange dilatee 2 px ; profondeur = ouverture sombre (lum<42) au nord ; piliers = arche cristalline et couronne de piliers hexagonaux au nord ; ilots = piliers et dalles hexagonales isoles dans le lac ; cristaux = pointes de cristal bleu-sarcelle sombre (lum<142) ; rebords = dalles biseautees en bordure de plateforme ; reflets = croix lumineuses aqua (lum>218) ; dalles = sol cristallin cyan praticable",
+  "layers": [
+    {
+      "file": "animation/eau/ELC1_00_eau_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/lueur/ELC1_01_lueur_fNN.png",
+      "phases": 12,
+      "ticks": 10
+    },
+    {
+      "file": "animation/scintillements/ELC1_02_scintillements_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/gouttes/ELC1_03_gouttes_fNN.png",
+      "phases": 24,
+      "ticks": 5
+    },
+    {
+      "file": "calques/ELC1_04_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_05_dalles.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_06_reflets.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_07_rebords.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_08_cristaux.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_09_ilots.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_10_piliers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/ELC1_11_profondeur.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "animation/eclats/ELC1_12_eclats_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    }
+  ],
+  "water": {
+    "phases": 4,
+    "frame_length_ticks": 10,
+    "couleurs": {
+      "surface": [
+        55,
+        111,
+        151
+      ],
+      "bande": [
+        55,
+        103,
+        143
+      ],
+      "accent": [
+        47,
+        151,
+        191
+      ]
+    },
+    "modele": "structure et cadence riviere Metano, couleurs EXACTES du rip lakecrystalpmdsky.png, sans lisere clair de rive",
+    "origine": "pixels recalcules aux couleurs canoniques du rip, pas de tuiles natives"
+  },
+  "glow": {
+    "phases": 12,
+    "frame_length_ticks": 10,
+    "couleurs": [
+      [
+        135,
+        223,
+        239
+      ],
+      [
+        119,
+        207,
+        231
+      ],
+      [
+        103,
+        183,
+        215
+      ],
+      [
+        79,
+        167,
+        215
+      ],
+      [
+        63,
+        159,
+        191
+      ],
+      [
+        55,
+        135,
+        183
+      ],
+      [
+        47,
+        135,
+        183
+      ],
+      [
+        47,
+        127,
+        175
+      ],
+      [
+        47,
+        119,
+        167
+      ]
+    ],
+    "ring_px": 4,
+    "centres": [
+      [
+        0,
+        257,
+        54,
+        42
+      ],
+      [
+        767,
+        292,
+        54,
+        42
+      ]
+    ],
+    "origine": "anneaux de lueur sous-marine aux 9 couleurs cyan/bleu exactes du rip"
+  },
+  "sparkles": {
+    "source": "source/eau_metano/natifs/Metano_Town_River_Sparkles.tile",
+    "placements": [
+      {
+        "famille": "A_16x24",
+        "xy": [
+          184,
+          80
+        ]
+      },
+      {
+        "famille": "A_16x24",
+        "xy": [
+          24,
+          80
+        ]
+      },
+      {
+        "famille": "A_16x24",
+        "xy": [
+          88,
+          24
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          728,
+          208
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          512,
+          464
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          704,
+          560
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          120,
+          376
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          496,
+          536
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          72,
+          96
+        ]
+      }
+    ],
+    "origine": "pixels et couleurs Metano NATIFS inchanges"
+  },
+  "gouttes": {
+    "poses": 6,
+    "sequence": [
+      [
+        "goutte",
+        -18
+      ],
+      [
+        "goutte",
+        -12
+      ],
+      [
+        "goutte_etiree",
+        -6
+      ],
+      [
+        "goutte_etiree",
+        -2
+      ],
+      [
+        "eclaboussure",
+        0
+      ],
+      [
+        "eclaboussure",
+        0
+      ],
+      [
+        "rond_0",
+        0
+      ],
+      [
+        "rond_0",
+        0
+      ],
+      [
+        "rond_0",
+        0
+      ],
+      [
+        "rond_1",
+        0
+      ],
+      [
+        "rond_1",
+        0
+      ],
+      [
+        "rond_1",
+        0
+      ],
+      [
+        "rond_1",
+        0
+      ],
+      [
+        "rond_2",
+        0
+      ],
+      [
+        "rond_2",
+        0
+      ],
+      [
+        "rond_2",
+        0
+      ],
+      [
+        "rond_2",
+        0
+      ],
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "emitters": [
+      [
+        168,
+        364,
+        0
+      ],
+      [
+        75,
+        116,
+        3
+      ],
+      [
+        72,
+        303,
+        6
+      ],
+      [
+        597,
+        60,
+        9
+      ],
+      [
+        225,
+        498,
+        12
+      ],
+      [
+        191,
+        74,
+        15
+      ],
+      [
+        622,
+        423,
+        18
+      ],
+      [
+        694,
+        152,
+        21
+      ]
+    ],
+    "phases": 24,
+    "frame_length_ticks": 5,
+    "origine": "dessin GENERE sur poses_lac_cristal.png (rangee 1), reduit x1/8"
+  },
+  "eclats": {
+    "poses": 6,
+    "taille_px": [
+      11,
+      11
+    ],
+    "reduction": "fenetre 176 px -> 11 px (x1/16)",
+    "pulsation": [
+      0,
+      1,
+      2,
+      3,
+      3,
+      2,
+      3,
+      4,
+      5,
+      -1,
+      -1,
+      -1
+    ],
+    "points": [
+      [
+        544,
+        143,
+        0,
+        4
+      ],
+      [
+        516,
+        344,
+        5,
+        6
+      ],
+      [
+        336,
+        494,
+        10,
+        8
+      ],
+      [
+        296,
+        134,
+        15,
+        4
+      ],
+      [
+        245,
+        154,
+        20,
+        6
+      ],
+      [
+        256,
+        361,
+        25,
+        8
+      ],
+      [
+        605,
+        271,
+        30,
+        4
+      ],
+      [
+        496,
+        76,
+        35,
+        6
+      ],
+      [
+        639,
+        458,
+        40,
+        8
+      ],
+      [
+        546,
+        197,
+        45,
+        4
+      ],
+      [
+        221,
+        97,
+        2,
+        6
+      ],
+      [
+        709,
+        394,
+        7,
+        8
+      ],
+      [
+        482,
+        153,
+        12,
+        4
+      ],
+      [
+        454,
+        498,
+        17,
+        6
+      ]
+    ],
+    "phases": 48,
+    "frame_length_ticks": 5,
+    "origine": "dessin GENERE sur poses_lac_cristal.png (rangee 2) ; boucles de Lissajous et pulsation creees par nous"
+  },
+  "scene_loop_ticks": 240,
+  "access": {
+    "entry_px": [
+      384,
+      560
+    ],
+    "threshold_px": [
+      376,
+      112
+    ],
+    "path_found_16x16": true,
+    "cells_explored": 1156,
+    "blocked_cells": 5554,
+    "total_cells": 6912,
+    "walkable_cells": 1358,
+    "rule": "case bloquee si > 25 % hors dalles et reflets cristallins de la plateforme centrale",
+    "seuil": "bout nord de la plateforme cristalline, au pied sec de l ouverture sombre sous l arche de cristal"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "elc1_entree_lac_cristal",
+    "namespace": "entree_lac_cristal_sud_nord",
+    "tiles_per_bank": {
+      "ELC1_00_EAU": 2861,
+      "ELC1_01_LUEUR": 2357,
+      "ELC1_02_SCINTILLEMENTS": 52,
+      "ELC1_03_GOUTTES": 403,
+      "ELC1_04_SOL": 3488,
+      "ELC1_05_DALLES": 1611,
+      "ELC1_06_REFLETS": 562,
+      "ELC1_07_REBORDS": 339,
+      "ELC1_08_CRISTAUX": 838,
+      "ELC1_09_ILOTS": 445,
+      "ELC1_10_PILIERS": 776,
+      "ELC1_11_PROFONDEUR": 83,
+      "ELC1_12_ECLATS": 543
+    },
+    "banks": [
+      "ELC1_00_EAU",
+      "ELC1_01_LUEUR",
+      "ELC1_02_SCINTILLEMENTS",
+      "ELC1_03_GOUTTES",
+      "ELC1_04_SOL",
+      "ELC1_05_DALLES",
+      "ELC1_06_REFLETS",
+      "ELC1_07_REBORDS",
+      "ELC1_08_CRISTAUX",
+      "ELC1_09_ILOTS",
+      "ELC1_10_PILIERS",
+      "ELC1_11_PROFONDEUR",
+      "ELC1_12_ECLATS"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}
