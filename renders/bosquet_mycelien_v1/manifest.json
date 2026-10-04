@@ -1,0 +1,140 @@
+{
+  "map_id": "bosquet_mycelien_v1",
+  "title": "Bosquet Mycélien — Clairière des Lanternes",
+  "prefix": "BMF1",
+  "reference": "Mushroom Forest (Red Rescue Team)",
+  "reference_file": "Mushroom_Forest_RRT.png",
+  "reference_sha256": "948e328e9e15187d3266d5bdb0fa771c5bddf36d21ebeff84f264e176b5658c4",
+  "reference_source": "Pokémon Mystery Dungeon: Red Rescue Team — Friend Area Mushroom Forest ; rip Toastypk, découpe de jeu déjà archivée dans le dépôt",
+  "reference_dimensions_px": [
+    456,
+    336
+  ],
+  "reference_kind": "clairière menthe bordée de champignons géants multicolores",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "layout": "entrée sud, deux branches autour d'un îlot fongique central, corridor de lanternes et grande arche nord fermée",
+  "loop_ticks": 192,
+  "animation": {
+    "lueurs_lanternes": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    },
+    "spores": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      552
+    ],
+    "clairiere": [
+      384,
+      470
+    ],
+    "objectif_lanternes": [
+      384,
+      112
+    ]
+  },
+  "walkable_cells": 858,
+  "obstacle_cells": 6054,
+  "reachable_cells_from_entry": 858,
+  "component_count": 6,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 24.68,
+      "p95": 47.0,
+      "pixels": 68909
+    },
+    "sous_bois": {
+      "rgb_distance": 13.85,
+      "p95": 34.55,
+      "pixels": 111933
+    },
+    "bois": {
+      "rgb_distance": 19.08,
+      "p95": 32.12,
+      "pixels": 25967
+    },
+    "champignons": {
+      "rgb_distance": 15.07,
+      "p95": 36.15,
+      "pixels": 235526
+    },
+    "scene_complete": {
+      "rgb_distance": 18.3,
+      "p95": 40.61,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 93,
+  "pmdo_banks": {
+    "BMF1_00_SOL": 568,
+    "BMF1_01_MURS": 4125,
+    "BMF1_02_OMBRES": 60,
+    "BMF1_03_SOUS_BOIS": 2577,
+    "BMF1_04_BOIS": 1510,
+    "BMF1_05_CHAMPIGNONS": 2045,
+    "BMF1_06_ARCHE_NORD": 725,
+    "BMF1_07_ILOT_CENTRAL": 600,
+    "BMF1_08_PREMIER_PLAN": 518,
+    "BMF1_09_LUEURS_LANTERNES": 259,
+    "BMF1_10_SPORES": 460
+  },
+  "total_tiles": 13447,
+  "layers": [
+    "sol_complet",
+    "sol",
+    "murs",
+    "ombres",
+    "sous_bois",
+    "bois",
+    "champignons",
+    "arche_nord",
+    "ilot_central",
+    "premier_plan",
+    "lueurs_lanternes",
+    "spores"
+  ],
+  "raw_inputs": {
+    "decor_magenta.png": "e9a0ff80266158c131841a035a66d37111ead72793022cd42274a6e02c98846d",
+    "fond_sans_objets.png": "54196a9d221cbb2e1fc0aad8fa5215ca5a01c1fa07f20f959933dda09361e024",
+    "sol_complet.png": "4f714fe62d8532948704a21903dfe91a869d8e08533ecdcfffbaf23cfe3e0699"
+  },
+  "rejected_raws": [
+    {
+      "path": "bruts/ecartes/sol_complet_obstacles_sur_route.png",
+      "sha256": "32bc9282c825f3b7d1bb54460e8adc63fcf62b670475819aa0f686445feb46db",
+      "reason": "première édition du sol : rangée de petits champignons ajoutée sur le passage sud"
+    },
+    {
+      "path": "bruts/ecartes/fond_sans_objets_1194x880.png",
+      "sha256": "6f8758420e266318b412efc0211fc989cbfc480f0d1c2d13e9bc4999c3de679c",
+      "reason": "sortie générée en 1194x880 ; conservée avant normalisation nearest vers 1200x896"
+    }
+  ],
+  "notes": [
+    "Composition générée avec Mushroom Forest RRT en référence ; route sur magenta puis segmentation multicalque.",
+    "Tous les RGB statiques sont quantifiés vers les 93 couleurs de la référence ; cela ne certifie pas des tuiles natives.",
+    "Lueurs des lanternes et spores sont des animations calculées pour BMF1, pas des cycles officiels récupérés.",
+    "Nord, ouest et est fermés ; aucun warp configuré ; chargement et gameplay PMDO non testés."
+  ]
+}

@@ -1,5 +1,14 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Bosquet Mycélien — Clairière des Lanternes (BMF1, 5 octobre 2026)
+
+- **Sorties** : `source/bosquet_mycelien_v1/`, `renders/bosquet_mycelien_v1/`, aperçu `apercu_bosquet_mycelien_v1.html`, ORA `BMF1_bosquet_mycelien.ora`, projet PMDO `mod_bosquet_mycelien_pmdo_0812.zip` et pack complet `livrable_bosquet_mycelien_v1.zip`.
+- **Méthode** : composition générée guidée par la capture canonique de `Mushroom Forest` (*Pokémon Mystery Dungeon: Red Rescue Team*, rip Toastypk, 456×336, 93 couleurs), route détourée sur magenta, segmentation multicalque et quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,552]`, deux branches autour de l'îlot fongique central, clairière `[384,470]`, corridor de petits champignons-lanternes et objectif nord fermé `[384,112]`. **858 cellules marchables**, toutes reliées ; aucun warp ni autre sortie.
+- **Calques/animations** : sol menthe, sous-couche, ombres, sous-bois, bois/racines, champignons, arche nord, îlot et premier plan ; lueurs des lanternes et spores calculées séparément, chacune en 24 phases × 8 ticks.
+- **Fidélité RGB** avant quantification (<35) : sol `24,68`, sous-bois `13,85`, bois `19,08`, champignons `15,07`, scène complète `18,30` ; **13 447 tuiles PMDO**.
+- **Validation** : 6 tests BMF1 PASS. `art_approved: false`, `runtime_tested: false` ; aucune approbation artistique ni validation dans le moteur PMDO n'est revendiquée.
+
 ## Fin du Passage des Ruines — Sanctuaire du Cadran (FPR1, 4 octobre 2026)
 
 - **Sorties** : `source/fin_passage_ruines_v1/`, `renders/fin_passage_ruines_v1/`, aperçu `apercu_fin_passage_ruines_v1.html`, ORA `FPR1_fin_passage_ruines.ora`, projet PMDO `mod_fin_passage_ruines_pmdo_0812.zip` et pack complet `livrable_fin_passage_ruines_v1.zip`.
