@@ -1,0 +1,150 @@
+{
+  "map_id": "fin_ile_zenith_v1",
+  "title": "Fin de l’Île du Zénith — Sanctuaire des Alizés",
+  "prefix": "FIZ1",
+  "series": "Trilogie du Zénith",
+  "series_role": "fin",
+  "reference": "Final Island (Red Rescue Team)",
+  "reference_file": "Final_Island_RRT.png",
+  "reference_sha256": "dae533b0cb304a3fbf93f272aa433b0f51b203c4c95008d422a4d2bfe84c3f12",
+  "reference_source": "Pokémon Mystery Dungeon: Red Rescue Team — Friend Area Final Island ; capture déjà archivée dans le dépôt",
+  "reference_dimensions_px": [
+    480,
+    312
+  ],
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "layout": "arrivée sud, arène ovale à autel bloqué, deux croissants, observatoires et sanctuaire nord fermé",
+  "loop_ticks": 192,
+  "animation": {
+    "halo_sanctuaire": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    },
+    "voiles_nuages": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      552
+    ],
+    "boss": [
+      384,
+      360
+    ],
+    "objectif_sanctuaire": [
+      350,
+      128
+    ],
+    "observatoire_ouest": [
+      100,
+      280
+    ],
+    "observatoire_est": [
+      680,
+      280
+    ]
+  },
+  "blocked_area": {
+    "autel_central": [
+      342,
+      180,
+      430,
+      330
+    ]
+  },
+  "walkable_cells": 1126,
+  "obstacle_cells": 5786,
+  "reachable_cells_from_entry": 1126,
+  "component_count": 8,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 11.02,
+      "p95": 20.45,
+      "pixels": 96535
+    },
+    "ciel": {
+      "rgb_distance": 7.26,
+      "p95": 13.04,
+      "pixels": 442368
+    },
+    "roche_hors_contours": {
+      "rgb_distance": 11.88,
+      "p95": 35.01,
+      "pixels": 109896
+    },
+    "vegetation": {
+      "rgb_distance": 14.12,
+      "p95": 40.16,
+      "pixels": 52057
+    },
+    "scene_complete": {
+      "rgb_distance": 10.26,
+      "p95": 22.45,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 1244,
+  "pmdo_banks": {
+    "FIZ1_00_FOND_CIEL": 6455,
+    "FIZ1_01_SOL": 916,
+    "FIZ1_02_OMBRES": 31,
+    "FIZ1_03_CIEL_DETAIL": 3367,
+    "FIZ1_04_NUAGES": 1295,
+    "FIZ1_05_FALAISES": 784,
+    "FIZ1_06_VEGETATION": 631,
+    "FIZ1_07_PIERRES": 710,
+    "FIZ1_08_SANCTUAIRE": 545,
+    "FIZ1_09_ILOTS_LATERAUX": 811,
+    "FIZ1_10_PREMIER_PLAN": 564,
+    "FIZ1_11_HALO_SANCTUAIRE": 377,
+    "FIZ1_12_VOILES_NUAGES": 42
+  },
+  "total_tiles": 16528,
+  "layers": [
+    "sol_complet",
+    "fond_ciel",
+    "sol",
+    "ombres",
+    "ciel_detail",
+    "nuages",
+    "falaises",
+    "vegetation",
+    "pierres",
+    "sanctuaire",
+    "ilots_lateraux",
+    "premier_plan",
+    "halo_sanctuaire",
+    "voiles_nuages"
+  ],
+  "raw_inputs": {
+    "decor_magenta.png": "414e62a4c9970aef39245e3f598d3c877a09078086a3ddb6831fcdcdab09f551",
+    "fond_sans_objets.png": "7f916d1633bdd4e09bbaf6b921189c731923a6bb978fe5b44b5487870aa5bbe5",
+    "sol_complet.png": "255304af3e1cdaf9e49f59f367d937caf9e82ee48d71c7134e334c0f0768502a"
+  },
+  "rejected_raws": [],
+  "notes": [
+    "Composition générée avec Final Island RRT en référence ; terrasses peintes sur magenta puis segmentées.",
+    "Tous les RGB statiques sont quantifiés vers les 1244 couleurs de la référence ; cela ne certifie pas des tuiles natives.",
+    "Halo du sanctuaire et voiles de nuages sont calculés pour FIZ1, pas récupérés comme cycles officiels.",
+    "Finale fermée sans warp configuré ; chargement et gameplay PMDO non testés."
+  ]
+}

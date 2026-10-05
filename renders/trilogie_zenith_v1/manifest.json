@@ -1,0 +1,194 @@
+{
+  "series_id": "trilogie_zenith_v1",
+  "title": "Trilogie du Zénith",
+  "reference": "Final Island (Red Rescue Team)",
+  "roles": [
+    "entrée",
+    "chemin",
+    "fin"
+  ],
+  "maps": [
+    {
+      "role": "entrée",
+      "prefix": "EIZ1",
+      "map_id": "entree_ile_zenith_v1",
+      "title": "Entrée de l’Île du Zénith — Portail des Alizés",
+      "dimensions_px": [
+        768,
+        576
+      ],
+      "walkable_cells": 1097,
+      "reachable_cells": 1097,
+      "animations": {
+        "runes_portail": {
+          "frames": 24,
+          "ticks_per_frame": 8,
+          "native": false
+        },
+        "voiles_nuages": {
+          "frames": 24,
+          "ticks_per_frame": 8,
+          "native": false
+        }
+      },
+      "total_tiles": 16025,
+      "fidelity": {
+        "sol": {
+          "rgb_distance": 10.42,
+          "p95": 14.14,
+          "pixels": 85464
+        },
+        "ciel": {
+          "rgb_distance": 7.26,
+          "p95": 13.04,
+          "pixels": 442368
+        },
+        "roche_hors_contours": {
+          "rgb_distance": 8.96,
+          "p95": 27.46,
+          "pixels": 104818
+        },
+        "vegetation": {
+          "rgb_distance": 12.25,
+          "p95": 33.05,
+          "pixels": 40389
+        },
+        "scene_complete": {
+          "rgb_distance": 7.15,
+          "p95": 15.0,
+          "pixels": 442368
+        }
+      },
+      "preview": "apercu_entree_ile_zenith_v1.html",
+      "delivery_zip": "livrable_entree_ile_zenith_v1.zip",
+      "delivery_sha256": "564a4b9dd6e2354ddfc6d765d55f697292d82cda5901ba4c132e17aa82067f05",
+      "pmdo_zip": "mod_entree_ile_zenith_pmdo_0812.zip",
+      "pmdo_sha256": "41c8a68d2ac729825c75228fb121cf2ce349bd007ff85fe58a527d31d8a84477",
+      "art_approved": false,
+      "runtime_tested": false
+    },
+    {
+      "role": "chemin",
+      "prefix": "IFZ1",
+      "map_id": "ile_flottante_zenith_v1",
+      "title": "Île Flottante du Zénith — Couronne des Vents",
+      "dimensions_px": [
+        768,
+        576
+      ],
+      "walkable_cells": 829,
+      "reachable_cells": 829,
+      "animations": {
+        "courants_vent": {
+          "frames": 24,
+          "ticks_per_frame": 8,
+          "native": false
+        },
+        "voiles_nuages": {
+          "frames": 24,
+          "ticks_per_frame": 8,
+          "native": false
+        }
+      },
+      "total_tiles": 16623,
+      "fidelity": {
+        "sol": {
+          "rgb_distance": 27.32,
+          "p95": 43.31,
+          "pixels": 69350
+        },
+        "ciel": {
+          "rgb_distance": 7.26,
+          "p95": 13.04,
+          "pixels": 442368
+        },
+        "roche_hors_contours": {
+          "rgb_distance": 25.47,
+          "p95": 65.25,
+          "pixels": 83877
+        },
+        "vegetation": {
+          "rgb_distance": 25.15,
+          "p95": 52.32,
+          "pixels": 54613
+        },
+        "scene_complete": {
+          "rgb_distance": 25.38,
+          "p95": 68.8,
+          "pixels": 442368
+        }
+      },
+      "preview": "apercu_ile_flottante_zenith_v1.html",
+      "delivery_zip": "livrable_ile_flottante_zenith_v1.zip",
+      "delivery_sha256": "2804666001f06781b9ef8988f6523d50a4b75608e22e8f2b1340946c9374ccca",
+      "pmdo_zip": "mod_ile_flottante_zenith_pmdo_0812.zip",
+      "pmdo_sha256": "64f92546e996a52e81fc329c18689791bdf1982faa036deb54b2602153b160ca",
+      "art_approved": false,
+      "runtime_tested": false
+    },
+    {
+      "role": "fin",
+      "prefix": "FIZ1",
+      "map_id": "fin_ile_zenith_v1",
+      "title": "Fin de l’Île du Zénith — Sanctuaire des Alizés",
+      "dimensions_px": [
+        768,
+        576
+      ],
+      "walkable_cells": 1126,
+      "reachable_cells": 1126,
+      "animations": {
+        "halo_sanctuaire": {
+          "frames": 24,
+          "ticks_per_frame": 8,
+          "native": false
+        },
+        "voiles_nuages": {
+          "frames": 24,
+          "ticks_per_frame": 8,
+          "native": false
+        }
+      },
+      "total_tiles": 16528,
+      "fidelity": {
+        "sol": {
+          "rgb_distance": 11.02,
+          "p95": 20.45,
+          "pixels": 96535
+        },
+        "ciel": {
+          "rgb_distance": 7.26,
+          "p95": 13.04,
+          "pixels": 442368
+        },
+        "roche_hors_contours": {
+          "rgb_distance": 11.88,
+          "p95": 35.01,
+          "pixels": 109896
+        },
+        "vegetation": {
+          "rgb_distance": 14.12,
+          "p95": 40.16,
+          "pixels": 52057
+        },
+        "scene_complete": {
+          "rgb_distance": 10.26,
+          "p95": 22.45,
+          "pixels": 442368
+        }
+      },
+      "preview": "apercu_fin_ile_zenith_v1.html",
+      "delivery_zip": "livrable_fin_ile_zenith_v1.zip",
+      "delivery_sha256": "8049edad202762f5c373825170cf22f1a06c5691a34609892f6a4946b1ef8f17",
+      "pmdo_zip": "mod_fin_ile_zenith_pmdo_0812.zip",
+      "pmdo_sha256": "a262ceedabe7080eb2d3783f19c073f03752d529f72526f27704e8bf93da1324",
+      "art_approved": false,
+      "runtime_tested": false
+    }
+  ],
+  "notes": [
+    "Compositions générées référencées et quantifiées, non certifiées comme tuiles natives.",
+    "Animations calculées indépendamment pour chaque lot.",
+    "Aucun runtime PMDO, rendu GPU ou gameplay testé."
+  ]
+}

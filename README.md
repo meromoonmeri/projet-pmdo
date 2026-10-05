@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Trilogie du Zénith — entrée, chemin et fin (EIZ1 / IFZ1 / FIZ1, 5 octobre 2026)
+
+- **Galerie** : `apercu_trilogie_zenith_v1.html` ; manifeste et notice dans `renders/trilogie_zenith_v1/` et `source/trilogie_zenith_v1/`.
+- **Entrée — EIZ1, Portail des Alizés** : `source/entree_ile_zenith_v1/`, `renders/entree_ile_zenith_v1/`, aperçu `apercu_entree_ile_zenith_v1.html`. Arrivée sud, deux branches autour d'un puits de ciel, deux belvédères et seuil nord ; **1 097 cases praticables**, **16 025 tuiles PMDO**. Runes du portail et voiles de nuages en 24×8 ticks.
+- **Chemin — IFZ1, Couronne des Vents** : lot précédent conservé sans remplacement ; ouverture sud, couronne bifurquée, deux îlots et sortie nord ; **829 cases praticables**, **16 623 tuiles PMDO**.
+- **Fin — FIZ1, Sanctuaire des Alizés** : `source/fin_ile_zenith_v1/`, `renders/fin_ile_zenith_v1/`, aperçu `apercu_fin_ile_zenith_v1.html`. Arène ovale, autel central bloqué, deux croissants, deux observatoires et terrasse nord fermée ; **1 126 cases praticables**, **16 528 tuiles PMDO**. Halo du sanctuaire et voiles de nuages en 24×8 ticks.
+- **Méthode** : deux nouvelles compositions générées avec `Final Island RRT` en référence, route/terrasses sur magenta, segmentation en 11 calques visibles + deux animations, quantification vers les 1 244 couleurs de la capture, ORA et Ground/Tile PMDO 0.8.12. Pixels générés, non certifiés comme tuiles natives.
+- **Fidélité RGB** avant quantification : EIZ1 `7,15–12,25`, FIZ1 `7,26–14,12`, toutes les matières sous 35. Préfixes et dossiers vérifiés absents des douze têtes sœurs ; aucun travail parallèle repris.
+- **Validation** : **18 tests PASS** — 10 pour les deux nouvelles cartes, 6 pour IFZ1 et 2 pour la série complète. `art_approved: false`, `runtime_tested: false` ; aucun warp, test moteur, rendu GPU ou gameplay revendiqué.
+
 ## Île Flottante du Zénith — Couronne des Vents (IFZ1, 5 octobre 2026)
 
 - **Sorties** : `source/ile_flottante_zenith_v1/`, `renders/ile_flottante_zenith_v1/`, aperçu `apercu_ile_flottante_zenith_v1.html`, ORA `IFZ1_ile_flottante_zenith.ora`, projet PMDO `mod_ile_flottante_zenith_pmdo_0812.zip` et pack complet `livrable_ile_flottante_zenith_v1.zip`.

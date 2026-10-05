@@ -1,0 +1,142 @@
+{
+  "map_id": "entree_ile_zenith_v1",
+  "title": "Entrée de l’Île du Zénith — Portail des Alizés",
+  "prefix": "EIZ1",
+  "series": "Trilogie du Zénith",
+  "series_role": "entrée",
+  "reference": "Final Island (Red Rescue Team)",
+  "reference_file": "Final_Island_RRT.png",
+  "reference_sha256": "dae533b0cb304a3fbf93f272aa433b0f51b203c4c95008d422a4d2bfe84c3f12",
+  "reference_source": "Pokémon Mystery Dungeon: Red Rescue Team — Friend Area Final Island ; capture déjà archivée dans le dépôt",
+  "reference_dimensions_px": [
+    480,
+    312
+  ],
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "layout": "arrivée sud, palier, deux branches autour d'un puits de ciel, deux belvédères et portail nord",
+  "loop_ticks": 192,
+  "animation": {
+    "runes_portail": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    },
+    "voiles_nuages": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      552
+    ],
+    "palier_bas": [
+      384,
+      430
+    ],
+    "seuil_portail": [
+      384,
+      105
+    ],
+    "belvedere_ouest": [
+      86,
+      285
+    ],
+    "belvedere_est": [
+      687,
+      285
+    ]
+  },
+  "walkable_cells": 1097,
+  "obstacle_cells": 5815,
+  "reachable_cells_from_entry": 1097,
+  "component_count": 8,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 10.42,
+      "p95": 14.14,
+      "pixels": 85464
+    },
+    "ciel": {
+      "rgb_distance": 7.26,
+      "p95": 13.04,
+      "pixels": 442368
+    },
+    "roche_hors_contours": {
+      "rgb_distance": 8.96,
+      "p95": 27.46,
+      "pixels": 104818
+    },
+    "vegetation": {
+      "rgb_distance": 12.25,
+      "p95": 33.05,
+      "pixels": 40389
+    },
+    "scene_complete": {
+      "rgb_distance": 7.15,
+      "p95": 15.0,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 1244,
+  "pmdo_banks": {
+    "EIZ1_00_FOND_CIEL": 6455,
+    "EIZ1_01_SOL": 704,
+    "EIZ1_02_OMBRES": 31,
+    "EIZ1_03_CIEL_DETAIL": 2173,
+    "EIZ1_04_NUAGES": 2191,
+    "EIZ1_05_FALAISES": 881,
+    "EIZ1_06_VEGETATION": 509,
+    "EIZ1_07_PIERRES": 705,
+    "EIZ1_08_PORTAIL": 365,
+    "EIZ1_09_ILOTS_LATERAUX": 658,
+    "EIZ1_10_PREMIER_PLAN": 597,
+    "EIZ1_11_RUNES_PORTAIL": 714,
+    "EIZ1_12_VOILES_NUAGES": 42
+  },
+  "total_tiles": 16025,
+  "layers": [
+    "sol_complet",
+    "fond_ciel",
+    "sol",
+    "ombres",
+    "ciel_detail",
+    "nuages",
+    "falaises",
+    "vegetation",
+    "pierres",
+    "portail",
+    "ilots_lateraux",
+    "premier_plan",
+    "runes_portail",
+    "voiles_nuages"
+  ],
+  "raw_inputs": {
+    "decor_magenta.png": "929f86c1eafa2f6c700248d5cc0ec8c7533cc878c599b578a93332f4a364520a",
+    "fond_sans_objets.png": "7f916d1633bdd4e09bbaf6b921189c731923a6bb978fe5b44b5487870aa5bbe5",
+    "sol_complet.png": "7dc0d65c2c2f20a1a3cc638c3ee9a90398127046565cfdfb4d6ba59da6c3c305"
+  },
+  "rejected_raws": [],
+  "notes": [
+    "Composition générée avec Final Island RRT en référence ; route peinte sur magenta puis segmentée.",
+    "Tous les RGB statiques sont quantifiés vers les 1244 couleurs de la référence ; cela ne certifie pas des tuiles natives.",
+    "Runes et voiles de nuages sont calculés pour EIZ1, pas récupérés comme cycles officiels.",
+    "Seuil nord sans warp configuré ; chargement et gameplay PMDO non testés."
+  ]
+}
