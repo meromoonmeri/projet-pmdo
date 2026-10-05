@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZGT1 — Village arboricole de guilde</title>
+<style>
+:root { color-scheme:dark; --bg:#101614; --panel:#18211d; --line:#31453a; --mint:#99e1ad; --gold:#e7c982; }
+* { box-sizing:border-box } body { margin:0; background:var(--bg); color:#eef4ed; font:14px/1.5 system-ui,sans-serif; padding:22px; }
+h1 { margin:0; color:var(--mint); font-size:22px; } .sub { color:#b3c2b6; margin:4px 0 16px; }
+.toolbar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+button, .pill { border:1px solid var(--line); border-radius:8px; color:inherit; background:var(--panel); padding:7px 11px; }
+button { cursor:pointer } a { color:#b4d8ff }
+main { display:grid; grid-template-columns:minmax(320px,768px) minmax(260px,360px); gap:16px; align-items:start; }
+.stage { position:relative; width:min(100%,768px); aspect-ratio:4/3; background:#0c1110; border:1px solid #587361; image-rendering:pixelated; overflow:hidden; }
+.stage img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; image-rendering:pixelated; }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+.layer-list { display:grid; gap:6px; margin:8px 0 14px; } .layer-list label { display:flex; align-items:center; gap:8px; }
+.small { color:#bdcbbf; font-size:12px; } .warning { border-left:3px solid var(--gold); padding:8px 10px; background:#27251c; margin:12px 0; }
+@media(max-width:900px) { main { grid-template-columns:1fr; } .stage { width:100%; } }
+</style></head>
+<body>
+<h1>ZGT1 — Village arboricole de guilde</h1>
+<div class="sub">Prototype 4:3 · 768×576 px · 96×72 tuiles de 8 px · PMDO 0.8.12 · référence visuelle T00P01</div>
+<div class="toolbar">
+  <button id="play">⏸ Pause</button><span class="pill" id="tick">Tick 000 / 072</span>
+  <label class="pill"><input type="checkbox" id="collision"> Collisions</label>
+  <a class="pill" href="renders/zone_guilde_treehouse_v1/ZGT1_PMDO_0812.zip">ZIP PMDO</a>
+  <a class="pill" href="renders/zone_guilde_treehouse_v1/ZGT1_layers.ora">ORA éditable</a>
+</div>
+<main>
+  <div class="stage" id="stage"></div>
+  <section class="panel">
+    <strong>Calques</strong><div class="layer-list" id="layers"></div>
+    <div class="warning"><strong>Composition V1 validée par l’utilisateur.</strong> Cette version reste inchangée; une V2 est demandée pour relier la maison droite, retirer les panneaux et fournir les sprites séparés.</div>
+    <p class="small"><strong>Provenance :</strong> les pixels de la scène et du sol sont générés, pas extraits du jeu. La palette est quantifiée sur T00P01; l'eau utilise des tuiles 8×8 directement échantillonnées dans le canal canonique T00P01. La géométrie du village, les bâtiments, le pont, les collisions et les marqueurs sont de nouvelles propositions.</p>
+    <p class="small">Boucle d'eau : 36 phases, FrameLength=2, période 72 ticks. Celle-ci combine les crans BPL et BPA de T00P01 avec leur cadence exacte; elle ne réutilise pas le layout natif.</p>
+    <p class="small">Distance moyenne des couleurs générées à la palette T00P01 la plus proche : 13.07 RGB; p95 24.60. Part des couleurs visibles appartenant à la palette de référence : 100.0%.</p>
+    <p class="small"><a href="source/zone_guilde_treehouse_v1/README_PACK.md">Méthode et limites</a> · <a href="renders/zone_guilde_treehouse_v1/manifest.json">Manifeste</a></p>
+    <div id="layerLinks" class="small"></div>
+  </section>
+</main>
+<script>
+const specs = [{"id": "base", "label": "00 · Sol résiduel généré", "src": "renders/zone_guilde_treehouse_v1/layers/ZGT1_00_sol_residuel.png"}, {"id": "water", "label": "01 · Eau · échantillon T00P01 animé", "src": "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f00.png"}, {"id": "details", "label": "02 · Détails & végétation basse", "src": "renders/zone_guilde_treehouse_v1/layers/ZGT1_02_details.png"}, {"id": "structures", "label": "03 · Habitations & pont", "src": "renders/zone_guilde_treehouse_v1/layers/ZGT1_03_habitations_pont.png"}, {"id": "canopy", "label": "04 · Canopée / premier plan", "src": "renders/zone_guilde_treehouse_v1/layers/ZGT1_04_canopee.png"}];
+const frames = ["renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f00.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f01.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f02.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f03.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f04.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f05.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f06.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f07.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f08.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f09.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f10.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f11.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f12.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f13.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f14.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f15.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f16.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f17.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f18.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f19.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f20.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f21.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f22.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f23.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f24.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f25.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f26.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f27.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f28.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f29.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f30.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f31.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f32.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f33.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f34.png", "renders/zone_guilde_treehouse_v1/anim/ZGT1_01_eau_T00P01_f35.png"];
+const stage = document.getElementById('stage');
+const layerList = document.getElementById('layers');
+const imgById = {};
+for (const s of specs) {
+  const img = document.createElement('img'); img.src = s.src; img.alt = s.label; img.dataset.layer = s.id;
+  stage.appendChild(img); imgById[s.id] = img;
+  const label = document.createElement('label');
+  const box = document.createElement('input'); box.type='checkbox'; box.checked=true;
+  box.onchange = () => { img.style.display = box.checked ? 'block' : 'none'; };
+  label.append(box, document.createTextNode(s.label)); layerList.appendChild(label);
+}
+const collision = document.createElement('img'); collision.src='renders/zone_guilde_treehouse_v1/ZGT1_collision_walkability.png'; collision.style.display='none'; collision.style.opacity='.65'; collision.alt='Walkability'; stage.appendChild(collision);
+document.getElementById('collision').onchange = e => collision.style.display=e.target.checked?'block':'none';
+document.getElementById('layerLinks').innerHTML = specs.map(s=>`<a href="${s.src}">PNG ${s.label}</a>`).join(' · ');
+let phase=0, playing=true;
+const tick=document.getElementById('tick');
+function setPhase() { imgById.water.src=frames[phase]; tick.textContent=`Tick ${String(phase*2).padStart(3,'0')} / 72`; }
+setInterval(()=>{ if(!playing)return; phase=(phase+1)%frames.length; setPhase(); }, 1000*2/60);
+document.getElementById('play').onclick=e=>{ playing=!playing; e.target.textContent=playing?'⏸ Pause':'▶ Lecture'; };
+setPhase();
+</script>
+</body></html>

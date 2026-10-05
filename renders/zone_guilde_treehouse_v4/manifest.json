@@ -1,0 +1,27 @@
+{
+  "concept": "ZGT4",
+  "source_image": "ZGT4_village_imagegen.png",
+  "source_sha256": "3a05fdf67d90ef0727a58fc709aa6eb3ac2ba0b643145ec1214531f579905a65",
+  "references": [
+    "renders/zone_guilde_treehouse_v2/ZGT2_scene_t000.png",
+    "source/zone_guilde_treehouse_v1/reference/T00P01_canonique.png",
+    "source/amp_plains_fleurie_v1/references/Vast_Steppe_Flower_Animations.png"
+  ],
+  "imagegen_output_px": [
+    1200,
+    896
+  ],
+  "display_px": [
+    768,
+    576
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "palette": "nearest-color T00P01 (134 RGB colors)",
+  "mean_palette_distance_before": 12.006,
+  "p95_palette_distance_before": 25.652,
+  "texture_note": "AI-rendered concept resampled and palette-mapped; it is not an exact T00P01 tile extraction. The actual canonical-texture multilayer PMDO map is ZGT2.",
+  "layers_note": "ZGT4 is a visual concept image. Use ZGT2_layers.ora / ZGT2_PMDO_0812.zip for the 8-layer PMDO composition."
+}

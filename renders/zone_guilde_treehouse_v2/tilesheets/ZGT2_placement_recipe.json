@@ -1,0 +1,60 @@
+{
+  "grid_px": 8,
+  "atlas_png": "tilesheets/ZGT2_structures_sans_fond_8px.png",
+  "atlas_size_px": [
+    768,
+    256
+  ],
+  "alpha_background": "transparent",
+  "objects": [
+    {
+      "id": "qg_treehouse",
+      "panel_xywh_px": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "sprite_file": "sprites/ZGT2_QG_treehouse_transparent.png",
+      "anchor_px": [
+        128,
+        240
+      ],
+      "source": "exports/guild_structures_v1/hq/GuildStructuresV1_hq_object.png",
+      "note": "Sprite treehouse déjà isolé du lot Structures Guilde; ce n'est pas un détourage pixel à pixel du grand QG fusionné au fond de la map ZGT1."
+    },
+    {
+      "id": "maison_droite_jour",
+      "panel_xywh_px": [
+        256,
+        0,
+        256,
+        256
+      ],
+      "sprite_file": "sprites/ZGT2_maison_droite_jour_transparent.png",
+      "anchor_px": [
+        320,
+        112
+      ],
+      "source": "découpe manuelle du sprite droit visible dans le rendu généré ZGT1; fond et panneau de sol exclus."
+    },
+    {
+      "id": "maison_droite_nuit",
+      "panel_xywh_px": [
+        512,
+        0,
+        256,
+        256
+      ],
+      "sprite_file": "sprites/ZGT2_maison_droite_nuit_transparent.png",
+      "anchor_px": [
+        576,
+        112
+      ],
+      "night_filter": "source/cote_v4_abyss/night.py",
+      "style_status": "proposition provisoire; filtre non sélectionné comme style final",
+      "same_alpha_as_day": true
+    }
+  ],
+  "note": "PNG atlas 8px + TSX Tiled pour pose manuelle; ce n'est pas un binaire PMDO .tile ni une carte importée."
+}

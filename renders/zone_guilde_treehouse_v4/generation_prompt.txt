@@ -1,0 +1,6 @@
+Generate a complete, beautiful top-down PMDO-style village map as a fresh image. Use the first reference only to preserve the approved readable composition and walkways, the second as guidance for canonical PMD terrain color/texture, and the third only for the small Halcyon flower palette and scale. Layout: dense forest around the outer edge; one large guild treehouse at the upper center; a small treehouse to the right with a clearly connected pale path; a circular stone plaza in the center; a blue river and wooden bridge along the right side; small garden clearings and flower clumps around the plaza. Remove every signboard and signpost. Use a strict 8-pixel-grid pixel-art look inspired by Halcyon/PMDO: crisp stepped clusters, compact 8px-native details, restrained canonical tile palette, no antialiasing, no soft painterly rendering, no subpixel gradients. Add original lilac, rose-pink, violet and golden flowers among leafy green clumps; do not copy any Halcyon sprite pixels or exact flower silhouettes. Landscape 4:3 framing, coherent map composition, no characters, no text, no UI, no labels, no grid.
+
+References:
+- renders/zone_guilde_treehouse_v2/ZGT2_scene_t000.png
+- source/zone_guilde_treehouse_v1/reference/T00P01_canonique.png
+- source/amp_plains_fleurie_v1/references/Vast_Steppe_Flower_Animations.png
