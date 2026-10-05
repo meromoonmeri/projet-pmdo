@@ -1218,3 +1218,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
 - **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
 
+## Consolidation ciblée des finales — 5 octobre 2026
+
+- La branche de travail demeure `arena/01a10bc6-projet-pmdo`. Ne pas basculer vers une branche sœur ni pousser ailleurs.
+- À la demande de consolidation, les 11 têtes Arena distantes ont été recensées sans les fusionner en bloc : elles divergent, comportent des versions concurrentes et des projets sans rapport avec la série des fins. La tête `01a108a6` seule présente environ 746 MiB de nouveaux blobs et 2 713 chemins modifiés par rapport à `main` ; une fusion complète dépasserait le périmètre d'une consolidation de cartes.
+- Import ciblé des six versions finales les plus récentes de la série des fins depuis `arena/01a108a6-projet-pmdo` (commit `e6b29afbf999109f912ef3b44cd6b6a5b9a64bfc`) : FCT2, FCV3, FMT3, FJS4, FUL2 et FMF3. Les variantes antérieures et les brouillons n'ont pas été ajoutés. Seuls leurs dossiers `source/`, `renders/` et aperçus correspondants ont été repris ; aucun historique de branche sœur n'a été fusionné.
+- Pour chacune : conservation des bruts, de la référence canonique, du manifeste et du code `build.py` / `package.py` / `test_build.py`. Les rendus sont générés référencés ; seuls les éléments explicitement marqués dans leurs notices sont des pixels extraits de tuiles natives.
+- Vérification locale : recréer les six stages ignorés `.cache/` en exécutant `build.py`, puis lancer les six suites de tests. **76 tests passent**. Les ZIP/ORA versionnés ont été restaurés après le rebuild afin de garder les octets d'origine ; les PNG recalculés étaient identiques. Aucun test PMDO, rendu GPU ou gameplay n'a été revendiqué.
+- Cette consolidation est volontairement **ciblée**, pas une fusion de toutes les branches Arena. Les autres familles restent sur leurs branches distantes ; les futures cartes de cette session s'ajoutent à la branche fixe, avec leur propre provenance et leurs tests.
+

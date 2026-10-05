@@ -1,0 +1,623 @@
+{
+  "lot": "fin_mystifying_forest_v3",
+  "prefix": "FMF3",
+  "format": "4:3 vaste",
+  "type": "fin de donjon",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "branche de session (EMF1 pour l eau, les feuilles, les lucioles et les bruts sol_complet/poses ; EWC2/EWC1/ESN1 pour les utilitaires) ; aucun emprunt aux branches soeurs",
+  "biome": "fin de Mystifying Forest (sanctuaire de la foret mystique, prolonge EMF1), biome et portee choisis par l agent (« alors ........... »), a confirmer",
+  "method": "textures canoniques = rendu genere REFERENCE : rip passe au generateur ; mare en magenta sur le decor, autel sanctuaire au nord (sans ouverture sombre), sol complet et planche de poses d EMF1 reutilises",
+  "reference_da": {
+    "file": "Mystifying_Forest_entrance_TDS.png",
+    "sha256": "9f45d140aebe5559d9d1ea8d5891825d4450e7a550ba30d6be97af1af9e3e941"
+  },
+  "generation": [
+    {
+      "file": "decor_magenta.png",
+      "images": [
+        "source/entree_mystifying_forest_sud_nord_v1/bruts/decor_magenta.png",
+        "Mystifying_Forest_entrance_TDS.png"
+      ],
+      "prompt": "Edit the first wide 4:3 landscape pixel-art map (1200x896). Keep the exact 4:3 wide landscape aspect ratio (1200x896) and keep the exact same pixel-art style, palette, bright green grass with fine blades, pinkish-brown dirt path, huge dark green trees with pale twisted exposed roots, grey-green mossy boulders, dark green tall grass patches, and flat pure magenta #FF00FF pond on the left. Make ONLY two changes for a closed end-of-dungeon forest sanctuary room: (1) at the top center (NORTH), close the black opening between the trees with dense dark green tree canopies, twisted roots, and a mossy grey-green stone sanctuary monolith / altar at the northern end of the pinkish-brown dirt path (NO black opening, NO dark hole at the top edge); (2) remove the single central tree standing in the middle of the clearing and replace it with open bright green meadow grass and the pinkish-brown dirt path so the center of the clearing forms a wide open boss arena. Wide landscape 4:3. No characters, no text, no UI, no border.",
+      "essais": "premier essai ; conforme (herbe 7.2, chemin 9.5, feuillage_sombre 2.5, roche_racines 13.8)"
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "source/entree_mystifying_forest_sud_nord_v1/bruts/decor_magenta.png"
+      ],
+      "prompt": "REUTILISE sans nouvelle generation : sol complet d'EMF1 (source/entree_mystifying_forest_sud_nord_v1/bruts/sol_complet.png, meme sha256). Prompt d'origine : Same image, same size and pixel-art style, but showing only the plain bright green grass ground everywhere (the trees, path, rocks, dark grass and pink pond are all removed and replaced by that same grass).",
+      "essais": "copie du sol_complet d EMF1 (meme biome, repare par repair_ground) : aucune generation supplementaire"
+    },
+    {
+      "file": "feuilles_lucioles_poses.png",
+      "images": [
+        "Mystifying_Forest_entrance_TDS.png"
+      ],
+      "prompt": "REUTILISE sans nouvelle generation : planche de poses d'EMF1 (source/entree_mystifying_forest_sud_nord_v1/bruts/feuilles_lucioles_poses.png, meme sha256). Prompt d'origine : Sprite sheet on a flat pure magenta #FF00FF background, in EXACTLY the pixel-art style and colors of the reference image (Pokemon Mystery Dungeon Explorers of Sky forest). 2 rows x 6 columns of separate small sprites. Row 1: a single green leaf (same greens as the tree canopies) falling and fluttering, 6 rotation poses. Row 2: a small glowing firefly light mote (pale yellow-green glow), 6 poses from dim to bright to dim. Each sprite isolated and centered in its cell, wide magenta spacing, no overlap, no text, no grid lines.",
+      "essais": "copie de la planche de poses d EMF1 : aucune generation supplementaire"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/fin_mystifying_forest_v3/bruts/decor_magenta.png",
+      "sha256": "0a0f9c570d5d2c09ad2f1ce52e28909f2124233bec01086c8dd2c590163409b8",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_mystifying_forest_v3/bruts/sol_complet.png",
+      "sha256": "ffee92bb9b63d374bbf5972e61dd0d7acf61009bf64958ea30d4598768a64e96",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_mystifying_forest_v3/bruts/feuilles_lucioles_poses.png",
+      "sha256": "e1a55e4c8f83300f74e7efd2432a8b838793f2cc3aa94cee2315bf1efb855925",
+      "size": [
+        1124,
+        944
+      ]
+    }
+  ],
+  "reparation_sol_complet": {
+    "bande_haut_rangees": 76,
+    "rectangle_bas": [
+      480,
+      834,
+      720,
+      896
+    ]
+  },
+  "fidelite_rip": {
+    "methode": "moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne ; seuil 20",
+    "brut": {
+      "herbe": {
+        "rip_rgb": [
+          79.5,
+          156.2,
+          87.0
+        ],
+        "decor_rgb": [
+          80.0,
+          149.7,
+          83.8
+        ],
+        "distance": 7.2
+      },
+      "chemin": {
+        "rip_rgb": [
+          168.1,
+          153.1,
+          137.2
+        ],
+        "decor_rgb": [
+          164.1,
+          147.4,
+          130.8
+        ],
+        "distance": 9.5
+      },
+      "feuillage_sombre": {
+        "rip_rgb": [
+          37.4,
+          77.5,
+          64.4
+        ],
+        "decor_rgb": [
+          38.1,
+          76.9,
+          62.1
+        ],
+        "distance": 2.5
+      },
+      "roche_racines": {
+        "rip_rgb": [
+          138.4,
+          152.3,
+          133.0
+        ],
+        "decor_rgb": [
+          130.5,
+          148.2,
+          122.5
+        ],
+        "distance": 13.8
+      }
+    },
+    "calques_finaux": {
+      "herbe": {
+        "calque": "herbe",
+        "rgb": [
+          80.1,
+          152.2,
+          81.4
+        ],
+        "distance_rip": 6.9
+      },
+      "chemin": {
+        "calque": "chemin",
+        "rgb": [
+          167.8,
+          148.3,
+          133.1
+        ],
+        "distance_rip": 6.3
+      },
+      "feuillage_sombre": {
+        "calque": "arbres",
+        "rgb": [
+          36.1,
+          73.3,
+          59.4
+        ],
+        "distance_rip": 6.7
+      },
+      "roche_racines": {
+        "calque": "rochers",
+        "rgb": [
+          137.7,
+          154.6,
+          136.4
+        ],
+        "distance_rip": 4.2
+      }
+    }
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "methode": "moyenne ponderee par classe (BOX), attribution exclusive par poids maximal",
+    "palettes": {
+      "terrain": {
+        "calques": [
+          "sol_complet",
+          "herbe",
+          "chemin",
+          "herbes_hautes"
+        ],
+        "couleurs": 96
+      },
+      "arbres": {
+        "calques": [
+          "arbres"
+        ],
+        "couleurs": 40
+      },
+      "rochers": {
+        "calques": [
+          "rochers",
+          "sanctuaire"
+        ],
+        "couleurs": 24
+      }
+    }
+  },
+  "layers": [
+    {
+      "file": "animation/eau/FMF3_00_eau_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/scintillements/FMF3_01_scintillements_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "calques/FMF3_02_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMF3_03_herbe.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMF3_04_chemin.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMF3_05_herbes_hautes.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMF3_06_rochers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMF3_07_arbres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FMF3_08_sanctuaire.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "animation/feuilles/FMF3_09_feuilles_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    },
+    {
+      "file": "animation/lucioles/FMF3_10_lucioles_fNN.png",
+      "phases": 48,
+      "ticks": 5
+    }
+  ],
+  "water": {
+    "style": "facon riviere Metano, SANS lisere clair de rive (water_phases d EWC2), couleurs Metano exactes",
+    "couleurs": {
+      "surface": [
+        131,
+        218,
+        230
+      ],
+      "bande": [
+        87,
+        135,
+        191
+      ],
+      "inter": [
+        95,
+        183,
+        207
+      ],
+      "accent": [
+        111,
+        207,
+        231
+      ]
+    },
+    "phases": 4,
+    "frame_length_ticks": 10
+  },
+  "sparkles": {
+    "source": "source/eau_metano/natifs/Metano_Town_River_Sparkles.tile",
+    "phases": 4,
+    "frame_length_ticks": 10,
+    "placements": [
+      {
+        "famille": "A_16x24",
+        "xy": [
+          168,
+          216
+        ]
+      },
+      {
+        "famille": "A_16x24",
+        "xy": [
+          176,
+          248
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          248,
+          224
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          208,
+          200
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          144,
+          240
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          208,
+          240
+        ]
+      }
+    ]
+  },
+  "feuilles": {
+    "source": "source/fin_mystifying_forest_v3/bruts/feuilles_lucioles_poses.png",
+    "poses": 6,
+    "taille_pose_px": [
+      10,
+      10
+    ],
+    "palette": "palette du calque arbres",
+    "departs": [
+      [
+        566,
+        270,
+        0,
+        -1
+      ],
+      [
+        198,
+        445,
+        8,
+        1
+      ],
+      [
+        680,
+        409,
+        16,
+        -1
+      ],
+      [
+        562,
+        482,
+        24,
+        1
+      ],
+      [
+        564,
+        153,
+        32,
+        -1
+      ],
+      [
+        535,
+        420,
+        40,
+        1
+      ],
+      [
+        94,
+        452,
+        0,
+        -1
+      ],
+      [
+        307,
+        179,
+        8,
+        1
+      ]
+    ],
+    "phases_chute": 30,
+    "phases": 48,
+    "frame_length_ticks": 5,
+    "origine": "poses generees d EMF1 reutilisees, trajectoires et cadence creees par nous"
+  },
+  "lucioles": {
+    "source": "source/fin_mystifying_forest_v3/bruts/feuilles_lucioles_poses.png",
+    "poses": 6,
+    "taille_pose_px": [
+      6,
+      6
+    ],
+    "palette": [
+      [
+        249,
+        253,
+        219
+      ],
+      [
+        240,
+        253,
+        160
+      ],
+      [
+        223,
+        240,
+        151
+      ],
+      [
+        208,
+        229,
+        135
+      ],
+      [
+        221,
+        203,
+        153
+      ],
+      [
+        204,
+        209,
+        135
+      ],
+      [
+        209,
+        182,
+        143
+      ],
+      [
+        218,
+        166,
+        155
+      ]
+    ],
+    "points": [
+      [
+        718,
+        328,
+        0,
+        4
+      ],
+      [
+        217,
+        340,
+        5,
+        6
+      ],
+      [
+        131,
+        122,
+        10,
+        8
+      ],
+      [
+        204,
+        535,
+        15,
+        4
+      ],
+      [
+        40,
+        319,
+        20,
+        6
+      ],
+      [
+        205,
+        114,
+        25,
+        8
+      ],
+      [
+        294,
+        535,
+        30,
+        4
+      ],
+      [
+        112,
+        201,
+        35,
+        6
+      ],
+      [
+        98,
+        491,
+        40,
+        8
+      ],
+      [
+        641,
+        348,
+        45,
+        4
+      ],
+      [
+        92,
+        426,
+        2,
+        6
+      ],
+      [
+        500,
+        550,
+        7,
+        8
+      ],
+      [
+        450,
+        526,
+        12,
+        4
+      ],
+      [
+        109,
+        331,
+        17,
+        6
+      ]
+    ],
+    "pulsation": [
+      0,
+      1,
+      2,
+      3,
+      3,
+      2,
+      3,
+      4,
+      5,
+      -1,
+      -1,
+      -1
+    ],
+    "phases": 48,
+    "frame_length_ticks": 5,
+    "origine": "poses generees d EMF1 reutilisees, trajectoires et cadence creees par nous"
+  },
+  "scene_loop_ticks": 240,
+  "access": {
+    "entry_px": [
+      384,
+      560
+    ],
+    "boss_px": [
+      376,
+      280
+    ],
+    "objective_px": [
+      376,
+      136
+    ],
+    "path_found_16x16": true,
+    "path_to_boss": true,
+    "path_to_objective": true,
+    "cells_explored": 746,
+    "blocked_cells": 4722,
+    "total_cells": 6912,
+    "walkable_cells": 2190,
+    "rule": "case bloquee si > 25 % hors praticable (herbe claire + chemin)",
+    "boss": "case 2 x 2 libre au centre de la clairiere",
+    "objectif": "case 2 x 2 libre la plus haute sous l autel sanctuaire au nord",
+    "fin": "aucune sortie, aucun warp, pas de donjon_seuil ; le bord nord et les flancs sont bloques"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "fmf3_fin_mystifying_forest",
+    "namespace": "fin_mystifying_forest",
+    "tiles_per_bank": {
+      "FMF3_00_EAU": 283,
+      "FMF3_01_SCINTILLEMENTS": 52,
+      "FMF3_02_SOL": 6776,
+      "FMF3_03_HERBE": 2508,
+      "FMF3_04_CHEMIN": 573,
+      "FMF3_05_HERBES": 2861,
+      "FMF3_06_ROCHERS": 334,
+      "FMF3_07_ARBRES": 3165,
+      "FMF3_08_SANCTUAIRE": 111,
+      "FMF3_09_FEUILLES": 527,
+      "FMF3_10_LUCIOLES": 427
+    },
+    "banks": [
+      "FMF3_00_EAU",
+      "FMF3_01_SCINTILLEMENTS",
+      "FMF3_02_SOL",
+      "FMF3_03_HERBE",
+      "FMF3_04_CHEMIN",
+      "FMF3_05_HERBES",
+      "FMF3_06_ROCHERS",
+      "FMF3_07_ARBRES",
+      "FMF3_08_SANCTUAIRE",
+      "FMF3_09_FEUILLES",
+      "FMF3_10_LUCIOLES"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}

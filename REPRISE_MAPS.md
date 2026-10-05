@@ -1,8 +1,8 @@
-# Reprise des maps — 20 septembre 2026
+# Reprise des maps — mise à jour du 5 octobre 2026
 
 ## Demande actuelle
 
-Reprendre la création de maps avec textures canoniques. **Mise à jour du 25 septembre** : l'utilisateur a choisi une entrée de donjon sud → nord, la méthode rendu généré et les deux livrables (PNG 8 px + Ground). Premier lot : `renders/entree_vapeur_sud_nord_v1/`, biome Steam Cave choisi par l'agent et à confirmer. Les anciens travaux sont conservés. **V2** (`renders/entree_vapeur_sud_nord_v2/`) : eau façon rivière Métano, scintillements Métano, bulles de marais générées ; V1 intacte. Map suivante réalisée : **Entrée Cratère** (`renders/entree_cratere_sud_nord_v1/`, réf. Dark Crater, biome choisi par l'agent et à confirmer). Puis **Entrée Ruine** (`renders/entree_ruine_sud_nord_v1/`, réf. Sealed Ruin) et **Entrée Givre** (`renders/entree_givre_sud_nord_v1/`, réf. Frosty Forest, neige). Puis **Entrée Bristle** (`renders/entree_bristle_sud_nord_v1/`, réf. Mt. Bristle, canyon de sable et torrent). **Nouveau standard demandé (26 septembre) : maps plus vastes au format 4:3** — premier lot `renders/entree_jungle_sud_nord_v1/` en 768 × 576 (96 × 72 cases). L'utilisateur a demandé de continuer la série de maps.
+État au 5 octobre : les six finales FCT2, FCV3, FMT3, FJS4, FUL2 et FMF3 ont été réunies sur la branche fixe après sélection des livrables finalisés. La consolidation porte sur ces cartes, pas sur l’intégralité des historiques Arena distants ; le détail figure plus bas. Reprendre la création de maps avec textures canoniques. **Mise à jour du 25 septembre** : l'utilisateur a choisi une entrée de donjon sud → nord, la méthode rendu généré et les deux livrables (PNG 8 px + Ground). Premier lot : `renders/entree_vapeur_sud_nord_v1/`, biome Steam Cave choisi par l'agent et à confirmer. Les anciens travaux sont conservés. **V2** (`renders/entree_vapeur_sud_nord_v2/`) : eau façon rivière Métano, scintillements Métano, bulles de marais générées ; V1 intacte. Map suivante réalisée : **Entrée Cratère** (`renders/entree_cratere_sud_nord_v1/`, réf. Dark Crater, biome choisi par l'agent et à confirmer). Puis **Entrée Ruine** (`renders/entree_ruine_sud_nord_v1/`, réf. Sealed Ruin) et **Entrée Givre** (`renders/entree_givre_sud_nord_v1/`, réf. Frosty Forest, neige). Puis **Entrée Bristle** (`renders/entree_bristle_sud_nord_v1/`, réf. Mt. Bristle, canyon de sable et torrent). **Nouveau standard demandé (26 septembre) : maps plus vastes au format 4:3** — premier lot `renders/entree_jungle_sud_nord_v1/` en 768 × 576 (96 × 72 cases). L'utilisateur a demandé de continuer la série de maps.
 
 Reprise du 25 septembre : `.venv` absente du checkout puis recréée (Pillow 12.3, NumPy 2.4, SciPy 1.17). Les tests V16 + sud–nord V3 donnent de nouveau 18/19, avec la même erreur liée à l'objet historique `438b9288`.
 
@@ -82,9 +82,9 @@ Même jour, sur « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET 
 
 **Serveur d'aperçus, à relancer au début de chaque session** : `python3 source/serveur_apercus/serve.py --port 8000`, via l'outil de processus de fond. Il écoute sur 0.0.0.0 et sa page d'accueil liste tous les aperçus, les entrées sud → nord en tête.
 
-Même jour (29 septembre, session `arena/01a0ec9c`, branchée sur `311b0dd0`), sur « Poursuis le projet tu vas lire les read me agent et outil et methode creation de map pmd texture canonique » : lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et du README de l'outil maps PMD Sky. Lot **Fin Sables mouvants** (`renders/fin_sables_mouvants_v1/`, préfixe `FSM1`, réf. `witheringdesert.png`, aperçu `apercu_fin_sables_mouvants_v1.html`, 15 tests PASS, 5 mutations). Biome et portée choisis par l'agent, **à confirmer**. **Relevé des branches sœurs** : `01a0ea8f` (FUL1, ATF1) et `01a0eaca` (FUL1, FMF1, FMF2, repères FCV1 FJS3 FMT1 FQS1 FSC1 FTC1, BZF1) ont travaillé en parallèle sur les fins ; rien fusionné, rien repris. Fins restantes ici, dans l'ordre du mod : Star Cave, Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret (Underground Lake et Mystifying Forest existent sur les branches sœurs). Préfixes pris en plus : FUL1, FMF1, FMF2, ATF1, BZF1, FCV1, FJS3, FMT1, FQS1, FSC1, FTC1, FSM1.
+Même jour (29 septembre, session `arena/01a0ec9c`, branchée sur `311b0dd0`), sur « Poursuis le projet tu vas lire les read me agent et outil et methode creation de map pmd texture canonique » : lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et du README de l'outil maps PMD Sky. Lot **Fin Sables mouvants** (`renders/fin_sables_mouvants_v1/`, préfixe `FSM1`, réf. `witheringdesert.png`, aperçu `apercu_fin_sables_mouvants_v1.html`, 15 tests PASS, 5 mutations). Biome et portée choisis par l'agent, **à confirmer**. **Relevé des branches sœurs** : `01a0ea8f` (FUL1, ATF1) et `01a0eaca` (FUL1, FMF1, FMF2, repères FCV1 FJS3 FMT1 FQS1 FSC1 FTC1, BZF1) ont travaillé en parallèle sur les fins ; rien fusionné, rien repris. Fins restantes à cette date, dans l'ordre du mod : Star Cave, Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret (Underground Lake et Mystifying Forest existaient alors sur les branches sœurs ; leurs dernières versions sont réunies plus bas). Préfixes pris en plus : FUL1, FMF1, FMF2, ATF1, BZF1, FCV1, FJS3, FMT1, FQS1, FSC1, FTC1, FSM1.
 
-Même jour, suite (« bon travail continue la suite ! ») : lot **Fin Star Cave** (`renders/fin_star_cave_v1/`, préfixe `FST1`, réf. `starcavepmdsky.png`, aperçu `apercu_fin_star_cave_v1.html`, 13 tests PASS, 5 mutations). Prolonge ESC1, planche de poussière réutilisée. Biome et portée choisis par l'agent, **à confirmer**. Fins restantes ici : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe pris en plus : FST1.
+Même jour, suite (« bon travail continue la suite ! ») : lot **Fin Star Cave** (`renders/fin_star_cave_v1/`, préfixe `FST1`, réf. `starcavepmdsky.png`, aperçu `apercu_fin_star_cave_v1.html`, 13 tests PASS, 5 mutations). Prolonge ESC1, planche de poussière réutilisée. Biome et portée choisis par l'agent, **à confirmer**. Fins restantes à cette date : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret (état complété par la consolidation ciblée du 5 octobre). Préfixe pris en plus : FST1.
 
 ## Branches sœurs de la série (relevé du 27 septembre)
 
@@ -222,3 +222,34 @@ Réserves relevées dans V16 :
 - L’alignement sur 8 px et le nommage Halcyon ne prouvent pas un import moteur.
 
 Les succès de chargement PMDO cités dans les anciens rapports restent historiques ; aucun lancement PMDO, rendu GPU ou test de gameplay n’a été effectué dans cette reprise.
+
+## Reprise du 5 octobre 2026 — consolidation ciblée de la série des fins
+
+Lecture effectuée : `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et `source/outil_maps_pmdsky/README.md`. Méthode conservée : rendu généré référencé sur une texture canonique, segmentation et animation par calques, puis export Ground PMDO ; pixels générés jamais présentés comme des tuiles canoniques natives.
+
+La branche fixe est `arena/01a10bc6-projet-pmdo`. `git ls-remote --heads origin` a relevé 11 branches Arena distantes, dont plusieurs variantes concurrentes. Après choix de l'utilisateur — intégrer les livrables finalisés seulement — reprise ciblée des six finales les plus récentes de la série depuis `arena/01a108a6-projet-pmdo`, tête `e6b29afbf999109f912ef3b44cd6b6a5b9a64bfc` :
+
+| Code | Carte | Dossier source / rendu | Tests |
+|---|---|---|---:|
+| FCT2 | Fin Clairière tropicale V2 | `source/fin_clairiere_tropicale_v2/`, `renders/fin_clairiere_tropicale_v2/` | 13 |
+| FCV3 | Fin Couloir violet V3 | `source/fin_couloir_violet_v3/`, `renders/fin_couloir_violet_v3/` | 12 |
+| FMT3 | Fin Mt. Thunder V3 | `source/fin_mt_thunder_v3/`, `renders/fin_mt_thunder_v3/` | 10 |
+| FJS4 | Fin Jardin secret V2 | `source/fin_jardin_secret_v2/`, `renders/fin_jardin_secret_v2/` | 13 |
+| FUL2 | Fin Underground Lake V2 | `source/fin_underground_lake_v2/`, `renders/fin_underground_lake_v2/` | 15 |
+| FMF3 | Fin Mystifying Forest V3 | `source/fin_mystifying_forest_v3/`, `renders/fin_mystifying_forest_v3/` | 13 |
+
+Les six builders et packageurs ont été relancés pour régénérer les stages `.cache/` absents, puis les archives ORA/ZIP originales ont été restaurées pour conserver leurs octets. Exécution finale :
+
+```sh
+.venv/bin/python -m unittest \
+  source.fin_clairiere_tropicale_v2.test_build \
+  source.fin_couloir_violet_v3.test_build \
+  source.fin_mt_thunder_v3.test_build \
+  source.fin_jardin_secret_v2.test_build \
+  source.fin_underground_lake_v2.test_build \
+  source.fin_mystifying_forest_v3.test_build -v
+```
+
+Résultat : **76 tests PASS**. Tests de l'outil maps PMD Sky : **4 PASS, 1 ignoré** (`rom` non rendu dans le cache courant). `runtime_tested: false` et `art_approved: false` restent inchangés ; aucun test dans PMDO n'a été fait.
+
+Il s'agit d'une **consolidation d'artefacts de cartes**, pas d'une fusion des historiques : seul le périmètre cohérent de six finales a été repris. La tête 01a108a6 contient à elle seule environ 746 MiB de nouvelles données et 2 713 chemins modifiés, avec d'autres familles et variantes ; les autres branches Arena restent intactes. Toutes les cartes produites ensuite dans cette session doivent rester sur `arena/01a10bc6-projet-pmdo`.

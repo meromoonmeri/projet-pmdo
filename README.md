@@ -1,5 +1,26 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Consolidation ciblée — six finales PMDO (5 octobre 2026)
+
+La branche de session regroupe maintenant les **dernières versions finalisées** des six fins de donjon ci-dessous, récupérées depuis les branches de sessions sœurs sans reprendre leurs anciennes variantes :
+
+| Code | Carte | Référence canonique utilisée par le générateur | Tests |
+|---|---|---|---:|
+| FCT2 | Fin Clairière tropicale V2 | `large.S01P03A` | 13 |
+| FCV3 | Fin Couloir violet V3 | `large.S05P03A` | 12 |
+| FMT3 | Fin Mt. Thunder V3 | capture PMD Rouge (`Mt. Thunder`) | 10 |
+| FJS4 | Fin Jardin secret V2 | `secretgarden.png` + décor EJS1 | 13 |
+| FUL2 | Fin Underground Lake V2 | `Underground_Lake_shore_TDS.png` + décor EUL1 | 15 |
+| FMF3 | Fin Mystifying Forest V3 | `Mystifying_Forest_entrance_TDS.png` + décor EMF1 | 13 |
+
+Chaque lot conserve son générateur, ses bruts, son manifeste, ses tests et son pipeline d'export : Ground PMDO 0.8.12, images 4:3 de 768 × 576 px, cellules de 8 px, PNG de calques, ORA, paquet d'import et aperçu animé. Les terrains sont des **rendus générés référencés** : ils ne sont pas présentés comme des tuiles canoniques pixel-à-pixel. Les éléments réellement repris des rips sont précisés dans le README propre à chaque lot.
+
+**Vérification locale de cette reprise : 76 tests PASS** après reconstruction des six stages `.cache`. Aucun lancement PMDO ni test GPU/gameplay n'a été réalisé ; les manifestes gardent `runtime_tested: false` et `art_approved: false`.
+
+- Aperçus : `apercu_fin_clairiere_tropicale_v2.html`, `apercu_fin_couloir_violet_v3.html`, `apercu_fin_mt_thunder_v3.html`, `apercu_fin_jardin_secret_v2.html`, `apercu_fin_underground_lake_v2.html`, `apercu_fin_mystifying_forest_v3.html`.
+- Sources et livrables : dossiers `source/fin_*_v2|v3/` et `renders/fin_*_v2|v3/` correspondants.
+- Portée de la consolidation : ces six cartes forment le lot final retenu ; les branches Arena distantes ne sont pas fusionnées intégralement et restent intactes. Voir `REPRISE_MAPS.md` pour le périmètre.
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
@@ -11,7 +32,7 @@
 - **Cohérence avec l'entrée** : reflets, étoiles (4 formes du rip) et planche de poussière d'ESC1 réutilisés. Le premier décor généré est sorti en 2:1 (1440 × 720) et a été écarté.
 - **Fidélité** (seuil 35) : sol 6,8, cristal 30,8 (parois 32,1 : cristaux plus cyan que le rip, limite).
 - **Contrôles** : 13 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
-- Fins restantes : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe **FST1** (FSC1 est pris par un repère d'une branche sœur).
+- Lors de la livraison FST1, les fins restantes étaient Clairière tropicale, Couloir violet, Mt. Thunder et Jardin secret ; elles sont maintenant réunies dans la consolidation du 5 octobre sous FCT2, FCV3, FMT3 et FJS4. Préfixe **FST1** conservé (FSC1 est pris par un repère d'une branche sœur).
 
 ## Fin Sables mouvants : arène du désert, FSM1 (29 septembre 2026)
 
