@@ -1,0 +1,99 @@
+{
+  "map_id": "entree_chateau_ancien_sud_nord_v1",
+  "title": "Entrée Château Ancien — Galerie des trésors",
+  "prefix": "EAC1",
+  "reference": "oldcastlepmd.png",
+  "reference_sha256": "809f27543260614c133b892cae9572d85dfedc0b2ed28deac5b689805bf20b88",
+  "reference_dimensions_px": [
+    408,
+    408
+  ],
+  "reference_kind": "intérieur, salle dorée / ancien château",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "loop_ticks": 240,
+  "animation": {
+    "reflets_or": {
+      "frames": 24,
+      "ticks_per_frame": 10,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entrance_sud": [
+      384,
+      520
+    ],
+    "sortie_nord": [
+      384,
+      104
+    ]
+  },
+  "walkable_cells": 2740,
+  "obstacle_cells": 4172,
+  "component_count": 54,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 5.29,
+      "p95": 9.49,
+      "pixels": 252764
+    },
+    "murs": {
+      "rgb_distance": 5.77,
+      "p95": 9.43,
+      "pixels": 189604
+    },
+    "decors": {
+      "rgb_distance": 13.73,
+      "p95": 35.93,
+      "pixels": 96606
+    },
+    "scene_complete": {
+      "rgb_distance": 6.72,
+      "p95": 18.87,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 118,
+  "pmdo_banks": {
+    "EAC1_00_SOL": 4149,
+    "EAC1_01_MURS": 3183,
+    "EAC1_02_OMBRES": 4,
+    "EAC1_03_ORNEMENTS": 552,
+    "EAC1_04_COFFRES": 931,
+    "EAC1_05_STATUES_RAILS": 501,
+    "EAC1_06_APPLIQUES": 51,
+    "EAC1_07_AUTRES": 1,
+    "EAC1_08_REFLETS_OR": 56
+  },
+  "total_tiles": 9428,
+  "layers": [
+    "sol",
+    "murs",
+    "ombres",
+    "porte_medaille",
+    "coffres",
+    "statues_rails",
+    "appliques",
+    "autres",
+    "reflets_or"
+  ],
+  "notes": [
+    "Composition générée référencée, détourage des objets par fond magenta.",
+    "Couleurs ramenées à la palette RGB du rip ; métriques calculées avant quantification.",
+    "Textures et géométrie proposées, non certifiées natives ; runtime PMDO non testé."
+  ]
+}

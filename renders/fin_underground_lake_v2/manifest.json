@@ -1,0 +1,597 @@
+{
+  "lot": "fin_underground_lake_v2",
+  "prefix": "FUL2",
+  "format": "4:3 vaste",
+  "type": "fin de donjon",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "base": "branche de session (EUL1 pour l eau, la lueur, les gouttes et les bruts sol_complet/poses ; EWC2/EWC1/ESN1 pour les utilitaires) ; aucun emprunt aux branches soeurs",
+  "biome": "fin d Underground Lake (sanctuaire du lac souterrain, prolonge EUL1), biome et portee choisis par l agent (« alors ........... »), a confirmer",
+  "method": "textures canoniques = rendu genere REFERENCE : rip passe au generateur ; lac en magenta sur le decor, monolithe sanctuaire au nord (sans bouche sombre), sol complet et planche de gouttes d EUL1 reutilises",
+  "reference_da": {
+    "file": "Underground_Lake_shore_TDS.png",
+    "sha256": "ad1b59ab8960ef35bd75381aeb85af3a20c64ebc31369c0f65078ff1d77fd463"
+  },
+  "generation": [
+    {
+      "file": "decor_magenta.png",
+      "images": [
+        "source/entree_underground_lake_sud_nord_v1/bruts/decor_magenta.png",
+        "Underground_Lake_shore_TDS.png"
+      ],
+      "prompt": "Edit the first wide 4:3 landscape pixel-art map (1200x896). Keep the exact 4:3 wide landscape aspect ratio (1200x896) and keep the exact same pixel-art style, palette, olive-khaki bumpy cave rock walls, pale yellow stippled sand, tall rock pillars, small pointed stalagmites, and flat pure magenta #FF00FF underground lake basins on the left and right. Make ONLY two changes for an end-of-dungeon sanctuary room: (1) at the top center (NORTH), replace the black cave tunnel opening with a CLOSED olive-khaki bumpy rock wall and a tall carved rock monolith / stalagmite sanctuary shrine standing at the northern tip of the sandy causeway (NO black hole, NO dark doorway, NO tunnel); (2) widen the middle of the sandy causeway slightly into a rounded sandy arena platform between the left and right magenta lake basins while keeping the two tall rock pillars and small stalagmites in the magenta water. Wide landscape 4:3. No characters, no text, no UI, no border.",
+      "essais": "premier essai ; conforme (sable 9.6, roche 6.2)"
+    },
+    {
+      "file": "sol_complet.png",
+      "images": [
+        "source/entree_underground_lake_sud_nord_v1/bruts/decor_magenta.png"
+      ],
+      "prompt": "REUTILISE sans nouvelle generation : sol complet d'EUL1 (source/entree_underground_lake_sud_nord_v1/bruts/sol_complet.png, meme sha256). Prompt d'origine : Same image, same framing and pixel-art style, but only plain pale yellow sand ground everywhere, nothing else.",
+      "essais": "copie du sol_complet d EUL1 (meme biome, parois recalees 0, 0) : aucune generation supplementaire"
+    },
+    {
+      "file": "gouttes_ronds_poses.png",
+      "images": [
+        "Underground_Lake_shore_TDS.png"
+      ],
+      "prompt": "REUTILISE sans nouvelle generation : planche de poses d'EUL1 (source/entree_underground_lake_sud_nord_v1/bruts/gouttes_ronds_poses.png, meme sha256). Prompt d'origine : Pixel-art sprite sheet on a flat pure magenta #FF00FF background, same style and colors as the reference. 2 rows of 6 small separate sprites. Row 1: a pale blue water drop falling then splashing. Row 2: a thin pale blue ripple ring growing from small to large. Sprites well separated, no text.",
+      "essais": "copie de la planche de poses d EUL1 : aucune generation supplementaire"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/fin_underground_lake_v2/bruts/decor_magenta.png",
+      "sha256": "a4da0260dd8b5eed9e396cc1514f89fb2709d5144234f2f670bb4ba1384a1b6f",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_underground_lake_v2/bruts/sol_complet.png",
+      "sha256": "262682af8e6ec6729a37f175cad49def1a7967ddf63c34a53dfe8a77a35a65fd",
+      "size": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/fin_underground_lake_v2/bruts/gouttes_ronds_poses.png",
+      "sha256": "eb8b338d371a897f13018cc1af250e6739377331fc21f471ed8aeb3111d74bed",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  ],
+  "sol_complet": {
+    "ecart_moyen_parois": 2.43,
+    "recalage_px": [
+      0,
+      0
+    ],
+    "note": "sol complet d EUL1 reutilise (meme sha256) : parois gardees au pixel pres hors zone nord"
+  },
+  "segmentation_mesures": {
+    "ecart_parois": 3.84,
+    "ecart_piliers": 85.8,
+    "sanctuaire_y": [
+      24,
+      198
+    ],
+    "sanctuaire_x": [
+      568,
+      632
+    ]
+  },
+  "fidelite_rip": {
+    "methode": "moyenne RGB par matiere, meme classifieur pixel sur le rip et sur le brut ; distance euclidienne ; seuil 20",
+    "brut": {
+      "sable": {
+        "rip_rgb": [
+          220.2,
+          193.4,
+          119.6
+        ],
+        "decor_rgb": [
+          215.5,
+          187.0,
+          114.2
+        ],
+        "distance": 9.6
+      },
+      "roche": {
+        "rip_rgb": [
+          98.8,
+          94.0,
+          60.4
+        ],
+        "decor_rgb": [
+          96.6,
+          90.2,
+          56.1
+        ],
+        "distance": 6.2
+      }
+    },
+    "calques_finaux": {
+      "sable": {
+        "matiere": "sable",
+        "rgb": [
+          221.8,
+          191.1,
+          115.2
+        ],
+        "distance_rip": 5.2
+      },
+      "roche": {
+        "matiere": "roche",
+        "rgb": [
+          94.3,
+          88.2,
+          54.3
+        ],
+        "distance_rip": 9.5
+      },
+      "piliers": {
+        "matiere": "roche",
+        "rgb": [
+          106.4,
+          99.6,
+          62.9
+        ],
+        "distance_rip": 9.7
+      },
+      "sanctuaire": {
+        "matiere": "roche",
+        "rgb": [
+          107.4,
+          100.5,
+          63.5
+        ],
+        "distance_rip": 11.2
+      }
+    },
+    "eau_et_lueur": "couleurs EXACTES du rip (test : sous-ensemble des 69 couleurs du rip)"
+  },
+  "normalization": {
+    "scale": 0.6428571428571429,
+    "scaled": [
+      771,
+      576
+    ],
+    "crop_x": [
+      1,
+      2
+    ],
+    "methode": "moyenne ponderee par classe (BOX), attribution exclusive par poids maximal",
+    "palettes": {
+      "terrain": {
+        "calques": [
+          "sol_complet",
+          "sable",
+          "ombres",
+          "berge"
+        ],
+        "couleurs": 96
+      },
+      "roche": {
+        "calques": [
+          "roche",
+          "piliers",
+          "sanctuaire"
+        ],
+        "couleurs": 64
+      }
+    }
+  },
+  "layers": [
+    {
+      "file": "animation/eau/FUL2_00_eau_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/lueur/FUL2_01_lueur_fNN.png",
+      "phases": 12,
+      "ticks": 10
+    },
+    {
+      "file": "animation/scintillements/FUL2_02_scintillements_fNN.png",
+      "phases": 4,
+      "ticks": 10
+    },
+    {
+      "file": "animation/gouttes/FUL2_03_gouttes_fNN.png",
+      "phases": 24,
+      "ticks": 5
+    },
+    {
+      "file": "calques/FUL2_04_sol_complet.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FUL2_05_sable.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FUL2_06_ombres.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FUL2_07_berge.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FUL2_08_roche.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FUL2_09_piliers.png",
+      "phases": 1,
+      "ticks": 60
+    },
+    {
+      "file": "calques/FUL2_10_sanctuaire.png",
+      "phases": 1,
+      "ticks": 60
+    }
+  ],
+  "water": {
+    "style": "structure de water_phases d EWC2 (bande contre rive, frange dentelee, aplat ; aucun lisere clair), couleurs exactes du rip",
+    "couleurs": {
+      "surface": [
+        39,
+        39,
+        95
+      ],
+      "bande": [
+        55,
+        55,
+        111
+      ],
+      "accent": [
+        63,
+        63,
+        119
+      ]
+    },
+    "phases": 4,
+    "frame_length_ticks": 10
+  },
+  "lueur": {
+    "couleurs": [
+      [
+        31,
+        223,
+        167
+      ],
+      [
+        31,
+        207,
+        167
+      ],
+      [
+        31,
+        183,
+        167
+      ],
+      [
+        31,
+        151,
+        159
+      ],
+      [
+        39,
+        135,
+        151
+      ],
+      [
+        39,
+        119,
+        135
+      ],
+      [
+        39,
+        95,
+        135
+      ],
+      [
+        39,
+        79,
+        119
+      ],
+      [
+        39,
+        63,
+        111
+      ]
+    ],
+    "anneau_px": 4,
+    "respiration": 0.04,
+    "ondulation": 0.02,
+    "centres": [
+      [
+        231,
+        134,
+        92,
+        62
+      ],
+      [
+        537,
+        134,
+        92,
+        62
+      ]
+    ],
+    "phases": 12,
+    "frame_length_ticks": 10,
+    "origine": "couleurs exactes du rip ; animation creee par nous"
+  },
+  "sparkles": {
+    "source": "source/eau_metano/natifs/Metano_Town_River_Sparkles.tile",
+    "phases": 4,
+    "frame_length_ticks": 10,
+    "placements": [
+      {
+        "famille": "A_16x24",
+        "xy": [
+          592,
+          136
+        ]
+      },
+      {
+        "famille": "A_16x24",
+        "xy": [
+          288,
+          112
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          472,
+          136
+        ]
+      },
+      {
+        "famille": "B_24x16",
+        "xy": [
+          496,
+          112
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          168,
+          152
+        ]
+      },
+      {
+        "famille": "C_16x32",
+        "xy": [
+          192,
+          128
+        ]
+      }
+    ],
+    "zone": "coeur de la lueur uniquement"
+  },
+  "gouttes": {
+    "source": "source/fin_underground_lake_v2/bruts/gouttes_ronds_poses.png",
+    "reduction": 8,
+    "couverture_min": 0.3,
+    "poses": {
+      "goutte": [
+        96,
+        86,
+        96
+      ],
+      "goutte_etiree": [
+        125,
+        603,
+        96
+      ],
+      "impact": [
+        130,
+        874,
+        128
+      ],
+      "eclaboussure": [
+        412,
+        138,
+        176
+      ],
+      "rond_0": [
+        608,
+        156,
+        32
+      ],
+      "rond_1": [
+        608,
+        495,
+        64
+      ],
+      "rond_2": [
+        607,
+        847,
+        144
+      ],
+      "rond_3": [
+        869,
+        156,
+        192
+      ],
+      "rond_4": [
+        865,
+        495,
+        272
+      ],
+      "rond_5": [
+        863,
+        847,
+        288
+      ]
+    },
+    "palette": [
+      [
+        178,
+        239,
+        225
+      ],
+      [
+        163,
+        237,
+        220
+      ],
+      [
+        153,
+        216,
+        212
+      ],
+      [
+        121,
+        199,
+        191
+      ],
+      [
+        157,
+        167,
+        210
+      ],
+      [
+        126,
+        171,
+        190
+      ],
+      [
+        151,
+        151,
+        201
+      ],
+      [
+        99,
+        107,
+        148
+      ]
+    ],
+    "emetteurs": [
+      [
+        164,
+        305,
+        0
+      ],
+      [
+        100,
+        236,
+        3
+      ],
+      [
+        625,
+        255,
+        6
+      ],
+      [
+        652,
+        316,
+        9
+      ],
+      [
+        563,
+        346,
+        12
+      ],
+      [
+        564,
+        257,
+        15
+      ],
+      [
+        143,
+        364,
+        18
+      ],
+      [
+        96,
+        296,
+        21
+      ]
+    ],
+    "phases": 24,
+    "frame_length_ticks": 5,
+    "origine": "planche generee d EUL1 reutilisee, trajectoires et cadence creees par nous"
+  },
+  "scene_loop_ticks": 120,
+  "access": {
+    "entry_px": [
+      384,
+      560
+    ],
+    "boss_px": [
+      376,
+      336
+    ],
+    "objective_px": [
+      376,
+      128
+    ],
+    "path_found_16x16": true,
+    "path_to_boss": true,
+    "path_to_objective": true,
+    "cells_explored": 380,
+    "blocked_cells": 5571,
+    "total_cells": 6912,
+    "walkable_cells": 1341,
+    "rule": "case bloquee si > 25 % hors sable praticable (sable + ombres)",
+    "boss": "case 2 x 2 libre au centre de la plateforme de sable",
+    "objectif": "case 2 x 2 libre la plus haute de la chaussee centrale (+-40 px), au pied du monolithe sanctuaire",
+    "fin": "aucune sortie, aucun warp, pas de donjon_seuil ; le bord nord et les flancs sont bloques"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "asset": "ful2_fin_underground_lake",
+    "namespace": "fin_underground_lake",
+    "tiles_per_bank": {
+      "FUL2_00_EAU": 2097,
+      "FUL2_01_LUEUR": 3175,
+      "FUL2_02_SCINTILLEMENTS": 52,
+      "FUL2_03_GOUTTES": 449,
+      "FUL2_04_SOL": 5379,
+      "FUL2_05_SABLE": 1339,
+      "FUL2_06_OMBRES": 345,
+      "FUL2_07_BERGE": 200,
+      "FUL2_08_ROCHE": 3702,
+      "FUL2_09_PILIERS": 248,
+      "FUL2_10_SANCTUAIRE": 76
+    },
+    "banks": [
+      "FUL2_00_EAU",
+      "FUL2_01_LUEUR",
+      "FUL2_02_SCINTILLEMENTS",
+      "FUL2_03_GOUTTES",
+      "FUL2_04_SOL",
+      "FUL2_05_SABLE",
+      "FUL2_06_OMBRES",
+      "FUL2_07_BERGE",
+      "FUL2_08_ROCHE",
+      "FUL2_09_PILIERS",
+      "FUL2_10_SANCTUAIRE"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun"
+  },
+  "art_approved": false
+}

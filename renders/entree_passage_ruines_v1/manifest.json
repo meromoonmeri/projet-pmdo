@@ -1,0 +1,105 @@
+{
+  "map_id": "entree_passage_ruines_v1",
+  "title": "Entrée du Sentier des Ruines",
+  "prefix": "EPR1",
+  "reference": "P22P01A",
+  "reference_file": "P22P01A.png",
+  "reference_sha256": "0fcfcbd33c8a19015288b400143631e61d72ea7b240a9cbf9599b73a890c9684",
+  "reference_source": "pret/pmd-sky, commit c8073235b39746a7ee74e6cea16c730bd91a1e67; rendu MAP_BG P22P01A",
+  "reference_dimensions_px": [
+    408,
+    408
+  ],
+  "reference_kind": "sentier de pierre dans une clairière de ruines et d'arbres",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "loop_ticks": 192,
+  "animation": {
+    "pollen_dore": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      540
+    ],
+    "boss": [
+      384,
+      330
+    ],
+    "objectif_nord": [
+      384,
+      140
+    ]
+  },
+  "walkable_cells": 2136,
+  "obstacle_cells": 4776,
+  "component_count": 19,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 6.89,
+      "p95": 11.18,
+      "pixels": 179940
+    },
+    "murs": {
+      "rgb_distance": 5.63,
+      "p95": 9.43,
+      "pixels": 262428
+    },
+    "decors": {
+      "rgb_distance": 10.34,
+      "p95": 23.85,
+      "pixels": 226572
+    },
+    "scene_complete": {
+      "rgb_distance": 8.26,
+      "p95": 14.53,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 109,
+  "pmdo_banks": {
+    "EPR1_00_SOL": 1277,
+    "EPR1_01_MURS": 1456,
+    "EPR1_02_OMBRES": 17,
+    "EPR1_03_RUINES": 2151,
+    "EPR1_04_VEGETATION": 1600,
+    "EPR1_05_STELES": 147,
+    "EPR1_06_DEBRIS": 94,
+    "EPR1_07_POLLEN_DORE": 127
+  },
+  "total_tiles": 6869,
+  "layers": [
+    "sol_complet",
+    "sol",
+    "murs",
+    "ombres",
+    "ruines",
+    "vegetation",
+    "steles",
+    "debris",
+    "pollen_dore"
+  ],
+  "notes": [
+    "Composition générée référencée sur le rendu PMD Sky P22P01A ; décor détouré sur magenta.",
+    "Couleurs ramenées à la palette RGB du rip ; métriques calculées avant quantification.",
+    "Pollen animé calculé depuis la palette, pas extrait d'une animation native.",
+    "Textures et géométrie proposées, non certifiées natives ; runtime PMDO non testé."
+  ]
+}
