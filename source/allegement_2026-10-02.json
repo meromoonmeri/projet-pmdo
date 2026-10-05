@@ -1,0 +1,1381 @@
+{
+ "date": "2026-10-02",
+ "commit_archive": "6cca4a09380211e510ab1bea454a1b1926ef4b5a",
+ "depot": "https://github.com/meromoonmeri/projet-pmdo",
+ "avant": {
+  "octets": 6665744610,
+  "fichiers": 41868
+ },
+ "apres": {
+  "octets": 2418118391,
+  "fichiers": 16343
+ },
+ "critere": "lots de renders/ dont la dernière modification précède le 25 septembre 2026, que ni les lots récents, ni les outils partagés, ni un aperçu conservé ne lisent ; leurs ZIP voisins (renders/<lot>_pack.zip) et leurs aperçus apercu_*.html de la racine partent avec eux",
+ "exemptes": {
+  "mega_evolution_v1": "images chargées par apercu_mega_et_carapagos.html et manifestes d'exports conservés",
+  "mega_evolution_v2": "images chargées par apercu_carapagos_v4_animations.html et apercu_mega_generee_v2.html (conservés)"
+ },
+ "lots": {
+  "amp_plains_fleurie_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 122,
+   "octets": 52657138,
+   "chemins": [
+    "renders/amp_plains_fleurie_v1",
+    "apercu_amp_plains_fleurie_v1.html"
+   ],
+   "lit": []
+  },
+  "antre_bassin_v4": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 465,
+   "octets": 21683062,
+   "chemins": [
+    "renders/antre_bassin_v4",
+    "apercu_antre_bassin_v4.html"
+   ],
+   "lit": [
+    "antre_harmonie_v3"
+   ]
+  },
+  "antre_cascades_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 868,
+   "octets": 59589748,
+   "chemins": [
+    "renders/antre_cascades_v2",
+    "apercu_antre_cascades_v2.html"
+   ],
+   "lit": [
+    "arene_aquatique_bois_v1"
+   ]
+  },
+  "antre_ecumes_v6": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 503,
+   "octets": 18467494,
+   "chemins": [
+    "renders/antre_ecumes_v6",
+    "apercu_antre_ecumes_v6.html"
+   ],
+   "lit": [
+    "antre_bassin_v4",
+    "antre_harmonie_v3"
+   ]
+  },
+  "antre_harmonie_v3": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 192,
+   "octets": 14210594,
+   "chemins": [
+    "renders/antre_harmonie_v3",
+    "apercu_antre_harmonie_v3.html"
+   ],
+   "lit": []
+  },
+  "antre_raccords_v5": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 490,
+   "octets": 13698696,
+   "chemins": [
+    "renders/antre_raccords_v5",
+    "apercu_antre_raccords_v5.html"
+   ],
+   "lit": [
+    "antre_bassin_v4",
+    "antre_harmonie_v3"
+   ]
+  },
+  "applewoods_skygrass_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 104,
+   "octets": 41533254,
+   "chemins": [
+    "renders/applewoods_skygrass_v1",
+    "apercu_applewoods_skygrass_v1.html",
+    "apercu_pommier_et_siphons.html",
+    "apercu_siphons_ecoulement_v3.html"
+   ],
+   "lit": [
+    "siphons_ecoulement_v3"
+   ]
+  },
+  "arene_aquatique_bois_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 855,
+   "octets": 31624240,
+   "chemins": [
+    "renders/arene_aquatique_bois_v1",
+    "apercu_arene_aquatique_bois_v1.html"
+   ],
+   "lit": [
+    "siphons_ecoulement_v3"
+   ]
+  },
+  "arene_boreales_v4": {
+   "derniere_modif": "2026-09-17",
+   "fichiers": 110,
+   "octets": 74746372,
+   "chemins": [
+    "renders/arene_boreales_v4",
+    "renders/arene_boreales_v4_pack.zip",
+    "apercu_boreales_animees_v4.html"
+   ],
+   "lit": [
+    "arene_glace_large_v3"
+   ]
+  },
+  "arene_glace_generee_v2": {
+   "derniere_modif": "2026-09-17",
+   "fichiers": 159,
+   "octets": 26454640,
+   "chemins": [
+    "renders/arene_glace_generee_v2",
+    "renders/arene_glace_generee_v2_pack.zip",
+    "apercu_arene_glace_generee_v2.html"
+   ],
+   "lit": [
+    "layouts_magenta_v1"
+   ]
+  },
+  "arene_glace_large_v3": {
+   "derniere_modif": "2026-09-17",
+   "fichiers": 232,
+   "octets": 73211348,
+   "chemins": [
+    "renders/arene_glace_large_v3",
+    "renders/arene_glace_large_v3_pack.zip",
+    "apercu_arene_glace_large_v3.html"
+   ],
+   "lit": []
+  },
+  "arene_guide_couches_v13": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 25,
+   "octets": 30462206,
+   "chemins": [
+    "renders/arene_guide_couches_v13",
+    "renders/arene_guide_couches_v13_pack.zip",
+    "apercu_arene_guide_couches_v13.html"
+   ],
+   "lit": []
+  },
+  "arene_guide_couches_v14": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 31,
+   "octets": 28132557,
+   "chemins": [
+    "renders/arene_guide_couches_v14",
+    "renders/arene_guide_couches_v14_pack.zip",
+    "apercu_arene_guide_couches_v14.html"
+   ],
+   "lit": []
+  },
+  "arene_halcyon_v15": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 25,
+   "octets": 37040011,
+   "chemins": [
+    "renders/arene_halcyon_v15",
+    "renders/arene_halcyon_v15_pack.zip",
+    "apercu_arene_halcyon_v15.html"
+   ],
+   "lit": [
+    "arene_guide_couches_v14"
+   ]
+  },
+  "arene_halcyon_v16": {
+   "derniere_modif": "2026-09-19",
+   "fichiers": 27,
+   "octets": 36711912,
+   "chemins": [
+    "renders/arene_halcyon_v16",
+    "renders/arene_halcyon_v16_pack.zip",
+    "apercu_arene_halcyon_v16.html"
+   ],
+   "lit": [
+    "arene_guide_couches_v14"
+   ]
+  },
+  "beach_extension_v2": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 123,
+   "octets": 16707813,
+   "chemins": [
+    "renders/beach_extension_v2",
+    "apercu_extension_plage_v2.html"
+   ],
+   "lit": [
+    "beach_network_v1"
+   ]
+  },
+  "beach_layers_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 290,
+   "octets": 50410310,
+   "chemins": [
+    "renders/beach_layers_v1",
+    "apercu_beach_calques_v1.html"
+   ],
+   "lit": []
+  },
+  "beach_network_v1": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 193,
+   "octets": 50730042,
+   "chemins": [
+    "renders/beach_network_v1",
+    "apercu_reseau_plage_v1.html"
+   ],
+   "lit": [
+    "beach_layers_v1",
+    "ledian_dojo_v1"
+   ]
+  },
+  "beach_sky_gradient_v3": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 16,
+   "octets": 391014,
+   "chemins": [
+    "renders/beach_sky_gradient_v3",
+    "apercu_plages_ciels_v3.html"
+   ],
+   "lit": [
+    "beach_extension_v2",
+    "beach_network_v1"
+   ]
+  },
+  "boreales_frames_generees_v5": {
+   "derniere_modif": "2026-09-17",
+   "fichiers": 123,
+   "octets": 95759773,
+   "chemins": [
+    "renders/boreales_frames_generees_v5",
+    "renders/boreales_frames_generees_v5_pack.zip",
+    "apercu_boreales_generees_palette_v5.html"
+   ],
+   "lit": [
+    "arene_glace_large_v3"
+   ]
+  },
+  "boreales_ondulation_glace_v8": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 65,
+   "octets": 74104835,
+   "chemins": [
+    "renders/boreales_ondulation_glace_v8",
+    "renders/boreales_ondulation_glace_v8_pack.zip",
+    "apercu_arene_ondulation_glace_v8.html"
+   ],
+   "lit": [
+    "arene_glace_large_v3"
+   ]
+  },
+  "boreales_palette_cycling_v12": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 28,
+   "octets": 14191752,
+   "chemins": [
+    "renders/boreales_palette_cycling_v12",
+    "renders/boreales_palette_cycling_v12_pack.zip",
+    "apercu_palette_cycling_v12.html"
+   ],
+   "lit": [
+    "boreales_ondulation_glace_v8"
+   ]
+  },
+  "boreales_pmdsky_v7": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 70,
+   "octets": 17611126,
+   "chemins": [
+    "renders/boreales_pmdsky_v7",
+    "renders/boreales_pmdsky_v7_pack.zip",
+    "apercu_ciel_boreal_pmdsky_v7.html"
+   ],
+   "lit": [
+    "arene_glace_large_v3"
+   ]
+  },
+  "boreales_suite_generee_v11": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 42,
+   "octets": 34983850,
+   "chemins": [
+    "renders/boreales_suite_generee_v11",
+    "renders/boreales_suite_generee_v11_pack.zip",
+    "apercu_boreale_suite_generee_v11.html"
+   ],
+   "lit": [
+    "boreales_ondulation_glace_v8"
+   ]
+  },
+  "cafe_halcyon_agrandi_v1": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 34,
+   "octets": 547110,
+   "chemins": [
+    "renders/cafe_halcyon_agrandi_v1",
+    "apercu_cafe_halcyon_agrandi_v1.html"
+   ],
+   "lit": [
+    "casino_network_v1"
+   ]
+  },
+  "cafe_multietage_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 113,
+   "octets": 6358188,
+   "chemins": [
+    "renders/cafe_multietage_v1",
+    "apercu_cafe_multietage_v1.html"
+   ],
+   "lit": []
+  },
+  "cafe_multietage_v2": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 121,
+   "octets": 2234431,
+   "chemins": [
+    "renders/cafe_multietage_v2",
+    "apercu_cafe_multietage_v2.html"
+   ],
+   "lit": []
+  },
+  "cafe_multietage_v3": {
+   "derniere_modif": "2026-09-22",
+   "fichiers": 43,
+   "octets": 31984549,
+   "chemins": [
+    "renders/cafe_multietage_v3",
+    "apercu_cafe_calques_v3.html"
+   ],
+   "lit": []
+  },
+  "cafe_spinda_reseau_v4": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 58,
+   "octets": 3399772,
+   "chemins": [
+    "renders/cafe_spinda_reseau_v4",
+    "apercu_cafe_spinda_reseau_v4.html"
+   ],
+   "lit": [
+    "casino_network_v1"
+   ]
+  },
+  "cafe_spinda_revisite_v5": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 8,
+   "octets": 218497,
+   "chemins": [
+    "renders/cafe_spinda_revisite_v5"
+   ],
+   "lit": [
+    "cafe_spinda_reseau_v4"
+   ]
+  },
+  "cafe_spinda_revisite_v6": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 10,
+   "octets": 2120182,
+   "chemins": [
+    "renders/cafe_spinda_revisite_v6",
+    "apercu_cafe_spinda_revisite_v6.html"
+   ],
+   "lit": [
+    "beach_network_v1",
+    "cafe_spinda_reseau_v4",
+    "cafe_spinda_revisite_v5"
+   ]
+  },
+  "cafe_spinda_revisite_v7": {
+   "derniere_modif": "2026-09-20",
+   "fichiers": 59,
+   "octets": 2783181,
+   "chemins": [
+    "renders/cafe_spinda_revisite_v7",
+    "apercu_cafe_spinda_revisite_v7.html"
+   ],
+   "lit": [
+    "beach_network_v1",
+    "cafe_spinda_revisite_v6"
+   ]
+  },
+  "cafe_spinda_revisite_v8": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 33,
+   "octets": 3678478,
+   "chemins": [
+    "renders/cafe_spinda_revisite_v8",
+    "apercu_cafe_spinda_revisite_v8.html"
+   ],
+   "lit": [
+    "beach_sky_gradient_v3",
+    "cafe_spinda_revisite_v6",
+    "cafe_spinda_revisite_v7"
+   ]
+  },
+  "caps_terrasses_v3": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 174,
+   "octets": 51444479,
+   "chemins": [
+    "renders/caps_terrasses_v3",
+    "apercu_caps_terrasses_v3.html"
+   ],
+   "lit": []
+  },
+  "caps_terrasses_v4": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 65,
+   "octets": 53324522,
+   "chemins": [
+    "renders/caps_terrasses_v4",
+    "apercu_caps_terrasses_v4.html"
+   ],
+   "lit": [
+    "caps_terrasses_v3"
+   ]
+  },
+  "casino_bois_v1": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 1,
+   "octets": 615,
+   "chemins": [
+    "renders/casino_bois_v1"
+   ],
+   "lit": []
+  },
+  "casino_network_v1": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 47,
+   "octets": 7568998,
+   "chemins": [
+    "renders/casino_network_v1",
+    "apercu_casino_reseau_v1.html"
+   ],
+   "lit": []
+  },
+  "cendres_fissures_matiere_v5": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 677,
+   "octets": 98724536,
+   "chemins": [
+    "renders/cendres_fissures_matiere_v5",
+    "apercu_cendres_fissures_matiere_v5.html"
+   ],
+   "lit": [
+    "cendres_palette_raccord_v4"
+   ]
+  },
+  "cendres_grotte_eruptions_v3": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 605,
+   "octets": 104916270,
+   "chemins": [
+    "renders/cendres_grotte_eruptions_v3",
+    "apercu_cendres_grotte_eruptions_v3.html"
+   ],
+   "lit": []
+  },
+  "cendres_palette_raccord_v4": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 606,
+   "octets": 94626241,
+   "chemins": [
+    "renders/cendres_palette_raccord_v4",
+    "apercu_cendres_palette_raccord_v4.html"
+   ],
+   "lit": [
+    "cendres_grotte_eruptions_v3"
+   ]
+  },
+  "corrections_eau_canopy_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 75,
+   "octets": 29867558,
+   "chemins": [
+    "renders/corrections_eau_canopy_v1",
+    "apercu_corrections_eau_canopy_v1.html"
+   ],
+   "lit": [
+    "layouts_magenta_v1"
+   ]
+  },
+  "corrections_spring_tours_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 647,
+   "octets": 43554239,
+   "chemins": [
+    "renders/corrections_spring_tours_v2",
+    "apercu_spring_applewoods_v2.html"
+   ],
+   "lit": [
+    "soleil_spring_v1",
+    "spring_pulsation_v2",
+    "tours_hooh_v1"
+   ]
+  },
+  "cote_cendres_passage_v2": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 723,
+   "octets": 62023590,
+   "chemins": [
+    "renders/cote_cendres_passage_v2",
+    "apercu_cote_cendres_passage_v2.html"
+   ],
+   "lit": []
+  },
+  "crooked_statique_v2": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 17,
+   "octets": 576344,
+   "chemins": [
+    "renders/crooked_statique_v2"
+   ],
+   "lit": []
+  },
+  "crooked_verdure_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 63,
+   "octets": 60356584,
+   "chemins": [
+    "renders/crooked_verdure_v1",
+    "apercu_crooked_verdure_v1.html"
+   ],
+   "lit": [
+    "spring_colonne_irisee_v1"
+   ]
+  },
+  "designs_dtef_v4": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 113,
+   "octets": 7647349,
+   "chemins": [
+    "renders/designs_dtef_v4"
+   ],
+   "lit": [
+    "donjons_dtef_v2"
+   ]
+  },
+  "donjons_10_biomes_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 477,
+   "octets": 89258554,
+   "chemins": [
+    "renders/donjons_10_biomes_v1",
+    "apercu_cascades_biomes_steam_v1.html"
+   ],
+   "lit": [
+    "steam_cave_geysers_v1",
+    "waterfall_lake_encastrees_v5",
+    "waterfall_lake_generateur_v6"
+   ]
+  },
+  "donjons_dtef_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 1354,
+   "octets": 46441700,
+   "chemins": [
+    "renders/donjons_dtef_v2",
+    "apercu_donjons_dtef_v2.html"
+   ],
+   "lit": []
+  },
+  "donjons_generes_dtef_v3": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 859,
+   "octets": 52243570,
+   "chemins": [
+    "renders/donjons_generes_dtef_v3"
+   ],
+   "lit": [
+    "donjons_dtef_v2"
+   ]
+  },
+  "dungeon_autotiles_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 317,
+   "octets": 15667477,
+   "chemins": [
+    "renders/dungeon_autotiles_v1",
+    "apercu_dungeon_autotiles_v1.html"
+   ],
+   "lit": []
+  },
+  "eau_siphons_rapides_v2": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 303,
+   "octets": 86015312,
+   "chemins": [
+    "renders/eau_siphons_rapides_v2",
+    "apercu_eau_siphons_rapides_v2.html"
+   ],
+   "lit": [
+    "corrections_eau_canopy_v1"
+   ]
+  },
+  "effet_boreale_canonique_v10": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 28,
+   "octets": 12201652,
+   "chemins": [
+    "renders/effet_boreale_canonique_v10",
+    "renders/effet_boreale_canonique_v10_pack.zip",
+    "apercu_effet_boreale_canonique_v10.html"
+   ],
+   "lit": [
+    "boreales_ondulation_glace_v8"
+   ]
+  },
+  "entrees_calques_v6": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 33,
+   "octets": 27870822,
+   "chemins": [
+    "renders/entrees_calques_v6"
+   ],
+   "lit": []
+  },
+  "entrees_halcyon_generees": {
+   "derniere_modif": "2026-09-12",
+   "fichiers": 6,
+   "octets": 12709901,
+   "chemins": [
+    "renders/entrees_halcyon_generees"
+   ],
+   "lit": []
+  },
+  "entrees_pmd_collection": {
+   "derniere_modif": "2026-09-12",
+   "fichiers": 28,
+   "octets": 47277768,
+   "chemins": [
+    "renders/entrees_pmd_collection"
+   ],
+   "lit": []
+  },
+  "entrees_six_donjons_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 45,
+   "octets": 54225820,
+   "chemins": [
+    "renders/entrees_six_donjons_v1",
+    "apercu_sakura_entree_calques_v1.html"
+   ],
+   "lit": []
+  },
+  "falaise_metano_temoin": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 4,
+   "octets": 6445737,
+   "chemins": [
+    "renders/falaise_metano_temoin"
+   ],
+   "lit": []
+  },
+  "final_duos_v1": {
+   "derniere_modif": "2026-09-22",
+   "fichiers": 34,
+   "octets": 123546139,
+   "chemins": [
+    "renders/final_duos_v1"
+   ],
+   "lit": [
+    "spinda_torches_v1"
+   ]
+  },
+  "foret_saisons_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 66,
+   "octets": 20335290,
+   "chemins": [
+    "renders/foret_saisons_v1"
+   ],
+   "lit": []
+  },
+  "jungle_geysers_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 671,
+   "octets": 39669667,
+   "chemins": [
+    "renders/jungle_geysers_v2"
+   ],
+   "lit": []
+  },
+  "layouts_magenta_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 354,
+   "octets": 104473372,
+   "chemins": [
+    "renders/layouts_magenta_v1",
+    "apercu_variantes_magenta_v1.html"
+   ],
+   "lit": []
+  },
+  "ledian_dojo_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 80,
+   "octets": 28403672,
+   "chemins": [
+    "renders/ledian_dojo_v1",
+    "apercu_ledian_dojo_v1.html"
+   ],
+   "lit": []
+  },
+  "lisiere_pmd_v1": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 7,
+   "octets": 270464,
+   "chemins": [
+    "renders/lisiere_pmd_v1"
+   ],
+   "lit": []
+  },
+  "map_zones_debloquees_v1": {
+   "derniere_modif": "2026-09-22",
+   "fichiers": 18,
+   "octets": 4238182,
+   "chemins": [
+    "renders/map_zones_debloquees_v1"
+   ],
+   "lit": [
+    "cafe_multietage_v3"
+   ]
+  },
+  "metano_expeditions_actuel": {
+   "derniere_modif": "2026-09-12",
+   "fichiers": 81,
+   "octets": 11364356,
+   "chemins": [
+    "renders/metano_expeditions_actuel"
+   ],
+   "lit": []
+  },
+  "mont_horn_altitude_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 680,
+   "octets": 52117019,
+   "chemins": [
+    "renders/mont_horn_altitude_v2",
+    "apercu_mont_horn_altitude_v2.html"
+   ],
+   "lit": [
+    "mont_horn_panorama_v1"
+   ]
+  },
+  "mont_horn_panorama_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 680,
+   "octets": 68500364,
+   "chemins": [
+    "renders/mont_horn_panorama_v1",
+    "apercu_mont_horn_panorama_v1.html"
+   ],
+   "lit": []
+  },
+  "network_zones_multicalques_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 50,
+   "octets": 4787784,
+   "chemins": [
+    "renders/network_zones_multicalques_v1"
+   ],
+   "lit": []
+  },
+  "network_zones_multicalques_v2": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 91,
+   "octets": 4960784,
+   "chemins": [
+    "renders/network_zones_multicalques_v2"
+   ],
+   "lit": []
+  },
+  "network_zones_multicalques_v3": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 93,
+   "octets": 9356648,
+   "chemins": [
+    "renders/network_zones_multicalques_v3"
+   ],
+   "lit": []
+  },
+  "northern_calques_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 27,
+   "octets": 4054561,
+   "chemins": [
+    "renders/northern_calques_v1"
+   ],
+   "lit": []
+  },
+  "onde_boreale_v9": {
+   "derniere_modif": "2026-09-18",
+   "fichiers": 29,
+   "octets": 30198361,
+   "chemins": [
+    "renders/onde_boreale_v9",
+    "renders/onde_boreale_v9_pack.zip",
+    "apercu_onde_boreale_v9.html"
+   ],
+   "lit": [
+    "arene_glace_large_v3",
+    "boreales_ondulation_glace_v8"
+   ]
+  },
+  "panoramas_tours_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 215,
+   "octets": 56279601,
+   "chemins": [
+    "renders/panoramas_tours_v2",
+    "apercu_panoramas_tours_v2.html"
+   ],
+   "lit": [
+    "tours_hooh_v1"
+   ]
+  },
+  "references_54d3731": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 164,
+   "octets": 52388358,
+   "chemins": [
+    "renders/references_54d3731",
+    "apercu_references_54d3731.html"
+   ],
+   "lit": [
+    "references_calques_v1"
+   ]
+  },
+  "references_calques_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 165,
+   "octets": 29975921,
+   "chemins": [
+    "renders/references_calques_v1",
+    "apercu_references_calques_v1.html"
+   ],
+   "lit": []
+  },
+  "references_calques_v2": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 379,
+   "octets": 114945588,
+   "chemins": [
+    "renders/references_calques_v2",
+    "apercu_references_calques_v2.html"
+   ],
+   "lit": [
+    "references_calques_v1"
+   ]
+  },
+  "references_fideles_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 161,
+   "octets": 23316715,
+   "chemins": [
+    "renders/references_fideles_v1"
+   ],
+   "lit": []
+  },
+  "retouches_zones_v6": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 23,
+   "octets": 38501539,
+   "chemins": [
+    "renders/retouches_zones_v6"
+   ],
+   "lit": []
+  },
+  "siphons_ecoulement_v3": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 527,
+   "octets": 64576464,
+   "chemins": [
+    "renders/siphons_ecoulement_v3",
+    "apercu_siphons_ecoulement_v3.html"
+   ],
+   "lit": [
+    "eau_siphons_rapides_v2"
+   ]
+  },
+  "sky_peak_ambiances_v2": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 220,
+   "octets": 26074027,
+   "chemins": [
+    "renders/sky_peak_ambiances_v2"
+   ],
+   "lit": []
+  },
+  "sky_peak_canonique_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 98,
+   "octets": 10191069,
+   "chemins": [
+    "renders/sky_peak_canonique_v1"
+   ],
+   "lit": []
+  },
+  "sky_peak_plaine_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 5,
+   "octets": 5632917,
+   "chemins": [
+    "renders/sky_peak_plaine_v1"
+   ],
+   "lit": []
+  },
+  "sky_peak_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 6,
+   "octets": 31443150,
+   "chemins": [
+    "renders/sky_peak_v1",
+    "apercu_sky_peak_ambiances_v2.html",
+    "apercu_sky_peak_canonique_v1.html"
+   ],
+   "lit": [
+    "references_calques_v1",
+    "sky_peak_ambiances_v2",
+    "sky_peak_canonique_v1",
+    "sky_peak_plaine_v1",
+    "soleil_spring_v1"
+   ]
+  },
+  "soleil_spring_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 214,
+   "octets": 53173447,
+   "chemins": [
+    "renders/soleil_spring_v1",
+    "apercu_soleil_spring_v1.html"
+   ],
+   "lit": [
+    "references_calques_v2"
+   ]
+  },
+  "spinda_decor_v1": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 45,
+   "octets": 2360274,
+   "chemins": [
+    "renders/spinda_decor_v1"
+   ],
+   "lit": [
+    "cafe_spinda_revisite_v7",
+    "casino_network_v1"
+   ]
+  },
+  "spinda_torches_v1": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 45,
+   "octets": 1223673,
+   "chemins": [
+    "renders/spinda_torches_v1",
+    "apercu_spinda_torches.html"
+   ],
+   "lit": [
+    "beach_sky_gradient_v3",
+    "cafe_spinda_reseau_v4",
+    "cafe_spinda_revisite_v7",
+    "cafe_spinda_revisite_v8"
+   ]
+  },
+  "spring_arc_en_ciel_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 152,
+   "octets": 36990182,
+   "chemins": [
+    "renders/spring_arc_en_ciel_v1",
+    "apercu_spring_arc_en_ciel_v1.html"
+   ],
+   "lit": [
+    "soleil_spring_v1"
+   ]
+  },
+  "spring_colonne_irisee_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 86,
+   "octets": 7656266,
+   "chemins": [
+    "renders/spring_colonne_irisee_v1"
+   ],
+   "lit": []
+  },
+  "spring_escalier_v1": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 16,
+   "octets": 17868723,
+   "chemins": [
+    "renders/spring_escalier_v1",
+    "apercu_spring_colonne_irisee_v1.html",
+    "apercu_spring_escalier_v1.html"
+   ],
+   "lit": [
+    "soleil_spring_v1",
+    "spring_arc_en_ciel_v1",
+    "spring_colonne_irisee_v1"
+   ]
+  },
+  "spring_pulsation_v2": {
+   "derniere_modif": "2026-09-13",
+   "fichiers": 84,
+   "octets": 5064657,
+   "chemins": [
+    "renders/spring_pulsation_v2"
+   ],
+   "lit": []
+  },
+  "steam_cave_geysers_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 286,
+   "octets": 12378771,
+   "chemins": [
+    "renders/steam_cave_geysers_v1"
+   ],
+   "lit": []
+  },
+  "tours_hooh_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 153,
+   "octets": 78257773,
+   "chemins": [
+    "renders/tours_hooh_v1"
+   ],
+   "lit": []
+  },
+  "tours_layers_v3": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 1789,
+   "octets": 112168847,
+   "chemins": [
+    "renders/tours_layers_v3",
+    "apercu_tours_layers_v3.html"
+   ],
+   "lit": [
+    "panoramas_tours_v2",
+    "references_calques_v2"
+   ]
+  },
+  "viewport_pmdo_v1": {
+   "derniere_modif": "2026-09-21",
+   "fichiers": 11,
+   "octets": 10800156,
+   "chemins": [
+    "renders/viewport_pmdo_v1"
+   ],
+   "lit": [
+    "beach_network_v1"
+   ]
+  },
+  "waterfall_lake_demi_cercle_v4": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 787,
+   "octets": 22825737,
+   "chemins": [
+    "renders/waterfall_lake_demi_cercle_v4",
+    "apercu_waterfall_lake_demi_cercle_v4.html"
+   ],
+   "lit": [
+    "waterfall_lake_fidele_v1",
+    "waterfall_lake_raccords_v3",
+    "waterfall_lake_trois_v2"
+   ]
+  },
+  "waterfall_lake_encastrees_v5": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 776,
+   "octets": 17327128,
+   "chemins": [
+    "renders/waterfall_lake_encastrees_v5",
+    "apercu_waterfall_lake_encastrees_v5.html"
+   ],
+   "lit": [
+    "waterfall_lake_demi_cercle_v4"
+   ]
+  },
+  "waterfall_lake_etendu_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 2,
+   "octets": 2303380,
+   "chemins": [
+    "renders/waterfall_lake_etendu_v1"
+   ],
+   "lit": []
+  },
+  "waterfall_lake_fidele_v1": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 529,
+   "octets": 9741911,
+   "chemins": [
+    "renders/waterfall_lake_fidele_v1",
+    "apercu_waterfall_lake_fidele_v1.html"
+   ],
+   "lit": []
+  },
+  "waterfall_lake_generateur_v6": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 767,
+   "octets": 13308177,
+   "chemins": [
+    "renders/waterfall_lake_generateur_v6",
+    "apercu_waterfall_lake_generateur_v6.html"
+   ],
+   "lit": [
+    "waterfall_lake_encastrees_v5"
+   ]
+  },
+  "waterfall_lake_raccords_v3": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 771,
+   "octets": 27230089,
+   "chemins": [
+    "renders/waterfall_lake_raccords_v3",
+    "apercu_waterfall_lake_raccords_v3.html"
+   ],
+   "lit": [
+    "waterfall_lake_fidele_v1",
+    "waterfall_lake_trois_v2"
+   ]
+  },
+  "waterfall_lake_trois_v2": {
+   "derniere_modif": "2026-09-15",
+   "fichiers": 764,
+   "octets": 15518921,
+   "chemins": [
+    "renders/waterfall_lake_trois_v2",
+    "apercu_waterfall_lake_trois_v2.html"
+   ],
+   "lit": [
+    "waterfall_lake_fidele_v1"
+   ]
+  },
+  "world_map_7_continents_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 21,
+   "octets": 2207711,
+   "chemins": [
+    "renders/world_map_7_continents_v1"
+   ],
+   "lit": []
+  },
+  "world_map_7_continents_v2": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 20,
+   "octets": 76951851,
+   "chemins": [
+    "renders/world_map_7_continents_v2"
+   ],
+   "lit": []
+  },
+  "world_map_8_continents_reference_da_v4": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 1217294,
+   "chemins": [
+    "renders/world_map_8_continents_reference_da_v4"
+   ],
+   "lit": []
+  },
+  "world_map_8_continents_reverie_generator_v3": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 1111216,
+   "chemins": [
+    "renders/world_map_8_continents_reverie_generator_v3"
+   ],
+   "lit": []
+  },
+  "world_map_8_continents_reverie_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 1121533,
+   "chemins": [
+    "renders/world_map_8_continents_reverie_v1"
+   ],
+   "lit": []
+  },
+  "world_map_8_continents_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 3033128,
+   "chemins": [
+    "renders/world_map_8_continents_v1"
+   ],
+   "lit": []
+  },
+  "world_map_9_continents_orange_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 4260640,
+   "chemins": [
+    "renders/world_map_9_continents_orange_v1"
+   ],
+   "lit": []
+  },
+  "world_map_9_continents_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 1279251,
+   "chemins": [
+    "renders/world_map_9_continents_v1"
+   ],
+   "lit": []
+  },
+  "world_map_latest_references_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 1096512,
+   "chemins": [
+    "renders/world_map_latest_references_v1"
+   ],
+   "lit": [
+    "world_map_9_continents_v1"
+   ]
+  },
+  "world_map_layers_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 21,
+   "octets": 26121852,
+   "chemins": [
+    "renders/world_map_layers_v1"
+   ],
+   "lit": []
+  },
+  "world_map_layers_v2": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 2190644,
+   "chemins": [
+    "renders/world_map_layers_v2"
+   ],
+   "lit": []
+  },
+  "world_map_layers_v2_reverie": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 2247344,
+   "chemins": [
+    "renders/world_map_layers_v2_reverie"
+   ],
+   "lit": []
+  },
+  "world_map_texture_strict_v5": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 68,
+   "octets": 164765608,
+   "chemins": [
+    "renders/world_map_texture_strict_v5"
+   ],
+   "lit": []
+  },
+  "world_map_texture_strict_v6": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 68,
+   "octets": 165953854,
+   "chemins": [
+    "renders/world_map_texture_strict_v6"
+   ],
+   "lit": []
+  },
+  "world_map_texture_strict_v8": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 68,
+   "octets": 158582510,
+   "chemins": [
+    "renders/world_map_texture_strict_v8"
+   ],
+   "lit": []
+  },
+  "world_map_texture_strict_v9": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 68,
+   "octets": 159853536,
+   "chemins": [
+    "renders/world_map_texture_strict_v9"
+   ],
+   "lit": []
+  },
+  "world_map_userfond_v1": {
+   "derniere_modif": "2026-09-23",
+   "fichiers": 5,
+   "octets": 1346258,
+   "chemins": [
+    "renders/world_map_userfond_v1"
+   ],
+   "lit": []
+  },
+  "world_map_zones_v1": {
+   "derniere_modif": "2026-09-22",
+   "fichiers": 23,
+   "octets": 1650418,
+   "chemins": [
+    "renders/world_map_zones_v1"
+   ],
+   "lit": []
+  },
+  "zones_pmd_20_v1": {
+   "derniere_modif": "2026-09-14",
+   "fichiers": 13,
+   "octets": 33407122,
+   "chemins": [
+    "renders/zones_pmd_20_v1",
+    "apercu_references_fideles_v1.html"
+   ],
+   "lit": [
+    "references_fideles_v1"
+   ]
+  }
+ },
+ "scripts_conserves_lisant_des_lots_archives": {
+  "source/corrections_northern_v1": {
+   "derniere_modif": "2026-09-13",
+   "lit": [
+    "crooked_statique_v2",
+    "crooked_verdure_v1",
+    "northern_calques_v1",
+    "references_calques_v1",
+    "soleil_spring_v1",
+    "spring_escalier_v1",
+    "spring_pulsation_v2"
+   ]
+  },
+  "source/livraison_jungle_dtef_v3": {
+   "derniere_modif": "2026-09-15",
+   "lit": [
+    "donjons_dtef_v2",
+    "donjons_generes_dtef_v3",
+    "jungle_geysers_v2"
+   ]
+  },
+  "source/retouches_v6": {
+   "derniere_modif": "2026-09-13",
+   "lit": [
+    "entrees_calques_v6",
+    "entrees_pmd_collection",
+    "metano_expeditions_actuel",
+    "retouches_zones_v6"
+   ]
+  },
+  "source/suite_foret_cafe_v1": {
+   "derniere_modif": "2026-09-21",
+   "lit": [
+    "cafe_spinda_revisite_v7",
+    "lisiere_pmd_v1",
+    "spinda_decor_v1"
+   ]
+  },
+  "source/tours_saisons_v1": {
+   "derniere_modif": "2026-09-15",
+   "lit": [
+    "designs_dtef_v4",
+    "foret_saisons_v1",
+    "tours_hooh_v1"
+   ]
+  }
+ },
+ "scripts_conserves_note": "Scripts restés dans source/ (anciennes livraisons, dernière modification avant le 25 septembre) qui lisent renders/<lot> d'un lot archivé : restaurer ces lots (avec --avec-dependances) avant de les relancer."
+}

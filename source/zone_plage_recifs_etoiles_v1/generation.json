@@ -1,0 +1,136 @@
+[
+ {
+  "file": "bruts/terre_jour.png",
+  "taille": [
+   1200,
+   896
+  ],
+  "essais": 4,
+  "images": [
+   "references/guide_plage_x4_3.png",
+   "references/plage_td_scene.png",
+   "references/arene_plage_pmdsky_x2.png"
+  ],
+  "role": "terre du jour (sable, promontoires rocheux, palmiers, mares, coquillages) sur magenta uni ; mer et ciel vides",
+  "essais_notes": "essai 1 propre mais perdu (réinitialisation du bac à sable) ; essai 2 : sable teinté de magenta, écarté ; essai 3 : propre mais baie trop étroite (fichier retiré de l'arbre à la fin du lot ; il reste dans l'historique : git show 44a7e330:source/zone_plage_recifs_etoiles_v1/bruts/terre_jour_baie_etroite.png) ; essai 4 retenu : baie large conforme au plan",
+  "prompt": "Pokémon Mystery Dungeon Explorers of Sky / Time / Darkness (Nintendo DS) pixel art, 16-bit tile-based painted map style, crisp hard pixels, no anti-aliasing, no blur, no smooth gradients. Use exactly the same art style, colour palette, rock shapes, sand ripples and palm trees as the reference images 2 and 3 (red-brown rocky outcrops with lighter pink highlights and dark red outlines, pale yellow sand with a diagonal wavy ripple pattern, green palm trees with dark green fronds and thin brown trunks, little tufts of green grass).\n\nDraw ONLY THE LAND of a beautiful tropical beach cove seen from a three-quarter top-down angle, following the layout diagram of image 1 EXACTLY (same composition, same proportions, same positions). The most important point is the WIDE BAY: the magenta bay of image 1 is very wide, a big bowl that spans about three quarters of the image width near the top and narrows gently down to a long curved shoreline in the middle of the image; the two rocky headlands are therefore NARROW diagonal slopes of red rocks hugging the left and right edges, rising up to the top corners, never entering the middle of the picture. Below the bay: a wide pale yellow sandy beach in the lower half, a group of three palm trees at the foot of each headland, a few small red rocks on the sand, a driftwood log, two small shallow tide pools, a few pink and white seashells and one orange starfish, tufts of green beach grass at the foot of the rocks, and a lighter trodden sand path from the bottom centre going up to the middle of the beach. Warm sunlight from the upper left, soft shadows under the palms and rocks.\n\nCRITICAL: everything that is sea or sky is just the empty background and must be a perfectly flat solid magenta #FF00FF area with hard sharp edges: the entire upper part of the image and the whole wide bay of image 1. The bay is like a hole in the picture: do NOT draw ANY sand, sand ripples, wet sand, water, foam, shadow or reflection inside it, and do NOT tint, fade or blend any sand or rock towards magenta anywhere. The sand keeps its normal pale yellow colour all the way up to a hard clean edge (only a thin band of darker golden wet sand) where it meets the flat magenta directly. No sky, no clouds, no sun, no horizon line. No characters, no text, no UI, no frame, no border, no vignette. Full 4:3 landscape image."
+ },
+ {
+  "file": "bruts/ciel_mer_jour.png",
+  "taille": [
+   1200,
+   896
+  ],
+  "essais": 2,
+  "images": [
+   "bruts/terre_jour.png",
+   "../zone_reveil_prairie_horizon_v2/bruts/ciel_mer_jour.png",
+   "references/plage_td_marees.png"
+  ],
+  "role": "ciel et mer du jour (retouche de la terre : seul le magenta est remplacé) ; l'horizon tombe à la rangée 237 sur 896",
+  "essais_notes": "essai 1 (sur une terre précédente, perdue) : horizon à la rangée 241 ; essai 2 retenu sur la terre retenue",
+  "prompt": "Image 1 is the land of a tropical beach cove drawn on a flat magenta (#FF00FF) background. Keep every land pixel of image 1 EXACTLY as it is (rocks, palm trees, sand, shells, tide pools, driftwood): do not move, change or redraw any of the land. Replace ONLY the flat magenta area with the sky and the sea, in the same Pokémon Mystery Dungeon Explorers of Sky pixel art style as image 2 (banded pixel sky gradient, cyan sparkling sea) and with the turquoise shallow water of image 3.\n\n- The sky: a clear bright daytime sky made of flat horizontal pixel bands, from a deeper blue at the very top to a pale cyan-white just above the horizon. Absolutely no clouds, no sun, no moon, no birds.\n- A perfectly straight, perfectly horizontal horizon line at exactly 20% of the image height from the top, with a thin bright cyan band of tiny white sparkles right under it.\n- The sea inside the bay, filling all the former magenta below the horizon: deep royal blue just under the horizon, then medium blue, then cyan, then bright turquoise, and finally pale aquamarine shallow lagoon water (light sand with faint ripples seen through clear water) very close to the beach shoreline, in smooth wide bands that follow the curved shape of the shoreline; a few faint thin darker wavy lines; tiny white sparkles only near the horizon.\n- NO white foam line on the shore (the aquamarine water meets the wet sand band directly), NO breaking waves, NO reefs, NO rocks or islands in the water, NO boats, NO text, NO characters.\nCrisp hard pixels, no blur, no smooth gradients (only pixel-art bands). Same 4:3 framing and same size as image 1."
+ },
+ {
+  "file": "bruts/recifs_roches.png",
+  "taille": [
+   1200,
+   896
+  ],
+  "essais": 1,
+  "images": [
+   "bruts/terre_jour.png"
+  ],
+  "role": "planche de sept récifs rocheux (paire, ronde, amas de trois, pic, groupe allongé, banc plat, grande île) sur magenta ; découpée et posée par build.py",
+  "prompt": "(résumé fidèle, le texte exact n'a pas été conservé) PMD Explorers of Sky pixel-art sprite sheet of reef rock formations seen from three-quarter top-down, each one alone on flat magenta #FF00FF, loose grid with wide gaps, same rock style and palette as image 1 (red rocks, green seaweed tufts, white spray dots), no water, no shadow, no text."
+ },
+ {
+  "file": "bruts/recifs_coraux.png",
+  "taille": [
+   1200,
+   896
+  ],
+  "essais": 1,
+  "images": [
+   "bruts/terre_jour.png"
+  ],
+  "role": "planche de douze coraux (grille 4 x 3 : cerveau orange, ramifié orange, éventail rose, tubes violets, table jaune, anémones, gorgone rouge, cerveau rose, ramifié bleu, massif mixte, trois ronds, étoiles et oursin) sur magenta",
+  "prompt": "(résumé fidèle, le texte exact n'a pas été conservé) PMD Explorers of Sky pixel-art sprite sheet of twelve coral growths seen from three-quarter top-down, each one alone on flat magenta #FF00FF, loose 4 x 3 grid with wide gaps, colours orange, hot pink, violet, teal, yellow, same pixel style as image 1, no water, no shadow, no text."
+ },
+ {
+  "file": "bruts/decor_jour_pour_ambiances.png",
+  "taille": [
+   1200,
+   900
+  ],
+  "essais": 0,
+  "images": [],
+  "role": "entrée CALCULÉE par build.py (pas une génération) : décor de jour assemblé (ciel, mer, récifs, terre) mis à l'échelle 1,5625 sans lissage ; image 1 des trois retouches d'ambiance. C'est l'image exacte donnée au générateur : les roches des récifs y étaient recolorées dans la palette des promontoires ; la version finale du jour garde les couleurs propres des sprites (algues vertes, liseré clair). Seuls ces pixels de roches diffèrent (vérifié par le test test_decor_jour_pour_ambiances_reproduit).",
+  "prompt": ""
+ },
+ {
+  "file": "bruts/ambiance_aube.png",
+  "taille": [
+   1195,
+   896
+  ],
+  "essais": 1,
+  "images": [
+   "bruts/decor_jour_pour_ambiances.png"
+  ],
+  "role": "aube : retouche du décor de jour, même composition (alignée au pixel, corrélation de contours 0,83) ; ne sert que d'échantillon de couleurs",
+  "prompt": "Image 1 is a pixel-art tropical beach cove (Pokémon Mystery Dungeon Explorers of Sky style) at midday. Redraw EXACTLY the same picture: same composition, same shapes, and exactly the same positions and sizes of every rock, sea reef, coral patch, palm tree, tide pool, shell, driftwood log, of the coastline and of the horizon line. Only the time of day and the lighting change. Keep the same crisp hard-pixel art style, no blur, same size and framing. Do not add or remove any object. No clouds, no sun disc, no moon disc.\n\nTIME: DAWN, just before sunrise. Sky: soft pastel horizontal pixel bands going from deep blue-violet at the top, through lavender and pink, to a glowing peach-orange at the horizon; only a few very faint stars at the very top. Sea: calm, cool teal and blue-violet with pink and peach reflections near the horizon; the turquoise shallows slightly cooler and paler. Sand: cool pale pinkish beige with long soft blue-violet shadows of the palms. Red rocks: cooler violet-red with a warm orange rim light on their right sides. Palm trees: deep teal green. Corals under the water: slightly muted but still colourful."
+ },
+ {
+  "file": "bruts/ambiance_crepuscule.png",
+  "taille": [
+   1195,
+   896
+  ],
+  "essais": 1,
+  "images": [
+   "bruts/decor_jour_pour_ambiances.png"
+  ],
+  "role": "crépuscule : retouche du décor de jour (corrélation de contours 0,81) ; échantillon de couleurs",
+  "prompt": "Image 1 is a pixel-art tropical beach cove (Pokémon Mystery Dungeon Explorers of Sky style) at midday. Redraw EXACTLY the same picture: same composition, same shapes, and exactly the same positions and sizes of every rock, sea reef, coral patch, palm tree, tide pool, shell, driftwood log, of the coastline and of the horizon line. Only the time of day and the lighting change. Keep the same crisp hard-pixel art style, no blur, same size and framing. Do not add or remove any object. No clouds, no sun disc, no moon disc.\n\nTIME: SUNSET, dusk. Sky: fiery horizontal pixel bands going from deep indigo-purple at the top, through magenta and red, to a bright orange and yellow glow at the horizon; the first few stars at the very top. Sea: deep violet-blue to purple with orange and pink glints near the horizon; the shallows a warm teal-violet. Sand: warm orange-pink with long purple shadows of the palms. Red rocks: glowing deep red-orange on the lit side and purple in the shade. Palm trees: dark green-black silhouettes with warm orange rims. Corals under the water: warm and slightly darker."
+ },
+ {
+  "file": "bruts/ambiance_nuit.png",
+  "taille": [
+   1195,
+   896
+  ],
+  "essais": 1,
+  "images": [
+   "bruts/decor_jour_pour_ambiances.png",
+   "references/nuit_pmdsky_lune_x3.png"
+  ],
+  "role": "nuit étoilée : retouche du décor de jour (corrélation de contours 0,79) ; échantillon de couleurs (ses étoiles sont écartées : les étoiles du lot sont calculées)",
+  "prompt": "Image 1 is a pixel-art tropical beach cove (Pokémon Mystery Dungeon Explorers of Sky style) at midday. Redraw EXACTLY the same picture: same composition, same shapes, and exactly the same positions and sizes of every rock, sea reef, coral patch, palm tree, tide pool, shell, driftwood log, of the coastline and of the horizon line. Only the time of day and the lighting change. Keep the same crisp hard-pixel art style, no blur, same size and framing. Do not add or remove any object. No clouds, no moon disc, no sun disc.\n\nTIME: NIGHT under a clear starry sky (image 2 shows the night sky palette of the original game: deep indigo, tiny one-pixel stars and a few four-point sparkles). Sky: deep midnight indigo and navy horizontal pixel bands, a little lighter near the horizon, filled with many tiny pixel stars of different brightness and a faint milky way. Sea: dark navy and deep blue with faint silvery highlights; the shallow lagoon a dim teal that glows slightly. Sand: cool blue-grey in the moonlight with soft silver highlights and blue shadows. Red rocks: dark blue-violet with a faint violet-red tint. Palm trees: dark blue-green silhouettes. Corals under the water glow softly with neon colours (pink, orange, cyan, violet)."
+ },
+ {
+  "file": "bruts/astres.png",
+  "reutilise": "source/zone_reveil_prairie_horizon_v2/bruts/astres.png",
+  "role": "planche lune / soleil de ZRV2, copiée telle quelle (sha256 dans manifest.json)"
+ },
+ {
+  "file": "bruts/reflets_astres.png",
+  "reutilise": "source/zone_reveil_prairie_horizon_v2/bruts/reflets_astres.png",
+  "role": "planche de reflets (lune, aube, crépuscule) de ZRV2"
+ },
+ {
+  "file": "bruts/banc_nuages_jour.png",
+  "reutilise": "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour.png",
+  "role": "banc de nuages de ZRV2"
+ },
+ {
+  "file": "bruts/banc_nuages_jour_b.png",
+  "reutilise": "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour_b.png",
+  "role": "banc de nuages de ZRV2"
+ },
+ {
+  "file": "bruts/banc_nuages_jour_c.png",
+  "reutilise": "source/zone_reveil_prairie_horizon_v2/bruts/banc_nuages_jour_c.png",
+  "role": "banc de nuages de ZRV2"
+ }
+]

@@ -1,5 +1,13 @@
 # Méthode de production approuvée — zones Métano
 
+## Allègement du 2 octobre 2026 — anciens lots absents du dernier état
+
+Sur demande de l'utilisateur (« allège-le »), 120 anciens lots de `renders/` (modifiés avant le 25 septembre) et 74 de leurs aperçus de la racine ne sont plus au dernier état : voir `ALLEGEMENT.md`. Ils restent dans l'historique (commit `6cca4a09`) et se restaurent avec `python3 source/restaurer_lot.py LOT` (`--liste`, `--avec-dependances`, `--prefixe`). Les chemins `renders/<lot>/…` de ces lots, cités plus bas, sont absents tant que le lot n'est pas restauré ; un build ou des tests qui en lisent un demandent cette restauration d'abord.
+
+- Ne pas re-committer un lot restauré : l'outil le laisse hors suivi (`.git/info/exclude`). Ne le versionner de nouveau que sur demande explicite.
+- Ne pas réécrire l'historique ni fusionner une branche sœur pour « récupérer » un lot : la restauration suffit.
+- Poids : le dernier état est à 2,4 Go. Avant de pousser un lot, mesurer (`git ls-files -z | xargs -0 du -cb | tail -1`) et prévenir l'utilisateur si le dépôt approche de 3 Go, en proposant un nouvel archivage plutôt qu'un dépôt qui regrossit.
+
 ## Correction utilisateur du 13 septembre 2026 — nouvelles entrées indépendantes
 
 Pour les nouvelles entrées de donjon indépendantes, l’utilisateur autorise expressément des **textures inventées dans la DA PMD**, via le générateur, avec de nombreux layouts et biomes. La contrainte des falaises/structures Métano exactes ne s’applique que lorsqu’il demande d’étendre Métano. Ne pas réimposer cette contrainte aux nouvelles entrées. Consulter les Ground PMD Sky comme références et publier des PNG visibles avec leurs chemins GitHub.
@@ -1218,3 +1226,12 @@ Pas de runtime. Pas dans le mod unique.
 - **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
 - **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
 
+## ZPR1 — Plage aux récifs étoilés (2 octobre 2026), recette et pièges du générateur
+
+Lot `source/zone_plage_recifs_etoiles_v1/`, préfixe `ZPR1`, namespace `zone_plage_recifs_etoiles_v1`, banques `ZPR1J_`, `ZPR1A_`, `ZPR1C_` et `ZPR1N_`. Zone 768 × 576 sur le gabarit ZRV2 ; `build.py` (≈ 3 min), `test_build.py` (21 tests, ≈ 75 s), `package.py` (tests, zips, aperçu).
+
+- **Ordre des bruts** : (1) terre du jour sur magenta, (2) ciel et mer en retouche de la terre, (3) planches de récifs et de coraux sur magenta, (4) décor de jour assemblé par le code (`bruts/decor_jour_pour_ambiances.png`), (5) trois retouches d'ambiance du décor de jour. Les retouches sortent alignées au pixel (corrélation de contours 0,79 à 0,83) : on ne leur prend que des couleurs.
+- **Couleurs des ambiances** : ciel = médiane de chaque rangée de la retouche (les étoiles s'écartent seules) ; mer = pixels de la retouche, récifs et terre exclus puis prolongés ; terre = `recolor_rank` par classe (sable, roches, palmes…). Pour les sprites qui gardent des teintes propres (récifs : algues, liseré), `relight` multiplie par le rapport des roches de même quantile.
+- **Pièges du générateur** : une terre sur magenta doit dire « la baie est un trou dans l'image », interdire tout mélange vers le magenta et décrire la baie en cuvette large, sinon le sable est teinté ou la baie trop étroite ; l'horizon sort vers 27 % de la hauteur malgré « 20 % » (on l'accepte : `YH = 153`) ; une retouche redessine la terre (≈ 82 % identique) : n'utiliser que sa mer et son ciel ; les pixels de bord mêlés au magenta donnent un halo rose (écarter `b - g > -20` avant la réduction) ; une palette médiane de 64 couleurs perd les teintes rares (mares bleues) : `palette_familles`.
+- **Pièges du code** : `binary_dilation(iterations=0)` dilate sans fin (garde explicite) ; les 384 images des nuages se calculent à la demande (`LazySeq`) et le Ground n'en garde que la bande utile ; ne pas importer le `build.py` d'un autre lot (il écrit ses exports) : recopier les fonctions.
+- **Interruptions** : chaque interruption de l'utilisateur ramène le bac à sable au dernier état poussé (fichiers non poussés, `.venv` et `.cache` perdus). Pousser après chaque étape coûteuse.
