@@ -1,5 +1,168 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Île Flottante du Zénith — Couronne des Vents (IFZ1, 5 octobre 2026)
+
+- **Sorties** : `source/ile_flottante_zenith_v1/`, `renders/ile_flottante_zenith_v1/`, aperçu `apercu_ile_flottante_zenith_v1.html`, ORA `IFZ1_ile_flottante_zenith.ora`, projet PMDO `mod_ile_flottante_zenith_pmdo_0812.zip` et pack complet `livrable_ile_flottante_zenith_v1.zip`.
+- **Méthode** : composition générée guidée par la capture canonique de `Final Island` (*Pokémon Mystery Dungeon: Red Rescue Team*, 480×312, 1 244 couleurs), route détourée sur magenta, segmentation multicalque et quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,552]`, couronne à deux branches autour du monolithe suspendu, sortie nord `[384,24]`, belvédères ouest `[104,280]` et est `[680,280]`. Le sceau `[384,382]` est décoratif et bloqué. **829 cellules marchables**, toutes reliées ; ouvertures nord et sud sans warp.
+- **Calques/animations** : fond de ciel, sol, ombres, ciel détaillé, nuages, falaises, végétation, pierres dressées, monolithe, îlots et premier plan ; courants ascendants et voiles de nuages calculés séparément, chacun en 24 phases × 8 ticks.
+- **Fidélité RGB** avant quantification (<35) : sol `27,32`, ciel `7,26`, roche hors contours `25,47`, végétation `25,15`, scène complète `25,38` ; **16 623 tuiles PMDO**.
+- **Validation** : 6 tests IFZ1 PASS. Cinq bruts refusés (palette trop vive, roche trop bleue, puis sol trop beige) sont archivés. `art_approved: false`, `runtime_tested: false` ; aucune approbation artistique ni validation dans le moteur PMDO n'est revendiquée.
+
+## Lot précédent — Bosquet Mycélien : Clairière des Lanternes (BMF1, 5 octobre 2026)
+
+- **Sorties** : `source/bosquet_mycelien_v1/`, `renders/bosquet_mycelien_v1/`, aperçu `apercu_bosquet_mycelien_v1.html`, ORA `BMF1_bosquet_mycelien.ora`, projet PMDO `mod_bosquet_mycelien_pmdo_0812.zip` et pack complet `livrable_bosquet_mycelien_v1.zip`.
+- **Méthode** : composition générée guidée par la capture canonique de `Mushroom Forest` (*Pokémon Mystery Dungeon: Red Rescue Team*, rip Toastypk, 456×336, 93 couleurs), route détourée sur magenta, segmentation multicalque et quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,552]`, deux branches autour de l'îlot fongique central, clairière `[384,470]`, corridor de petits champignons-lanternes et objectif nord fermé `[384,112]`. **858 cellules marchables**, toutes reliées ; aucun warp ni autre sortie.
+- **Calques/animations** : sol menthe, sous-couche, ombres, sous-bois, bois/racines, champignons, arche nord, îlot et premier plan ; lueurs des lanternes et spores calculées séparément, chacune en 24 phases × 8 ticks.
+- **Fidélité RGB** avant quantification (<35) : sol `24,68`, sous-bois `13,85`, bois `19,08`, champignons `15,07`, scène complète `18,30` ; **13 447 tuiles PMDO**.
+- **Validation** : 6 tests BMF1 PASS. `art_approved: false`, `runtime_tested: false` ; aucune approbation artistique ni validation dans le moteur PMDO n'est revendiquée.
+
+## Fin du Passage des Ruines — Sanctuaire du Cadran (FPR1, 4 octobre 2026)
+
+- **Sorties** : `source/fin_passage_ruines_v1/`, `renders/fin_passage_ruines_v1/`, aperçu `apercu_fin_passage_ruines_v1.html`, ORA `FPR1_fin_passage_ruines.ora`, projet PMDO `mod_fin_passage_ruines_pmdo_0812.zip` et pack complet `livrable_fin_passage_ruines_v1.zip`.
+- **Méthode** : composition générée guidée par le rendu canonique `P22P01A` (408×408, 109 couleurs), décor détouré sur magenta, segmentation multicalque puis quantification vers la palette de la référence. Pixels générés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,548]`, arène ovale au cadran brisé et boss `[384,340]`, grand escalier puis sanctuaire fermé au nord `[384,152]`. **1 528 cellules marchables**, toutes reliées depuis l'entrée ; aucun warp ni autre sortie.
+- **Calques/animations** : sol, murs, ombres, relief, ruines, végétation, sanctuaire et débris ; lueur du cadran et pollen doré calculés séparément, chacun en 24 phases × 8 ticks (boucle 192 ticks).
+- **Fidélité RGB** avant quantification (<35) : sol `13,10`, relief `20,70`, ruines/sanctuaire `11,32`, végétation `10,92`, scène complète `14,61` ; **14 098 tuiles PMDO**.
+- **Validation** : 6 tests FPR1 PASS. `art_approved: false`, `runtime_tested: false` ; aucune approbation artistique ni validation dans le moteur PMDO n'est revendiquée.
+
+## Fin Château Ancien — Salle du Trésor (FAC1, 4 octobre 2026)
+
+- **Sorties** : `source/fin_chateau_ancien_v1/`, `renders/fin_chateau_ancien_v1/`, aperçu `apercu_fin_chateau_ancien_v1.html`, ORA `FAC1_fin_chateau_ancien.ora`, projet PMDO `mod_fin_chateau_ancien_pmdo_0812.zip` et pack complet `livrable_fin_chateau_ancien_v1.zip`.
+- **Méthode** : rendu généré référencé sur le rip canonique `oldcastlepmd.png` (408×408), ramené à 768×576 avec segmentation et détourage magenta ; les pixels générés sont des propositions, pas des tuiles natives certifiées.
+- **Layout** : grande arène dorée au médaillon central, entrée sud `[384,520]`, boss `[384,280]`, trésor/dais et objectif nord `[384,165]`. 2 934 cases de marche accessibles et reliées par BFS.
+- **Calques et animation** : sol, murs, ombres, ornements, coffres, statues/rails, appliques ; reflets d'or calculés sur un calque indépendant (24 images × 10 ticks). Export ORA, PNG 8 px et Ground/Tile PMDO 0.8.12.
+- **Fidélité RGB** (<35) : sol `4,79`, murs `4,78`, décors `9,48`, scène complète `5,62` ; 10 324 tuiles PMDO.
+- **Validation** : 6 tests FAC1 PASS ; 25 tests avec EAC1 et la trilogie Bassin Chauffant PASS. `art_approved: false`, `runtime_tested: false` ; aucun test moteur effectué.
+
+## Entrée du Sentier des Ruines (EPR1, 4 octobre 2026)
+
+- **Sorties** : `source/entree_passage_ruines_v1/`, `renders/entree_passage_ruines_v1/`, aperçu `apercu_entree_passage_ruines_v1.html`, ORA `EPR1_entree_passage_ruines.ora`, projet PMDO `mod_entree_passage_ruines_pmdo_0812.zip` et pack complet `livrable_entree_passage_ruines_v1.zip`.
+- **Méthode** : composition générée guidée par le rendu canonique `P22P01A` (408×408 RGBA, 109 couleurs) ; normalisée à 768×576, segmentation du décor sur magenta et quantification vers la palette du rip. Pixels proposés, non certifiés comme tuiles natives.
+- **Layout** : entrée sud `[384,540]`, clairière centrale `[384,330]`, objectif sous l'arche nord `[384,140]` ; **2 136 cellules marchables**, les trois points étant reliés par le masque de collision.
+- **Calques/animation** : sol, murs, ombres, ruines, végétation/rochers, stèles, débris ; pollen doré calculé séparément en 24 phases × 8 ticks (boucle 192 ticks).
+- **Fidélité RGB** (<35) : sol `6,89`, murs `5,63`, décors `10,34`, scène complète `8,26` ; **6 869 tuiles PMDO**.
+- **Validation** : 6 tests EPR1 PASS ; `art_approved: false`, `runtime_tested: false` ; aucune validation dans le moteur PMDO.
+
+## Animation canonique PMD Sky Port de la mer (10 phases) & Wrap Nuages — `cliffnordouesttest1.rsground` & `cliffdaytest.rsground` (4 octobre 2026)
+
+**Demande** : « non fallait pas toucher au layer qui constitue le cliff et les objet et leurs animation seulement les nuage activé le wrap overlay et animée la mer c'est tout canoniquement a pmd sky recommence (pour lanimation de la mer regarde dans pmd sky portà ». Reprise complète de l'animation de `cliffnordouesttest1.rsground` (`138 × 98` cases = `1104 × 784` px) et `cliffdaytest.rsground` (`123 × 99` cases = `984 × 792` px) :
+
+- **Sorties** : `renders/cliff_nord_jour_anime_v1/`, archive PMDO `renders/cliff_nord_jour_anime_v1/cliff_nord_jour_anime_pmdo_0812.zip` (copiée à la racine sous `livrable_cliff_nord_jour_anime_v1.zip`), aperçu interactif `apercu_cliff_nord_jour_anime_v1.html`, fusionneur d'index non destructif `renders/cliff_nord_jour_anime_v1/INSTALLER.py`, build `source/cliff_nord_jour_anime_v1/build.py`.
+- **Calques de falaise, d'objets et d'animations 100 % intacts (`assert out == orig`)** :
+  - Dans `cliffnordouesttest1.rsground` : `Layers[2]` (`New Layer`) et `Layers[3]` (`Layer 3`) sont **strictement identiques octet pour octet** à l'original (ainsi que la case `Altere_Pond_Cliffs` sur `Layers[1]`), sans aucun renommage ni ajout de calque.
+  - Dans `cliffdaytest.rsground` : `Layers[2]` (`Layer 2`), `Layers[3]` (`Layer 4`), `Layers[4]` (`Layer 3`), les `5` cases `Altere_Pond_Cliffs` / `CanyonCamp` sur `Layers[0]` et les **`325` cases d'objets** (`Altere_Pond_Objects`, `Altere_Pond_Objects_Under`, `Metano_Town_Objects`, `Metano_Town_Trimmed`, `Metano_Inn_Objects`) sur `Layers[5]` (`Cloud/nuage`) restent **strictement identiques octet pour octet** à leur place d'origine.
+  - Aucune banque `.tile` proxy/factice n'est générée pour les falaises ou les objets : seule `Content/Tile/v2_promontoire_jour_03.tile` est livrée.
+- **Nuages : uniquement le wrap overlay activé (`LayeredBG` / `MapBG`)** :
+  - `Object["Background"]` est configuré en `RogueEssence.Dungeon.LayeredBG, RogueEssence` avec le ciel fixe (`CLIFF_NORD_OUEST_CIEL` / `CLIFF_DAY_CIEL`, `RepeatX = false`, `BGMovement = (0, 0)`, `Parallax = "1, 1"`) suivi du calque de nuages en wrap horizontal (`CLIFF_NORD_OUEST_NUAGES` / `CLIFF_DAY_NUAGES`, `RepeatX = true`, `RepeatY = false`, `BGMovement = (-4, 0)`, `Parallax = "1, 1"`).
+  - Les tuiles statiques `00_ciel` sur `Layers[0]` et `01_long_cap_jour_02` sur `Layers[5]` sont vidées pour que le `LayeredBG` soit visible derrière les calques de tuiles sans doublon statique.
+- **Mer (`Layers[1]`) : animation canonique PMD Sky Port (`source/falaises_cotieres_nues/reference_ciel_mer.png`, Pelipper Post Office)** :
+  - Extrait les **5 bandes `far_sea`** (`(544+56*f, 224, 592+56*f, 352)`, `48 × 128` px) et les **10 bandes `near_sea`** (`(824+56*f, 224, 872+56*f, 392)`, `48 × 168` px) de `reference_ciel_mer.png`.
+  - Reconstruit les **10 phases canoniques `1312 × 1024` px** dans le repère exact de `v2_promontoire_jour_03` (`0` pixel d'écart en phase 0 face à `sprites/cote_dix_zones/fonds/jour_mer_00.png`).
+  - Encode `Content/Tile/v2_promontoire_jour_03.tile` au format binaire natif `TileSheet` de RogueEssence (Phase 0 conservée aux coordonnées `(tx, ty)` exactes dans `ty = 0..127`, phases `1..9` dédupliquées dans `ty >= 128`, `534` motifs `8 × 8` uniques) et anime les `6 209` cases de mer de `cliffnordouesttest1.rsground` et les `7 503` cases de mer de `cliffdaytest.rsground` sur 10 phases (`FrameLength = 10` ticks à 60 Hz).
+- **Contrôles** : **7/7 tests PASS** (`source/cliff_nord_jour_anime_v1/test_pipeline.py`), `art_approved: false`, `runtime_tested: false`.
+
+## Mod PMDO 0.8.12 unique des 17 fins de donjon + FUL2 et FMF3 (3 octobre 2026)
+
+**Demande** : « alors ........... » (après FCV3, FMT3 et FJS4). Complétion sur cette branche des deux seules fins de donjon de la série d'entrées qui n'existaient que sur des branches sœurs non fusionnées — **Fin Underground Lake V2 (`FUL2`)** et **Fin Mystifying Forest V3 (`FMF3`)**, créées sans aucun emprunt aux branches sœurs —, puis assemblage du **mod PMDO 0.8.12 unique des 17 fins de donjon** (`guilde_fins_donjons_pmdo_0812.zip`, `28,6 Mo`, `164` banques de tuiles, galerie `apercu_mod_guilde_fins_v1.html`).
+
+### 1. Mod unique des 17 fins de donjon (`mod_guilde_fins_v1`)
+
+- Sorties : `renders/mod_guilde_fins_v1/guilde_fins_donjons_pmdo_0812.zip` (`28,6 Mo`, reproductible à horodatage fixe), `renders/mod_guilde_fins_v1/planche_cartes.png`, `renders/mod_guilde_fins_v1/manifest.json`, galerie interactive `apercu_mod_guilde_fins_v1.html`, build `source/mod_guilde_fins_v1/build_mod.py`.
+- **Contenu** : regroupe dans un seul namespace `guilde_fins_donjons` les **17 Grounds 4:3 (`768 × 576` px)** de fin de donjon qui prolongent la série des entrées (`guilde_entrees_sud_nord` + `EFB1`) :
+  `FVS1`, `FCF1`, `FRP1`, `FGG1`, `FGG2`, `FBS1`, `FJS1`, `FWC1`, `FUL2`, `FMF3`, `FSM1`, `FST1`, `FCT2`, `FCV3`, `FMT3`, `FJS4` et `FFB1` (`FOC1`, arène sous-marine autonome, reste hors mod unique comme indiqué dans sa section).
+- **Méthode** : chaque banque `.tile` (`164` banques au total) et chaque Ground `.rsground` sont copiés **octet pour octet** depuis le ZIP projet versionné de son lot (`renders/<lot>/<PFX>_projet_pmdo_0812.zip`) ; `Content/Tile/index.idx` fusionne les 164 nœuds ; `INSTALLER.py` permet l'installation dans un mod existant avec `--dry-run` et fusion d'index.
+- **Contrôles** : **6/6 tests PASS** (`source.mod_guilde_fins_v1.test_mod`).
+
+### 2. Fin Underground Lake V2 : sanctuaire du lac souterrain, FUL2
+
+- Sorties : `renders/fin_underground_lake_v2/`, aperçu `apercu_fin_underground_lake_v2.html`, build `source/fin_underground_lake_v2/build.py`. Paquets : `FUL2_projet_pmdo_0812.zip` et `FUL2_calques_png_8px.zip`. Préfixe **FUL2** (`FUL1` étant pris sur `01a0ea8f` et `01a0eaca`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Underground_Lake_shore_TDS.png` et `EUL1` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : caverne lacustre fermée 4:3 (`768 × 576` px) ; arrivée au sud sur la plage de sable (`entrance` à `[384, 560]`), chaussée de sable centrale (`boss` à `[376, 336]`) traversant le lac souterrain entre les deux grands piliers et les stalagmites jusqu'à un **autel-sanctuaire de pierre sculptée d'une spirale** adossé à la paroi nord fermée, sans tunnel sombre (`objectif` à `[376, 128]`).
+- **Calques & animations (120 ticks = 2 s)** : `sol_complet` et `gouttes_ronds_poses.png` d'EUL1 réutilisés ; `sable`, `ombres`, `berge`, `roche`, `piliers`, `sanctuaire`, `eau` (`4 × 10` ticks, couleurs exactes du rip sans liseré clair), `lueur` (`12 × 10` ticks, 9 couleurs exactes du rip), `scintillements` (`4 × 10` ticks), `gouttes` (`24 × 5` ticks).
+- **Fidélité** (seuil 35) : sable `9,6`, roche `6,2` ; **13/13 tests PASS**.
+
+### 3. Fin Mystifying Forest V3 : sanctuaire sylvestre, FMF3
+
+- Sorties : `renders/fin_mystifying_forest_v3/`, aperçu `apercu_fin_mystifying_forest_v3.html`, build `source/fin_mystifying_forest_v3/build.py`. Paquets : `FMF3_projet_pmdo_0812.zip` et `FMF3_calques_png_8px.zip`. Préfixe **FMF3** (`FMF1` et `FMF2` étant pris sur `01a0eaca`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Mystifying_Forest_entrance_TDS.png` et `EMF1` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : clairière fermée 4:3 (`768 × 576` px) ; arrivée au sud sur le chemin de terre (`entrance` à `[384, 560]`), chemin dédoublé autour du grand arbre central (`boss` à `[376, 280]`), mare à l'ouest, et au nord une **stèle-sanctuaire moussue gravée** devant le rideau d'arbres géants fermé, sans trou noir (`objectif` à `[376, 136]`).
+- **Calques & animations (240 ticks = 4 s)** : `sol_complet` et `feuilles_lucioles_poses.png` d'EMF1 réutilisés ; `herbe`, `chemin`, `herbes_hautes`, `rochers`, `sanctuaire`, `arbres`, `eau` (`4 × 10` ticks, Métano exacte sans liseré), `scintillements` (`4 × 10` ticks), `feuilles` (`48 × 5` ticks), `lucioles` (`48 × 5` ticks).
+- **Fidélité** (seuil 35) : herbe `7,2`, chemin `9,5`, feuillage sombre `2,5`, roche/racines `13,8` ; **12/12 tests PASS**.
+
+## Fins de donjon Couloir violet (FCV3), Mt. Thunder (FMT3) et Jardin secret (FJS4) (3 octobre 2026)
+
+**Demande** : « bon avance » (après FCT2). Réalisation des **trois dernières fins de donjon de la série** dans l'ordre du mod, prolongeant respectivement ECV1 (Couloir violet), EMT1 (Mt. Thunder) et EJS1/EJS2 (Jardin secret). Biomes et portées choisis par l'agent, **à confirmer**. Préfixes choisis sans aucune collision avec les branches sœurs : **FCV3** (`FCV1` et `FCV2` sont pris), **FMT3** (`FMT1` et `FTN1` sont pris) et **FJS4** (`FJS3` et `FGS1` sont pris).
+
+### 1. Fin Jardin secret V2 : stèle sanctuaire fermée de Celebi, FJS4
+
+- Sorties : `renders/fin_jardin_secret_v2/`, aperçu `apercu_fin_jardin_secret_v2.html`, build `source/fin_jardin_secret_v2/build.py`. Paquets : `FJS4_projet_pmdo_0812.zip` (`1,20 Mo`) et `FJS4_calques_png_8px.zip` (`4,22 Mo`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur le décor d'EJS1 et `secretgarden.png` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : arène 4:3 (`768 × 576` px, `96 × 72` cases de 8 px) ; arrivée au sud dans l'allée d'herbe (`entrance` à `[384, 560]`), grande prairie fleurie (`boss` à `[376, 280]`), et au nord, sur la souche dorée baignée par le rayon de lumière verte, une **stèle sanctuaire de pierre fermée** (sans trou ni porte) ornée d'un emblème de Celebi en relief (`objectif` à `[376, 128]` sur les marches au pied de la stèle) ; aucune sortie, aucun warp.
+- **Collage local** : un premier jet en `1024 × 1024` (`bruts/ecartes/decor_sanctuaire_essai1_1024x1024.png`) a été écarté ; le second jet en `1200 × 896` (`recalage` hors souche `3,94` à `(0, 0)`) fournit la seule zone de la stèle sanctuaire (`8 185` px collés sur le décor d'EJS1). Témoin et sol complet d'EJS1 réutilisés.
+- **Calques** : `sol_complet`, `prairie`, `herbe`, `ombres`, `fleurs`, `rochers`, `arbres`, `haies`, `souche`, `sanctuaire`, `marches`, `fond`, `embleme` (`24 × 5` ticks), `rayon` (`24 × 5` ticks), `lucioles` (`24 × 5` ticks), plus un Top vide (`Layer=4`). Pas de calque `profondeur`.
+- **Fidélité** (seuil 35) : fond `9,9` (final `11,7`), herbe claire `8,7` (final `30,5`), herbe `8,5` (final `8,1`, ombres `2,2`), roche `23,1` (final `23,0`), sol complet `11,0`.
+- **Contrôles** : 13 tests PASS.
+
+### 2. Fin Mt. Thunder V3 : sommet d'orage de l'aiguille rocheuse, FMT3
+
+- Sorties : `renders/fin_mt_thunder_v3/`, aperçu `apercu_fin_mt_thunder_v3.html`, build `source/fin_mt_thunder_v3/build.py`. Paquets : `FMT3_projet_pmdo_0812.zip` (`1,15 Mo`) et `FMT3_calques_png_8px.zip` (`2,65 Mo`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Game Boy Advance - Pokemon Mystery Dungeon_ Red Rescue Team - Dungeon Boss Rooms - Mt. Thunder.png` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : sommet fermé 4:3 (`768 × 576` px) ; arrivée au sud sur la crête de sable (`entrance` à `[384, 560]`), plateau de sable à deux gradins (`boss` à `[376, 192]`), et au nord une **couronne rocheuse sommitale à trois aiguilles** (`piton`) dominant la mer d'orage sans grotte sombre (`objectif` à `[376, 128]` au pied de l'aiguille centrale), fidèle à la vraie salle de boss de Mt. Thunder Peak ; aucune sortie, aucun warp.
+- **Calques** : `sol_complet` (réutilisé d'EMT1, même `sha256`), `sable`, `cailloux`, `pics`, `falaise`, `piton`, `ciel`, `nuages`, `lueurs` (`48 × 5` ticks), `eclairs` (`48 × 5` ticks), plus un Top vide (`Layer=4`). Pas de `profondeur` ni de `seuil`.
+- **Cohérence avec l'entrée EMT1** : les 4 éclairs, l'arc « Flash » et les couleurs *Normal* / *Fading* sont relevés pixel par pixel au bas de la planche (fonctions d'EMT1 partagées via `loadmod`).
+- **Fidélité** (seuil 35) : sable `6,6` (final `7,6`), roche `16,2` (final `16,2`), ciel `10,7` (final `13,3`), nuages sombres `14,1` (final `13,2`), nuages clairs `14,2` (final `15,2`).
+- **Contrôles** : 10 tests PASS.
+
+### 3. Fin Couloir violet V3 : salle du monolithe rocheux, FCV3
+
+- Sorties : `renders/fin_couloir_violet_v3/`, aperçu `apercu_fin_couloir_violet_v3.html`, build `source/fin_couloir_violet_v3/build.py`. Paquets : `FCV3_projet_pmdo_0812.zip` (`1,92 Mo`) et `FCV3_calques_png_8px.zip` (`5,86 Mo`).
+- **Méthode « textures canoniques »** = rendu généré référencé sur `large.S05P03A.png.23718d3ffd2fd25e79ccfb3fbbe2fa73.png` (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : salle souterraine fermée 4:3 (`768 × 576` px) ; arrivée au sud par un goulet rocheux (`entrance` à `[392, 560]`), grande salle ovale parsemée de six amas de rochers et de gravillons (`boss` à `[384, 312]`), et au nord un **monolithe rocheux dressé** sur son socle de pierre contre la falaise striée fermée, sans arche sombre (`objectif` à `[376, 120]` au pied du monolithe) ; aucune sortie, aucun warp.
+- **Calques** : `sol_complet` (réutilisé d'ECV1, même `sha256`), `sol`, `ombres`, `gravillons`, `blocs`, `rochers`, `falaise`, `vide`, `eboulis` (`24 × 5` ticks), `poussiere` (`24 × 5` ticks), plus un Top vide (`Layer=4`). Pas de `profondeur`.
+- **Cohérence avec l'entrée ECV1** : les 3 gravillons d'éboulis relevés sur le rip et la planche `poussiere_poses.png` d'ECV1 (même `sha256`) sont partagés via `loadmod`.
+- **Fidélité** (seuil 35) : sol `10,7` (final `14,3`), roche `11,2` (final rochers `14,0`, blocs `23,1`).
+- **Contrôles** : 12 tests PASS.
+- Toutes les fins de donjon de la série ouverte sur cette branche (`FSM1`, `FST1`, `FCT2`, `FCV3`, `FMT3`, `FJS4`, plus `FFB1`) sont désormais complètes.
+
+## Fin Clairière tropicale V2 : arène du sanctuaire du lagon, FCT2 (3 octobre 2026)
+
+**Demande** : « passons a la suite » (après la trilogie Forêt Brumeuse EFB1/FFB1/ZFB1). Reprise de la série des fins de donjon restantes dans l'ordre du mod : **FCT2** prolonge l'entrée ETC1 (Clairière tropicale). Biome et portée choisis par l'agent, **à confirmer**. Préfixe **FCT2** (`FTC1`, `FCT1`, `FCL1` et `FCL2` sont déjà pris sur des branches sœurs non fusionnées).
+
+- Sorties : `renders/fin_clairiere_tropicale_v2/`, aperçu `apercu_fin_clairiere_tropicale_v2.html`, build `source/fin_clairiere_tropicale_v2/build.py`.
+- **Méthode « textures canoniques »** = rendu généré référencé sur `large.S01P03A.png.84e22fb77c4061e77b0f546545fed2c7.png`. Ce ne sont pas des tuiles natives (`art_approved: false`, `runtime_tested: false`).
+- **Layout** : arène fermée 4:3 (`768 × 576` px, `96 × 72` cases de 8 px) ; arrivée au sud par un couloir d'herbe et de dalles de sable (`entrance` à `[384, 560]`), grande clairière centrale (`boss` à `[376, 288]`) bordée à gauche et à droite de deux vasques de lagon tropical sous une rive de terre brune, et au nord d'un tertre de terre et de roche abritant un autel-sanctuaire de pierre sculptée sans bouche sombre (`objectif` à `[376, 168]` au pied de l'autel) ; aucune sortie, aucun warp.
+- **Calques** : `sol_complet`, `herbe`, `ombres`, `dalles`, `touffes`, `fleurs`, `jungle`, `palmiers`, `tertre`, `autel`, `rive`, `mer` (`24 × 5` ticks), `papillons` (`24 × 5` ticks), plus un Top vide (`Layer=4`).
+- **Cohérence avec l'entrée ETC1** : profil de vague (48 px, colonne `x = 0`, `y = 404..451`), crête, couleurs exactes de l'eau du rip (bande sombre `(15, 95, 199)` contre la rive, sans aucun liseré clair) et planche de papillons d'ETC1 réutilisés tels quels (même `sha256`). Le premier jet du décor (`bruts/ecartes/decor_magenta_essai1_jungle_sombre.png`, jungle à `46,8 > 35` et quatre coins en aplat sombre) a été écarté et recoloré avec le rip en seconde référence (`recalage` sol `5,05`, témoin `3,27` à `(0, 0)`).
+- **Fidélité** (seuil 35) : herbe `24,2` (calque final `25,9`), jungle `16,8` (calque final `18,2`), dalles `15,4` (calque final `17,2`).
+- **Contrôles** : 13 tests PASS, 5 mutations détectées. Pas de runtime, `art_approved: false`.
+- Fins restantes de la série sur cette branche : Couloir violet (ECV1), Mt. Thunder (EMT1), Jardin secret (EJS1/EJS2).
+
+## Trilogie Forêt Brumeuse (Foggy Forest) en 4:3 : EFB1, FFB1 et ZFB1 (3 octobre 2026)
+
+**Demande** : nouvelle map / nouveau biome en 4:3, puis sélection par l'utilisateur de **Forêt brumeuse (`D08P11A` / `P21P02A`)** et **« les 3 »** layouts :
+1. **EFB1** — Entrée de donjon (sud → nord) : `renders/entree_foret_brumeuse_sud_nord_v1/`, aperçu `apercu_entree_foret_brumeuse_sud_nord_v1.html`, paquets `livrable_entree_foret_brumeuse_sud_nord_v1.zip` et `mod_entree_foret_brumeuse_sud_nord_pmdo_0812.zip`.
+2. **FFB1** — Fin de donjon / Arène de boss : `renders/fin_foret_brumeuse_v1/`, aperçu `apercu_fin_foret_brumeuse_v1.html`, paquets `livrable_fin_foret_brumeuse_v1.zip` et `mod_fin_foret_brumeuse_pmdo_0812.zip`.
+3. **ZFB1** — Zone ouverte / Camp de base & panorama : `renders/zone_foret_brumeuse_camp_v1/`, aperçu `apercu_zone_foret_brumeuse_camp_v1.html`, paquets `livrable_zone_foret_brumeuse_camp_v1.zip` et `mod_zone_foret_brumeuse_camp_pmdo_0812.zip`.
+
+- **Méthode « textures canoniques »** = rendu généré référencé sur `Foggy_Forest_Base_Camp_TDS.png` (`D08P11A`, *PMD Explorers of Sky*). Ce ne sont pas des tuiles natives certifiées (`art_approved: false`, `runtime_tested: false`).
+- **Bruts et contrôle de fidélité** (seuil `< 35`) :
+  - **EFB1** : le premier jet `bruts/ecartes/decor_herbe_pale_v0.png` avait une herbe de clairière trop pâle (`dist_rip = 47,3 > 35`) ; il a été conservé dans `bruts/ecartes/` (statut `ecarte` dans `manifest.json`, jamais lu par `build.py`) et recoloré avec `Foggy_Forest_Base_Camp_TDS.png` en seconde référence pour produire `bruts/decor_magenta.png` (`herbe = 18,5`, `chemin = 6,8`, `feuillage = 5,5` ; calques finaux : `18,8`, `18,4`, `12,4`).
+  - **FFB1** : `herbe = 2,3`, `chemin = 7,0`, `feuillage = 5,2` (calques finaux : `4,9`, `5,9`, `13,2`).
+  - **ZFB1** : `herbe = 4,9`, `chemin = 8,6`, `feuillage = 2,3`, `tentes = 5,5` (calques finaux : `7,6`, `4,2`, `8,5`, `6,5`).
+  - **Sol complet et planche de poses** : `sol_complet.png` (`dist_rip = 7,9`) et `poses_foret_brumeuse.png` (6 poses de feuille 10 × 10 px + 6 poses de luciole 6 × 6 px sans frange magenta).
+- **Architecture multicalque (768 × 576 px, 96 × 72 cases de 8 px)** :
+  - **EFB1** (14 calques + Top `Layer=4`) : `eau`, `scintillements`, `sol_complet`, `herbe`, `chemin`, `fleurs`, `rochers`, `buissons`, `herbes_hautes`, `parois` (arche rocheuse moussue), `arbres`, `profondeur` (ouverture sombre au nord), `feuilles`, `lucioles`. Marqueurs `entrance` (`[384, 560]`) et `donjon_seuil` (`[376, 104]`).
+  - **FFB1** (13 calques + Top `Layer=4`) : `eau`, `scintillements`, `sol_complet`, `herbe`, `chemin` (chemin sud + anneau de dalles), `fleurs`, `rochers`, `buissons`, `herbes_hautes`, `stele` (monument ancien moussu au nord), `arbres`, `feuilles`, `lucioles`. Aucune ouverture sombre ni sortie au nord ; bords nord, ouest et est fermés. Marqueurs `entrance` (`[384, 560]`), `boss` (`[376, 312]`), `objectif` (`[376, 200]`).
+  - **ZFB1** (13 calques + Top `Layer=4`) : `eau`, `scintillements`, `sol_complet`, `herbe`, `chemin`, `fleurs`, `rochers`, `buissons`, `herbes_hautes`, `tentes` (3 tentes d'expédition rose corail / orange à rayures beiges), `arbres`, `feuilles`, `lucioles`. Marqueurs `entrance` (`[384, 560]`), `camp` (`[432, 296]`), `sortie_nord` (`[384, 0]`).
+- **Animations (boucle fermée 240 ticks = 4 s)** :
+  - **eau** : façon rivière Métano, couleurs Métano exactes, sans liseré clair contre la rive (`water_phases` d'EWC2), 4 × 10 ticks ;
+  - **scintillements** : `Metano_Town_River_Sparkles.tile` natifs, 4 × 10 ticks ;
+  - **feuilles** : 8 départs sous les houppiers, chute et balancement sur 48 × 5 ticks ;
+  - **lucioles** : 14 points en lisière ombragée, pulsation et boucles de Lissajous sur 48 × 5 ticks.
+- **Contrôles** : 13/13 tests PASS sur chacun des 3 lots (39 tests unitaires au total) + 9 mutations vérifiées (alpha intermédiaire, liseré clair dans l'eau, teinte magenta dans les lucioles).
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.

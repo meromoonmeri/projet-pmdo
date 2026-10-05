@@ -1,0 +1,138 @@
+{
+  "map_id": "fin_passage_ruines_v1",
+  "title": "Fin du Passage des Ruines — Sanctuaire du Cadran",
+  "prefix": "FPR1",
+  "reference": "P22P01A",
+  "reference_file": "P22P01A.png",
+  "reference_sha256": "0fcfcbd33c8a19015288b400143631e61d72ea7b240a9cbf9599b73a890c9684",
+  "reference_source": "pret/pmd-sky, commit c8073235b39746a7ee74e6cea16c730bd91a1e67 ; rendu MAP_BG P22P01A",
+  "reference_dimensions_px": [
+    408,
+    408
+  ],
+  "reference_kind": "sentier de pierre dans une clairière de ruines et d'arbres",
+  "dimensions_px": [
+    768,
+    576
+  ],
+  "dimensions_tiles": [
+    96,
+    72
+  ],
+  "tile_size_px": [
+    8,
+    8
+  ],
+  "aspect_ratio": "4:3",
+  "layout": "entrée sud, arène ovale, deux croissants de terrasses, escalier nord, sanctuaire fermé sans sortie",
+  "loop_ticks": 192,
+  "animation": {
+    "lueur_cadran": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    },
+    "pollen_dore": {
+      "frames": 24,
+      "ticks_per_frame": 8,
+      "native": false
+    }
+  },
+  "art_approved": false,
+  "runtime_tested": false,
+  "markers": {
+    "entree_sud": [
+      384,
+      548
+    ],
+    "boss": [
+      384,
+      340
+    ],
+    "objectif_cadran": [
+      384,
+      152
+    ]
+  },
+  "walkable_cells": 1528,
+  "obstacle_cells": 5384,
+  "reachable_cells_from_entry": 1528,
+  "component_count": 8,
+  "fidelity": {
+    "sol": {
+      "rgb_distance": 13.1,
+      "p95": 24.08,
+      "pixels": 112538
+    },
+    "relief": {
+      "rgb_distance": 20.7,
+      "p95": 35.17,
+      "pixels": 81091
+    },
+    "ruines": {
+      "rgb_distance": 11.32,
+      "p95": 25.96,
+      "pixels": 70394
+    },
+    "vegetation": {
+      "rgb_distance": 10.92,
+      "p95": 19.8,
+      "pixels": 206258
+    },
+    "scene_complete": {
+      "rgb_distance": 14.61,
+      "p95": 32.94,
+      "pixels": 442368
+    }
+  },
+  "palette_colors": 109,
+  "pmdo_banks": {
+    "FPR1_00_SOL": 1395,
+    "FPR1_01_MURS": 3975,
+    "FPR1_02_OMBRES": 25,
+    "FPR1_03_RELIEF": 2664,
+    "FPR1_04_RUINES": 1806,
+    "FPR1_05_VEGETATION": 3626,
+    "FPR1_06_SANCTUAIRE": 227,
+    "FPR1_07_DEBRIS": 11,
+    "FPR1_08_LUEUR_CADRAN": 129,
+    "FPR1_09_POLLEN_DORE": 240
+  },
+  "total_tiles": 14098,
+  "layers": [
+    "sol_complet",
+    "sol",
+    "murs",
+    "ombres",
+    "relief",
+    "ruines",
+    "vegetation",
+    "sanctuaire",
+    "debris",
+    "lueur_cadran",
+    "pollen_dore"
+  ],
+  "raw_inputs": {
+    "decor_magenta.png": "951d2f4e797abb1e94a8e87809874ec3d9fcb5fe6caecda437f6f20744d3e6fb",
+    "fond_sans_objets.png": "85b534c8708cdd4749d71da987cdb210cb06ea92d5d58395fb83707dcf7c0ada",
+    "sol_complet.png": "637287afc6d8006c1733bdeac0e788d6a5e9a8e3b4858201363985208fde8272"
+  },
+  "rejected_raws": [
+    {
+      "path": "bruts/ecartes/decor_magenta_layout_trop_proche_epr1.png",
+      "sha256": "26f2615b09ce2a537ef883720189b01f51c3b8f11e3138e08385b06488757041",
+      "reason": "silhouette trop proche de l'entrée EPR1 ; remplacée par une arène ovale à terrasses asymétriques"
+    },
+    {
+      "path": "bruts/ecartes/sol_complet_herbe_trop_vive.png",
+      "sha256": "c11464945febabe2549a6e45bce22c2eb1f09792a15aaf32146b64ca14bb494b",
+      "reason": "herbe centrale trop vive et distance RGB du sol 46,76 >= 35 ; recoloration guidée par P22P01A"
+    }
+  ],
+  "notes": [
+    "Composition générée avec P22P01A en référence ; terrain sur magenta puis segmentation multicalque.",
+    "Tous les RGB statiques sont quantifiés vers les 109 couleurs du rip ; cela ne certifie pas des tuiles natives.",
+    "Lueur du cadran et pollen sont des animations calculées pour FPR1, pas des cycles officiels récupérés.",
+    "Nord, ouest et est fermés ; aucun warp configuré ; chargement et gameplay PMDO non testés."
+  ]
+}
