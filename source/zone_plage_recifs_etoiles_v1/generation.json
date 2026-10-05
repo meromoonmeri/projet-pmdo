@@ -1,0 +1,71 @@
+[
+ {
+  "file": "bruts/terre_jour.png",
+  "taille": [
+   1200,
+   896
+  ],
+  "essais": 4,
+  "images": [
+   "references/guide_plage_x4_3.png",
+   "references/plage_td_scene.png",
+   "references/arene_plage_pmdsky_x2.png"
+  ],
+  "role": "terre du jour (sable, promontoires rocheux, palmiers, mares, coquillages) sur magenta uni ; mer et ciel vides",
+  "essais_notes": "essai 1 propre mais perdu (réinitialisation du bac à sable) ; essai 2 : sable teinté de magenta, écarté ; essai 3 : propre mais baie trop étroite (source/zone_plage_recifs_etoiles_v1/bruts/terre_jour_baie_etroite.png, commit 44a7e330) ; essai 4 retenu : baie large conforme au plan",
+  "prompt": "Pokémon Mystery Dungeon Explorers of Sky / Time / Darkness (Nintendo DS) pixel art, 16-bit tile-based painted map style, crisp hard pixels, no anti-aliasing, no blur, no smooth gradients. Use exactly the same art style, colour palette, rock shapes, sand ripples and palm trees as the reference images 2 and 3 (red-brown rocky outcrops with lighter pink highlights and dark red outlines, pale yellow sand with a diagonal wavy ripple pattern, green palm trees with dark green fronds and thin brown trunks, little tufts of green grass).\n\nDraw ONLY THE LAND of a beautiful tropical beach cove seen from a three-quarter top-down angle, following the layout diagram of image 1 EXACTLY (same composition, same proportions, same positions). The most important point is the WIDE BAY: the magenta bay of image 1 is very wide, a big bowl that spans about three quarters of the image width near the top and narrows gently down to a long curved shoreline in the middle of the image; the two rocky headlands are therefore NARROW diagonal slopes of red rocks hugging the left and right edges, rising up to the top corners, never entering the middle of the picture. Below the bay: a wide pale yellow sandy beach in the lower half, a group of three palm trees at the foot of each headland, a few small red rocks on the sand, a driftwood log, two small shallow tide pools, a few pink and white seashells and one orange starfish, tufts of green beach grass at the foot of the rocks, and a lighter trodden sand path from the bottom centre going up to the middle of the beach. Warm sunlight from the upper left, soft shadows under the palms and rocks.\n\nCRITICAL: everything that is sea or sky is just the empty background and must be a perfectly flat solid magenta #FF00FF area with hard sharp edges: the entire upper part of the image and the whole wide bay of image 1. The bay is like a hole in the picture: do NOT draw ANY sand, sand ripples, wet sand, water, foam, shadow or reflection inside it, and do NOT tint, fade or blend any sand or rock towards magenta anywhere. The sand keeps its normal pale yellow colour all the way up to a hard clean edge (only a thin band of darker golden wet sand) where it meets the flat magenta directly. No sky, no clouds, no sun, no horizon line. No characters, no text, no UI, no frame, no border, no vignette. Full 4:3 landscape image."
+ },
+ {
+  "file": "bruts/ciel_mer_jour.png",
+  "taille": [
+   1200,
+   896
+  ],
+  "essais": 2,
+  "images": [
+   "bruts/terre_jour.png",
+   "../zone_reveil_prairie_horizon_v2/bruts/ciel_mer_jour.png",
+   "references/plage_td_marees.png"
+  ],
+  "role": "ciel et mer du jour (retouche de la terre : seul le magenta est remplacé) ; l'horizon tombe à la rangée 237 sur 896",
+  "essais_notes": "essai 1 (sur une terre précédente, perdue) : horizon à la rangée 241 ; essai 2 retenu sur la terre retenue",
+  "prompt": "Image 1 is the land of a tropical beach cove drawn on a flat magenta (#FF00FF) background. Keep every land pixel of image 1 EXACTLY as it is (rocks, palm trees, sand, shells, tide pools, driftwood): do not move, change or redraw any of the land. Replace ONLY the flat magenta area with the sky and the sea, in the same Pokémon Mystery Dungeon Explorers of Sky pixel art style as image 2 (banded pixel sky gradient, cyan sparkling sea) and with the turquoise shallow water of image 3.\n\n- The sky: a clear bright daytime sky made of flat horizontal pixel bands, from a deeper blue at the very top to a pale cyan-white just above the horizon. Absolutely no clouds, no sun, no moon, no birds.\n- A perfectly straight, perfectly horizontal horizon line at exactly 20% of the image height from the top, with a thin bright cyan band of tiny white sparkles right under it.\n- The sea inside the bay, filling all the former magenta below the horizon: deep royal blue just under the horizon, then medium blue, then cyan, then bright turquoise, and finally pale aquamarine shallow lagoon water (light sand with faint ripples seen through clear water) very close to the beach shoreline, in smooth wide bands that follow the curved shape of the shoreline; a few faint thin darker wavy lines; tiny white sparkles only near the horizon.\n- NO white foam line on the shore (the aquamarine water meets the wet sand band directly), NO breaking waves, NO reefs, NO rocks or islands in the water, NO boats, NO text, NO characters.\nCrisp hard pixels, no blur, no smooth gradients (only pixel-art bands). Same 4:3 framing and same size as image 1."
+ },
+ {
+  "file": "bruts/recifs_roches.png",
+  "taille": [1200, 896],
+  "essais": 1,
+  "images": "non journalisées par la session parente (commit 23cbfd1a)",
+  "role": "planche de 7 rochers de récif émergés (blocs rouges arrondis, reflets blancs de flottaison, touffes vertes) sur magenta uni, vues de trois-quarts",
+  "essais_notes": "retenue du premier essai ; le prompt exact n'a pas été conservé dans le journal de la session parente",
+  "prompt": null,
+  "contenu observe": "7 rochers : double bloc (haut-gauche), dome (haut-centre), triple amas (haut-droite), colonne (milieu-gauche), chapelet (centre), dalle allongée (bas-gauche), grand plateau (bas-droite)"
+ },
+ {
+  "file": "bruts/recifs_coraux.png",
+  "taille": [1200, 896],
+  "essais": 1,
+  "images": "non journalisées par la session parente (commit 23cbfd1a)",
+  "role": "planche de 12 coraux et coquillages (cervelle orange, branchu orange, éventail rose, tubes violets, coupe verte, anémones, branchu rouge, cervelle magenta, branchu bleu, massif mixte, éponges, étoiles de mer + oursin) sur magenta uni",
+  "essais_notes": "retenue du premier essai ; le prompt exact n'a pas été conservé dans le journal de la session parente",
+  "prompt": null
+ },
+ {
+  "file": "bruts/ciel_mer_nuit.png",
+  "taille": [1200, 896],
+  "essais": 1,
+  "images": ["bruts/ciel_mer_jour.png", "references/nuit_pmdsky_lune_x3.png"],
+  "role": "ciel et mer de nuit (retouche : terre du jour gardée, ciel étoilé + lune + mer nuit) ; horizon à la rangée 240 sur 896 ; écart terre 24,3 (léger reflet bleuté sur le sable, ambiance nuit)",
+  "essais_notes": "retenue du premier essai (session arena/01a0fdc2)",
+  "prompt": "Image 1 is a tropical beach cove map in Pokémon Mystery Dungeon Explorers of Sky pixel art style. Keep every land pixel of image 1 EXACTLY as it is (red-brown rocky headlands, palm trees, pale yellow sand with ripples, shells, starfish, tide pools, driftwood): do not move, change or redraw any of the land. Replace ONLY the sky and the sea with a NIGHT version, in the same pixel art style as image 2 (deep blue night sky, big pale yellow cratered moon, small white four-pointed star sparkles, dark blue sparkling sea with a shimmering moon reflection path).\n\n- The sky: a clear night sky in flat horizontal pixel bands, deep navy blue at the very top to slightly lighter blue just above the horizon. Many small white four-pointed star sparkles scattered across the sky, exactly like image 2. One big round pale yellow cratered moon in the upper LEFT area of the visible sky (left of centre, well clear of the rocky headlands).\n- Keep the SAME perfectly straight horizontal horizon line at the SAME height as image 1, with a thin bright band right under it.\n- The sea inside the bay: deep royal navy blue just under the horizon, then dark blue, then slightly lighter deep blue, and finally a dark teal shallow lagoon very close to the beach shoreline, in smooth wide bands following the curved shoreline; a wide shimmering moon-reflection path of broken horizontal white-cyan dashes running from under the horizon down towards the beach, slightly left of centre (under the moon); tiny white sparkles near the horizon.\n- NO white foam line on the shore (the dark lagoon water meets the wet sand band directly), NO breaking waves, NO reefs, NO rocks or islands in the water, NO boats, NO clouds, NO text, NO characters. Crisp hard pixels, no blur, no smooth gradients (only pixel-art bands). Same 4:3 framing and same size as image 1."
+ },
+ {
+  "file": "bruts/sol_complet.png",
+  "taille": [1200, 896],
+  "essais": 1,
+  "images": ["bruts/terre_jour.png"],
+  "role": "sable seul (stries diagonales), édité depuis la terre ; ton moyen à 2,7 du sable du décor",
+  "essais_notes": "retenu du premier essai (session arena/01a0fdc2)",
+  "prompt": "Edit image 1 (a tropical beach cove map in Pokémon Mystery Dungeon Explorers of Sky pixel art style): keep the exact same framing, size and pixel-art style, but remove EVERYTHING except the beach sand: no rocks, no palm trees, no grass, no tide pools, no shells, no starfish, no driftwood, no path, no sea, no sky, no magenta. The whole image becomes the same pale yellow beach sand as image 1, with its diagonal wavy ripple pattern, flat top-down, seamless, uniform warm lighting. Crisp hard pixels, no blur. Same 4:3 framing and same size as image 1."
+ }
+]

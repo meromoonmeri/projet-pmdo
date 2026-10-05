@@ -1,5 +1,13 @@
 # Méthode de production approuvée — zones Métano
 
+## Allègement du 2 octobre 2026 — anciens lots absents du dernier état
+
+Sur demande de l'utilisateur (« allège-le »), 120 anciens lots de `renders/` (modifiés avant le 25 septembre) et 74 de leurs aperçus de la racine ne sont plus au dernier état : voir `ALLEGEMENT.md`. Ils restent dans l'historique (commit `6cca4a09`) et se restaurent avec `python3 source/restaurer_lot.py LOT` (`--liste`, `--avec-dependances`, `--prefixe`). Les chemins `renders/<lot>/…` de ces lots, cités plus bas, sont absents tant que le lot n'est pas restauré ; un build ou des tests qui en lisent un demandent cette restauration d'abord.
+
+- Ne pas re-committer un lot restauré : l'outil le laisse hors suivi (`.git/info/exclude`). Ne le versionner de nouveau que sur demande explicite.
+- Ne pas réécrire l'historique ni fusionner une branche sœur pour « récupérer » un lot : la restauration suffit.
+- Poids : le dernier état est à 2,4 Go. Avant de pousser un lot, mesurer (`git ls-files -z | xargs -0 du -cb | tail -1`) et prévenir l'utilisateur si le dépôt approche de 3 Go, en proposant un nouvel archivage plutôt qu'un dépôt qui regrossit.
+
 ## Correction utilisateur du 13 septembre 2026 — nouvelles entrées indépendantes
 
 Pour les nouvelles entrées de donjon indépendantes, l’utilisateur autorise expressément des **textures inventées dans la DA PMD**, via le générateur, avec de nombreux layouts et biomes. La contrainte des falaises/structures Métano exactes ne s’applique que lorsqu’il demande d’étendre Métano. Ne pas réimposer cette contrainte aux nouvelles entrées. Consulter les Ground PMD Sky comme références et publier des PNG visibles avec leurs chemins GitHub.
