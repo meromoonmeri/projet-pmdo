@@ -1,0 +1,111 @@
+{
+  "lot": "intro_mew_traversee_v1",
+  "asset": "IMW3",
+  "serie": "Cinematiques",
+  "demande": [
+    "pour l'introduction faut quelque chose de ce genre (capture : Treasure Town (Intro), Explorers of Sky, Spriters Resource)"
+  ],
+  "choix_agent": {
+    "portee": "une cinematique video, dans l'esprit de l'ouverture du jeu (grand decor vertical parcouru de haut en bas, personnage qui grossit, petales, anneaux de lumiere) ; IMW1 (11 cartes) et IMW2 (fond Ground) sont conserves ; a confirmer",
+    "reference": "le fichier joint n'etait plus dans le bac a sable : travail d'apres l'image vue dans la conversation, rien mesure ni copie"
+  },
+  "format": {
+    "size_px": [
+      768,
+      576
+    ],
+    "fps": 30,
+    "frames": 840,
+    "duree_s": 28.0,
+    "codec": "H.264 yuv420p, crf 19"
+  },
+  "actes": [
+    {
+      "t_debut_s": 0.0,
+      "t_fin_s": 9.0,
+      "legende": "Le soleil : Mew surgit de la lumière"
+    },
+    {
+      "t_debut_s": 9.0,
+      "t_fin_s": 22.0,
+      "legende": "La descente vers le monde"
+    },
+    {
+      "t_debut_s": 22.0,
+      "t_fin_s": 28.0,
+      "legende": "Le village, puis le grand envol"
+    }
+  ],
+  "decor": {
+    "fichier": "source/intro_mew_traversee_v1/bruts/fond_vertical.png",
+    "sha256": "c61416a4514e09d7ae3b39d645bd84b3818c584af5574d6206476b3e559d99b3",
+    "taille": [
+      768,
+      1376
+    ],
+    "defilement_px": 800,
+    "soleil_xy": [
+      384,
+      232
+    ],
+    "editions": 0
+  },
+  "mew": {
+    "poses": [
+      "bruts/mew_peint_a.png",
+      "bruts/mew_peint_b.png"
+    ],
+    "sha256": [
+      "5bd939ac3d3a061cd65007808fbac04a80bbc14cc6ff3e363fb74931fbdb4b19",
+      "d60bca5da122ddc74e3b822b185348551ef6523472228fe701e9bf4d1f10a884"
+    ],
+    "taille_decoupe": [
+      728,
+      600
+    ],
+    "note": "pose B generee depuis A : seule la queue differe ; fondu A-B pour la queue",
+    "periode_queue_s": 0.9
+  },
+  "effets": {
+    "petales": {
+      "nombre": 60,
+      "tailles_px": [
+        12,
+        18,
+        28,
+        42
+      ],
+      "poses": 8,
+      "plans": 2
+    },
+    "anneaux": "du soleil toutes les 2 s (5), un au moment de l arrivee de Mew",
+    "voiles_nuages": "flous, periodiques, parallaxe x1,25",
+    "lueur_soleil": "etoile a 8 branches et halo qui pulsent (3,2 s)"
+  },
+  "jalons_s": [
+    0.5,
+    2.0,
+    4.0,
+    6.0,
+    7.8,
+    9.5,
+    12.0,
+    15.0,
+    18.0,
+    21.0,
+    23.0,
+    24.5,
+    26.0,
+    27.0,
+    27.6
+  ],
+  "deterministe": true,
+  "art_approved": false,
+  "runtime_tested": false,
+  "reserves": [
+    "pas une map PMDO : une video",
+    "decor et Mew generes (peinture), jamais valides comme assets de jeu ; Mew non valide SpriteCollab",
+    "style de la ressource Treasure Town imite, pas reproduit",
+    "mp4 compresse : les PNG de calques font foi"
+  ]
+}

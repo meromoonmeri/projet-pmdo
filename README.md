@@ -1,5 +1,15 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## IMW3 — Traversée, nouvelle intro dans l'esprit Treasure Town (5 octobre 2026)
+
+**Demande** : « pour l'introduction faut quelque chose de ce genre » (capture Spriters Resource « Treasure Town (Intro) », Explorers of Sky : grand décor vertical peint parcouru de haut en bas, personnage qui vole en grossissant, pétales, cercles de lumière). Le fichier joint n'était plus dans le bac à sable : travail d'après l'image vue dans la conversation, rien mesuré ni copié.
+
+- `renders/intro_mew_traversee_v1/IMW3_traversee.mp4` (~5,5 Mo, 28 s, 768 × 576, 30 i/s), pack `IMW3_traversee_pack.zip` (16,7 Mo), aperçu `apercu_intro_mew_traversee.html`, source `source/intro_mew_traversee_v1/`.
+- **3 actes** : (0→9 s) Mew surgit du soleil en grossissant, étoile à 8 branches qui pulse, un anneau toutes les 2 s + un anneau rose d'arrivée ; (9→22 s) la caméra parcourt le décor vertical (800 px vers le bas, courbe douce) : ciel et nuages, mer, montagnes enneigées, désert, volcan, plateaux, forêt ; (22→28 s) village (maisons, place, fontaine), grand envol vers le haut à droite, éclat blanc à 25,6 s, fondu final.
+- Décor vertical peint (768 × 1376) et Mew peint en deux poses (queue qui bat par fondu A↔B, période 0,9 s) : **générés**, pas des rips ROM. Effets procéduraux : pétales sakura 8 poses × 4 tailles × 2 plans (60 pétales), voiles de nuages périodiques à parallaxe ×1,25, halo pulsant, vignette.
+- **Pas une carte PMDO ni un Ground** : une vidéo. **IMW1 et IMW2 sont conservés** (IMW1 ciné 63 s / 11 cartes, IMW2 fond Ground en boucle). Le Mew peint n'est pas un sprite SpriteCollab. `art_approved: false`, non testé en jeu, style imité pas reproduit. Biomes traversés à confirmer.
+- 10 tests PASS. Déterministe.
+
 ## Mod Colonnes Lances et Mew — 4 cartes (1er octobre 2026)
 
 **Demande** : « alors ? ». Choix de l'agent, à confirmer : les quatre cartes autonomes qu'aucun mod ne contenait (CLR1, CLR2, ECL1, IMW2) réunies en un mod, comme pour les entrées et les fins.
