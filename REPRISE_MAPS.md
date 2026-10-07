@@ -1,4 +1,4 @@
-# Reprise des maps — mise à jour du 5 octobre 2026
+# Reprise des maps — mise à jour du 7 octobre 2026
 
 ## Demande actuelle
 
@@ -252,4 +252,19 @@ Les six builders et packageurs ont été relancés pour régénérer les stages 
 
 Résultat : **76 tests PASS**. Tests de l'outil maps PMD Sky : **4 PASS, 1 ignoré** (`rom` non rendu dans le cache courant). `runtime_tested: false` et `art_approved: false` restent inchangés ; aucun test dans PMDO n'a été fait.
 
-Il s'agit d'une **consolidation d'artefacts de cartes**, pas d'une fusion des historiques : seul le périmètre cohérent de six finales a été repris. La tête 01a108a6 contient à elle seule environ 746 MiB de nouvelles données et 2 713 chemins modifiés, avec d'autres familles et variantes ; les autres branches Arena restent intactes. Toutes les cartes produites ensuite dans cette session doivent rester sur `arena/01a10bc6-projet-pmdo`.
+Il s'agit d'une **consolidation d'artefacts de cartes**, pas d'une fusion des historiques : seul le périmètre cohérent de six finales a été repris. La tête 01a108a6 contient à elle seule environ 746 MiB de nouvelles données et 2 713 chemins modifiés, avec d'autres familles et variantes ; les autres branches Arena restent intactes.
+
+## Reprise du 7 octobre 2026 — Passage du Canyon des Piliers / CPL1
+
+La branche active de cette reprise est la branche Arena fixe `arena/f4987da6-projet-pmdo`. Le checkout, initialement sur `6cca4a09`, a été avancé en fast-forward jusqu'à `0b52defd` depuis la branche distante `arena/01a10bc6-projet-pmdo` après inspection du ref; les six finales consolidées sont présentes. Ne pas changer de branche ni pousser ailleurs.
+
+La carte précédente **Colonnes Ocre** n'a pas été retrouvée dans ce checkout après le fast-forward. Les archives historiques nommées `OCO1_projet_pmdo_0812.zip` (SHA-256 `14c65d67899a0ea8d29673b66938623362a5d7eaef23ef69f6c8a4f8b46932f4`) et `OCO1_calques_png_8px.zip` (SHA-256 `658f93c5a10f053dcc32080bf3e7f347d4e8ca25212889ee176414ab09c0d0e8`) sont mentionnées par la mémoire de session, mais ne sont pas présentes dans ce checkout. Une recherche Drive par PMDO/Colonnes/OCO1 n'a rien trouvé; **ne pas déclarer la série restaurée ni inventer ses fichiers**. Si l'utilisateur souhaite la récupérer, demander une copie/artefact de cette ancienne session.
+
+Carte suivante, choisie par l'agent : **Passage du Canyon des Piliers**, intitulé dans le Ground « Défilé des Aiguilles », code interne provisoire **CPL1** (non MAP_BG officiel), référence canonique `D13P11A`. Build `source/defile_aiguilles_v1/`, sortie `renders/defile_aiguilles_v1/`, aperçu `apercu_defile_aiguilles_v1.html`.
+
+- Rip D13P11A extrait de `pret/pmd-sky` commit `c8073235b39746a7ee74e6cea16c730bd91a1e67` avec skytemple-files : 456×456, une frame, 30 couleurs RGB, deux couches, sans collision ni animation palette. Le PNG de rip est fourni dans `source/defile_aiguilles_v1/bruts/`; il est pixel-identique au GIF versionné. Taille carrée maintenue, 57×57 tuiles de 8 px.
+- Le guide de composition est généré à partir de ce rip, ramené à 456×456 et quantifié sans tramage sur ses 30 couleurs exactes. Les formes générées ne sont **pas** des tuiles natives originales. Base de sable et petit raccord sud-est de 22 px prélevés dans le rip.
+- Calques séparés : base canonique, sable/chemin générés référencés, falaises, piliers/blocs; Top vide. Masque d'obstacles, marqueurs provisoires `entrance` / `sortie`, et chemin libre 16×16 nord-sud vérifié par 7 tests de la carte.
+- Packs : `renders/defile_aiguilles_v1/CPL1_projet_pmdo_0812.zip` et `CPL1_calques_png_8px.zip`; le second inclut les deux références. SHA-256 dans `renders/defile_aiguilles_v1/SHA256SUMS.json`. Vérification combinée : 11 tests PASS, 1 contrôle des rendus complets ignoré (cache ROM complet absent).
+- Sauvegarde Drive privée (aucun partage public ajouté) : dossier `PMDO — Cartes et mémoire Arena`. Y sont déposés les deux packs CPL1, `D13P11A_ROM.png`, l'aperçu HTML, le manifeste détaillé, `CPL1_SESSION_NOTE.md` et les sommes SHA-256.
+- Aucun lancement runtime PMDO, rendu GPU, test gameplay ni approbation artistique. Destinations/warps non reliés; collisions et raccord à valider dans l'éditeur.

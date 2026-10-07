@@ -1220,7 +1220,7 @@ Pas de runtime. Pas dans le mod unique.
 
 ## Consolidation ciblée des finales — 5 octobre 2026
 
-- La branche de travail demeure `arena/01a10bc6-projet-pmdo`. Ne pas basculer vers une branche sœur ni pousser ailleurs.
+- Pour la session de consolidation du 5 octobre, la branche de travail était `arena/01a10bc6-projet-pmdo`. La reprise du 7 octobre est fixée par Arena à `arena/f4987da6-projet-pmdo` : ne pas changer de branche et ne pousser que sur cette branche de session.
 - À la demande de consolidation, les 11 têtes Arena distantes ont été recensées sans les fusionner en bloc : elles divergent, comportent des versions concurrentes et des projets sans rapport avec la série des fins. La tête `01a108a6` seule présente environ 746 MiB de nouveaux blobs et 2 713 chemins modifiés par rapport à `main` ; une fusion complète dépasserait le périmètre d'une consolidation de cartes.
 - Import ciblé des six versions finales les plus récentes de la série des fins depuis `arena/01a108a6-projet-pmdo` (commit `e6b29afbf999109f912ef3b44cd6b6a5b9a64bfc`) : FCT2, FCV3, FMT3, FJS4, FUL2 et FMF3. Les variantes antérieures et les brouillons n'ont pas été ajoutés. Seuls leurs dossiers `source/`, `renders/` et aperçus correspondants ont été repris ; aucun historique de branche sœur n'a été fusionné.
 - Pour chacune : conservation des bruts, de la référence canonique, du manifeste et du code `build.py` / `package.py` / `test_build.py`. Les rendus sont générés référencés ; seuls les éléments explicitement marqués dans leurs notices sont des pixels extraits de tuiles natives.

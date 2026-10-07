@@ -21,6 +21,17 @@ Chaque lot conserve son générateur, ses bruts, son manifeste, ses tests et son
 - Sources et livrables : dossiers `source/fin_*_v2|v3/` et `renders/fin_*_v2|v3/` correspondants.
 - Portée de la consolidation : ces six cartes forment le lot final retenu ; les branches Arena distantes ne sont pas fusionnées intégralement et restent intactes. Voir `REPRISE_MAPS.md` pour le périmètre.
 
+## Passage du Canyon des Piliers — Défilé des Aiguilles, CPL1 (7 octobre 2026)
+
+Suite demandée après Colonnes Ocre; thème choisi par l'agent, référence D13P11A. **CPL1 est un code de travail local**, pas un identifiant MAP_BG officiel. Le titre d'affichage du Ground est « Défilé des Aiguilles ».
+
+- Sources : `source/defile_aiguilles_v1/`; rendus et packs : `renders/defile_aiguilles_v1/`; aperçu : `apercu_defile_aiguilles_v1.html`.
+- Échelle carrée canonique conservée : 456×456 px, 57×57 cases de 8 px. Extraction ROM ciblée `D13P11A` via skytemple-files comparée au GIF versionné : pixels identiques. Une frame, deux couches, 30 couleurs, sans collision ni animation palette; pas d'animation inventée.
+- Le guide est généré et référencé sur D13P11A, puis quantifié sans tramage à ses 30 couleurs exactes. Le patch de sable de base et le col de raccord de 22 px sont des pixels copiés du rip. Les formes générées **ne sont pas des tuiles natives originales**.
+- Ground PMDO 0.8.12, quatre calques visuels éditables + Top vide, masque de collision, marqueurs `entrance` / `sortie`. Un petit col de sable canonique au sud-est de la mesa relie les deux tronçons de la composition.
+- Packs : `CPL1_projet_pmdo_0812.zip` (285 089 octets, SHA-256 `cd6b4277467c8fb681128a717cb48362a30231e7db41e58daf1d7dec43b5f81b`) et `CPL1_calques_png_8px.zip` (3 267 645 octets, SHA-256 `6ffef09cb4ca8342422e6d988d02abe274a40a54f74b50e83a88bce41412a92a`). **11 tests PASS, 1 test de rendus complet ignoré** (cache complet de ROM absent). Pas de lancement PMDO, test GPU/gameplay ni approbation artistique.
+- Sauvegarde Drive privée dans le dossier `PMDO — Cartes et mémoire Arena` : deux packs, rip D13P11A, aperçu, manifeste, note de reprise et sommes SHA-256.
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.
