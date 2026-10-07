@@ -1,0 +1,693 @@
+{
+  "lot": "passage_veines_cristal_v1",
+  "prefix_local": "PVC1",
+  "title": "Passage des Veines Cristallines",
+  "source": {
+    "canonical_reference": "D17P33A_ROM.png",
+    "reference_sha256": "3e598a7df00ccde19657213af2aa4e07db4cccaa3b2754aecee03dd69947649c",
+    "reference_size_px": [
+      456,
+      504
+    ],
+    "reference_rgb_colors": 96,
+    "reference_frames": 12,
+    "reference_graphical_layers": 2,
+    "source_repository": "pret/pmd-sky",
+    "source_commit": "c8073235b39746a7ee74e6cea16c730bd91a1e67",
+    "source_resources": [
+      "files/MAP_BG/d17p33a.bma",
+      "files/MAP_BG/d17p33a.bpc",
+      "files/MAP_BG/d17p33a.bpl",
+      "files/MAP_BG/d17p33a1.bpa",
+      "files/MAP_BG/d17p33a5.bpa"
+    ],
+    "extraction": "source/outil_maps_pmdsky/recuperer_maps.py rom --only D17P33A; skytemple-files",
+    "index_entry": {
+      "size_px": [
+        456,
+        504
+      ],
+      "rendered_frames": 12,
+      "layers": 2,
+      "collision": false,
+      "palette_animation": false,
+      "bpa_slots": [
+        "D17P33A1",
+        null,
+        null,
+        null,
+        "D17P33A5",
+        null,
+        null,
+        null
+      ]
+    },
+    "bpa_timing": {
+      "slot_1": {
+        "frames": 6,
+        "ticks_per_frame": 10,
+        "loop_ticks": 60
+      },
+      "slot_5": {
+        "frames": 4,
+        "ticks_per_frame": 10,
+        "loop_ticks": 40
+      },
+      "combined_frames": 12,
+      "combined_loop_ticks": 120,
+      "at_60_ticks_per_second_seconds": 2.0
+    },
+    "animation_render_sha256": "c76381f2aa662f4ebe94466dba139c9a13fd858842efcd8a0cf7f0af7095bcbf",
+    "animation_render_frames": 12,
+    "gallery_gif": "large.D17P33A.gif.188f8399cf4c18292d9ecdd2454bcd10.gif",
+    "gallery_and_rom_frames_pixel_identical": true,
+    "gallery_declared_ms_per_frame": 160,
+    "rom_webp_declared_ms_per_frame": 167,
+    "native_pixel_origin": "Aucun pixel de texture n'est prélevé. La palette RGB de 96 couleurs est la palette exacte du rip; composition, segmentation et animations visuelles sont générées."
+  },
+  "generated_assets": {
+    "guide": {
+      "file": "decor_magenta.png",
+      "sha256": "29b808f93cfda4d8da0a212b2b545ca24504612da9a90949407f2d3275998792",
+      "size_px": [
+        1200,
+        896
+      ],
+      "prompt": "Use the attached Pokémon Mystery Dungeon D17P33A rip as a STRICT visual reference for cool blue/cyan crystal palette, faceted quartz shapes, dark navy-blue cave stone, crisp pixel-art edges, and top-down scale. Create ONE entirely new original PMD dungeon map composition, WIDE LANDSCAPE 4:3, zoomed out, full map visible, intended for a 768 by 576 pixel final map. Do not copy the reference layout: instead design a broad crystalline cavern with a wide walkable route that clearly connects the SOUTH edge to the NORTH edge, making a gentle S-curve around an offset, elongated luminous turquoise crystal vein/pool in the middle. Put jagged dark-blue mineral walls around the outer rim, several distinct pale cyan crystal clusters at the sides, and a small raised geode shelf in the upper third. Keep the walkable floor broad and unbroken, at least 15 percent of map width at its narrowest point, with no crystals on the path. Render only the map terrain and crystal formations; no characters, no text, no UI, no border, no extra background scenery. Outside the terrain silhouette must be a perfectly flat, uniform chroma-magenta background RGB #DC3CDC, with absolutely no texture or shadows on that background. Pixel-art, crisp stepped silhouettes and discrete facets, limited blue/cyan/lavender palette grounded in the reference, no photorealism, no airbrushed gradients, no soft focus."
+    },
+    "floor_underlay": {
+      "file": "sol_complet.png",
+      "sha256": "546da56804a1ef647daa67ed09dca3527720a8ef265b8e975f2b2e158e8f7c06",
+      "size_px": [
+        1200,
+        896
+      ],
+      "prompt": "Edit the attached image into the matching FULL BASE-FLOOR plate for layer compositing. Preserve the canvas aspect ratio, framing, terrain silhouette, exact south-to-north S-shaped route, and uniform pure magenta RGB #DC3CDC outside the terrain. Inside the entire map silhouette, replace every crystal cluster, crystal wall, rock wall, raised geode shelf, glowing pool, shadow and object with one continuous walkable blue-gray cave floor in the same cracked-stone pixel style as the broad path. Fill underneath all former features; do not leave holes or magenta gaps inside the map. Do not add any objects, highlights, pools or text. Keep the path's overall shape visible only through very subtle floor value variation, not through objects. This is a floor-only underlay, not a finished scene."
+    },
+    "guide_floor_mask_iou": 0.999225,
+    "normalization": {
+      "scale_uniform": 0.64285714,
+      "scaled_size_px": [
+        771,
+        576
+      ],
+      "crop_x_px": [
+        1,
+        2
+      ],
+      "resampling": "BOX pondéré par classe, puis palette D17P33A sans tramage"
+    }
+  },
+  "map": {
+    "size_px": [
+      768,
+      576
+    ],
+    "grid_8px": [
+      96,
+      72
+    ],
+    "tile_px": 8,
+    "layers": [
+      "Sol complet généré",
+      "Bordure minérale",
+      "Alcôve géode",
+      "Cristaux",
+      "Veine lumineuse",
+      "Reflets des cristaux — 6 × 10 ticks",
+      "Ondes de la veine — 4 × 10 ticks"
+    ],
+    "segmentation": {
+      "terrain_ratio": 0.79474,
+      "magenta_ratio": 0.20526,
+      "components_cyan": 504,
+      "veine_component_id": 235,
+      "veine_source_area_px": 81395,
+      "cristaux_source_area_px": 59028,
+      "bordure_source_area_px": 241157,
+      "alcove_source_area_px": 44733,
+      "thresholds": {
+        "magenta": "R>140, B>130, R-G>70, B-G>60",
+        "veine_seed": "G-R>35, B-R>50, G>95, B>125, luminance>85; plus grande composante cyan, closing 9x9, trous remplis",
+        "cristaux": "B-R>42, G-R>20, luminance>118; ouverture 3x3; hors veine",
+        "bordure": "distance au magenta <90 px; hors veine/cristaux/ROI géode",
+        "alcove_roi_px": [
+          620,
+          0,
+          950,
+          285
+        ]
+      }
+    },
+    "palette": {
+      "source_palette_exact": true,
+      "source_palette_colors": 96,
+      "used_palette_colors": 94,
+      "used_rgb_colors": [
+        [
+          23,
+          63,
+          95
+        ],
+        [
+          23,
+          79,
+          111
+        ],
+        [
+          23,
+          95,
+          127
+        ],
+        [
+          31,
+          47,
+          79
+        ],
+        [
+          31,
+          71,
+          103
+        ],
+        [
+          31,
+          79,
+          111
+        ],
+        [
+          39,
+          95,
+          119
+        ],
+        [
+          39,
+          95,
+          135
+        ],
+        [
+          39,
+          103,
+          127
+        ],
+        [
+          39,
+          111,
+          135
+        ],
+        [
+          39,
+          111,
+          143
+        ],
+        [
+          39,
+          119,
+          151
+        ],
+        [
+          39,
+          119,
+          167
+        ],
+        [
+          47,
+          111,
+          159
+        ],
+        [
+          47,
+          119,
+          159
+        ],
+        [
+          47,
+          119,
+          167
+        ],
+        [
+          47,
+          127,
+          175
+        ],
+        [
+          47,
+          135,
+          167
+        ],
+        [
+          47,
+          135,
+          183
+        ],
+        [
+          47,
+          151,
+          191
+        ],
+        [
+          55,
+          103,
+          143
+        ],
+        [
+          55,
+          111,
+          143
+        ],
+        [
+          55,
+          111,
+          151
+        ],
+        [
+          55,
+          111,
+          159
+        ],
+        [
+          55,
+          127,
+          159
+        ],
+        [
+          55,
+          135,
+          167
+        ],
+        [
+          55,
+          143,
+          175
+        ],
+        [
+          55,
+          151,
+          175
+        ],
+        [
+          55,
+          151,
+          183
+        ],
+        [
+          55,
+          159,
+          191
+        ],
+        [
+          63,
+          151,
+          183
+        ],
+        [
+          63,
+          159,
+          183
+        ],
+        [
+          63,
+          167,
+          191
+        ],
+        [
+          63,
+          167,
+          199
+        ],
+        [
+          63,
+          175,
+          199
+        ],
+        [
+          71,
+          151,
+          183
+        ],
+        [
+          71,
+          167,
+          183
+        ],
+        [
+          71,
+          167,
+          191
+        ],
+        [
+          71,
+          175,
+          191
+        ],
+        [
+          71,
+          183,
+          207
+        ],
+        [
+          79,
+          175,
+          191
+        ],
+        [
+          79,
+          175,
+          199
+        ],
+        [
+          79,
+          191,
+          215
+        ],
+        [
+          79,
+          215,
+          231
+        ],
+        [
+          87,
+          175,
+          191
+        ],
+        [
+          87,
+          183,
+          199
+        ],
+        [
+          87,
+          183,
+          207
+        ],
+        [
+          87,
+          199,
+          223
+        ],
+        [
+          95,
+          183,
+          207
+        ],
+        [
+          95,
+          191,
+          215
+        ],
+        [
+          95,
+          199,
+          215
+        ],
+        [
+          95,
+          207,
+          223
+        ],
+        [
+          95,
+          207,
+          231
+        ],
+        [
+          95,
+          223,
+          239
+        ],
+        [
+          103,
+          191,
+          215
+        ],
+        [
+          103,
+          199,
+          215
+        ],
+        [
+          103,
+          199,
+          223
+        ],
+        [
+          103,
+          223,
+          231
+        ],
+        [
+          111,
+          151,
+          199
+        ],
+        [
+          111,
+          183,
+          207
+        ],
+        [
+          111,
+          199,
+          223
+        ],
+        [
+          111,
+          207,
+          223
+        ],
+        [
+          111,
+          215,
+          231
+        ],
+        [
+          111,
+          223,
+          239
+        ],
+        [
+          111,
+          231,
+          247
+        ],
+        [
+          119,
+          207,
+          223
+        ],
+        [
+          119,
+          207,
+          231
+        ],
+        [
+          119,
+          215,
+          231
+        ],
+        [
+          119,
+          223,
+          239
+        ],
+        [
+          119,
+          247,
+          255
+        ],
+        [
+          127,
+          167,
+          215
+        ],
+        [
+          127,
+          215,
+          231
+        ],
+        [
+          127,
+          231,
+          239
+        ],
+        [
+          127,
+          231,
+          247
+        ],
+        [
+          135,
+          223,
+          239
+        ],
+        [
+          143,
+          183,
+          215
+        ],
+        [
+          143,
+          207,
+          223
+        ],
+        [
+          143,
+          223,
+          239
+        ],
+        [
+          143,
+          231,
+          239
+        ],
+        [
+          143,
+          239,
+          247
+        ],
+        [
+          143,
+          247,
+          255
+        ],
+        [
+          151,
+          231,
+          239
+        ],
+        [
+          151,
+          239,
+          247
+        ],
+        [
+          159,
+          231,
+          239
+        ],
+        [
+          159,
+          231,
+          247
+        ],
+        [
+          159,
+          247,
+          255
+        ],
+        [
+          167,
+          239,
+          247
+        ],
+        [
+          167,
+          247,
+          255
+        ],
+        [
+          175,
+          247,
+          255
+        ],
+        [
+          183,
+          247,
+          255
+        ],
+        [
+          183,
+          255,
+          255
+        ],
+        [
+          191,
+          247,
+          255
+        ],
+        [
+          191,
+          255,
+          255
+        ],
+        [
+          223,
+          255,
+          255
+        ]
+      ]
+    },
+    "static_preview": "maps/passage/review/PVC1_scene_t000.png"
+  },
+  "animation": {
+    "visuals_generated": true,
+    "timing_basis": "BPA1/BPA5 frame counts and frame durations, not GIF/WebP timing",
+    "tracks": [
+      {
+        "name": "Reflets des cristaux",
+        "frames": 6,
+        "ticks_per_frame": 10,
+        "loop_ticks": 60
+      },
+      {
+        "name": "Ondes de la veine",
+        "frames": 4,
+        "ticks_per_frame": 10,
+        "loop_ticks": 40
+      }
+    ],
+    "composite_frames": 12,
+    "composite_loop_ticks": 120,
+    "preview_ms_per_phase": 167,
+    "palette_colors_exact": true
+  },
+  "collision": {
+    "method": "Extérieur, bordure minérale, alcôve, cristaux et veine bloqués; grille 8 px; cellule bloquée si plus de 25 % de pixels obstacles; ouvertures nord/sud réservées.",
+    "blocked_cells": 4227,
+    "walkable_cells": 2685,
+    "markers_px": {
+      "entrance": [
+        376,
+        552
+      ],
+      "sortie": [
+        376,
+        8
+      ]
+    },
+    "marker_adjustments_px": {
+      "entrance": 0,
+      "sortie": 0
+    },
+    "north_south_path_16x16": true
+  },
+  "native": {
+    "target": "PMDO 0.8.12",
+    "namespace": "passage_veines_cristal",
+    "asset": "pvc1_passage_veines_cristallines",
+    "tile_px": 8,
+    "tile_banks": {
+      "PVC1_00_SOL": 5002,
+      "PVC1_01_BORDURE": 1922,
+      "PVC1_02_ALCOVE": 234,
+      "PVC1_03_CRISTAUX": 1072,
+      "PVC1_04_VEINE": 572,
+      "PVC1_05_REFLETS": 2109,
+      "PVC1_06_ONDES": 839
+    },
+    "ground_layer_count_including_top": 8,
+    "tile_index_nodes": 7,
+    "runtime_tested": false,
+    "gpu_tested": false
+  },
+  "limitations": [
+    "PVC1 est un identifiant local de lot, pas un ID MAP_BG officiel.",
+    "Le décor et les matières sont des rendus générés référencés, segmentés puis quantifiés; ils ne sont pas des tuiles source pixel-natives.",
+    "La palette 96 couleurs est exacte au rip D17P33A, mais une palette exacte ne certifie pas l'origine native des formes.",
+    "Les effets visuels sont générés; seules les durées et longueurs des deux cycles BPA canoniques (6/4 phases, 10 ticks) servent de cadence.",
+    "Les collisions et les marqueurs entrance/sortie sont provisoires; les destinations/warps, occlusions et rendu demandent une revue dans PMDO.",
+    "Aucun test runtime PMDO, GPU ou gameplay n'a été effectué; l'approbation artistique reste false."
+  ],
+  "art_approved": false,
+  "runtime_tested": false,
+  "gpu_tested": false
+}

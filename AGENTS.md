@@ -1227,3 +1227,11 @@ Pas de runtime. Pas dans le mod unique.
 - Vérification locale : recréer les six stages ignorés `.cache/` en exécutant `build.py`, puis lancer les six suites de tests. **76 tests passent**. Les ZIP/ORA versionnés ont été restaurés après le rebuild afin de garder les octets d'origine ; les PNG recalculés étaient identiques. Aucun test PMDO, rendu GPU ou gameplay n'a été revendiqué.
 - Cette consolidation est volontairement **ciblée**, pas une fusion de toutes les branches Arena. Les autres familles restent sur leurs branches distantes ; les futures cartes de cette session s'ajoutent à la branche fixe, avec leur propre provenance et leurs tests.
 
+## PVC1 — Passage des Veines Cristallines (7 octobre 2026)
+
+- Lot de continuation après CPL1 : référence choisie par l'agent `D17P33A`. Code `PVC1` local uniquement. Voir `source/passage_veines_cristal_v1/README.md` et `REPRISE_MAPS.md`.
+- Rip ROM extrait et comparé au GIF : 12/12 frames pixel-identiques. BPA1 = 6×10 ticks, BPA5 = 4×10 ticks; boucle composée 120 ticks. Ne pas utiliser 160 ms (GIF) ou 167 ms (WebP) comme timing moteur.
+- Deux images générées (décor magenta + sol complet), segmentées et quantifiées sans tramage sur les 96 couleurs RGB du rip. **Aucun pixel de texture natif** : les formes/effets générés ne deviennent pas canoniques par la palette exacte. Les reflets/ondes créés utilisent seulement les longueurs et cadences des BPA comme référence.
+- Ground 768×576, calques par matière, masque/collision, marqueurs provisoires, ORA, PNG, aperçu, ZIP PMDO 0.8.12. 7 tests locaux passent; aucun runtime, GPU, gameplay ou art signoff. Les warps, occlusions et collisions doivent encore être revus dans PMDO.
+- Après toute extraction ciblée `recuperer_maps.py rom --only ...`, restaurer les index/planches modifiés par le script à partir de leur état Git avant commit; ne pas inclure les side effects dans le lot.
+

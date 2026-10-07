@@ -1,5 +1,17 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Passage des Veines Cristallines — PVC1 (7 octobre 2026)
+
+Suite de CPL1; biome choisi par l'agent pour apporter un passage cristallin, référence canonique `D17P33A`. **PVC1 est un code local**, pas un identifiant `MAP_BG` officiel.
+
+- Sources : `source/passage_veines_cristal_v1/`; rendu/paquets : `renders/passage_veines_cristal_v1/`; aperçu : `apercu_passage_veines_cristal_v1.html`.
+- Rip ROM 456×504 px, 12 états composés, 2 couches, 96 couleurs. Les 12 frames du WebP extrait sont pixel-identiques au GIF galerie. BPA1 : 6 × 10 ticks; BPA5 : 4 × 10 ticks; boucle combinée 120 ticks. Les durées GIF/WebP (160/167 ms) ne définissent pas la cadence canonique.
+- Ground 4:3, 768×576 px, 96×72 cellules de 8 px. Cinq calques statiques, deux pistes animées et Top vide. Le décor et le sol sont générés, segmentés, puis quantifiés sur la palette exacte du rip; **aucun pixel de texture natif n'est copié ou présenté comme tel**. Les effets visuels sont générés; les cadences 6/4 phases proviennent des BPA.
+- Masque d'obstacles : 4 227 cellules bloquées / 2 685 praticables; route nord-sud 16×16 vérifiée hors moteur. Marqueurs provisoires `entrance` / `sortie`, warps non reliés.
+- Packs : `PVC1_projet_pmdo_0812.zip` (790 257 octets, SHA-256 `ee7e0fe24128b3bbf3906e053ba372150c6fffcf5ace581823c8fb6e79904631`) et `PVC1_calques_png_8px.zip` (6 250 510 octets, SHA-256 `a462576b2de92a3b24c3ec3121d0a5f038f37192954a47c9f7863951c326b24b`). **7 tests PASS**; les contrôles détaillés et sommes sont dans `manifest.json` et `SHA256SUMS.json`.
+- Sauvegarde Drive privée : [dossier PMDO — Cartes et mémoire Arena](https://drive.google.com/drive/folders/1joJL1O6mhAPB9KuuwrEjPQRhk44mIgOj), avec 9 artefacts PVC1 déposés; 16 fichiers au total (7 CPL1 + 9 PVC1), sans doublons ni partage public ajouté.
+- Aucun runtime PMDO, rendu GPU, test gameplay ni approbation artistique n'est revendiqué.
+
 ## Consolidation ciblée — six finales PMDO (5 octobre 2026)
 
 La branche de session regroupe maintenant les **dernières versions finalisées** des six fins de donjon ci-dessous, récupérées depuis les branches de sessions sœurs sans reprendre leurs anciennes variantes :

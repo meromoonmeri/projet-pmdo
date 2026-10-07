@@ -1,0 +1,42 @@
+{
+  "PVC1_projet_pmdo_0812.zip": {
+    "sha256": "ee7e0fe24128b3bbf3906e053ba372150c6fffcf5ace581823c8fb6e79904631",
+    "bytes": 790257
+  },
+  "PVC1_calques_png_8px.zip": {
+    "sha256": "a462576b2de92a3b24c3ec3121d0a5f038f37192954a47c9f7863951c326b24b",
+    "bytes": 6250510
+  },
+  "D17P33A_ROM.png": {
+    "sha256": "3e598a7df00ccde19657213af2aa4e07db4cccaa3b2754aecee03dd69947649c",
+    "bytes": 150109
+  },
+  "D17P33A_animations.webp": {
+    "sha256": "c76381f2aa662f4ebe94466dba139c9a13fd858842efcd8a0cf7f0af7095bcbf",
+    "bytes": 200712
+  },
+  "decor_magenta.png": {
+    "sha256": "29b808f93cfda4d8da0a212b2b545ca24504612da9a90949407f2d3275998792",
+    "bytes": 2032052
+  },
+  "sol_complet.png": {
+    "sha256": "546da56804a1ef647daa67ed09dca3527720a8ef265b8e975f2b2e158e8f7c06",
+    "bytes": 1661988
+  },
+  "PVC1_scene_t000.png": {
+    "sha256": "22d445e7c272417dcdbeed2dcb929e111601d227c69c9f6991d137197cbab966",
+    "bytes": 200963
+  },
+  "PVC1_animation_12_phases.webp": {
+    "sha256": "a635be9e236fd179040db860ebbc9c327506fffc1ae439a3c3d2332e891a084a",
+    "bytes": 242512
+  },
+  "SESSION_NOTE.md": {
+    "sha256": "437496dab793add98a8dd4c70decf376e6613213cd7a2c3c44b407e3b6b60fd1",
+    "bytes": 3423
+  },
+  "apercu_passage_veines_cristal_v1.html": {
+    "sha256": "104a41d42e30a4f9680e275b2db9b769caf53e50b43d4f833f8dac610dfac72a",
+    "bytes": 1032571
+  }
+}
