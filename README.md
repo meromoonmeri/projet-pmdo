@@ -1,5 +1,30 @@
 # Guilde Treehouse — passages ouverts PMD
 
+## Nouvelle série de cartes PMD Red × Sky — pilote 01 (8 octobre 2026)
+
+**Lac de Verre** (`LGV1`) est le pilote de la série inspirée des dépôts PMDO Red et Sky. Références : Red `T01P02A` (*Whiscash Pond*) + Sky `D52P11A` (code de preview; aucun nom canonique supplémentaire n’est affirmé). Sky `D04P12A` / *Waterfall Cave* reste écartée pour éviter un doublon antérieur. Le nombre et les thèmes des cartes suivantes restent ouverts.
+
+- **Aperçu interactif** : [`apercu_serie_sources_croisees_v1.html`](apercu_serie_sources_croisees_v1.html).
+- **Ground PMDO 0.8.12** : [`LGV1_projet_pmdo_0812.zip`](renders/serie_sources_croisees_v1/lac_de_verre/LGV1_projet_pmdo_0812.zip).
+- **Calques PNG 8 px + OpenRaster** : [`LGV1_calques_png_8px.zip`](renders/serie_sources_croisees_v1/lac_de_verre/LGV1_calques_png_8px.zip); aperçu, masques, palette et manifeste dans `renders/serie_sources_croisees_v1/lac_de_verre/`.
+- **Méthode corrigée** : le Ground réel D52P11A est décodé depuis son `.rsground` et son `.tile` et contrôlé pixel pour pixel contre la preview Sky. Le layout reste celui de la zone PMD, adapté au 4:3 sans étirement; seule une petite ellipse d’eau est ajoutée depuis les pixels des six rendus Red T01P02A. Python réalise le masque, le redimensionnement et l’export. Aucun fond magenta ni décor généré.
+- Source D52 : 504 × 408 px, étendue par réflexion à 544 × 408 px (68 × 51 cases), sans étirement. Bruts persistants : **1200 × 896**; réduction BOX uniforme puis recadrage centré vers **768 × 576** (96 × 72 cases de 8 px). Palette partagée de **96 couleurs**.
+- **Reproduction** : `source/serie_sources_croisees_v1/lac_de_verre/` (sources canoniques, rendus Red, hashes, build, tests, packaging). **11 tests PASS**.
+- L’eau provient des rendus visuels Red, pas de sa banque `.tile`. Les nouvelles banques LGV1 ne sont donc pas certifiées comme tuiles natives. Passage 16 × 16 vérifié sur grille, pas dans le jeu; aucun warp. `art_approved`, `native_texture_certified` et `runtime_tested` restent faux.
+
+## Mod multicalque des fins de donjon — première édition (8 octobre 2026)
+
+Le premier mod de la série rassemble **11 Grounds PMDO 0.8.12** : neuf fins dans l’ordre FVS1 → FST1, FGG1 comme variante de Givre conservée et FOC1 comme carte Océan hors-série. Chaque carte garde ses calques PMDO, animations, collisions, marqueurs et banques. Dimensions communes : **768 × 576 px**, grille 8 px. L’index fusionne **91 banques**.
+
+- **Mod** : [`guilde_fins_donjons_pmdo_0812.zip`](renders/mod_fins_donjons_v1/guilde_fins_donjons_pmdo_0812.zip) (18,3 Mo).
+- **Galerie interactive** : [`apercu_mod_fins_donjons_v1.html`](apercu_mod_fins_donjons_v1.html) — chaque carte ouvre son aperçu individuel multicalque.
+- **README / planche / manifeste / rapport de build** : `renders/mod_fins_donjons_v1/`.
+- **Création et contrôles** : `source/mod_fins_donjons_v1/README.md`, `WORKFLOW.md`, `build_mod.py`, `test_mod.py`.
+- L’assemblage copie les `.tile`, `.rsground` et scripts Lua octet pour octet depuis les projets individuels ; seul l’index est fusionné et le chemin des scripts passe au namespace commun. Aucun décor n’a été régénéré.
+- **Validation** : 6 tests PASS (octets sources, index, tuiles référencées, calques, collisions, marqueurs, installateur et galerie). Deux builds consécutifs donnent le même SHA-256 : `42d19a5b86db0026f2f933c518a3206399fcaed9ac7489c0e1bb70c603c7ee38`.
+- **Périmètre à compléter** : Fin Clairière tropicale, Fin Couloir violet, Fin Mt. Thunder et Fin Jardin secret ne sont pas encore créées et ne sont pas incluses. FGG2 est la version de Givre dans l’ordre principal ; FGG1 reste une variante consultable. FOC1 est hors-série.
+- **Limites** : aucun test de chargement/rendu dans PMDO, aucun warp et aucun raccord de donjon ; l’assemblage ne modifie pas `art_approved` des cartes sources.
+
 ## Fin Star Cave : arène de cristal, FST1 (29 septembre 2026)
 
 **Demande** : « bon travail continue la suite ! » (après FSM1). Suite de la série des fins de donjon dans l'ordre du mod : **FST1** prolonge l'entrée ESC1 (Star Cave). Biome et portée choisis par l'agent, **à confirmer**.

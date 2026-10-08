@@ -1,0 +1,494 @@
+{
+  "lot": "serie_sources_croisees_v1/lac_de_verre",
+  "title": "Lac de Verre",
+  "prefix": "LGV1",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "method": "recomposition légère de sources PMD canoniques; base du Ground Sky D52P11A rendue depuis son .rsground et son .tile; pixels d’eau Red T01P02A recadrés dans le bassin central; traitement et export Python; aucune image de décor générée",
+  "references": [
+    {
+      "repo": "meromoonmeri/PMD-RED-PMDO-PORT",
+      "branch": "main",
+      "commit": "680fb85efacbde40473ef3f09dde2c0152e96f6c",
+      "map": "T01P02A (Whiscash Pond)",
+      "path": "PMDRed_PMDO_Framework/output/Visual_Renders/T01P02A_Frame_0.png",
+      "url": "https://github.com/meromoonmeri/PMD-RED-PMDO-PORT/blob/680fb85efacbde40473ef3f09dde2c0152e96f6c/PMDRed_PMDO_Framework/output/Visual_Renders/T01P02A_Frame_0.png",
+      "use": "source de pixels pour le petit bassin; recadrage identique dans les frames 0–5; non présenté comme banque .tile"
+    },
+    {
+      "repo": "meromoonmeri/PMD-SKY-PMDO-PORT",
+      "branch": "master",
+      "commit": "d62110a00269bdc861b8fe41b077607a80f50978",
+      "map": "D52P11A (Ground natif; code de preview, nom canonique non affirmé)",
+      "path": "output/Grounds/d52p11a.rsground",
+      "tiles_path": "output/Tiles/D52p11a_Base.tile",
+      "preview_path": "output/Previews/d52p11a.png",
+      "ground_blob": "b938d1668244302f02cac52989627b66e15b243a",
+      "tiles_blob": "68a914a3281fa3cfef46b0347a5b9c3d9136e4da",
+      "url": "https://github.com/meromoonmeri/PMD-SKY-PMDO-PORT/tree/d62110a00269bdc861b8fe41b077607a80f50978/output",
+      "use": "base D52 décodée depuis le Ground et le tileset natifs; le rendu brut décode pixel-pour-pixel la preview locale"
+    }
+  ],
+  "reference_files": [
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame0.png",
+      "sha256": "a2791e9b79ae393f9c116fde50f6783f9a5799618d3297f2d5bfbf167c677ce3",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame1.png",
+      "sha256": "96c8ef59e598168ec02f913f1c24d68e22a6f3e258cacc845df6035cefcf2c14",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame2.png",
+      "sha256": "bb5e0c35beac1a0ac6820215e6e0d20b02298491b9e3db5ed6f23121e0d5de4b",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame3.png",
+      "sha256": "48800d26b543f9d0432d809b140a3ea2f73ca48cf771e32b6d746440cd0cb57c",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame4.png",
+      "sha256": "5d5b5daa3138b0b0f948dbfaedfc0098e10b3222f7ce7c8b851b2bacf2a92e82",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame5.png",
+      "sha256": "5251a118effa701936d6d4017dc9994fdc29d2d4fcafab6df28ba2a40fcc29f9",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/sky_D52P11A.png",
+      "sha256": "84350fa4032a4e28fc5c6c589ee1289b7f7cc2c85d01fa5c9b53f47566d45bdd",
+      "size_px": [
+        504,
+        408
+      ]
+    }
+  ],
+  "native_source_files": [
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/native_D52P11A/d52p11a.rsground",
+      "sha256": "a2a4d2b3adead0953fe7a48e868cf92a8acb1dc87539a552311f52e8aad0b6b6",
+      "size_bytes": 1480423
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/native_D52P11A/D52p11a_Base.tile",
+      "sha256": "61c5f5efe50ed31347262b2214ecf5a4e0d8da7a71335d564cda0adcdab25737",
+      "size_bytes": 258097
+    }
+  ],
+  "native_decode": {
+    "ground_grid": [
+      63,
+      51
+    ],
+    "native_render_px": [
+      504,
+      408
+    ],
+    "tile_px": 8,
+    "ground_version": "0.8.9.0",
+    "ground_sha256": "a2a4d2b3adead0953fe7a48e868cf92a8acb1dc87539a552311f52e8aad0b6b6",
+    "tile_sha256": "61c5f5efe50ed31347262b2214ecf5a4e0d8da7a71335d564cda0adcdab25737",
+    "render_matches_reference_png": true,
+    "native_blocked_cells": 2850
+  },
+  "raw_inputs": [
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/bruts/D52P11A_zone_1200x896.png",
+      "sha256": "05148f481c9c64e0d2bf143892492f35dbdfce8bd799050a705daa2e086f32a4",
+      "size_px": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/bruts/LGV1_lac_de_verre_frame0_1200x896.png",
+      "sha256": "9725b9d4816e10f92b7cda1879964bd29f6a62b61292382ec7e4235c710978b9",
+      "size_px": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/bruts/LGV1_masque_lac_1200x896.png",
+      "sha256": "0667e67970f9da6c5f5f60e06e03ac98961b408dcfbb489c2b472d184fb5795b",
+      "size_px": [
+        1200,
+        896
+      ]
+    }
+  ],
+  "adaptation_4_3": {
+    "native_ground_grid": [
+      63,
+      51
+    ],
+    "native_ground_px": [
+      504,
+      408
+    ],
+    "horizontal_reflect_pad_cells_left_right": [
+      2,
+      3
+    ],
+    "adapted_grid": [
+      68,
+      51
+    ],
+    "adapted_canvas_px": [
+      544,
+      408
+    ],
+    "raw_scale_uniforme": 2.2058823529411766,
+    "raw_intermediate_px": [
+      1200,
+      900
+    ],
+    "raw_crop_top_bottom_px": [
+      2,
+      2
+    ],
+    "raw_px": [
+      1200,
+      896
+    ],
+    "method": "extension par réflexion aux bords horizontaux, sans étirement; agrandissement NEAREST pour composer à 1200×900 puis retrait de 2 px en haut et en bas"
+  },
+  "normalization": {
+    "source_px": [
+      1200,
+      896
+    ],
+    "scale_uniforme": 0.6428571428571429,
+    "scaled_px": [
+      771,
+      576
+    ],
+    "crop_x_left_right": [
+      1,
+      2
+    ],
+    "output_px": [
+      768,
+      576
+    ],
+    "method": "BOX, facteur uniforme 576/896, recadrage centré vers 768×576; calque d’eau et masque traités séparément"
+  },
+  "segmentation": {
+    "decor_sol": "Ground D52P11A conservé comme calque plein cadre; aucun key magenta",
+    "water": "ellipse centrale dessinée comme masque binaire Python; eau hors masque transparente",
+    "water_crop": {
+      "xyxy": [
+        270,
+        226,
+        334,
+        258
+      ],
+      "source_px": [
+        64,
+        32
+      ],
+      "lake_box_native_px": [
+        224,
+        216,
+        96,
+        48
+      ]
+    },
+    "exterior": "aucun extérieur transparent: le Ground source couvre tout le canvas"
+  },
+  "palette": {
+    "shared_colors": 96,
+    "target_colors": 96,
+    "sampling": {
+      "label": "PMD natif D52P11A + eau extraite de T01P02A",
+      "target_colors": 96,
+      "actual_colors": 96,
+      "required_source_unique_rgb": 51,
+      "all_source_colors_retained": true,
+      "filler_colors_are_exact_reference_rgb": true,
+      "source_files": [
+        "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame0.png",
+        "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame1.png",
+        "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame2.png",
+        "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame3.png",
+        "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame4.png",
+        "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame5.png",
+        "source/serie_sources_croisees_v1/lac_de_verre/references/sky_D52P11A.png"
+      ],
+      "method": "RGB sources exacts conservés; palette complétée par échantillonnage farthest-point, sans nouvelle couleur; sans tramage"
+    },
+    "source_rgb_distance": {
+      "base_D52P11A": {
+        "sample_pixels": 24000,
+        "mean_rgb_euclidean": 1.02,
+        "p95_rgb_euclidean": 6.928,
+        "max_rgb_euclidean": 12.0
+      },
+      "eau_T01P02A": {
+        "sample_pixels": 24000,
+        "mean_rgb_euclidean": 0.0,
+        "p95_rgb_euclidean": 0.0,
+        "max_rgb_euclidean": 0.0
+      }
+    },
+    "water_source_unique_rgb": [
+      [
+        0,
+        159,
+        215
+      ],
+      [
+        0,
+        175,
+        231
+      ],
+      [
+        0,
+        191,
+        247
+      ],
+      [
+        7,
+        207,
+        255
+      ],
+      [
+        7,
+        215,
+        255
+      ],
+      [
+        7,
+        223,
+        255
+      ],
+      [
+        7,
+        239,
+        255
+      ],
+      [
+        7,
+        247,
+        255
+      ],
+      [
+        47,
+        135,
+        55
+      ],
+      [
+        47,
+        159,
+        103
+      ]
+    ],
+    "dither": false
+  },
+  "water": {
+    "frames": 6,
+    "distinct_frames_after_export": 3,
+    "frame_length_ticks": 10,
+    "frame_ms": 166.67,
+    "loop_seconds": 1.0,
+    "animation": "recadrage des frames Red T01P02A 0–5; cycle source conservé, aucune onde procédurale",
+    "source_frames": [
+      {
+        "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame0.png",
+        "water_geometry_coverage": 0.953613,
+        "blue_pixel_ratio_this_frame": 0.953613,
+        "mask_source": "frame 0 water geometry reused for frames 0–5 to retain teal animation pixels",
+        "crop_xyxy": [
+          270,
+          226,
+          334,
+          258
+        ],
+        "crop_px": [
+          64,
+          32
+        ],
+        "unique_rgb_after_fill": 8
+      },
+      {
+        "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame1.png",
+        "water_geometry_coverage": 0.953613,
+        "blue_pixel_ratio_this_frame": 0.944336,
+        "mask_source": "frame 0 water geometry reused for frames 0–5 to retain teal animation pixels",
+        "crop_xyxy": [
+          270,
+          226,
+          334,
+          258
+        ],
+        "crop_px": [
+          64,
+          32
+        ],
+        "unique_rgb_after_fill": 10
+      },
+      {
+        "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame2.png",
+        "water_geometry_coverage": 0.953613,
+        "blue_pixel_ratio_this_frame": 0.94043,
+        "mask_source": "frame 0 water geometry reused for frames 0–5 to retain teal animation pixels",
+        "crop_xyxy": [
+          270,
+          226,
+          334,
+          258
+        ],
+        "crop_px": [
+          64,
+          32
+        ],
+        "unique_rgb_after_fill": 10
+      },
+      {
+        "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame3.png",
+        "water_geometry_coverage": 0.953613,
+        "blue_pixel_ratio_this_frame": 0.944336,
+        "mask_source": "frame 0 water geometry reused for frames 0–5 to retain teal animation pixels",
+        "crop_xyxy": [
+          270,
+          226,
+          334,
+          258
+        ],
+        "crop_px": [
+          64,
+          32
+        ],
+        "unique_rgb_after_fill": 10
+      },
+      {
+        "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame4.png",
+        "water_geometry_coverage": 0.953613,
+        "blue_pixel_ratio_this_frame": 0.953613,
+        "mask_source": "frame 0 water geometry reused for frames 0–5 to retain teal animation pixels",
+        "crop_xyxy": [
+          270,
+          226,
+          334,
+          258
+        ],
+        "crop_px": [
+          64,
+          32
+        ],
+        "unique_rgb_after_fill": 8
+      },
+      {
+        "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame5.png",
+        "water_geometry_coverage": 0.953613,
+        "blue_pixel_ratio_this_frame": 0.958496,
+        "mask_source": "frame 0 water geometry reused for frames 0–5 to retain teal animation pixels",
+        "crop_xyxy": [
+          270,
+          226,
+          334,
+          258
+        ],
+        "crop_px": [
+          64,
+          32
+        ],
+        "unique_rgb_after_fill": 8
+      }
+    ]
+  },
+  "layers_bottom_to_top": [
+    {
+      "index": 0,
+      "name": "zone_glace_D52P11A",
+      "file": "calques/LGV1_00_zone_D52P11A.png",
+      "frames": 1,
+      "frame_length_ticks": 60,
+      "origin": "Ground natif D52P11A décodé puis adapté au 4:3 sans étirement"
+    },
+    {
+      "index": 1,
+      "name": "eau_lac_T01P02A",
+      "file": "animation/eau/LGV1_01_eau_T01P02A_fXX.png",
+      "frames": 6,
+      "frame_length_ticks": 10,
+      "origin": "recadrage des six frames du rendu Red T01P02A; aucune animation procédurale"
+    }
+  ],
+  "layer_limits": "Base visuelle décodée d’un Ground Sky réel et frames Red issues de rendus publiés; mise à l’échelle et extraction du bassin modifient les pixels. Les nouvelles banques LGV1 ne sont pas les banques Sky/Red originales et la texture n’est pas certifiée native.",
+  "access": {
+    "entry_px": [
+      56,
+      352
+    ],
+    "threshold_px": [
+      584,
+      352
+    ],
+    "entry_grid_yx": [
+      44,
+      7
+    ],
+    "threshold_grid_yx": [
+      44,
+      73
+    ],
+    "path_found_16x16": true,
+    "reachable_16x16_cells": 476,
+    "blocked_cells": 6342,
+    "total_cells": 6912,
+    "rule": "collisions natives D52P11A rééchantillonnées; eau du lac bloquante (>25 % d’une case); empreinte personnage 16×16 px; corridor est-ouest"
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "serialization": "0.8.12.0",
+    "asset": "lgv1_lac_de_verre",
+    "namespace": "serie_sources_croisees_lac_de_verre",
+    "tex_size": 1,
+    "tile_px": 8,
+    "banks": [
+      "LGV1_00_ZONE_D52P11A",
+      "LGV1_01_EAU_T01P02A"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun; markers entrance/donjon_seuil à raccorder",
+    "tiles_per_bank": {
+      "LGV1_00_ZONE_D52P11A": 5568,
+      "LGV1_01_EAU_T01P02A": 80
+    }
+  },
+  "art_approved": false,
+  "native_texture_certified": false,
+  "runtime_tested": false
+}

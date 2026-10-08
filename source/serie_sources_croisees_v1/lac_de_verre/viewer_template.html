@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lac de Verre · série PMD Red × Sky · 4:3</title>
+<style>
+:root{color-scheme:dark;--bg:#101920;--panel:#19272f;--line:#31454f;--ink:#e7f1f4;--muted:#b8cbd3;--ice:#b8e4ed;--gold:#e4d38f}
+*{box-sizing:border-box}body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,sans-serif}
+main{max-width:1500px;margin:auto}h1{margin:0 0 5px;font-size:30px}p{max-width:85ch;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(320px,1fr) 340px;gap:20px;align-items:start}
+.stage{overflow:auto;max-height:88vh;border:1px solid var(--line);background:#060c11;border-radius:8px;padding:10px}
+canvas{display:block;image-rendering:pixelated;max-width:none}
+aside{display:grid;gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}.card h2{font-size:16px;margin:0 0 8px;color:var(--ice)}
+button{background:#cdebf0;color:#11232b;border:0;border-radius:5px;padding:7px 12px;margin:2px 4px 2px 0;font-weight:650;cursor:pointer}button.on{background:var(--gold)}
+label{display:block;padding:3px 0;color:var(--muted);cursor:pointer}code{color:var(--ice)}.note{border-left:3px solid var(--gold);padding-left:10px;font-size:13px}.small{font-size:13px;color:var(--muted)}
+a{color:#b9e9f5}ul{padding-left:20px;margin:4px 0}
+@media(max-width:980px){.layout{grid-template-columns:1fr}aside{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
+</style>
+</head>
+<body>
+<main>
+<h1>Lac de Verre — première carte de la série Red × Sky</h1>
+<p>Variante légère d’un vrai Ground Sky <strong>D52P11A</strong>, au format 4:3, 768 × 576 px (96 × 72 cases). La base et les collisions viennent du Ground et du tileset Sky; le petit bassin réutilise les pixels des six rendus Red T01P02A. Adaptation et calques par Python, palette partagée de 96 couleurs, sans magenta ni décor généré.</p>
+<div class="layout">
+  <div class="stage"><canvas id="map"></canvas></div>
+  <aside>
+    <section class="card"><h2>Lecture</h2>
+      <button id="play">Pause</button><button id="step">Phase suivante</button>
+      <span id="phase" class="small"></span>
+      <div><button data-zoom="1">1×</button><button data-zoom="2" class="on">2×</button><button data-zoom="3">3×</button></div>
+    </section>
+    <section class="card"><h2>Affichage</h2>
+      <label><input id="grid" type="checkbox"> Grille 8 px</label>
+      <label><input id="collisions" type="checkbox"> Collisions et marqueurs (rouge)</label>
+      <div id="layers"></div>
+      <button id="all">Réafficher tous les calques</button>
+    </section>
+    <section class="card"><h2>Références utilisées</h2>
+      <ul><li><a target="_blank" rel="noreferrer" href="https://github.com/meromoonmeri/PMD-RED-PMDO-PORT/blob/680fb85efacbde40473ef3f09dde2c0152e96f6c/PMDRed_PMDO_Framework/output/Visual_Renders/T01P02A_Frame_0.png">Red · T01P02A / Whiscash Pond</a></li>
+      <li><a target="_blank" rel="noreferrer" href="https://github.com/meromoonmeri/PMD-SKY-PMDO-PORT/blob/d62110a00269bdc861b8fe41b077607a80f50978/output/Previews/d52p11a.png">Sky · D52P11A preview</a></li></ul>
+      <p class="small">Les codes et commits sont dans le manifeste. La référence D04P12A / Waterfall Cave n’a pas été reprise.</p>
+    </section>
+    <section class="card"><h2>Limites documentées</h2>
+      <p class="note">Base reconstruite depuis le Ground Sky natif; eau prélevée dans le rendu Red, non dans sa banque .tile. Les pixels sont redimensionnés/recompilés et les nouvelles banques ne sont pas certifiées natives. Le passage 16 × 16 est vérifié sur grille, pas dans le jeu. Aucun warp; <code>donjon_seuil</code> reste à raccorder.</p>
+      <p class="small">Archive Ground PMDO 0.8.12 et calques PNG inclus dans les livrables.</p>
+    </section>
+  </aside>
+</div>
+</main>
+<script>
+const D=__DATA__,W=D.size[0],H=D.size[1],canvas=document.getElementById('map'),ctx=canvas.getContext('2d');
+function image(uri){const im=new Image();im.src=uri;return im}
+const water=D.water.map(image),layers=D.layers.map(l=>({id:l.id,name:l.name,im:image(l.uri)})),collision=image(D.collision);
+const controls=document.getElementById('layers'),visible={};
+const waterLabel=document.createElement('label'),waterBox=document.createElement('input');waterBox.type='checkbox';waterBox.checked=true;waterBox.onchange=draw;waterLabel.append(waterBox,' Eau du lac (frames Red T01P02A)');controls.append(waterLabel);
+for(const l of layers){const label=document.createElement('label'),box=document.createElement('input');box.type='checkbox';box.checked=true;box.onchange=draw;visible[l.id]=box;label.append(box,' '+l.name);controls.append(label)}
+let zoom=2,frame=0,playing=true,last=performance.now();
+function composite(c){c.clearRect(0,0,W,H);c.fillStyle='#071017';c.fillRect(0,0,W,H);for(const l of layers){if(visible[l.id].checked)c.drawImage(l.im,0,0)}if(waterBox.checked)c.drawImage(water[frame],0,0);if(document.getElementById('collisions').checked)c.drawImage(collision,0,0)}
+function draw(){canvas.width=W*zoom;canvas.height=H*zoom;ctx.imageSmoothingEnabled=false;ctx.save();ctx.scale(zoom,zoom);composite(ctx);ctx.restore();
+ if(document.getElementById('grid').checked){ctx.strokeStyle='rgba(240,250,255,.18)';ctx.lineWidth=1;ctx.beginPath();for(let x=0;x<=W;x+=8){ctx.moveTo(x*zoom+.5,0);ctx.lineTo(x*zoom+.5,H*zoom)}for(let y=0;y<=H;y+=8){ctx.moveTo(0,y*zoom+.5);ctx.lineTo(W*zoom,y*zoom+.5)}ctx.stroke()}
+ document.getElementById('phase').textContent=`phase ${frame+1}/${water.length} · ${D.frame_ms} ms`}
+function tick(t){if(playing&&t-last>=D.frame_ms){frame=(frame+1)%water.length;last=t;draw()}requestAnimationFrame(tick)}
+document.getElementById('play').onclick=e=>{playing=!playing;e.target.textContent=playing?'Pause':'Lecture'};
+document.getElementById('step').onclick=()=>{frame=(frame+1)%water.length;draw()};
+document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{zoom=Number(b.dataset.zoom);document.querySelectorAll('[data-zoom]').forEach(q=>q.classList.toggle('on',q===b));draw()});
+document.getElementById('grid').onchange=draw;document.getElementById('collisions').onchange=draw;
+document.getElementById('all').onclick=()=>{waterBox.checked=true;Object.values(visible).forEach(v=>v.checked=true);draw()};
+Promise.all([...water,...layers.map(l=>l.im),collision].map(im=>im.decode())).then(()=>{draw();requestAnimationFrame(tick)});
+</script>
+</body>
+</html>

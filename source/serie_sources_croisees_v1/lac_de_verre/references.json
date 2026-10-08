@@ -1,0 +1,75 @@
+{
+  "method": "recomposition légère de sources PMD canoniques, Python, format 4:3 sans fond magenta",
+  "decision_de_direction": "Conserver une vraie zone PMD et ne modifier que légèrement son layout; ne pas utiliser les essais de décor généré.",
+  "references_generatrices": [
+    {
+      "repo": "meromoonmeri/PMD-RED-PMDO-PORT",
+      "ref": "main",
+      "commit": "680fb85efacbde40473ef3f09dde2c0152e96f6c",
+      "map": "T01P02A (Whiscash Pond)",
+      "file_pattern": "PMDRed_PMDO_Framework/output/Visual_Renders/T01P02A_Frame_{0..5}.png",
+      "local_copies": [
+        "references/red_T01P02A_frame0.png",
+        "references/red_T01P02A_frame1.png",
+        "references/red_T01P02A_frame2.png",
+        "references/red_T01P02A_frame3.png",
+        "references/red_T01P02A_frame4.png",
+        "references/red_T01P02A_frame5.png"
+      ],
+      "use": "Pixels d’eau prélevés au même recadrage dans les six frames publiés, composités dans un petit bassin du Ground Sky. Le rendu Red ne constitue pas une banque .tile et ses pixels ne sont pas déclarés tuiles natives.",
+      "url": "https://github.com/meromoonmeri/PMD-RED-PMDO-PORT/tree/680fb85efacbde40473ef3f09dde2c0152e96f6c/PMDRed_PMDO_Framework/output/Visual_Renders"
+    },
+    {
+      "repo": "meromoonmeri/PMD-SKY-PMDO-PORT",
+      "ref": "master",
+      "commit": "d62110a00269bdc861b8fe41b077607a80f50978",
+      "map": "D52P11A (Ground natif; code de preview, nom canonique non affirmé)",
+      "ground": "output/Grounds/d52p11a.rsground",
+      "ground_blob": "b938d1668244302f02cac52989627b66e15b243a",
+      "tiles": "output/Tiles/D52p11a_Base.tile",
+      "tiles_blob": "68a914a3281fa3cfef46b0347a5b9c3d9136e4da",
+      "preview": "output/Previews/d52p11a.png",
+      "local_copies": [
+        "references/native_D52P11A/d52p11a.rsground",
+        "references/native_D52P11A/D52p11a_Base.tile",
+        "references/sky_D52P11A.png"
+      ],
+      "use": "Base du décor reconstruite à partir du .rsground et du .tile. Le rendu 504×408 obtenu par décodage correspond pixel pour pixel au PNG de preview local.",
+      "url": "https://github.com/meromoonmeri/PMD-SKY-PMDO-PORT/tree/d62110a00269bdc861b8fe41b077607a80f50978/output"
+    }
+  ],
+  "adaptation_4_3": {
+    "ground_source_px": [504, 408],
+    "ground_source_grid": [63, 51],
+    "reflect_pad_cells_left_right": [2, 3],
+    "adapted_px": [544, 408],
+    "adapted_grid": [68, 51],
+    "raw_px": [1200, 896],
+    "output_px": [768, 576],
+    "final_grid_8px": [96, 72],
+    "method": "Extension horizontale par réflexion, aucun étirement; segmentation/mask pleine résolution; réduction BOX uniforme par 576/896 et crop centré."
+  },
+  "water_crop": {
+    "source_px": [64, 32],
+    "xyxy_frame_0": [270, 226, 334, 258],
+    "upscale": "uniforme 1.5× vers 96×48, masque ovale distinct",
+    "magenta_background": false
+  },
+  "excluded_reference": "Sky D04P12A / Waterfall Cave écartée car déjà utilisée dans des travaux antérieurs.",
+  "rejected_trials": [
+    "Décor original généré et calque magenta : rejeté après la correction de méthode de l’utilisateur.",
+    "Tuilage du patch Red 64×48 : raccords visibles, abandonné.",
+    "Aperçu D52 + patch x305,y193 : séparation de teintes dominante, abandonné."
+  ],
+  "files": [
+    "references/red_T01P02A_frame0.png",
+    "references/red_T01P02A_frame1.png",
+    "references/red_T01P02A_frame2.png",
+    "references/red_T01P02A_frame3.png",
+    "references/red_T01P02A_frame4.png",
+    "references/red_T01P02A_frame5.png",
+    "references/sky_D52P11A.png",
+    "references/native_D52P11A/d52p11a.rsground",
+    "references/native_D52P11A/D52p11a_Base.tile"
+  ]
+}
