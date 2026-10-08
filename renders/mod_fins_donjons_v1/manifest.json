@@ -1,0 +1,2185 @@
+{
+  "lot": "mod_fins_donjons_v1",
+  "namespace": "guilde_fins_donjons",
+  "target": "0.8.12",
+  "mod_version": "1.0.0.0",
+  "map_count": 11,
+  "main_series_count": 9,
+  "tile_bank_count": 91,
+  "main_series_order": [
+    "FVS1",
+    "FCF1",
+    "FRP1",
+    "FGG2",
+    "FBS1",
+    "FJS1",
+    "FWC1",
+    "FSM1",
+    "FST1"
+  ],
+  "preserved_complements": [
+    "FGG1",
+    "FOC1"
+  ],
+  "planned_not_included": [
+    "Fin Clairière tropicale",
+    "Fin Couloir violet",
+    "Fin Mt. Thunder",
+    "Fin Jardin secret"
+  ],
+  "assembly_method": "ZIP projets existants; .tile, .rsground et scripts Lua conserves octet pour octet; index fusionne; namespace commun pour les scripts; aucune generation de map ni retouche des pixels.",
+  "runtime_tested": false,
+  "art_approved": false,
+  "maps": [
+    {
+      "folder": "fin_vapeur_sommet_v1",
+      "prefix": "FVS1",
+      "title": "Fin Vapeur — sommet de Steam Cave",
+      "group": "serie",
+      "order": 1,
+      "scene": "FVS1_scene_t000.png",
+      "preview": "apercu_fin_vapeur_sommet_v1.html",
+      "source_zip": "renders/fin_vapeur_sommet_v1/FVS1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "5b7897300b620890a26661c0161ddbd93efe3deb832bc39021500600fe5ea58c",
+      "source_manifest_sha256": "1996ee712bfa633861d4a87114eee99e1ea8d90d926282f2bd715dbf050fc60f",
+      "source_project_root": "fin_vapeur_sommet",
+      "source_namespace": "fin_vapeur_sommet",
+      "source_script_path": "Data/Script/fin_vapeur_sommet/ground/fvs1_fin_vapeur_sommet/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fvs1_fin_vapeur_sommet/init.lua",
+      "script_sha256": "304a0760a9fb662852419fac28323e6c1b98707d6461351eded8b10196c2f0ac",
+      "ground_source_path": "Data/Ground/fvs1_fin_vapeur_sommet.rsground",
+      "ground_asset": "fvs1_fin_vapeur_sommet",
+      "ground_sha256": "bf12528d4633a6617acf60a89ad7761daef9b9d5be46db2a058967144824d900",
+      "tile_banks": [
+        "FVS1_00_EAU",
+        "FVS1_01_BULLES",
+        "FVS1_02_SOL",
+        "FVS1_03_SOL",
+        "FVS1_04_MARGELLE",
+        "FVS1_05_EVENTS",
+        "FVS1_06_STALAGMITES",
+        "FVS1_07_VAPEUR"
+      ],
+      "tile_sha256": {
+        "FVS1_00_EAU": "10c5cce8b3f5fa6f28f014936977827d51367761149cc8c82df9700511cbd445",
+        "FVS1_01_BULLES": "e8faa801a4f32677f89ff0a318926f4b71e1dc8af4fd6fa1e5e658f5aec8fdf5",
+        "FVS1_02_SOL": "7213ff38e0f9eb722013f6a05a04b1c7c379af11e5224e4760cbfb90f0d1939a",
+        "FVS1_03_SOL": "a042d7252b195c80cba585d34b8929c522c42b9267aa6e416407534e81788d50",
+        "FVS1_04_MARGELLE": "7854e27d72681b3d7345961827296d91304592b3e525220f0e9c89c95e03e180",
+        "FVS1_05_EVENTS": "9e0c5b2baf588c120d1bf659c64cbf4d54d866c85f9b0f42dfd0b12c50fe3339",
+        "FVS1_06_STALAGMITES": "63cf3f92ec46f0f9bdfa8a8579548b55bbefd3384dfd5e1a456a248cd313cce8",
+        "FVS1_07_VAPEUR": "e51dfcac36df3007d914265a87d78254de49f7b596ee4501582b0dfd04d9007f"
+      },
+      "reference_method": "rendu genere reference : decor complet sur magenta (source = magenta), sol seul, planche de vapeur ; rip en images=",
+      "reference": "Steam_Cave_Peak_TDS.png",
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Vapeur - sommet de Steam Cave (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 9,
+        "layers": [
+          {
+            "name": "00 eau source 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "01 bulles 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "02 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 sol arene",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 margelle",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 events",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 stalagmites",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "07 vapeur 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "08 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 4,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FVS1_00_EAU",
+          "FVS1_01_BULLES",
+          "FVS1_02_SOL",
+          "FVS1_03_SOL",
+          "FVS1_04_MARGELLE",
+          "FVS1_05_EVENTS",
+          "FVS1_06_STALAGMITES",
+          "FVS1_07_VAPEUR"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              376,
+              344
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "source": {
+            "xy_px": [
+              376,
+              224
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fvs1_fin_vapeur_sommet"
+      }
+    },
+    {
+      "folder": "fin_cratere_fosse_v1",
+      "prefix": "FCF1",
+      "title": "Fin Cratère — fosse de Dark Crater",
+      "group": "serie",
+      "order": 2,
+      "scene": "FCF1_scene_t000.png",
+      "preview": "apercu_fin_cratere_fosse_v1.html",
+      "source_zip": "renders/fin_cratere_fosse_v1/FCF1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "b9eb61091d3c73a3e4f3659c1b1438a4dffb9aa401540f21a9cfc7326ac1cb6f",
+      "source_manifest_sha256": "151f1ff8ce352734d74456899f311f0a5cd0a0ff604e9d14354e6b6ab9093f7a",
+      "source_project_root": "fin_cratere_fosse",
+      "source_namespace": "fin_cratere_fosse",
+      "source_script_path": "Data/Script/fin_cratere_fosse/ground/fcf1_fin_cratere_fosse/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fcf1_fin_cratere_fosse/init.lua",
+      "script_sha256": "0dc74df70bc25882f2136039e943a9db92562114a98bcd33cab23a3d37e23c3b",
+      "ground_source_path": "Data/Ground/fcf1_fin_cratere_fosse.rsground",
+      "ground_asset": "fcf1_fin_cratere_fosse",
+      "ground_sha256": "d8a1b7a9a24b2f47e71e98c7c68bf1c67b10fe6217528a522bf6e5080136a526",
+      "tile_banks": [
+        "FCF1_00_LAVE",
+        "FCF1_01_ECLATS",
+        "FCF1_02_BULLES",
+        "FCF1_03_SOL",
+        "FCF1_04_SOL",
+        "FCF1_05_REBORD",
+        "FCF1_06_PITONS",
+        "FCF1_07_EMBLEME",
+        "FCF1_08_LUEUR"
+      ],
+      "tile_sha256": {
+        "FCF1_00_LAVE": "3655d7e336ef85c02d2b7626a6bcecff3dad3620ee96f655923ffb99662fd1cc",
+        "FCF1_01_ECLATS": "66f05d1175de2b165d26e14b7f84b6dc89f98519ba64e83fa63f31e434977420",
+        "FCF1_02_BULLES": "3055b38d8ce3b266ba656b8005f25d3a2e98affef6bdcbe4fc3156d308b859d4",
+        "FCF1_03_SOL": "cf4d850c5744beaa8adc5a132fc6efbd0d0e16a9e9a3a69289e2950a9510e878",
+        "FCF1_04_SOL": "4ac019efcb10ca25af63adfa3cbeefdefb96869f06c1de3442eed0cb1f279ebb",
+        "FCF1_05_REBORD": "d125bcbc844aeb555e9c20b0105c2799f0172f2794d1b394a59ddf761b0be6d4",
+        "FCF1_06_PITONS": "764fc465cb818ef87adff5f75f02839867a3fd37a9cbf4570053f530cd46eaa6",
+        "FCF1_07_EMBLEME": "4fc9681c47d5b9d127712863d3e22c77a91eea8a1b0801753ad2b70c61746af9",
+        "FCF1_08_LUEUR": "f3bd3acb89254cdf2e397972344e2364ef837c80d9a88483105165b7020f44b3"
+      },
+      "reference_method": "rendu genere reference : decor complet sur magenta (lave = magenta), rip en images= ; sol complet en miroir d une plage du decor",
+      "reference": "Dark_Crater_Pit_TDS.png",
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Cratere - fosse de Dark Crater (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 10,
+        "layers": [
+          {
+            "name": "00 lave 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "01 eclats 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "02 bulles 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "03 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 sol plateau",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 rebord",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 pitons",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "07 embleme",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "08 lueur 6 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 6,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "09 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 4,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 6,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FCF1_00_LAVE",
+          "FCF1_01_ECLATS",
+          "FCF1_02_BULLES",
+          "FCF1_03_SOL",
+          "FCF1_04_SOL",
+          "FCF1_05_REBORD",
+          "FCF1_06_PITONS",
+          "FCF1_07_EMBLEME",
+          "FCF1_08_LUEUR"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              376,
+              288
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "embleme": {
+            "xy_px": [
+              376,
+              96
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fcf1_fin_cratere_fosse"
+      }
+    },
+    {
+      "folder": "fin_ruine_puits_v1",
+      "prefix": "FRP1",
+      "title": "Fin Ruine — puits de Sealed Ruin",
+      "group": "serie",
+      "order": 3,
+      "scene": "FRP1_scene_t000.png",
+      "preview": "apercu_fin_ruine_puits_v1.html",
+      "source_zip": "renders/fin_ruine_puits_v1/FRP1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "1f664b69e04a3fa9d68ad09913d647df07a8ab63a25a49b3dbfefe36c86403a8",
+      "source_manifest_sha256": "019fe5b7e6599f01b2571572f87c04393ae57b7fc7dc0a99aec3baa2119877d3",
+      "source_project_root": "fin_ruine_puits",
+      "source_namespace": "fin_ruine_puits",
+      "source_script_path": "Data/Script/fin_ruine_puits/ground/frp1_fin_ruine_puits/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/frp1_fin_ruine_puits/init.lua",
+      "script_sha256": "c8bbea309d42edb81930f5d31d1480d55a489a34038c6ade634bfb0158e5e1fd",
+      "ground_source_path": "Data/Ground/frp1_fin_ruine_puits.rsground",
+      "ground_asset": "frp1_fin_ruine_puits",
+      "ground_sha256": "12ba1de8a3714128c0d836382a2704115a9be608d54bd9dd492aab0766bc5c10",
+      "tile_banks": [
+        "FRP1_00_SOL",
+        "FRP1_01_OMBRE",
+        "FRP1_02_AURA",
+        "FRP1_03_TOURBILLONS",
+        "FRP1_04_PAROIS",
+        "FRP1_05_CLE",
+        "FRP1_06_FISSURE",
+        "FRP1_07_FEUX"
+      ],
+      "tile_sha256": {
+        "FRP1_00_SOL": "f3735baceaedaee22f9a90b033ab6fadb68a8ae5799928ac5f16e2f989337d9d",
+        "FRP1_01_OMBRE": "c6b95d630f7a46fbe840e1d7b079564b19d7a53150888a28e71f309199ed8d22",
+        "FRP1_02_AURA": "311bf5052edb02b0ec73534723da49aa28117fbb4e73d6e033986a5809f830d4",
+        "FRP1_03_TOURBILLONS": "206658a26c170aea9d44259752d33326907a1f050a6e994dc80978e4659073b9",
+        "FRP1_04_PAROIS": "e4dfb3d5555bb7429c2213c49d3c8e748d0a345e0dfe0b2b35295d358ddce4d7",
+        "FRP1_05_CLE": "f4b0a14af1d61a16f5841801f02dc95e094b8e5c1fc9404f93aab3321848e4e0",
+        "FRP1_06_FISSURE": "a939949dc3d1b5b84f6ad8bb2336e02888ec1ff80c0fd29b22ddce1d9549dded",
+        "FRP1_07_FEUX": "f7714af602519ebe590cb9625d280f05482dc9abfb83861d710c59d2dfef5d20"
+      },
+      "reference_method": "rendu genere reference : blocs sur sol magenta, sol complet genere depuis une decoupe du sol du rip, cle de voute generee sur magenta",
+      "reference": "Sealed_Ruin_pit_TDS.png",
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Ruine - fosse de Sealed Ruin (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 9,
+        "layers": [
+          {
+            "name": "00 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "01 ombre parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "02 aura 6 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 6,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "03 tourbillons 8 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 8,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "04 parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 cle de voute",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 fissure 6 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 6,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "07 feux follets 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "08 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 6,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 8,
+            "frame_length_ticks": 5
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FRP1_00_SOL",
+          "FRP1_01_OMBRE",
+          "FRP1_02_AURA",
+          "FRP1_03_TOURBILLONS",
+          "FRP1_04_PAROIS",
+          "FRP1_05_CLE",
+          "FRP1_06_FISSURE",
+          "FRP1_07_FEUX"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              384,
+              288
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "cle_de_voute": {
+            "xy_px": [
+              376,
+              176
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "frp1_fin_ruine_puits"
+      }
+    },
+    {
+      "folder": "fin_givre_aurore_v2",
+      "prefix": "FGG2",
+      "title": "Fin Givre V2 — Frosty Grotto sous les aurores",
+      "group": "serie",
+      "order": 4,
+      "scene": "FGG2_scene_t000.png",
+      "preview": "apercu_fin_givre_aurore_v2.html",
+      "source_zip": "renders/fin_givre_aurore_v2/FGG2_projet_pmdo_0812.zip",
+      "source_zip_sha256": "6140a5f5126209679b44c96051a8e74c11fd104d8160fbd623fb46caeaba14bd",
+      "source_manifest_sha256": "d8d0b4abfa66b9e59b2cddc139d046320bf1d68f945903da339e94784323f5e6",
+      "source_project_root": "fin_givre_aurore",
+      "source_namespace": "fin_givre_aurore",
+      "source_script_path": "Data/Script/fin_givre_aurore/ground/fgg2_fin_givre_aurore/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fgg2_fin_givre_aurore/init.lua",
+      "script_sha256": "57f1c830ce93be1494bfba57c70c94c9a6f0a772c7afeb2a96616cfc1b27da2c",
+      "ground_source_path": "Data/Ground/fgg2_fin_givre_aurore.rsground",
+      "ground_asset": "fgg2_fin_givre_aurore",
+      "ground_sha256": "a17c3021947b77d18559006c0402f6ef9be36313ef2f0cc4df7c6df5c74cdda0",
+      "tile_banks": [
+        "FGG2_00_EAU",
+        "FGG2_01_REFLETS",
+        "FGG2_02_SOL",
+        "FGG2_03_CIEL",
+        "FGG2_04_ETOILES",
+        "FGG2_05_AURORE",
+        "FGG2_06_SOL",
+        "FGG2_07_PAROIS",
+        "FGG2_08_FLOCONS"
+      ],
+      "tile_sha256": {
+        "FGG2_00_EAU": "795220a887eb14397362c1ae31c8624e5504c5b917e1a7a52e07c7c5c6f265e3",
+        "FGG2_01_REFLETS": "f48be1c62dbfa5660a58b5cc5699a068022031e68d5733714b8da8398b81eff1",
+        "FGG2_02_SOL": "6347d2cdb97d0dd965ee777ba736715264d11ff2edf266807ab4fc0f66bc9cbc",
+        "FGG2_03_CIEL": "1b801b16f1ac486ed2ff9825b3f2e635096ac90517747506cd94779a08baf3e7",
+        "FGG2_04_ETOILES": "2c8ad55dd277f859e109764a9d3650c6eaddf1b283d86bfad2ecff19559085e0",
+        "FGG2_05_AURORE": "8d3a5b5ec4fd4be05e6bd8cbd164eba889d3db26393378f76fe7ecbd9fa28408",
+        "FGG2_06_SOL": "859415fe4b28e12b15484b88eeb4419321c69ecb5767beb644e0611baf718528",
+        "FGG2_07_PAROIS": "ee1082ae4aee004ea8733442eb3d3f22b098b9a950d78bf1653b1c4e1f207187",
+        "FGG2_08_FLOCONS": "6ec079f33582678b656b8fb14514339e0a722ed4c5a6d303a5cf24a02238cb98"
+      },
+      "reference_method": "rendu genere reference : decor = brut FGG1 edite (ciel = cle verte, bassins = magenta) ; aurore generee seule sur marine uni",
+      "reference": [
+        "pmdskyicearena.png",
+        "aurorepmdsky.png",
+        "source/fin_givre_aurore_v2/reference/Rescue_Team_-_Articuno_first_appearance_120px.png"
+      ],
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Givre V2 - Frosty Grotto, aurores (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 10,
+        "layers": [
+          {
+            "name": "00 eau glacee 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "01 reflets 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "02 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 ciel",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 etoiles 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "05 aurore 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "06 sol glace",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "07 parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "08 flocons 48 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 48,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "09 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 4,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 12,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 48,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FGG2_00_EAU",
+          "FGG2_01_REFLETS",
+          "FGG2_02_SOL",
+          "FGG2_03_CIEL",
+          "FGG2_04_ETOILES",
+          "FGG2_05_AURORE",
+          "FGG2_06_SOL",
+          "FGG2_07_PAROIS",
+          "FGG2_08_FLOCONS"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              376,
+              304
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "belvedere": {
+            "xy_px": [
+              376,
+              184
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fgg2_fin_givre_aurore"
+      }
+    },
+    {
+      "folder": "fin_bristle_sommet_v1",
+      "prefix": "FBS1",
+      "title": "Fin Bristle — sommet de Mt. Bristle",
+      "group": "serie",
+      "order": 5,
+      "scene": "FBS1_scene_t000.png",
+      "preview": "apercu_fin_bristle_sommet_v1.html",
+      "source_zip": "renders/fin_bristle_sommet_v1/FBS1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "31f6077f36c89e97f35c452617968bf43b22f1d53131d3504b409bf9deb523af",
+      "source_manifest_sha256": "7deee2c60db025afc29a7f7d0c8f2c030e7dfee16be61fd630b83c6caec72fa7",
+      "source_project_root": "fin_bristle_sommet",
+      "source_namespace": "fin_bristle_sommet",
+      "source_script_path": "Data/Script/fin_bristle_sommet/ground/fbs1_fin_bristle_sommet/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fbs1_fin_bristle_sommet/init.lua",
+      "script_sha256": "238859ac5a91314f5eb54eb5cf0d5cb404adedab0fadc4cd17f4cc9df7ba1622",
+      "ground_source_path": "Data/Ground/fbs1_fin_bristle_sommet.rsground",
+      "ground_asset": "fbs1_fin_bristle_sommet",
+      "ground_sha256": "8b65e234bd32e0e3fda288ba28d1503584eb69c2c1dfd4f7514ed509733f98bf",
+      "tile_banks": [
+        "FBS1_00_SOL",
+        "FBS1_01_SABLE",
+        "FBS1_02_RAFALES",
+        "FBS1_03_ROCHERS",
+        "FBS1_04_TOUFFES",
+        "FBS1_05_FALAISES"
+      ],
+      "tile_sha256": {
+        "FBS1_00_SOL": "ae77f681f8cfff05213f6a934a6c619120110696b9ff229d3b85e4303bf3c510",
+        "FBS1_01_SABLE": "8081a6ce5a9d7ee12af50173f01aef0bf98773e805476349571fed4dcab2f054",
+        "FBS1_02_RAFALES": "261e20132b2a734f3bb2ecf03484118e10ab89a6ef399bd3c9933074a57050f3",
+        "FBS1_03_ROCHERS": "78638b8f06f8bddf2d547982f088031f67f114f7fc442d5c1827717eb6257b62",
+        "FBS1_04_TOUFFES": "6089341129526b6d733a53d888e47fab5195c5ad1d15c13467912337a5db19e4",
+        "FBS1_05_FALAISES": "79a914103006723e9def25e12a81ae47406ab2a2d7391dd44adf9156bf4b00b4"
+      },
+      "reference_method": "rendu genere reference : decor complet (sans liquide, pas de magenta), sol complet genere depuis une decoupe du sable du rip",
+      "reference": [
+        "Mt_Bristle_entrance_TD.png",
+        "source/fin_bristle_sommet_v1/reference/Explorers_TD_-_Mt._Bristle_Peak_110px.png"
+      ],
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Bristle - sommet de Mt. Bristle (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 7,
+        "layers": [
+          {
+            "name": "00 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "01 sable",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "02 rafales 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "03 rochers",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 touffes 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "05 falaises",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 12,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FBS1_00_SOL",
+          "FBS1_01_SABLE",
+          "FBS1_02_RAFALES",
+          "FBS1_03_ROCHERS",
+          "FBS1_04_TOUFFES",
+          "FBS1_05_FALAISES"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              384,
+              288
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "azurill": {
+            "xy_px": [
+              376,
+              160
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fbs1_fin_bristle_sommet"
+      }
+    },
+    {
+      "folder": "fin_jungle_sud_v1",
+      "prefix": "FJS1",
+      "title": "Fin Jungle — Southern Jungle",
+      "group": "serie",
+      "order": 6,
+      "scene": "FJS1_scene_t000.png",
+      "preview": "apercu_fin_jungle_sud_v1.html",
+      "source_zip": "renders/fin_jungle_sud_v1/FJS1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "a85e4711cb2e238abcd34f47728377b762cb10fae58c245e788ae3fd6fdc24fb",
+      "source_manifest_sha256": "4f7ca2ce51f7acb6a578b9960c97b943601df668644d810d59700a5f73d732cb",
+      "source_project_root": "fin_jungle_sud",
+      "source_namespace": "fin_jungle_sud",
+      "source_script_path": "Data/Script/fin_jungle_sud/ground/fjs1_fin_jungle_sud/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fjs1_fin_jungle_sud/init.lua",
+      "script_sha256": "c06e41e923f5b264a7d0aae30c86b969528491f37e07fcf705cf1145f223fb11",
+      "ground_source_path": "Data/Ground/fjs1_fin_jungle_sud.rsground",
+      "ground_asset": "fjs1_fin_jungle_sud",
+      "ground_sha256": "a2917483793ebbca7297170b18bb9bba296a4d388639251aead6408e8e5066e8",
+      "tile_banks": [
+        "FJS1_00_SOL",
+        "FJS1_01_SABLE",
+        "FJS1_02_PELOUSE",
+        "FJS1_03_FEUILLES",
+        "FJS1_04_ROCHER",
+        "FJS1_05_JUNGLE",
+        "FJS1_06_PAPILLONS",
+        "FJS1_07_CANOPEE"
+      ],
+      "tile_sha256": {
+        "FJS1_00_SOL": "cf9f38201596620b957fb3d8b2a9ba060446eab71acb7c771e80b626b72753fd",
+        "FJS1_01_SABLE": "7e7353f7346dd092353e4c3bc2ce98e7a3f0fa4b1326da33bf461c49fd80d9ef",
+        "FJS1_02_PELOUSE": "51cc3ba1362150db1c7a1806929375928cee66d079011e95bed3a411726e15e1",
+        "FJS1_03_FEUILLES": "d92938c1a2564e1fcac751e364df3fce9ce3802258cda90bba7b48ffa106f20e",
+        "FJS1_04_ROCHER": "b45c76e267fc6bb24326bcb7874dc974d34d9b3b231af41449992c043399a9b2",
+        "FJS1_05_JUNGLE": "82ff11cb9faef6e1e5fd1689d9eb80573d8035c0def63b6cfd87676ccb1cda14",
+        "FJS1_06_PAPILLONS": "f33cf1126c3022fcfa48a757d9f41e46e358b0fbd9226da51b98d26c9b57090e",
+        "FJS1_07_CANOPEE": "9ca3558a54ed344bc0070841dd66403933bd9109dbed3115d0c3ddee8a16a081"
+      },
+      "reference_method": "rendu genere reference : decor complet sans cle (pas de liquide), en trois etapes avec la reference ; sol complet genere depuis une decoupe du sable",
+      "reference": [
+        "Southern_Jungle_exit_S.png"
+      ],
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Jungle - fond de Southern Jungle (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 9,
+        "layers": [
+          {
+            "name": "00 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "01 sable",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "02 pelouse",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 feuilles 48 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 48,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "04 rocher",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 jungle",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 papillons 48 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 48,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "07 canopee",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "08 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 48,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FJS1_00_SOL",
+          "FJS1_01_SABLE",
+          "FJS1_02_PELOUSE",
+          "FJS1_03_FEUILLES",
+          "FJS1_04_ROCHER",
+          "FJS1_05_JUNGLE",
+          "FJS1_06_PAPILLONS",
+          "FJS1_07_CANOPEE"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              376,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              384,
+              296
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "objectif": {
+            "xy_px": [
+              376,
+              176
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fjs1_fin_jungle_sud"
+      }
+    },
+    {
+      "folder": "fin_waterfall_cave_v1",
+      "prefix": "FWC1",
+      "title": "Fin Waterfall Cave — salle du joyau",
+      "group": "serie",
+      "order": 7,
+      "scene": "FWC1_scene_t000.png",
+      "preview": "apercu_fin_waterfall_cave_v1.html",
+      "source_zip": "renders/fin_waterfall_cave_v1/FWC1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "0d1749eb1a7d5ff4822f7d12e1eb26dca20e53d53635100a0cc23a27f1c399b3",
+      "source_manifest_sha256": "76d20c4669d3cb4b8c8bcc3b79242354e6e0ff224ee01781cce2c0f0efe313fb",
+      "source_project_root": "fin_waterfall_cave",
+      "source_namespace": "fin_waterfall_cave",
+      "source_script_path": "Data/Script/fin_waterfall_cave/ground/fwc1_fin_waterfall_cave/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fwc1_fin_waterfall_cave/init.lua",
+      "script_sha256": "2e6667b222a1a6adbbffc2c5ddcbcc959fce875f523603fff84bf6fe929048f4",
+      "ground_source_path": "Data/Ground/fwc1_fin_waterfall_cave.rsground",
+      "ground_asset": "fwc1_fin_waterfall_cave",
+      "ground_sha256": "bb49d94b8b2ff77bc2bc89c86ca23623f7e82136de06d9f106d6039ed498fb4a",
+      "tile_banks": [
+        "FWC1_00_SOL",
+        "FWC1_01_EAU",
+        "FWC1_02_SOL",
+        "FWC1_03_PAROIS",
+        "FWC1_04_CRISTAUX",
+        "FWC1_05_JOYAU",
+        "FWC1_06_LUEUR",
+        "FWC1_07_SCINTILLEMENTS"
+      ],
+      "tile_sha256": {
+        "FWC1_00_SOL": "a309fb2497a6962cac76b2aee1ba6df190b6486ba5f1cc0850240e9f66aeaf78",
+        "FWC1_01_EAU": "08e13fd5f0f4c5bf09ad500efeac83b49fa7427c07fae7b6747af89efe8dd1b3",
+        "FWC1_02_SOL": "e7537b05df5cdd0adf718e18cb171410c1a523942e339fd46f31850d8adc6586",
+        "FWC1_03_PAROIS": "f457920a0cb1096685fa037b3dd9d528ada766b74053b05b6b0bacb01760b1fd",
+        "FWC1_04_CRISTAUX": "083616662ba7c6da46da44bfff58c4b914ac1670f3840e9f5be5aeba01072f7e",
+        "FWC1_05_JOYAU": "b154c4ddf0da349b80e7c7845ea98c47940b85208f70e08a672ccb03045d7a0b",
+        "FWC1_06_LUEUR": "300cd8dcfe90bd16854d5a52cfd218932d13d87764b3d0d037151d0eb9836885",
+        "FWC1_07_SCINTILLEMENTS": "bb35e325c0eb49f493938cf4bba56a3300b1be77ff4800cc4ac5c2fe59b10fd6"
+      },
+      "reference_method": "rendu genere reference : decor complet avec eau en magenta, en deux etapes avec la capture ; sol complet genere depuis une decoupe des galets",
+      "reference": [
+        "Waterfall_Cave_gem_TDS.png"
+      ],
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Waterfall Cave - salle du joyau (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 9,
+        "layers": [
+          {
+            "name": "00 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "01 eau 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "02 sol",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 cristaux",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 joyau",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 lueur joyau 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "07 scintillements 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "08 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 12,
+            "frame_length_ticks": 5
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 10
+          }
+        ],
+        "used_banks": [
+          "FWC1_00_SOL",
+          "FWC1_01_EAU",
+          "FWC1_02_SOL",
+          "FWC1_03_PAROIS",
+          "FWC1_04_CRISTAUX",
+          "FWC1_05_JOYAU",
+          "FWC1_06_LUEUR",
+          "FWC1_07_SCINTILLEMENTS"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              376,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "arene": {
+            "xy_px": [
+              384,
+              312
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "joyau": {
+            "xy_px": [
+              376,
+              224
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fwc1_fin_waterfall_cave"
+      }
+    },
+    {
+      "folder": "fin_sables_mouvants_v1",
+      "prefix": "FSM1",
+      "title": "Fin Sables mouvants — arène du désert",
+      "group": "serie",
+      "order": 8,
+      "scene": "FSM1_scene_t000.png",
+      "preview": "apercu_fin_sables_mouvants_v1.html",
+      "source_zip": "renders/fin_sables_mouvants_v1/FSM1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "5318ccb71ea181f885516e8feb0c1bd2346b9f0c551d59579f883a254fad0a27",
+      "source_manifest_sha256": "ececdb8d84b8e8f0697d671292544c896b8a32585e76be72d4026b7fdaad2b68",
+      "source_project_root": "fin_sables_mouvants",
+      "source_namespace": "fin_sables_mouvants",
+      "source_script_path": "Data/Script/fin_sables_mouvants/ground/fsm1_fin_sables_mouvants/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fsm1_fin_sables_mouvants/init.lua",
+      "script_sha256": "9ab42e40f5fcbe5f89b54b537b3bb4a6e668530743575b17188c5ee55fa451ef",
+      "ground_source_path": "Data/Ground/fsm1_fin_sables_mouvants.rsground",
+      "ground_asset": "fsm1_fin_sables_mouvants",
+      "ground_sha256": "e5353c7657eb446ee42ad1365ecaaae6079dd685a736246b4fc7294cf65f014f",
+      "tile_banks": [
+        "FSM1_00_FOSSE",
+        "FSM1_01_SOL",
+        "FSM1_02_SABLE",
+        "FSM1_03_OMBRES",
+        "FSM1_04_BORD",
+        "FSM1_05_ROCHE",
+        "FSM1_06_PIERRES",
+        "FSM1_07_CHUTES",
+        "FSM1_08_POUSSIERE"
+      ],
+      "tile_sha256": {
+        "FSM1_00_FOSSE": "12ad7ca156279ac87604b25b7b027d9a3c43af33a76aec179ee66cae9a9c3b95",
+        "FSM1_01_SOL": "63b1e84a5054120bdcf93106ba3c2121626f5d80e9202bcfd0e68c3c72c7b8cb",
+        "FSM1_02_SABLE": "88e69a2454364707a3bcccd59a6a3be64262cd6ef503e04438ce2803abe3b8dc",
+        "FSM1_03_OMBRES": "055c4d86b120161ff006dc66ed380e0486005031f1eabe06f7a42b2a76acad0f",
+        "FSM1_04_BORD": "add776f548c750717737a14d3c05e42c4a1b4064fbae49328c32097c6cb34df6",
+        "FSM1_05_ROCHE": "1c887405d5da01391ef1d0786b72773c1a8e137bb1755ec0d466ea96565de658",
+        "FSM1_06_PIERRES": "46f7e9dad3bd3a27fea3a1cba372c71dd94dbc2d05203a6eeb9cdb4d3fb591b5",
+        "FSM1_07_CHUTES": "d71a0ff58c0d98ab86132adfe5fab0a0214b9ab5e748f52b9e52300f1765e216",
+        "FSM1_08_POUSSIERE": "576d236981c6e461f5db7b6e0660095774dc9a12e8f32cff92948bacc070025e"
+      },
+      "reference_method": "textures canoniques = rendu genere REFERENCE : rip passe au generateur ; decor complet sur magenta (fosse et chutes = magenta), sol complet edite depuis le decor, planche poussiere/tourbillon sur magenta",
+      "reference": {
+        "file": "witheringdesert.png",
+        "sha256": "4579a8dd877f90483372de7879fe4a6362af8b81218222e7cf2d153766854197",
+        "titre": "Furnace Desert, version originale (zone amie de PMD Rescue Team)"
+      },
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Sables mouvants - arene du desert (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 10,
+        "layers": [
+          {
+            "name": "00 fosse 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "01 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "02 sable",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 ombres",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 bord fosse",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 roche",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 pierres",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "07 chutes 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "08 poussiere 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "09 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 12,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FSM1_00_FOSSE",
+          "FSM1_01_SOL",
+          "FSM1_02_SABLE",
+          "FSM1_03_OMBRES",
+          "FSM1_04_BORD",
+          "FSM1_05_ROCHE",
+          "FSM1_06_PIERRES",
+          "FSM1_07_CHUTES",
+          "FSM1_08_POUSSIERE"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              376,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              384,
+              440
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "objectif": {
+            "xy_px": [
+              352,
+              160
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fsm1_fin_sables_mouvants"
+      }
+    },
+    {
+      "folder": "fin_star_cave_v1",
+      "prefix": "FST1",
+      "title": "Fin Star Cave — arène de cristal",
+      "group": "serie",
+      "order": 9,
+      "scene": "FST1_scene_t000.png",
+      "preview": "apercu_fin_star_cave_v1.html",
+      "source_zip": "renders/fin_star_cave_v1/FST1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "43a094797c39f1a51c6d45fb8e4950296b7cd1133e5a475e719b38a98b40f29d",
+      "source_manifest_sha256": "8105dd2967cbbb80e6dc9ddfcae35ed8dadca359e05328e98df38b335a2cfe86",
+      "source_project_root": "fin_star_cave",
+      "source_namespace": "fin_star_cave",
+      "source_script_path": "Data/Script/fin_star_cave/ground/fst1_fin_star_cave/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fst1_fin_star_cave/init.lua",
+      "script_sha256": "d634fea92b336dc40d9401954ba34c6eb61a69fb4a2c71a151b2471fd29b1e78",
+      "ground_source_path": "Data/Ground/fst1_fin_star_cave.rsground",
+      "ground_asset": "fst1_fin_star_cave",
+      "ground_sha256": "0099a9bc859c91eed817fc4be8fa9cf3934cee4c38cdd535bc8f4e763196fe40",
+      "tile_banks": [
+        "FST1_00_SOL",
+        "FST1_01_SOL",
+        "FST1_02_OMBRES",
+        "FST1_03_PAROIS",
+        "FST1_04_BLOCS",
+        "FST1_05_REFLETS",
+        "FST1_06_ETOILES",
+        "FST1_07_POUSSIERE"
+      ],
+      "tile_sha256": {
+        "FST1_00_SOL": "e7661e6bc261b10dd4a000a4ea5221a339016e50100d0ef1a9eab2cb9e85d8b3",
+        "FST1_01_SOL": "b9c8776ffcac95d5c16c5afdad870eba537a532b402c72f4e2c93113a054ac11",
+        "FST1_02_OMBRES": "dcdf6d8623c40a48ac3aede10936e9094c928832160bb204dcedc5c8ff31a467",
+        "FST1_03_PAROIS": "ff9b05f90e7edc9ff77132179e304f4b113271bf539c7ab8d1d41aa1631e4ef8",
+        "FST1_04_BLOCS": "63c8f8bb792917a8434a63f8c70a4e494872b1059a6a02d1075a167e5751699e",
+        "FST1_05_REFLETS": "aa8e6274904b532146e5c2b4439423454ed5c813fe29230ed7a5400e0fe7c8d8",
+        "FST1_06_ETOILES": "d627b86ccfdd19e357b122c502628a8f16c4df754dfdf7ac0818bd50c0b3e37f",
+        "FST1_07_POUSSIERE": "be66c9c5f1682e45e53e0584d044fcea6f3f340bdd9f7eb2aab3a795c638ea03"
+      },
+      "reference_method": "textures canoniques = rendu genere REFERENCE : rip passe au generateur ; decor complet sans etoiles, sol complet edite depuis le decor, planche poussiere d etoile sur magenta",
+      "reference": {
+        "file": "starcavepmdsky.png",
+        "sha256": "4aa7edd76aa16bc7674fec693e565e468d2bf266e7be898e3c011eab36de5b45",
+        "titre": "Star Cave (PMD Explorers of Sky d apres le nom du fichier) ; deux vues 504 x 504, la seconde avec la bouche"
+      },
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Star Cave - arene de cristal (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 9,
+        "layers": [
+          {
+            "name": "00 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "01 sol",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "02 ombres",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 blocs",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 reflets 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "06 etoiles 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "07 poussiere etoile 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "08 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 24,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FST1_00_SOL",
+          "FST1_01_SOL",
+          "FST1_02_OMBRES",
+          "FST1_03_PAROIS",
+          "FST1_04_BLOCS",
+          "FST1_05_REFLETS",
+          "FST1_06_ETOILES",
+          "FST1_07_POUSSIERE"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              384,
+              320
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "objectif": {
+            "xy_px": [
+              384,
+              152
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fst1_fin_star_cave"
+      }
+    },
+    {
+      "folder": "fin_givre_grotte_v1",
+      "prefix": "FGG1",
+      "title": "Fin Givre V1 — Frosty Grotto (variante conservée)",
+      "group": "variante",
+      "order": null,
+      "scene": "FGG1_scene_t000.png",
+      "preview": "apercu_fin_givre_grotte_v1.html",
+      "source_zip": "renders/fin_givre_grotte_v1/FGG1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "b23a7eecb025949abd7739b8bc7775e1f9c1471bb2e48c4b233b1860827ab557",
+      "source_manifest_sha256": "8f3664ffc2d808acdb7f2d36a2597c8c20698953db1193e64124a6cd676ed600",
+      "source_project_root": "fin_givre_grotte",
+      "source_namespace": "fin_givre_grotte",
+      "source_script_path": "Data/Script/fin_givre_grotte/ground/fgg1_fin_givre_grotte/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/fgg1_fin_givre_grotte/init.lua",
+      "script_sha256": "724f054f8c7eb52fb2db41264edaecdcec683071c703f150e0ba9a122366df62",
+      "ground_source_path": "Data/Ground/fgg1_fin_givre_grotte.rsground",
+      "ground_asset": "fgg1_fin_givre_grotte",
+      "ground_sha256": "59d303452524631e8d934f730691726a83e243b4359ff633e1b7977bfcef1e4c",
+      "tile_banks": [
+        "FGG1_00_EAU",
+        "FGG1_01_REFLETS",
+        "FGG1_02_SOL",
+        "FGG1_03_SOL",
+        "FGG1_04_PAROIS",
+        "FGG1_05_CRISTAL",
+        "FGG1_06_LUEUR",
+        "FGG1_07_FLOCONS"
+      ],
+      "tile_sha256": {
+        "FGG1_00_EAU": "c7a3a38103969c1701bf76eeefd87a47dbba8e9a13b1cea9aac5260508c6bcd8",
+        "FGG1_01_REFLETS": "f48be1c62dbfa5660a58b5cc5699a068022031e68d5733714b8da8398b81eff1",
+        "FGG1_02_SOL": "6af983258b7769d71487275a342af27281448606da8292096bdf124e28d21d13",
+        "FGG1_03_SOL": "2545c51f53621cabc552ca7fec091e869dc750b9b57643756a0228229f36ccfb",
+        "FGG1_04_PAROIS": "a8eceb9df823eb4f04beb26550fbd70ed8421bf2652a597629e6147fbdc3d820",
+        "FGG1_05_CRISTAL": "be2b46be87450e94f5867e3ccffc1ba402064cb1da97bbc48cf40b42181f8301",
+        "FGG1_06_LUEUR": "8ba22394ab0a87176f0863b7ebc186114735d6f00cfae7559de960848d7b0eb6",
+        "FGG1_07_FLOCONS": "6ec079f33582678b656b8fb14514339e0a722ed4c5a6d303a5cf24a02238cb98"
+      },
+      "reference_method": "rendu genere reference : decor complet sur magenta (bassins = magenta), sol complet genere depuis une decoupe du sol de la reference",
+      "reference": [
+        "pmdskyicearena.png",
+        "source/fin_givre_grotte_v1/reference/Rescue_Team_-_Articuno_first_appearance_120px.png"
+      ],
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Givre - Frosty Grotto (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 9,
+        "layers": [
+          {
+            "name": "00 eau glacee 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "01 reflets 4 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 4,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "02 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 sol glace",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "04 parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "05 cristal",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 lueur cristal 6 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 6,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "07 flocons 48 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 48,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "08 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 4,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 6,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 48,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FGG1_00_EAU",
+          "FGG1_01_REFLETS",
+          "FGG1_02_SOL",
+          "FGG1_03_SOL",
+          "FGG1_04_PAROIS",
+          "FGG1_05_CRISTAL",
+          "FGG1_06_LUEUR",
+          "FGG1_07_FLOCONS"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "boss": {
+            "xy_px": [
+              376,
+              312
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "cristal": {
+            "xy_px": [
+              376,
+              232
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "fgg1_fin_givre_grotte"
+      }
+    },
+    {
+      "folder": "fin_ocean_kyogre_v1",
+      "prefix": "FOC1",
+      "title": "Fin Océan — arène de Kyogre (hors-série)",
+      "group": "hors_serie",
+      "order": null,
+      "scene": "FOC1_scene_t000.png",
+      "preview": "apercu_fin_ocean_kyogre_v1.html",
+      "source_zip": "renders/fin_ocean_kyogre_v1/FOC1_projet_pmdo_0812.zip",
+      "source_zip_sha256": "ca52d7b478127834411b7b7444da29da93aaff90dd5eb14dcee84783e0f8141f",
+      "source_manifest_sha256": "dc58ab427c12adcffdd5d99ad8f0e6cad20507297d26af445cea2b9ec66a26c2",
+      "source_project_root": "fin_ocean_kyogre",
+      "source_namespace": "fin_ocean_kyogre",
+      "source_script_path": "Data/Script/fin_ocean_kyogre/ground/foc1_fin_ocean_kyogre/init.lua",
+      "script_path_in_mod": "Data/Script/guilde_fins_donjons/ground/foc1_fin_ocean_kyogre/init.lua",
+      "script_sha256": "2f69b7f0e62eb1d463b59813de956b5bc26514e4e98b2e6832b756a54242c82b",
+      "ground_source_path": "Data/Ground/foc1_fin_ocean_kyogre.rsground",
+      "ground_asset": "foc1_fin_ocean_kyogre",
+      "ground_sha256": "4f75d2bec04d8d86eb29c6dfccf2280f4f03f84f3f385152ab164221f557b512",
+      "tile_banks": [
+        "FOC1_00_SOL",
+        "FOC1_01_ABYSSE",
+        "FOC1_02_SOL",
+        "FOC1_03_NUANCES",
+        "FOC1_04_MOTIFS",
+        "FOC1_05_PAROIS",
+        "FOC1_06_CORAUX",
+        "FOC1_07_ALGUES",
+        "FOC1_08_BULLES",
+        "FOC1_09_SCINTILLEMENTS"
+      ],
+      "tile_sha256": {
+        "FOC1_00_SOL": "98aa8412e52dfa725a35c7234b7ab1c50f8d81bf8d6a2568c1c47bbace60452a",
+        "FOC1_01_ABYSSE": "dfce36158d087a68093309d477eb1f80a974df6afccc9790e01a74417845b0e9",
+        "FOC1_02_SOL": "256c1e9159f454b69d6e70305c034cb989ad29dd476cb088ba4f6864ccbacb8f",
+        "FOC1_03_NUANCES": "07bab23904f0a3c631298475279064ca48702033ae7fe8c6fdacc23e2af79052",
+        "FOC1_04_MOTIFS": "991207969024bc02e26717fe24a4e16f6275fd632184cad3319ddf3b152265ee",
+        "FOC1_05_PAROIS": "a45cc3a52e767974237b6ec544651206353561ae4da67db1fdc3582882dcf749",
+        "FOC1_06_CORAUX": "cc418bc676f9e065f88cd132ba2275269ceec0e00664c959d46c78bf5b84489c",
+        "FOC1_07_ALGUES": "b76ccb6bc05e800e885a31365b7ecc8053ab7d11eb4a294d6b1b5d96fc5b8273",
+        "FOC1_08_BULLES": "0ed96edf89568414e684e60b2bf4939aa28bfb4ade8e0a360393fc76111f4ac5",
+        "FOC1_09_SCINTILLEMENTS": "e5d316e2a0e0a9c6ed42e5adc0141421bf1d793bb326938a064501d33418e9ad"
+      },
+      "reference_method": "rendu genere reference : decor complet avec fosse en magenta (decoupe de style de la reference x3) ; sol complet genere depuis une decoupe du sol de la reference (x4)",
+      "reference": {
+        "code": "D42P41A",
+        "fichier": "source/fin_ocean_kyogre_v1/reference/D42P41A.png",
+        "sha256": "d8409682d9b570a648393c14f23b279acf212099a7ee56be1126acf502833b1f",
+        "origine": "source/outil_maps_pmdsky (pret/pmd-sky c8073235 + skytemple-files, frame 0 sans collision)"
+      },
+      "source_art_approved": false,
+      "source_runtime_tested": false,
+      "ground": {
+        "name": "Fin Ocean - arene de Kyogre sous la mer (4:3)",
+        "size_px": [
+          768,
+          576
+        ],
+        "grid_8px": [
+          96,
+          72
+        ],
+        "tex_size": 1,
+        "layer_count": 11,
+        "layers": [
+          {
+            "name": "00 sol complet",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "01 abysse 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "02 sol",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "03 nuances eau 16 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 16,
+                "frame_length_ticks": 15
+              }
+            ]
+          },
+          {
+            "name": "04 motifs lumineux 24 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 24,
+                "frame_length_ticks": 10
+              }
+            ]
+          },
+          {
+            "name": "05 parois",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "06 coraux",
+            "layer_id": 0,
+            "visible": true,
+            "animations": []
+          },
+          {
+            "name": "07 algues 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 20
+              }
+            ]
+          },
+          {
+            "name": "08 bulles 48 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 48,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "09 scintillements 12 phases",
+            "layer_id": 0,
+            "visible": true,
+            "animations": [
+              {
+                "frames": 12,
+                "frame_length_ticks": 5
+              }
+            ]
+          },
+          {
+            "name": "10 Vos elements avant-plan (Top)",
+            "layer_id": 4,
+            "visible": true,
+            "animations": []
+          }
+        ],
+        "animations": [
+          {
+            "frames": 12,
+            "frame_length_ticks": 5
+          },
+          {
+            "frames": 12,
+            "frame_length_ticks": 20
+          },
+          {
+            "frames": 16,
+            "frame_length_ticks": 15
+          },
+          {
+            "frames": 24,
+            "frame_length_ticks": 10
+          },
+          {
+            "frames": 48,
+            "frame_length_ticks": 5
+          }
+        ],
+        "used_banks": [
+          "FOC1_00_SOL",
+          "FOC1_01_ABYSSE",
+          "FOC1_02_SOL",
+          "FOC1_03_NUANCES",
+          "FOC1_04_MOTIFS",
+          "FOC1_05_PAROIS",
+          "FOC1_06_CORAUX",
+          "FOC1_07_ALGUES",
+          "FOC1_08_BULLES",
+          "FOC1_09_SCINTILLEMENTS"
+        ],
+        "markers": {
+          "entrance": {
+            "xy_px": [
+              384,
+              560
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "kyogre": {
+            "xy_px": [
+              368,
+              200
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          },
+          "sceau": {
+            "xy_px": [
+              376,
+              296
+            ],
+            "size_px": [
+              16,
+              16
+            ]
+          }
+        },
+        "obstacle_cells": [
+          96,
+          72
+        ],
+        "version": "0.8.12.0",
+        "asset": "foc1_fin_ocean_kyogre"
+      }
+    }
+  ]
+}

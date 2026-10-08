@@ -1218,3 +1218,13 @@ Pas de runtime. Pas dans le mod unique.
 - **Mutations** vérifiées : boss déplacé sur une paroi (manifeste), pixel rouge dans le sol, poussière modifiée, marqueur `donjon_seuil` ajouté au Ground, masque de blocs modifié. Sauvegarder `renders/` et `.cache/` dans `/tmp` avant, restaurer après.
 - **Limite connue** : les cristaux de parois générés sont plus cyan que le rip (32,1 sur 35) et en motif répétitif ; une régénération ciblée des parois serait la première amélioration.
 
+## Mod multicalque des fins de donjon — première édition
+
+- `source/mod_fins_donjons_v1/` assemble les projets PMDO existants, sans redessiner ni reconstruire leurs maps. Entrée reproductible : le ZIP projet versionné de chaque `renders/fin_*`.
+- Séquence principale actuelle (9) : FVS1 → FCF1 → FRP1 → FGG2 → FBS1 → FJS1 → FWC1 → FSM1 → FST1. FGG1 est gardée comme variante antérieure ; FOC1 est inclus comme hors-série. Les quatre fins Clairière tropicale, Couloir violet, Mt. Thunder et Jardin secret ne sont pas créées : ne pas les simuler.
+- Copier `.tile`, `.rsground` et contenu Lua octet pour octet ; fusionner les index après relecture des nœuds dans les banques. Les scripts changent seulement de chemin vers le namespace `guilde_fins_donjons`. Ne jamais écraser l’index complet d’un projet existant.
+- Contrôles obligatoires : SHA des archives sources, préfixes et assets distincts, tous les Ground 768×576/8 px, dernier calque Top `Layer=4`, forme des collisions, chaque référence de tuile résolue, marqueurs conservés, installateur en dry-run + réinstallation + refus d’un Ground modifié. La galerie doit lier les aperçus individuels qui exposent les calques.
+- Commandes : `.venv/bin/python source/mod_fins_donjons_v1/build_mod.py`, puis `.venv/bin/python -m unittest source.mod_fins_donjons_v1.test_mod -v`. Build vérifié reproductible (ZIP identique sur deux builds) ; 6 tests PASS. ZIP 11 Grounds / 91 banques.
+- Le ZIP rassemble des cartes individuelles dont `art_approved` reste faux ; ne pas présenter l’assemblage comme une approbation. Aucun test PMDO/runtime, rendu graphique ou gameplay n’est effectué ; aucun warp ni destination de donjon n’est ajouté.
+- À chaque nouvelle fin créée, l’ajouter explicitement à `MAPS`, au bon groupe/ordre, mettre à jour `PLANNED`, refaire build/tests, puis synchroniser `README.md`, `REPRISE_MAPS.md` et le workflow. Les variantes déjà livrées restent archivées.
+

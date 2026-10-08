@@ -1,6 +1,17 @@
 # Reprise des maps — 20 septembre 2026
 
-## Demande actuelle
+## Demande actuelle — série croisée PMD Red × Sky (8 octobre 2026)
+
+L’utilisateur demande une nouvelle série de maps inspirées des dépôts `PMD-SKY-PMDO-PORT` et `PMD-RED-PMDO-PORT`, avec Python. La méthode explicitement retenue est **échantillonnage-génération par générateur d’image, en multicalque magenta**; l’utilisateur a précisé que les maps doivent suivre le **gabarit 4:3**.
+
+- Pilote 01 : **Lac de Verre**, préfixe `LGV1`, références Red `T01P02A` (*Whiscash Pond*) et Sky `D52P11A` (code de preview; nom canonique non affirmé). Les deux rendus sont guidés par ces références, puis segmentés en calques par Python. Le duo provisoire avec Sky `D04P12A` / *Waterfall Cave* est écarté comme doublon antérieur.
+- Gabarit strict : bruts 1200 × 896, segmentation pleine résolution, réduction uniforme par classe avec `576/896`, crop centré de 771 × 576 vers **768 × 576** (96 × 72 cases de 8 px). Sol et décor restent alignés; eaux et extérieur sont détourés au key magenta.
+- Palette partagée de 96 couleurs échantillonnées; eau bleue/cyan et cristaux ont des palettes matières dédiées, elles aussi échantillonnées. Le rendu est **généré et référencé, non natif certifié**.
+- Sorties : `apercu_serie_sources_croisees_v1.html`, `renders/serie_sources_croisees_v1/lac_de_verre/LGV1_projet_pmdo_0812.zip`, `LGV1_calques_png_8px.zip`, ORA, masques et manifeste. Sources/build/tests : `source/serie_sources_croisees_v1/`.
+- **10 tests PASS** (fichiers et noms de calques, dimension 4:3, palette, cycle, accès 16 × 16, ORA, `.tile`/`.rsground` et index). Pas de test d’exécution dans PMDO; aucun warp, `art_approved: false`, `runtime_tested: false`.
+- Le nombre total et les thèmes des cartes suivantes restent ouverts. Les deux références du pilote sont prises pour ce lot et ne doivent pas être simplement reprises comme paire de la carte suivante.
+
+## Historique antérieur — série des entrées sud → nord
 
 Reprendre la création de maps avec textures canoniques. **Mise à jour du 25 septembre** : l'utilisateur a choisi une entrée de donjon sud → nord, la méthode rendu généré et les deux livrables (PNG 8 px + Ground). Premier lot : `renders/entree_vapeur_sud_nord_v1/`, biome Steam Cave choisi par l'agent et à confirmer. Les anciens travaux sont conservés. **V2** (`renders/entree_vapeur_sud_nord_v2/`) : eau façon rivière Métano, scintillements Métano, bulles de marais générées ; V1 intacte. Map suivante réalisée : **Entrée Cratère** (`renders/entree_cratere_sud_nord_v1/`, réf. Dark Crater, biome choisi par l'agent et à confirmer). Puis **Entrée Ruine** (`renders/entree_ruine_sud_nord_v1/`, réf. Sealed Ruin) et **Entrée Givre** (`renders/entree_givre_sud_nord_v1/`, réf. Frosty Forest, neige). Puis **Entrée Bristle** (`renders/entree_bristle_sud_nord_v1/`, réf. Mt. Bristle, canyon de sable et torrent). **Nouveau standard demandé (26 septembre) : maps plus vastes au format 4:3** — premier lot `renders/entree_jungle_sud_nord_v1/` en 768 × 576 (96 × 72 cases). L'utilisateur a demandé de continuer la série de maps.
 
@@ -85,6 +96,12 @@ Même jour, sur « BEAU TRAVAIL JE VALIDE PREPARELE MOD AVEC TOUTE CES CARTE ET 
 Même jour (29 septembre, session `arena/01a0ec9c`, branchée sur `311b0dd0`), sur « Poursuis le projet tu vas lire les read me agent et outil et methode creation de map pmd texture canonique » : lecture de `README.md`, `AGENTS.md`, `REPRISE_MAPS.md`, `MANUEL_METHODE_PMDO.md` et du README de l'outil maps PMD Sky. Lot **Fin Sables mouvants** (`renders/fin_sables_mouvants_v1/`, préfixe `FSM1`, réf. `witheringdesert.png`, aperçu `apercu_fin_sables_mouvants_v1.html`, 15 tests PASS, 5 mutations). Biome et portée choisis par l'agent, **à confirmer**. **Relevé des branches sœurs** : `01a0ea8f` (FUL1, ATF1) et `01a0eaca` (FUL1, FMF1, FMF2, repères FCV1 FJS3 FMT1 FQS1 FSC1 FTC1, BZF1) ont travaillé en parallèle sur les fins ; rien fusionné, rien repris. Fins restantes ici, dans l'ordre du mod : Star Cave, Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret (Underground Lake et Mystifying Forest existent sur les branches sœurs). Préfixes pris en plus : FUL1, FMF1, FMF2, ATF1, BZF1, FCV1, FJS3, FMT1, FQS1, FSC1, FTC1, FSM1.
 
 Même jour, suite (« bon travail continue la suite ! ») : lot **Fin Star Cave** (`renders/fin_star_cave_v1/`, préfixe `FST1`, réf. `starcavepmdsky.png`, aperçu `apercu_fin_star_cave_v1.html`, 13 tests PASS, 5 mutations). Prolonge ESC1, planche de poussière réutilisée. Biome et portée choisis par l'agent, **à confirmer**. Fins restantes ici : Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret. Préfixe pris en plus : FST1.
+
+## Mod multicalque des fins de donjon — 8 octobre 2026
+
+Sur « lance-toi dans la création d'un mod d'une série de maps multicalque » : création de `source/mod_fins_donjons_v1/` et assemblage PMDO 0.8.12 dans `renders/mod_fins_donjons_v1/guilde_fins_donjons_pmdo_0812.zip`, namespace `guilde_fins_donjons`. **11 Grounds / 91 banques** : neuf étapes principales dans l'ordre FVS1, FCF1, FRP1, FGG2, FBS1, FJS1, FWC1, FSM1, FST1 ; FGG1 est gardée comme variante antérieure et FOC1 comme map Océan hors-série. Tous sont 768 × 576, grille 8 px, calques et animations conservés. Les quatre fins encore annoncées (Clairière tropicale, Couloir violet, Mt. Thunder, Jardin secret) restent à produire et ne sont pas simulées.
+
+Aucun pixel ni Ground n'a été reconstruit : `.tile`, `.rsground` et scripts sont copiés octet pour octet des ZIP individuels ; l'index seul est fusionné. Galerie `apercu_mod_fins_donjons_v1.html`, planche, manifeste, rapport et README livrés. Reproduction : `.venv/bin/python source/mod_fins_donjons_v1/build_mod.py`; tests : `.venv/bin/python -m unittest source.mod_fins_donjons_v1.test_mod -v` (**6 PASS**). Deux builds consécutifs produisent le même SHA-256 `42d19a5b86db0026f2f933c518a3206399fcaed9ac7489c0e1bb70c603c7ee38`. L'installateur passe simulation, fusion, réinstallation sans effet et refus d'écraser un Ground édité. Aucune validation dans le moteur, aucun warp ; `art_approved` reste faux.
 
 ## Branches sœurs de la série (relevé du 27 septembre)
 

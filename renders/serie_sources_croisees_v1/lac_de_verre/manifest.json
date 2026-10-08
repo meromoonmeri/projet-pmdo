@@ -1,0 +1,512 @@
+{
+  "lot": "serie_sources_croisees_v1/lac_de_verre",
+  "title": "Lac de Verre",
+  "prefix": "LGV1",
+  "format": "4:3 vaste",
+  "size_px": [
+    768,
+    576
+  ],
+  "grid_8px": [
+    96,
+    72
+  ],
+  "method": "échantillonnage-génération; références PMDO Red + Sky transmises au générateur; décor et sol séparés sur magenta; segmentation Python à pleine résolution; réduction uniforme par matière puis recadrage centré 4:3; palette partagée échantillonnée",
+  "references": [
+    {
+      "repo": "meromoonmeri/PMD-RED-PMDO-PORT",
+      "branch": "main",
+      "commit": "680fb85efacbde40473ef3f09dde2c0152e96f6c",
+      "map": "T01P02A (Whiscash Pond)",
+      "path": "PMDRed_PMDO_Framework/output/Visual_Renders/T01P02A_Frame_0.png",
+      "url": "https://github.com/meromoonmeri/PMD-RED-PMDO-PORT/blob/680fb85efacbde40473ef3f09dde2c0152e96f6c/PMDRed_PMDO_Framework/output/Visual_Renders/T01P02A_Frame_0.png",
+      "use": "image de référence du générateur; palette d’eau échantillonnée sur les frames 0–5"
+    },
+    {
+      "repo": "meromoonmeri/PMD-SKY-PMDO-PORT",
+      "branch": "master",
+      "commit": "d62110a00269bdc861b8fe41b077607a80f50978",
+      "map": "D52P11A (code de preview; nom canonique non affirmé)",
+      "path": "output/Previews/d52p11a.png",
+      "url": "https://github.com/meromoonmeri/PMD-SKY-PMDO-PORT/blob/d62110a00269bdc861b8fe41b077607a80f50978/output/Previews/d52p11a.png",
+      "use": "image de référence du générateur et source de la palette froide"
+    }
+  ],
+  "reference_files": [
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame0.png",
+      "sha256": "a2791e9b79ae393f9c116fde50f6783f9a5799618d3297f2d5bfbf167c677ce3",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame1.png",
+      "sha256": "96c8ef59e598168ec02f913f1c24d68e22a6f3e258cacc845df6035cefcf2c14",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame2.png",
+      "sha256": "bb5e0c35beac1a0ac6820215e6e0d20b02298491b9e3db5ed6f23121e0d5de4b",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame3.png",
+      "sha256": "48800d26b543f9d0432d809b140a3ea2f73ca48cf771e32b6d746440cd0cb57c",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame4.png",
+      "sha256": "5d5b5daa3138b0b0f948dbfaedfc0098e10b3222f7ce7c8b851b2bacf2a92e82",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame5.png",
+      "sha256": "5251a118effa701936d6d4017dc9994fdc29d2d4fcafab6df28ba2a40fcc29f9",
+      "size_px": [
+        456,
+        624
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/references/sky_D52P11A.png",
+      "sha256": "84350fa4032a4e28fc5c6c589ee1289b7f7cc2c85d01fa5c9b53f47566d45bdd",
+      "size_px": [
+        504,
+        408
+      ]
+    }
+  ],
+  "raw_inputs": [
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/bruts/decor_magenta.png",
+      "sha256": "12682d57ca2b8686f672e1c7cfe7a01342277a2e22b3a9801fd32eec2f209315",
+      "size_px": [
+        1200,
+        896
+      ]
+    },
+    {
+      "file": "source/serie_sources_croisees_v1/lac_de_verre/bruts/sol_complet.png",
+      "sha256": "4eca49b60a7dbe5abdabc2679d8eb8b123f726434ec5a75cbf1010c5a644c164",
+      "size_px": [
+        1200,
+        896
+      ]
+    }
+  ],
+  "normalization": {
+    "source_px": [
+      1200,
+      896
+    ],
+    "scale_uniforme": 0.6428571428571429,
+    "scaled_px": [
+      771,
+      576
+    ],
+    "crop_x_left_right": [
+      1,
+      2
+    ],
+    "output_px": [
+      768,
+      576
+    ],
+    "method": "BOX sur chaque masque et ses couleurs, puis attribution exclusive par poids maximal"
+  },
+  "segmentation": {
+    "magenta_key": "RGB/antialias chroma: R,B>=150; G<=130; |R-B|<=100; R-G,B-G>=55",
+    "water": "composantes magenta non reliées au bord, aire >=120 px, dans decor_magenta",
+    "exterior": "composantes magenta reliées aux bords du brut décor",
+    "path": "sol_complet, luminance >205; seuil mesuré sur le brut",
+    "walls": "luminance <148 et saturation >24, ou bande de 28 px autour des bords/eau avec saturation >64 et luminance <205",
+    "crystals": "cyan lumineux: B>R+28, G>R+13, luminance>=182, saturation>=58",
+    "arch": "ROI nord centrée x=505..690, y<=142; pixels non-sol (luminance<203 ou saturation>68)"
+  },
+  "palette": {
+    "shared_colors": 96,
+    "target_colors": 96,
+    "sampling": {
+      "label": "shared_red_sky",
+      "requested_colors": 96,
+      "actual_colors": 96,
+      "source_pixels": 200000,
+      "source_unique_rgb": 154,
+      "source_sha256": "88e790f20f82d410dd0d6b9238fb7c6d6d2c140053d3af9b7c336b57530840e1",
+      "method": "Pillow median-cut; centers snapped to actual sampled reference RGB; no dither",
+      "sample_counts": {
+        "red_T01P02A": 100000,
+        "sky_D52P11A": 100000
+      }
+    },
+    "source_files": [
+      "source/serie_sources_croisees_v1/lac_de_verre/references/red_T01P02A_frame0.png",
+      "source/serie_sources_croisees_v1/lac_de_verre/references/sky_D52P11A.png"
+    ],
+    "crystal_colors": 28,
+    "crystal_palette_rgb": [
+      [
+        31,
+        71,
+        79
+      ],
+      [
+        55,
+        63,
+        71
+      ],
+      [
+        63,
+        71,
+        79
+      ],
+      [
+        23,
+        95,
+        103
+      ],
+      [
+        47,
+        95,
+        103
+      ],
+      [
+        31,
+        111,
+        119
+      ],
+      [
+        31,
+        119,
+        135
+      ],
+      [
+        23,
+        127,
+        143
+      ],
+      [
+        31,
+        127,
+        135
+      ],
+      [
+        23,
+        151,
+        175
+      ],
+      [
+        0,
+        159,
+        215
+      ],
+      [
+        71,
+        143,
+        159
+      ],
+      [
+        0,
+        175,
+        231
+      ],
+      [
+        7,
+        183,
+        223
+      ],
+      [
+        0,
+        191,
+        247
+      ],
+      [
+        7,
+        191,
+        231
+      ],
+      [
+        7,
+        199,
+        231
+      ],
+      [
+        7,
+        207,
+        255
+      ],
+      [
+        7,
+        215,
+        239
+      ],
+      [
+        7,
+        215,
+        255
+      ],
+      [
+        7,
+        223,
+        239
+      ],
+      [
+        7,
+        223,
+        255
+      ],
+      [
+        7,
+        239,
+        247
+      ],
+      [
+        7,
+        239,
+        255
+      ],
+      [
+        7,
+        247,
+        255
+      ],
+      [
+        111,
+        207,
+        239
+      ],
+      [
+        191,
+        231,
+        239
+      ],
+      [
+        223,
+        247,
+        255
+      ]
+    ],
+    "crystal_palette_sampling": {
+      "label": "cristaux_red_cyan",
+      "requested_colors": 28,
+      "actual_colors": 28,
+      "source_pixels": 446064,
+      "source_unique_rgb": 28,
+      "source_sha256": "7da0c9f8621ec2303dabdb1109c465d67414e5a6c390d8ce32195afa2f5a5861",
+      "method": "RGB exacts uniques bleus/cyans des six frames Red T01P02A, triés par luminance",
+      "sample_counts": {
+        "red_T01P02A_frames_0_to_5": 446064
+      }
+    },
+    "generated_material_distance_rgb": {
+      "base_sol": {
+        "sample_pixels": 24000,
+        "mean_rgb_euclidean": 33.471,
+        "p95_rgb_euclidean": 39.102,
+        "max_rgb_euclidean": 112.049
+      },
+      "chemin_givre": {
+        "sample_pixels": 24000,
+        "mean_rgb_euclidean": 10.734,
+        "p95_rgb_euclidean": 16.882,
+        "max_rgb_euclidean": 28.705
+      },
+      "parois_givrees": {
+        "sample_pixels": 24000,
+        "mean_rgb_euclidean": 31.221,
+        "p95_rgb_euclidean": 51.352,
+        "max_rgb_euclidean": 132.068
+      },
+      "cristaux": {
+        "sample_pixels": 24000,
+        "mean_rgb_euclidean": 31.335,
+        "p95_rgb_euclidean": 45.541,
+        "max_rgb_euclidean": 62.201
+      },
+      "arche_nord": {
+        "sample_pixels": 23410,
+        "mean_rgb_euclidean": 32.438,
+        "p95_rgb_euclidean": 46.271,
+        "max_rgb_euclidean": 104.062
+      }
+    },
+    "water_ramp_rgb": [
+      [
+        31,
+        71,
+        79
+      ],
+      [
+        55,
+        63,
+        71
+      ],
+      [
+        31,
+        111,
+        119
+      ],
+      [
+        23,
+        127,
+        143
+      ],
+      [
+        31,
+        127,
+        135
+      ],
+      [
+        0,
+        159,
+        215
+      ],
+      [
+        71,
+        143,
+        159
+      ],
+      [
+        0,
+        175,
+        231
+      ],
+      [
+        0,
+        191,
+        247
+      ],
+      [
+        111,
+        207,
+        239
+      ]
+    ],
+    "water_ramp_origin": "RGB exacts échantillonnés parmi les bleus/cyans des frames Red T01P02A 0–5"
+  },
+  "water": {
+    "frames": 4,
+    "frame_length_ticks": 10,
+    "frame_ms": 166.67,
+    "loop_seconds": 0.6666666666666666,
+    "animation": "ondes horizontales légèrement déformées, 4 phases; palette échantillonnée, pas le cycle officiel"
+  },
+  "layers_bottom_to_top": [
+    {
+      "index": 0,
+      "name": "eau_lac_gele",
+      "file": "animation/eau/LGV1_00_eau_fXX.png",
+      "frames": 4,
+      "frame_length_ticks": 10,
+      "origin": "texture animée procédurale à palette échantillonnée du Red PMDO T01P02A"
+    },
+    {
+      "index": 1,
+      "name": "sol_givre",
+      "file": "calques/LGV1_01_sol_givre.png",
+      "frames": 1,
+      "frame_length_ticks": 60,
+      "origin": "sol_complet généré"
+    },
+    {
+      "index": 2,
+      "name": "chemin_givre",
+      "file": "calques/LGV1_02_chemin_givre.png",
+      "frames": 1,
+      "frame_length_ticks": 60,
+      "origin": "sol_complet généré"
+    },
+    {
+      "index": 3,
+      "name": "parois_givrees",
+      "file": "calques/LGV1_03_parois_givrees.png",
+      "frames": 1,
+      "frame_length_ticks": 60,
+      "origin": "decor_magenta généré, masque segmenté en Python"
+    },
+    {
+      "index": 4,
+      "name": "cristaux",
+      "file": "calques/LGV1_04_cristaux.png",
+      "frames": 1,
+      "frame_length_ticks": 60,
+      "origin": "decor_magenta généré, masque segmenté en Python"
+    },
+    {
+      "index": 5,
+      "name": "arche_nord",
+      "file": "calques/LGV1_05_arche_nord.png",
+      "frames": 1,
+      "frame_length_ticks": 60,
+      "origin": "decor_magenta généré, masque segmenté en Python"
+    }
+  ],
+  "layer_limits": "Les calques sont des partitions générées/segmentées; certaines textures sont simplifiées. Aucune tuile native certifiée ni géométrie cachée reconstruite.",
+  "access": {
+    "entry_px": [
+      376,
+      552
+    ],
+    "threshold_px": [
+      376,
+      96
+    ],
+    "entry_grid_yx": [
+      69,
+      47
+    ],
+    "threshold_grid_yx": [
+      12,
+      47
+    ],
+    "path_found_16x16": true,
+    "cells_explored": 1203,
+    "blocked_cells": 5313,
+    "total_cells": 6912,
+    "rule": "case bloquée si >25 % non praticable (eau, falaises froides, cristaux, arche); personnage 16×16 px",
+    "reachable_16x16_cells": 1205
+  },
+  "pmdo": {
+    "target": "0.8.12",
+    "serialization": "0.8.12.0",
+    "asset": "lgv1_lac_de_verre",
+    "namespace": "serie_sources_croisees_lac_de_verre",
+    "tex_size": 1,
+    "tile_px": 8,
+    "banks": [
+      "LGV1_00_EAU_LAC_GELE",
+      "LGV1_01_SOL_GIVRE",
+      "LGV1_02_CHEMIN_GIVRE",
+      "LGV1_03_PAROIS_GIVREES",
+      "LGV1_04_CRISTAUX",
+      "LGV1_05_ARCHE_NORD"
+    ],
+    "runtime_tested": false,
+    "warp": "aucun; marker donjon_seuil à raccorder",
+    "tiles_per_bank": {
+      "LGV1_00_EAU_LAC_GELE": 3218,
+      "LGV1_01_SOL_GIVRE": 3701,
+      "LGV1_02_CHEMIN_GIVRE": 1376,
+      "LGV1_03_PAROIS_GIVREES": 3152,
+      "LGV1_04_CRISTAUX": 1929,
+      "LGV1_05_ARCHE_NORD": 191
+    }
+  },
+  "art_approved": false,
+  "native_texture_certified": false,
+  "runtime_tested": false
+}

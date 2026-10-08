@@ -1,0 +1,13 @@
+{
+  "lot": "mod_fins_donjons_v1",
+  "build_checks": "PASS",
+  "maps": 11,
+  "main_series_maps": 9,
+  "tile_banks": 91,
+  "zip": "renders/mod_fins_donjons_v1/guilde_fins_donjons_pmdo_0812.zip",
+  "zip_sha256": "42d19a5b86db0026f2f933c518a3206399fcaed9ac7489c0e1bb70c603c7ee38",
+  "zip_bytes": 18297039,
+  "index_sha256": "0999036f82e54089beb2f3620f1e28c36af154aeafc088e53055324d7916d3da",
+  "runtime_tested": false,
+  "art_approved": false
+}
